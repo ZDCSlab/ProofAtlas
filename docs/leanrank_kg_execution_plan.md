@@ -636,8 +636,8 @@ Implement `embed.py`.
 Baseline embeddings:
 
 ```text
-ProofState embedding = TF-IDF(context + goal_text)
-Premise embedding = TF-IDF(full_name + code + path)
+ProofState embedding = text_embedding(full_name + goal_text)
+Premise embedding = text_embedding(full_name + code + path)
 Theorem embedding = average(proof_state embeddings + positive premise embeddings)
 ```
 

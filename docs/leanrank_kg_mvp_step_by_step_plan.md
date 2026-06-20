@@ -481,17 +481,17 @@ Acceptance criteria:
 
 Implement `embed.py`.
 
-Use TF-IDF for MVP.
+Use TF-IDF for small smoke tests. For the production ProofAtlas run, use the configured sentence-embedding backend.
 
 Embeddings:
 
 ```text
-ProofState = TF-IDF(context + goal_text)
-Premise = TF-IDF(full_name + code + path)
+ProofState = text_embedding(full_name + goal_text)
+Premise = text_embedding(full_name + code + path)
 Theorem = average(proof state vectors + positive premise vectors)
 ```
 
-Use one shared TF-IDF vectorizer for proof-state text and premise text so cosine retrieval compares vectors in the same space. Fit the vectorizer on train proof-state texts plus train premise texts only.
+For TF-IDF smoke tests, use one shared vectorizer for proof-state text and premise text so cosine retrieval compares vectors in the same space. Fit the vectorizer on train proof-state texts plus train premise texts only. For BGE production runs, encode proof-state text with the query prefix and premise text with the passage prefix.
 
 Output:
 

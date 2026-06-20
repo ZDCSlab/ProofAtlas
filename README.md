@@ -68,7 +68,7 @@ leanrank-kg full-pipeline --config configs/proofatlas.yaml
 
 `configs/proofatlas.yaml` now uses theorem-first sampling for the real run. It pulls a larger Hugging Face candidate pool, samples theorem IDs, and keeps all candidate rows for those theorems. This makes the KG scale and evaluation theorem-centric instead of row-centric, which is important for held-out theorem retrieval and recall.
 
-TF-IDF is the default embedding backend because it is fast and reproducible. To experiment with Hugging Face sentence embeddings:
+`configs/sample.yaml` keeps TF-IDF available for fast local smoke tests. The production ProofAtlas config uses `BAAI/bge-base-en-v1.5` sentence embeddings on GPU, with proof-state text encoded as `full_name + goal_text` after the held-out query-representation diagnostic showed that this representation gives the best proof-state candidate recall.
 
 ```bash
 conda activate leanrank_kg
@@ -76,7 +76,7 @@ pip install -e ".[hf]"
 leanrank-kg full-pipeline --config configs/leanrank_hf_embeddings.yaml --debug-rows 120
 ```
 
-The optional configs use `BAAI/bge-base-en-v1.5` and write the same embedding filenames as the TF-IDF backend, so retrieval and graph augmentation continue to work.
+The embedding backends write the same embedding filenames, so retrieval and graph augmentation continue to work across TF-IDF smoke tests and BGE production runs.
 
 ## Pipeline Commands
 
@@ -215,7 +215,7 @@ Example request body:
 
 ## Limitations
 
-This is an MVP. The default local dataset is synthetic unless `use_huggingface` is enabled. The production experiment uses `erbacher/LeanRank-data`. The parser and weak labels are deterministic heuristics. The default retrieval backend uses TF-IDF/cosine features rather than prover-aware semantics; Hugging Face sentence embeddings are available as an optional experiment. New theorem guidance currently uses embedding retrieval plus heuristic proof-technique and difficulty signals; graph-neural reranking remains future work.
+This is an MVP. The lightweight local smoke-test dataset is synthetic unless `use_huggingface` is enabled. The production experiment uses `erbacher/LeanRank-data`, BGE sentence embeddings, ANN candidate retrieval, and a learned/fixed reranker. The parser and weak proof-technique labels are deterministic heuristics. New theorem guidance currently uses embedding retrieval plus heuristic proof-technique and difficulty signals; graph-neural reranking remains future work.
 
 ## No-GNN MVP Scope
 
