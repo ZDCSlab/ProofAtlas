@@ -257,6 +257,14 @@ def test_delivery_audit_metric_uncertainty_matches_committed_profile() -> None:
         assert cells[5] == f"{float(row['ci95_half_width']):.4f}"
 
 
+def test_delivery_audit_check_count_matches_committed_audit_artifact() -> None:
+    repo = Path(__file__).resolve().parents[1]
+    audit_text = (repo / "docs/proofatlas_delivery_audit.md").read_text(encoding="utf-8")
+    audit_json = json.loads((repo / "outputs/reports/mvp_completion_audit.json").read_text(encoding="utf-8"))
+    assert audit_json["passed"] is True
+    assert f"audit: {audit_json['total_checks']}/{audit_json['total_checks']} checks passed" in audit_text
+
+
 def test_current_status_timing_matches_committed_artifact() -> None:
     repo = Path(__file__).resolve().parents[1]
     current = (repo / "docs/proofatlas_current_status_and_gap_to_theorem_retrieval.md").read_text(encoding="utf-8")
