@@ -32,6 +32,17 @@ def _readme_table_row(readme: str, first_col: str, second_col: str | None = None
     raise AssertionError(f"Missing README row: {first_col}{suffix}")
 
 
+def _metric_uncertainty_row(text: str, task: str, metric: str) -> list[str]:
+    prefix = f"| {task} |"
+    for line in text.splitlines():
+        if not line.startswith(prefix):
+            continue
+        cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+        if len(cells) == 6 and cells[1] == metric:
+            return cells
+    raise AssertionError(f"Missing metric uncertainty row: {task} / {metric}")
+
+
 def test_readme_results_snapshot_matches_committed_metrics() -> None:
     repo = Path(__file__).resolve().parents[1]
     readme = (repo / "README.md").read_text(encoding="utf-8")
@@ -48,6 +59,26 @@ def test_readme_results_snapshot_matches_committed_metrics() -> None:
 
     for (task, metric), value in expected.items():
         assert _readme_metric(readme, task, metric) == f"{float(value):.4f}"
+
+
+def test_readme_metric_uncertainty_matches_committed_profile() -> None:
+    repo = Path(__file__).resolve().parents[1]
+    readme = (repo / "README.md").read_text(encoding="utf-8")
+    profile = json.loads((repo / "outputs/reports/pipeline_performance_report.json").read_text(encoding="utf-8"))
+    uncertainty = profile["throughput_profile"]["metric_uncertainty_profile"]
+    expected = {
+        ("Proof-state premise retrieval", "Recall@10"): uncertainty["proof_state"]["Recall@10"],
+        ("Proof-state premise retrieval", "Recall@100"): uncertainty["proof_state"]["Recall@100"],
+        ("Theorem-level premise retrieval", "Recall@10"): uncertainty["theorem"]["theorem_retrieval_Recall@10"],
+        ("Theorem-level premise retrieval", "Recall@100"): uncertainty["theorem"]["theorem_retrieval_Recall@100"],
+    }
+
+    for (task, metric), row in expected.items():
+        cells = _metric_uncertainty_row(readme, task, metric)
+        assert cells[2] == str(int(row["n"]))
+        assert cells[3] == f"{float(row['ci95_low']):.4f}"
+        assert cells[4] == f"{float(row['ci95_high']):.4f}"
+        assert cells[5] == f"{float(row['ci95_half_width']):.4f}"
 
 
 def test_readme_production_snapshot_matches_committed_artifacts() -> None:
@@ -128,6 +159,26 @@ def test_delivery_audit_performance_snapshot_matches_committed_artifacts() -> No
     assert _readme_table_row(audit, "Primary bottleneck", "share of total")[2] == f"{float(bottleneck['primary_stage_share_of_total']):.4f}"
     assert _readme_table_row(audit, "Top-3 timed stages", "share of total")[2] == f"{float(bottleneck['top3_stage_share_of_total']):.4f}"
     assert f"Total seconds: {float(timing['total_seconds']):.4f}" in audit
+
+
+def test_delivery_audit_metric_uncertainty_matches_committed_profile() -> None:
+    repo = Path(__file__).resolve().parents[1]
+    audit = (repo / "docs/proofatlas_delivery_audit.md").read_text(encoding="utf-8")
+    profile = json.loads((repo / "outputs/reports/pipeline_performance_report.json").read_text(encoding="utf-8"))
+    uncertainty = profile["throughput_profile"]["metric_uncertainty_profile"]
+    expected = {
+        ("Proof-state premise retrieval", "Recall@10"): uncertainty["proof_state"]["Recall@10"],
+        ("Proof-state premise retrieval", "Recall@100"): uncertainty["proof_state"]["Recall@100"],
+        ("Theorem premise retrieval", "Recall@10"): uncertainty["theorem"]["theorem_retrieval_Recall@10"],
+        ("Theorem premise retrieval", "Recall@100"): uncertainty["theorem"]["theorem_retrieval_Recall@100"],
+    }
+
+    for (task, metric), row in expected.items():
+        cells = _metric_uncertainty_row(audit, task, metric)
+        assert cells[2] == str(int(row["n"]))
+        assert cells[3] == f"{float(row['ci95_low']):.4f}"
+        assert cells[4] == f"{float(row['ci95_high']):.4f}"
+        assert cells[5] == f"{float(row['ci95_half_width']):.4f}"
 
 
 def test_readme_premise_supervision_snapshot_matches_committed_artifacts() -> None:

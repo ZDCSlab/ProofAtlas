@@ -52,6 +52,15 @@ Full held-out test metrics from `configs/proofatlas.yaml`:
 | Theorem premise retrieval | MRR | 0.5609 |
 | Premise ranker validation | AUC | 0.8254 |
 
+Held-out metric uncertainty:
+
+| Task | Metric | n | 95% CI low | 95% CI high | Half-width |
+| --- | --- | ---: | ---: | ---: | ---: |
+| Proof-state premise retrieval | Recall@10 | 3053 | 0.1049 | 0.1276 | 0.0114 |
+| Proof-state premise retrieval | Recall@100 | 3053 | 0.2211 | 0.2512 | 0.0151 |
+| Theorem premise retrieval | Recall@10 | 1000 | 0.4630 | 0.5250 | 0.0310 |
+| Theorem premise retrieval | Recall@100 | 1000 | 0.6602 | 0.7176 | 0.0287 |
+
 Interpretation:
 
 - The theorem-level retrieval result is the strongest demo/report result.
