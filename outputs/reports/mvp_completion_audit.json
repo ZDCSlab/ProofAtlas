@@ -100,6 +100,11 @@
       "passed": true,
       "path": "outputs/reports/index_benchmark.json"
     },
+    "artifact:outputs/reports/lean_diagnostic_extraction_report.json": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/reports/lean_diagnostic_extraction_report.json"
+    },
     "artifact:outputs/reports/metrics.json": {
       "detail": "exists",
       "passed": true,
@@ -775,6 +780,11 @@
       "passed": true,
       "path": "outputs/indexes/index_summary.json"
     },
+    "validation:lean_diagnostic_extraction": {
+      "detail": "lean_diagnostic_extraction={'scope': 'query-time Lean unsolved-goals diagnostic proof-state extraction', 'case_count': 4, 'passed_case_count': 4, 'total_extracted_proof_states': 4, 'pipeline_role': 'optional query diagnostics only; not a corpus extractor and not part of the default LeanRank-data pipeline'}",
+      "passed": true,
+      "path": "outputs/reports/lean_diagnostic_extraction_report.json"
+    },
     "validation:pipeline_performance_report": {
       "detail": "pipeline_performance={'dataset_name': 'erbacher/LeanRank-data', 'scale_profile': {'ann_backend_availability': {'faiss': False, 'hnswlib': True, 'lancedb': False}, 'current_total_split_rows': 292012, 'dataset_name': 'erbacher/LeanRank-data', 'embedding_backend': 'sentence_transformers', 'embedding_device': 'cuda', 'embedding_devices': ['cuda:0', 'cuda:1', 'cuda:2', 'cuda:3', 'cuda:4', 'cuda:5', 'cuda:6'], 'index_backend': 'hnswlib', 'leanrank_premise_supervision_ready': True, 'requested_rows': 60000, 'requested_theorems': 10000, 'scale_bucket': 'large', 'source_rows': 350000, 'target_dataset_confirmed': True}, 'recommendations': [{'area': 'pipeline_bottleneck', 'priority': 'medium', 'recommendation': 'Embedding is the current largest timed bottleneck. Reuse cached embeddings when training/reranking only, and keep multi-GPU sentence-transformer encoding enabled for larger LeanRank-data refreshes.'}, {'area': 'retrieval_accuracy', 'priority': 'medium', 'recommendation': 'Proof-state Recall@100 is low, so proof-state premise retrieval is currently limited by candidate generation or embeddings before reranking. Prioritize stronger proof-state/query representations, domain-aware candidate pools, and embedding model comparisons before adding heavier rerankers.'}], 'stage_keys': ['benchmark', 'embeddings', 'evaluation', 'graph', 'indexes', 'processed', 'readiness', 'sample', 'timings']}",
       "passed": true,
@@ -863,5 +873,5 @@
   },
   "failed_checks": [],
   "passed": true,
-  "total_checks": 172
+  "total_checks": 174
 }

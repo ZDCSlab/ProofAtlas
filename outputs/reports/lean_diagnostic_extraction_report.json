@@ -1,0 +1,183 @@
+{
+  "case_count": 4,
+  "cases": [
+    {
+      "checks": {
+        "extracted_count_matches": true,
+        "proof_states_have_retrieval_text": true,
+        "proof_states_have_stable_ids": true
+      },
+      "description": "One Lean unsolved-goal diagnostic with hypotheses and a goal.",
+      "expected_extracted_count": 1,
+      "extracted_count": 1,
+      "failure_reason": null,
+      "name": "single_unsolved_goal",
+      "passed": true,
+      "proof_states": [
+        {
+          "block_index": 0,
+          "context_line_count": 3,
+          "extraction_method": "lean_unsolved_goals_diagnostic",
+          "goal_text": "x = x",
+          "hypothesis_count": 2,
+          "local_hypotheses": [
+            "x : Nat",
+            "h : x = x"
+          ],
+          "namespace_hints": [],
+          "proof_state_id": "lean_diag:2fcd0efa56024f4e",
+          "raw_text": "x : Nat\nh : x = x\n\u22a2 x = x",
+          "retrieval_text": "x : Nat\nh : x = x\n\u22a2 x = x",
+          "symbol_count": 4,
+          "symbols": [
+            "=",
+            "Nat",
+            "h",
+            "x"
+          ],
+          "typeclass_hints": []
+        }
+      ],
+      "raw_block_count": 1,
+      "rejected_blocks": [],
+      "rejected_count": 0
+    },
+    {
+      "checks": {
+        "extracted_count_matches": true,
+        "proof_states_have_retrieval_text": true,
+        "proof_states_have_stable_ids": true
+      },
+      "description": "Multiple case blocks emitted by Lean for one diagnostic.",
+      "expected_extracted_count": 2,
+      "extracted_count": 2,
+      "failure_reason": null,
+      "name": "multiple_unsolved_goals",
+      "passed": true,
+      "proof_states": [
+        {
+          "block_index": 0,
+          "context_line_count": 2,
+          "extraction_method": "lean_unsolved_goals_diagnostic",
+          "goal_text": "n = n",
+          "hypothesis_count": 1,
+          "local_hypotheses": [
+            "n : Nat"
+          ],
+          "namespace_hints": [],
+          "proof_state_id": "lean_diag:3f520d24e77a2888",
+          "raw_text": "n : Nat\n\u22a2 n = n",
+          "retrieval_text": "n : Nat\n\u22a2 n = n",
+          "symbol_count": 3,
+          "symbols": [
+            "=",
+            "Nat",
+            "n"
+          ],
+          "typeclass_hints": []
+        },
+        {
+          "block_index": 1,
+          "context_line_count": 3,
+          "extraction_method": "lean_unsolved_goals_diagnostic",
+          "goal_text": "m = m",
+          "hypothesis_count": 2,
+          "local_hypotheses": [
+            "m : Nat",
+            "h : m = m"
+          ],
+          "namespace_hints": [],
+          "proof_state_id": "lean_diag:c94e14fc0c601a69",
+          "raw_text": "m : Nat\nh : m = m\n\u22a2 m = m",
+          "retrieval_text": "m : Nat\nh : m = m\n\u22a2 m = m",
+          "symbol_count": 4,
+          "symbols": [
+            "=",
+            "Nat",
+            "h",
+            "m"
+          ],
+          "typeclass_hints": []
+        }
+      ],
+      "raw_block_count": 2,
+      "rejected_blocks": [],
+      "rejected_count": 0
+    },
+    {
+      "checks": {
+        "extracted_count_matches": true,
+        "proof_states_have_retrieval_text": true,
+        "proof_states_have_stable_ids": true,
+        "rejected_count_matches": true
+      },
+      "description": "Repeated goal/context blocks are deduplicated for retrieval.",
+      "expected_extracted_count": 1,
+      "extracted_count": 1,
+      "failure_reason": null,
+      "name": "duplicate_goal_context",
+      "passed": true,
+      "proof_states": [
+        {
+          "block_index": 0,
+          "context_line_count": 2,
+          "extraction_method": "lean_unsolved_goals_diagnostic",
+          "goal_text": "x = x",
+          "hypothesis_count": 1,
+          "local_hypotheses": [
+            "x : Nat"
+          ],
+          "namespace_hints": [],
+          "proof_state_id": "lean_diag:103c85be27b23de5",
+          "raw_text": "x : Nat\n\u22a2 x = x",
+          "retrieval_text": "x : Nat\n\u22a2 x = x",
+          "symbol_count": 3,
+          "symbols": [
+            "=",
+            "Nat",
+            "x"
+          ],
+          "typeclass_hints": []
+        }
+      ],
+      "raw_block_count": 2,
+      "rejected_blocks": [
+        {
+          "block_index": 1,
+          "raw_text": "x : Nat\n\u22a2 x = x",
+          "reason": "duplicate_goal_context"
+        }
+      ],
+      "rejected_count": 1
+    },
+    {
+      "checks": {
+        "extracted_count_matches": true,
+        "failure_reason_matches": true,
+        "proof_states_have_retrieval_text": true,
+        "proof_states_have_stable_ids": true
+      },
+      "description": "Malformed diagnostics explain why no proof state was extracted.",
+      "expected_extracted_count": 0,
+      "extracted_count": 0,
+      "failure_reason": "no_goal_blocks_with_turnstile",
+      "name": "missing_turnstile",
+      "passed": true,
+      "proof_states": [],
+      "raw_block_count": 0,
+      "rejected_blocks": [],
+      "rejected_count": 0
+    }
+  ],
+  "method": "lean_unsolved_goals_diagnostic",
+  "passed_case_count": 4,
+  "production_pipeline_role": "optional query diagnostics only; not a corpus extractor and not part of the default LeanRank-data pipeline",
+  "quality_checks": {
+    "all_cases_passed": true,
+    "all_extracted_states_have_retrieval_text": true,
+    "has_failure_explanation_case": true,
+    "has_successful_extraction_case": true
+  },
+  "scope": "query-time Lean unsolved-goals diagnostic proof-state extraction",
+  "total_extracted_proof_states": 4
+}

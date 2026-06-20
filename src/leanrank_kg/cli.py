@@ -8,7 +8,7 @@ import typer
 from rich.console import Console
 from rich.table import Table
 
-from . import audit, augment_graph, benchmark_index, build_graph, build_index, compute_difficulty, deployment_security, download_or_sample, embed, evaluate, experiment_report, homepage, normalize, pipeline_profile, premise_trace_supervision, report, train_difficulty, train_ranker, validate, weak_label_proof_technique
+from . import audit, augment_graph, benchmark_index, build_graph, build_index, compute_difficulty, deployment_security, download_or_sample, embed, evaluate, experiment_report, homepage, lean_diagnostic_report, normalize, pipeline_profile, premise_trace_supervision, report, train_difficulty, train_ranker, validate, weak_label_proof_technique
 from .pipeline_timing import PipelineTimer
 from .retrieve import (
     explain_premise_match,
@@ -49,6 +49,7 @@ def _stage_artifacts() -> dict[str, list[str]]:
         "label_techniques": [f"data/processed/{split}/{table}.parquet" for split in SPLIT_NAMES for table in technique_tables],
         "compute_difficulty": [f"data/processed/{split}/{table}.parquet" for split in SPLIT_NAMES for table in ["proof_state_features", "theorem_features"]],
         "premise_trace_supervision": ["outputs/reports/premise_trace_supervision_report.json"],
+        "lean_diagnostic_extraction": ["outputs/reports/lean_diagnostic_extraction_report.json"],
         "train_difficulty": ["outputs/models/difficulty_estimator.joblib", "outputs/reports/difficulty_estimator_metrics.json"],
         "embed": [
             *[f"outputs/embeddings/{split}_{kind}_embeddings.npz" for split in SPLIT_NAMES for kind in ["proof_state", "premise", "theorem"]],
@@ -159,6 +160,14 @@ def premise_trace_supervision_report_cmd(
     console.print_json(data=result)
 
 
+@app.command("lean-diagnostic-extraction-report")
+def lean_diagnostic_extraction_report_cmd(
+    output_path: str = "outputs/reports/lean_diagnostic_extraction_report.json",
+) -> None:
+    result = lean_diagnostic_report.run(output_path=output_path)
+    console.print_json(data=result)
+
+
 @app.command("augment-graph")
 def augment_graph_cmd(config: str = "configs/sample.yaml") -> None:
     augment_graph.run(config)
@@ -236,6 +245,7 @@ def full_pipeline(
         _run_or_skip(timer, "label_techniques", weak_label_proof_technique.run, config, force=force, force_stages=forced)
         _run_or_skip(timer, "compute_difficulty", compute_difficulty.run, config, force=force, force_stages=forced)
         _run_or_skip(timer, "premise_trace_supervision", premise_trace_supervision.run, force=force, force_stages=forced)
+        _run_or_skip(timer, "lean_diagnostic_extraction", lean_diagnostic_report.run, force=force, force_stages=forced)
         _run_or_skip(timer, "train_difficulty", train_difficulty.run, config, force=force, force_stages=forced)
         _run_or_skip(timer, "embed", embed.run, config, force=force, force_stages=forced)
         _run_or_skip(timer, "build_index", build_index.run, config, force=force, force_stages=forced)

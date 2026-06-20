@@ -28,6 +28,9 @@ def test_query_retrieval_commands_are_registered():
     result = runner.invoke(app, ["premise-trace-supervision-report", "--help"])
     assert result.exit_code == 0
     assert "--output-path" in result.output
+    result = runner.invoke(app, ["lean-diagnostic-extraction-report", "--help"])
+    assert result.exit_code == 0
+    assert "--output-path" in result.output
     result = runner.invoke(app, ["build-experiment-report", "--help"])
     assert result.exit_code == 0
     assert "--output-path" in result.output

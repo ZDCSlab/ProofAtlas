@@ -142,6 +142,7 @@ def build_audit() -> dict[str, Any]:
         "outputs/reports/ranker_validation_metrics.json",
         "outputs/reports/difficulty_estimator_metrics.json",
         "outputs/reports/index_benchmark.json",
+        "outputs/reports/lean_diagnostic_extraction_report.json",
         "outputs/reports/pipeline_run_timings.json",
         "outputs/reports/pipeline_performance_report.json",
         "outputs/reports/deployment_security_review.json",
@@ -316,6 +317,25 @@ def build_audit() -> dict[str, Any]:
             },
         ),
         "premise_trace_supervision={detail}",
+    )
+    checks["validation:lean_diagnostic_extraction"] = _json_condition(
+        "outputs/reports/lean_diagnostic_extraction_report.json",
+        lambda data: (
+            data.get("method") == "lean_unsolved_goals_diagnostic"
+            and data.get("quality_checks", {}).get("all_cases_passed") is True
+            and data.get("quality_checks", {}).get("has_successful_extraction_case") is True
+            and data.get("quality_checks", {}).get("has_failure_explanation_case") is True
+            and data.get("total_extracted_proof_states", 0) > 0
+            and "not a corpus extractor" in data.get("production_pipeline_role", ""),
+            {
+                "scope": data.get("scope"),
+                "case_count": data.get("case_count"),
+                "passed_case_count": data.get("passed_case_count"),
+                "total_extracted_proof_states": data.get("total_extracted_proof_states"),
+                "pipeline_role": data.get("production_pipeline_role"),
+            },
+        ),
+        "lean_diagnostic_extraction={detail}",
     )
     checks["validation:experiment_report"] = _file_contains(
         "outputs/reports/experiment_report.md",

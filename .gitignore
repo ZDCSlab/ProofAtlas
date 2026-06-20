@@ -71,6 +71,7 @@ outputs/reports/*
 !outputs/reports/graph_validation_summary.json
 !outputs/reports/homepage_summary.json
 !outputs/reports/index_benchmark.json
+!outputs/reports/lean_diagnostic_extraction_report.json
 !outputs/reports/metrics.json
 !outputs/reports/mvp_completion_audit.json
 !outputs/reports/pipeline_performance_report.json
