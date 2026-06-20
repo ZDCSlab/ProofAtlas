@@ -30,7 +30,7 @@ Out of current production scope:
 | Experiment report | `outputs/reports/experiment_report.md` | Delivered |
 | Held-out quantitative evaluation | `outputs/reports/test_set_evaluation.json`, `outputs/reports/metrics.json` | Delivered |
 | LeanRank-data source provenance | `outputs/reports/corpus_manifest.json`, `outputs/reports/premise_trace_supervision_report.json` | Delivered |
-| Premise positive/negative supervision | 69,461 positive edges, 663,198 negative edges, positive/negative overlap removed: 4,088; train trace profile includes 54,897 positive trace rows, 530,413 hard-negative rows, 128,855 high-hardness rows, and 3 example proof-state traces; ranker training sample uses 1,000 positive pairs and 1,000 hard-negative pairs with 100.0% nonzero hard-negative hardness coverage | Delivered |
+| Premise positive/negative supervision | 69,461 positive edges, 663,198 negative edges, positive/negative overlap removed: 4,088; train trace profile includes 54,897 positive trace rows, 530,413 hard-negative rows, 128,855 high-hardness rows, and 3 example proof-state traces; ranker training sample uses 10,000 positive pairs and 10,000 hard-negative pairs with 100.0% nonzero hard-negative hardness coverage | Delivered |
 | Larger real-data pipeline | `configs/proofatlas.yaml`, 292,012 current split rows, 10,000 requested theorems, 350,000 source rows | Delivered |
 | GPU BGE embeddings | `outputs/embeddings/embedding_config.json`: `BAAI/bge-base-en-v1.5`, devices `cuda:0` to `cuda:6`, proof-state template `full_name + goal_text` | Delivered |
 | ANN performance | `outputs/reports/index_benchmark.json`: hnswlib premise retrieval 19.0x faster than exact cosine at Recall@10 vs exact 0.994 | Delivered |
@@ -46,11 +46,11 @@ Full held-out test metrics from `configs/proofatlas.yaml`:
 | --- | --- | ---: |
 | Proof-state premise retrieval | Recall@10 | 0.1162 |
 | Proof-state premise retrieval | Recall@100 | 0.2362 |
-| Reranked proof-state retrieval | Recall@10 | 0.1513 |
+| Reranked proof-state retrieval | Recall@10 | 0.1689 |
 | Theorem premise retrieval | Recall@10 | 0.4940 |
 | Theorem premise retrieval | Recall@100 | 0.6889 |
 | Theorem premise retrieval | MRR | 0.5609 |
-| Premise ranker validation | AUC | 0.8254 |
+| Premise ranker validation | AUC | 0.8214 |
 
 Failure diagnosis from `outputs/reports/experiment_report.md`:
 
@@ -74,7 +74,7 @@ Interpretation:
 
 - The theorem-level retrieval result is the strongest demo/report result.
 - Proof-state candidate retrieval improved after switching proof-state embeddings to `full_name + goal_text`, but remains the main accuracy bottleneck.
-- Candidate-depth ablation supports `rerank_candidate_k=50` for the current diagnostic: Recall@10 0.1513 at k=50 versus 0.1382 at k=100.
+- Candidate-depth ablation supports `rerank_candidate_k=50` for the current diagnostic: Recall@10 0.1689 at k=50 versus 0.1382 at k=100.
 
 ## Performance Snapshot
 
@@ -82,18 +82,18 @@ From `outputs/reports/index_benchmark.json` and `outputs/reports/pipeline_perfor
 
 | Entity | Backend | Rows | Exact ms/query | Indexed ms/query | Speedup | Recall@10 vs exact |
 | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| Premise | hnswlib | 127,561 | 69.5725 | 3.3599 | 20.7065 | 0.9890 |
-| ProofState | hnswlib | 23,723 | 12.7818 | 0.7867 | 16.2478 | 0.9550 |
-| Theorem | hnswlib | 8,000 | 4.2451 | 0.2220 | 19.1213 | 0.9930 |
+| Premise | hnswlib | 127,561 | 69.2519 | 3.5655 | 19.4229 | 0.9920 |
+| ProofState | hnswlib | 23,723 | 12.7368 | 0.7929 | 16.0639 | 0.9580 |
+| Theorem | hnswlib | 8,000 | 4.1551 | 0.2326 | 17.8604 | 0.9950 |
 
 Pipeline bottleneck profile:
 
 | Stage group | Field | Value |
 | --- | --- | ---: |
 | Primary bottleneck | stage | embed |
-| Primary bottleneck | seconds | 148.6116 |
-| Primary bottleneck | share of total | 0.2689 |
-| Top-3 timed stages | share of total | 0.5175 |
+| Primary bottleneck | seconds | 147.9819 |
+| Primary bottleneck | share of total | 0.2645 |
+| Top-3 timed stages | share of total | 0.5239 |
 
 Performance acceptance gates:
 
@@ -107,10 +107,10 @@ Scale projection:
 
 | Projection | Target rows | Total seconds | Embed seconds | Index build seconds |
 | --- | ---: | ---: | ---: | ---: |
-| current_1x | 292012 | 552.6827 | 148.6116 | 6.5847 |
-| current_2x | 584024 | 1105.3654 | 297.2233 | 13.1695 |
-| current_5x | 1460060 | 2763.4134 | 743.0582 | 32.9236 |
-| configured_source_rows | 350000 | 662.4349 | 178.1231 | 7.8923 |
+| current_1x | 292012 | 559.3799 | 147.9819 | 6.3288 |
+| current_2x | 584024 | 1118.7599 | 295.9638 | 12.6575 |
+| current_5x | 1460060 | 2796.8997 | 739.9096 | 31.6438 |
+| configured_source_rows | 350000 | 670.4621 | 177.3683 | 7.5855 |
 
 Execution mode summary:
 
@@ -142,10 +142,10 @@ Do not retrain by default. Reuse embeddings, indexes, and trained models for rep
 
 Pipeline timing:
 
-- Total seconds: 552.6827
-- Saved full-pipeline evaluate stage: 19.6906 seconds
-- Current standalone full-heldout evaluation: 24.3357 seconds
-- Reranked proof-state diagnostic: 20 / 3053 sampled queries; projected full rerank 2115.8911 seconds; 2295.2802x batched seconds/query
+- Total seconds: 559.3799
+- Saved full-pipeline evaluate stage: 19.4384 seconds
+- Current standalone full-heldout evaluation: 25.0483 seconds
+- Reranked proof-state diagnostic: 20 / 3053 sampled queries; projected full rerank 2218.7567 seconds; 2285.8903x batched seconds/query
 - Timing freshness: current; full-pipeline evaluate timing and standalone evaluation timing are aligned.
 
 Pipeline scale profile:
@@ -157,8 +157,8 @@ Pipeline scale profile:
 - Embedding devices: `cuda:0` to `cuda:6`
 - Index backend: `hnswlib`
 - LeanRank premise supervision ready: true
-- Artifact storage: 2.8429 GiB total, 10,453.5899 bytes per processed row
-- Largest storage component: `outputs/indexes`, 2,295,000,411 bytes
+- Artifact storage: 2.8429 GiB total, 10,453.5996 bytes per processed row
+- Largest storage component: `outputs/indexes`, 2,295,002,116 bytes
 - Unreferenced index artifacts: 1,502,501,178 bytes (1.3993 GiB) not pointed to by current manifests
 - Projected storage at current_5x: 14.2147 GiB
 

@@ -62,6 +62,36 @@ def test_ranker_features_use_processed_feature_tables(tmp_path, monkeypatch):
     ].nunique().sum() > 6
 
 
+def test_ranker_pair_sampling_uses_configured_label_cap():
+    pairs = pd.DataFrame(
+        {
+            "label": [1] * 12 + [0] * 30,
+            "ps": [f"ps_{idx}" for idx in range(42)],
+            "prem": [f"prem_{idx}" for idx in range(42)],
+        }
+    )
+
+    sampled = train_ranker._sample_pairs_by_label(pairs, max_pairs_per_label=5, random_seed=7)
+
+    assert sampled["label"].value_counts().to_dict() == {0: 5, 1: 5}
+    assert sampled.equals(sampled.sort_values(["label", "ps", "prem"]).reset_index(drop=True))
+
+
+def test_ranker_pair_sampling_can_keep_all_pairs():
+    pairs = pd.DataFrame(
+        {
+            "label": [1, 1, 0],
+            "ps": ["ps_b", "ps_a", "ps_c"],
+            "prem": ["prem_b", "prem_a", "prem_c"],
+        }
+    )
+
+    sampled = train_ranker._sample_pairs_by_label(pairs, max_pairs_per_label=0, random_seed=7)
+
+    assert len(sampled) == 3
+    assert sampled["ps"].tolist() == ["ps_c", "ps_a", "ps_b"]
+
+
 def test_ranker_writes_feature_ablation_report(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     cfg = _write_config(tmp_path, 120)

@@ -22,7 +22,7 @@
     "warnings": []
   },
   "corpus": {
-    "config_hash": "9ec59ec654c3c8aa",
+    "config_hash": "37ec7d5d3cf4d7b9",
     "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
     "data_supervision": {
       "has_negative_candidates": true,
@@ -236,24 +236,24 @@
   "index_benchmark": {
     "premise": {
       "backend": "hnswlib",
-      "exact_ms_per_query": 69.57254945999011,
+      "exact_ms_per_query": 69.25192232010886,
       "indexed_available": true,
-      "indexed_ms_per_query": 3.3599313208833337,
-      "recall_vs_exact": 0.9890000000000001
+      "indexed_ms_per_query": 3.5654752096161246,
+      "recall_vs_exact": 0.992
     },
     "proof_state": {
       "backend": "hnswlib",
-      "exact_ms_per_query": 12.781757810153067,
+      "exact_ms_per_query": 12.736848390195519,
       "indexed_available": true,
-      "indexed_ms_per_query": 0.7866755593568087,
-      "recall_vs_exact": 0.9550000000000003
+      "indexed_ms_per_query": 0.7928880886174738,
+      "recall_vs_exact": 0.9580000000000001
     },
     "theorem": {
       "backend": "hnswlib",
-      "exact_ms_per_query": 4.24512208905071,
+      "exact_ms_per_query": 4.155110749416053,
       "indexed_available": true,
-      "indexed_ms_per_query": 0.22200980922207236,
-      "recall_vs_exact": 0.993
+      "indexed_ms_per_query": 0.2326433709822595,
+      "recall_vs_exact": 0.995
     }
   },
   "parsing": {
@@ -361,7 +361,7 @@
     "gold_premises_missing_from_train_index": 546,
     "premise_mrr": 0.07831169467619567,
     "premise_recall_at_10": 0.11624918291584951,
-    "ranker_auc": 0.825379,
+    "ranker_auc": 0.82143108,
     "theorem_mrr": 0.5608535466914221,
     "theorem_ndcg_at_10": 0.4451927253442335,
     "theorem_recall_at_10": 0.49403129986534694

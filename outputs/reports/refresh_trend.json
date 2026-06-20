@@ -5,7 +5,7 @@
     "edges": 1385416,
     "minimum_context_coverage": 1.0,
     "nodes": 280422,
-    "premise_index_recall_vs_exact": 0.9890000000000001,
+    "premise_index_recall_vs_exact": 0.992,
     "premise_recall_at_10": 0.11624918291584951,
     "premises": 202185,
     "proof_states": 29598,
@@ -15,7 +15,7 @@
     "theorems": 10000
   },
   "current_corpus": {
-    "config_hash": "9ec59ec654c3c8aa",
+    "config_hash": "37ec7d5d3cf4d7b9",
     "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
     "data_supervision": {
       "has_negative_candidates": true,
@@ -101,7 +101,7 @@
     "edges": 1385416,
     "minimum_context_coverage": 1.0,
     "nodes": 280422,
-    "premise_index_recall_vs_exact": 0.9890000000000001,
+    "premise_index_recall_vs_exact": 0.992,
     "premise_recall_at_10": 0.12792553191489361,
     "premises": 202185,
     "proof_states": 29598,
@@ -111,7 +111,7 @@
     "theorems": 10000
   },
   "previous_corpus": {
-    "config_hash": "9ec59ec654c3c8aa",
+    "config_hash": "37ec7d5d3cf4d7b9",
     "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
     "data_supervision": {
       "has_negative_candidates": true,

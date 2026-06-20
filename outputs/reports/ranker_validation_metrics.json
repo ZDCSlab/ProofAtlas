@@ -13,74 +13,74 @@
       "graph_premise_degree",
       "theorem_neighborhood_premise_score"
     ],
-    "full_auc": 0.825379,
+    "full_auc": 0.82143108,
     "groups": {
       "difficulty": {
-        "auc_group_only": 0.632403,
-        "auc_without_group": 0.8055380000000001,
+        "auc_group_only": 0.49623204,
+        "auc_without_group": 0.82171884,
         "columns": [
           "proof_state_difficulty",
           "negative_candidate_hardness"
         ],
-        "delta_without_group": 0.019840999999999887
+        "delta_without_group": -0.00028775999999997026
       },
       "embedding_similarity": {
-        "auc_group_only": 0.6252215,
-        "auc_without_group": 0.819774,
+        "auc_group_only": 0.5994637199999999,
+        "auc_without_group": 0.8190852200000001,
         "columns": [
           "cosine_similarity"
         ],
-        "delta_without_group": 0.005604999999999971
+        "delta_without_group": 0.002345859999999922
       },
       "frequency": {
-        "auc_group_only": 0.7878414999999999,
-        "auc_without_group": 0.8070589999999999,
+        "auc_group_only": 0.78416494,
+        "auc_without_group": 0.78305392,
         "columns": [
           "premise_frequency"
         ],
-        "delta_without_group": 0.018320000000000114
+        "delta_without_group": 0.03837716000000002
       },
       "graph": {
-        "auc_group_only": 0.6947325,
-        "auc_without_group": 0.820083,
+        "auc_group_only": 0.67965306,
+        "auc_without_group": 0.82545872,
         "columns": [
           "graph_premise_degree"
         ],
-        "delta_without_group": 0.005295999999999967
+        "delta_without_group": -0.004027639999999999
       },
       "namespace_domain": {
-        "auc_group_only": 0.44447349999999997,
-        "auc_without_group": 0.8525309999999999,
+        "auc_group_only": 0.51632808,
+        "auc_without_group": 0.81929388,
         "columns": [
           "same_namespace",
           "same_domain"
         ],
-        "delta_without_group": -0.027151999999999954
+        "delta_without_group": 0.0021371999999999503
       },
       "proof_technique": {
-        "auc_group_only": 0.6490000000000001,
-        "auc_without_group": 0.7739339999999999,
+        "auc_group_only": 0.4953000000000001,
+        "auc_without_group": 0.82154812,
         "columns": [
           "proof_technique_overlap"
         ],
-        "delta_without_group": 0.051445000000000074
+        "delta_without_group": -0.00011704000000001269
       },
       "symbol_overlap": {
-        "auc_group_only": 0.654192,
-        "auc_without_group": 0.790402,
+        "auc_group_only": 0.59927374,
+        "auc_without_group": 0.80776604,
         "columns": [
           "symbol_name_overlap",
           "symbol_context_overlap"
         ],
-        "delta_without_group": 0.034976999999999925
+        "delta_without_group": 0.013665040000000017
       },
       "theorem_neighborhood": {
-        "auc_group_only": 0.6013390000000001,
-        "auc_without_group": 0.824741,
+        "auc_group_only": 0.580964,
+        "auc_without_group": 0.81966988,
         "columns": [
           "theorem_neighborhood_premise_score"
         ],
-        "delta_without_group": 0.0006380000000000274
+        "delta_without_group": 0.0017612000000000183
       }
     }
   },
@@ -126,27 +126,32 @@
       "theorem_neighborhood_premise_score"
     ]
   },
-  "train_pairs": 2000,
+  "ranker_config": {
+    "max_train_pairs_per_label": 10000,
+    "max_validation_pairs_per_label": 5000,
+    "random_seed": 42
+  },
+  "train_pairs": 20000,
   "training_pair_utilization": {
     "feature_nonzero_rates": {
       "cosine_similarity": 1.0,
-      "graph_premise_degree": 0.376,
+      "graph_premise_degree": 0.39425,
       "negative_candidate_hardness": 1.0,
-      "premise_frequency": 0.472,
+      "premise_frequency": 0.45665,
       "proof_state_difficulty": 1.0,
-      "proof_technique_overlap": 0.4605,
-      "same_domain": 0.3925,
-      "same_namespace": 0.179,
-      "symbol_context_overlap": 0.6075,
-      "symbol_name_overlap": 0.502,
-      "theorem_neighborhood_premise_score": 0.2295
+      "proof_technique_overlap": 0.51765,
+      "same_domain": 0.40485,
+      "same_namespace": 0.20315,
+      "symbol_context_overlap": 0.63295,
+      "symbol_name_overlap": 0.55695,
+      "theorem_neighborhood_premise_score": 0.30525
     },
     "hardness_feature": {
-      "all_pair_nonzero_count": 2000,
+      "all_pair_nonzero_count": 20000,
       "all_pair_nonzero_share": 1.0,
       "column": "negative_candidate_hardness",
-      "negative_pair_mean_hardness": 0.5864086124738412,
-      "negative_pair_nonzero_count": 1000,
+      "negative_pair_mean_hardness": 0.6125832683406032,
+      "negative_pair_nonzero_count": 10000,
       "negative_pair_nonzero_share": 1.0
     },
     "label_source": {
@@ -159,12 +164,12 @@
       "total": 585310
     },
     "training_sample_counts": {
-      "hard_negative": 1000,
+      "hard_negative": 10000,
       "hard_negative_to_positive_ratio": 1.0,
-      "positive": 1000,
-      "total": 2000
+      "positive": 10000,
+      "total": 20000
     }
   },
-  "validation_auc": 0.825379,
-  "validation_pairs": 2000
+  "validation_auc": 0.82143108,
+  "validation_pairs": 10000
 }

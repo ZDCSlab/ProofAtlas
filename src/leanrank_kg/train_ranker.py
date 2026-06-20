@@ -7,7 +7,7 @@ from scipy import sparse
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import roc_auc_score
 
-from .utils import minmax, namespace, write_json
+from .utils import load_config, minmax, namespace, write_json
 
 FEATURE_GROUPS = {
     "embedding_similarity": ["cosine_similarity"],
@@ -37,13 +37,19 @@ def _jaccard(left: set[str], right: set[str]) -> float:
     return float(len(left & right) / len(union)) if union else 0.0
 
 
-def _features(pairs: pd.DataFrame, split: str) -> pd.DataFrame:
-    pairs = (
-        pairs.groupby("label", group_keys=False)
-        .head(1000)
-        .sort_values(["label", "ps", "prem"])
-        .reset_index(drop=True)
-    )
+def _sample_pairs_by_label(pairs: pd.DataFrame, *, max_pairs_per_label: int | None, random_seed: int) -> pd.DataFrame:
+    if max_pairs_per_label is None or max_pairs_per_label <= 0:
+        sampled = pairs
+    else:
+        sampled = pairs.groupby("label", group_keys=False).sample(
+            n=min(max_pairs_per_label, int(pairs.groupby("label").size().min())),
+            random_state=random_seed,
+        )
+    return sampled.sort_values(["label", "ps", "prem"]).reset_index(drop=True)
+
+
+def _features(pairs: pd.DataFrame, split: str, *, max_pairs_per_label: int | None = 1000, random_seed: int = 0) -> pd.DataFrame:
+    pairs = _sample_pairs_by_label(pairs, max_pairs_per_label=max_pairs_per_label, random_seed=random_seed)
     proof_states = pd.read_parquet(f"data/processed/{split}/proof_states.parquet").set_index("id")
     premises = pd.read_parquet(f"data/processed/{split}/premises.parquet").set_index("id")
     theorems = pd.read_parquet(f"data/processed/{split}/theorems.parquet").set_index("id")
@@ -204,22 +210,44 @@ def _pair_utilization_profile(raw_pairs: pd.DataFrame, train_features: pd.DataFr
 
 
 def run(config_path: str) -> None:
+    config = load_config(config_path)
+    ranker_config = config.get("ranker", {}) or {}
+    random_seed = int(config.get("random_seed", 0))
+    max_train_pairs_per_label = int(ranker_config.get("max_train_pairs_per_label", 1000) or 0)
+    max_validation_pairs_per_label = int(
+        ranker_config.get("max_validation_pairs_per_label", max_train_pairs_per_label) or 0
+    )
     Path("outputs/models").mkdir(parents=True, exist_ok=True)
     Path("outputs/reports").mkdir(parents=True, exist_ok=True)
     raw_train_pairs = _pairs("train")
-    train = _features(raw_train_pairs, "train")
+    train = _features(
+        raw_train_pairs,
+        "train",
+        max_pairs_per_label=max_train_pairs_per_label,
+        random_seed=random_seed,
+    )
     X = train.drop(columns=["label"])
     y = train["label"]
     model = LogisticRegression(max_iter=500).fit(X, y)
     joblib.dump(model, "outputs/models/premise_ranker.joblib")
     metrics = {
         "train_pairs": int(len(train)),
+        "ranker_config": {
+            "max_train_pairs_per_label": max_train_pairs_per_label,
+            "max_validation_pairs_per_label": max_validation_pairs_per_label,
+            "random_seed": random_seed,
+        },
         "feature_columns": X.columns.tolist(),
         "feature_groups": FEATURE_GROUPS,
         "training_pair_utilization": _pair_utilization_profile(raw_train_pairs, train),
     }
     try:
-        val = _features(_pairs("val"), "val")
+        val = _features(
+            _pairs("val"),
+            "val",
+            max_pairs_per_label=max_validation_pairs_per_label,
+            random_seed=random_seed,
+        )
         if not val.empty and val["label"].nunique() > 1:
             metrics["validation_auc"] = float(roc_auc_score(val["label"], model.predict_proba(val.drop(columns=["label"]))[:, 1]))
             metrics["validation_pairs"] = int(len(val))

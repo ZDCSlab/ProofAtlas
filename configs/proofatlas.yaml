@@ -46,6 +46,9 @@ index_benchmark:
   top_k: 10
   query_count: 100
   seed: 42
+ranker:
+  max_train_pairs_per_label: 10000
+  max_validation_pairs_per_label: 5000
 validation:
   max_schema_rows_per_table: 2000
 evaluation:

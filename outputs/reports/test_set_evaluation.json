@@ -80,14 +80,14 @@
         "actual_backend": "torch_cuda",
         "evaluated_queries": 2822,
         "name": "val_proof_state_retrieval",
-        "seconds": 6.880461106076837,
+        "seconds": 6.845822976902127,
         "split": "val"
       },
       {
         "actual_backend": "torch_cuda",
         "evaluated_queries": 3053,
         "name": "test_proof_state_retrieval",
-        "seconds": 0.9218443639110774,
+        "seconds": 0.9706312920898199,
         "split": "test"
       },
       {
@@ -95,7 +95,7 @@
         "case_study_limit": 0,
         "evaluated_queries": 1000,
         "name": "val_theorem_retrieval",
-        "seconds": 0.31515980511903763,
+        "seconds": 0.32711412012577057,
         "split": "val"
       },
       {
@@ -103,7 +103,7 @@
         "case_study_limit": 0,
         "evaluated_queries": 1000,
         "name": "test_theorem_retrieval",
-        "seconds": 0.4209123959299177,
+        "seconds": 0.42499413900077343,
         "split": "test"
       },
       {
@@ -111,21 +111,21 @@
         "candidate_k": 50,
         "evaluated_queries": 20,
         "name": "test_reranked_proof_state_retrieval",
-        "seconds": 13.861062084091827,
+        "seconds": 14.534927618922666,
         "split": "test"
       },
       {
         "best_variant_by_recall": "full_name_goal",
         "evaluated_queries": 50,
         "name": "val_proof_state_query_representation_diagnostic",
-        "seconds": 0.8309451229870319,
+        "seconds": 0.8350780119653791,
         "split": "val"
       },
       {
         "best_variant_by_recall": "full_name_goal",
         "evaluated_queries": 50,
         "name": "test_proof_state_query_representation_diagnostic",
-        "seconds": 0.670218690065667,
+        "seconds": 0.6680641700513661,
         "split": "test"
       }
     ],
@@ -133,7 +133,7 @@
       "test": null,
       "val": null
     },
-    "total_seconds": 24.335743549047038,
+    "total_seconds": 25.048266545170918,
     "use_gpu": true
   },
   "label_policy": "held-out test positive_edges are used only for evaluation",
@@ -307,39 +307,39 @@
         {
           "candidate_k": 50,
           "metrics": {
-            "MAP": 0.07660818713450292,
-            "MRR": 0.1456140350877193,
-            "Recall@1": 0.02631578947368421,
-            "Recall@10": 0.1513157894736842,
-            "Recall@5": 0.12061403508771928,
+            "MAP": 0.07650375939849624,
+            "MRR": 0.17982456140350878,
+            "Recall@1": 0.03289473684210526,
+            "Recall@10": 0.16885964912280702,
+            "Recall@5": 0.1337719298245614,
             "evaluated_queries": 20,
             "evaluated_retrievable_queries": 19,
             "gold_premise_coverage": 0.8771929824561403,
             "gold_premises_in_train_index": 50,
             "gold_premises_missing_from_train_index": 7,
             "gold_premises_total": 57,
-            "nDCG@1": 0.05263157894736842,
-            "nDCG@10": 0.11480395621121713,
-            "nDCG@5": 0.10233570120794566
+            "nDCG@1": 0.10526315789473684,
+            "nDCG@10": 0.12376565228608487,
+            "nDCG@5": 0.11293087792113359
           }
         },
         {
           "candidate_k": 100,
           "metrics": {
-            "MAP": 0.07419590643274854,
-            "MRR": 0.13157894736842105,
-            "Recall@1": 0.02631578947368421,
-            "Recall@10": 0.13815789473684212,
-            "Recall@5": 0.11403508771929824,
+            "MAP": 0.07650375939849624,
+            "MRR": 0.17982456140350878,
+            "Recall@1": 0.03289473684210526,
+            "Recall@10": 0.16885964912280702,
+            "Recall@5": 0.1337719298245614,
             "evaluated_queries": 20,
             "evaluated_retrievable_queries": 19,
             "gold_premise_coverage": 0.8771929824561403,
             "gold_premises_in_train_index": 50,
             "gold_premises_missing_from_train_index": 7,
             "gold_premises_total": 57,
-            "nDCG@1": 0.05263157894736842,
-            "nDCG@10": 0.10695045704909101,
-            "nDCG@5": 0.09341043264811366
+            "nDCG@1": 0.10526315789473684,
+            "nDCG@10": 0.12376565228608487,
+            "nDCG@5": 0.11293087792113359
           }
         }
       ],
@@ -373,9 +373,9 @@
         {
           "domain_tag": "Algebra",
           "metrics": {
-            "MAP": 0.13541666666666666,
-            "MRR": 0.3333333333333333,
-            "Recall@1": 0.125,
+            "MAP": 0.15625,
+            "MRR": 0.5,
+            "Recall@1": 0.15625,
             "Recall@10": 0.15625,
             "Recall@100": 0.0,
             "Recall@5": 0.15625,
@@ -386,10 +386,10 @@
             "gold_premises_in_train_index": 13,
             "gold_premises_missing_from_train_index": 2,
             "gold_premises_total": 15,
-            "nDCG@1": 0.25,
-            "nDCG@10": 0.18490463603732174,
+            "nDCG@1": 0.5,
+            "nDCG@10": 0.2165224738832789,
             "nDCG@100": 0.0,
-            "nDCG@5": 0.1956818238505666,
+            "nDCG@5": 0.23807684950976862,
             "nDCG@50": 0.0
           },
           "subdomain_tags": [
@@ -426,8 +426,8 @@
         {
           "domain_tag": "NumberTheory",
           "metrics": {
-            "MAP": 0.3611111111111111,
-            "MRR": 0.41666666666666663,
+            "MAP": 0.25595238095238093,
+            "MRR": 0.29166666666666663,
             "Recall@1": 0.0,
             "Recall@10": 0.8333333333333333,
             "Recall@100": 0.0,
@@ -440,9 +440,9 @@
             "gold_premises_missing_from_train_index": 1,
             "gold_premises_total": 5,
             "nDCG@1": 0.0,
-            "nDCG@10": 0.516364785774519,
+            "nDCG@10": 0.42926679425406655,
             "nDCG@100": 0.0,
-            "nDCG@5": 0.4327845582914179,
+            "nDCG@5": 0.3510536732502738,
             "nDCG@50": 0.0
           },
           "subdomain_tags": [
@@ -478,12 +478,12 @@
         {
           "domain_tag": "CategoryTheory",
           "metrics": {
-            "MAP": 0.025,
-            "MRR": 0.1,
+            "MAP": 0.08333333333333333,
+            "MRR": 0.3333333333333333,
             "Recall@1": 0.0,
             "Recall@10": 0.25,
             "Recall@100": 0.0,
-            "Recall@5": 0.0,
+            "Recall@5": 0.25,
             "Recall@50": 0.0,
             "evaluated_queries": 1,
             "evaluated_retrievable_queries": 1,
@@ -492,9 +492,9 @@
             "gold_premises_missing_from_train_index": 0,
             "gold_premises_total": 4,
             "nDCG@1": 0.0,
-            "nDCG@10": 0.11284514134893527,
+            "nDCG@10": 0.19519002499605084,
             "nDCG@100": 0.0,
-            "nDCG@5": 0.0,
+            "nDCG@5": 0.19519002499605084,
             "nDCG@50": 0.0
           },
           "subdomain_tags": [
@@ -504,10 +504,10 @@
         {
           "domain_tag": "Data",
           "metrics": {
-            "MAP": 0.16666666666666666,
+            "MAP": 0.2333333333333333,
             "MRR": 0.5,
             "Recall@1": 0.0,
-            "Recall@10": 0.3333333333333333,
+            "Recall@10": 0.6666666666666666,
             "Recall@100": 0.0,
             "Recall@5": 0.3333333333333333,
             "Recall@50": 0.0,
@@ -518,7 +518,7 @@
             "gold_premises_missing_from_train_index": 0,
             "gold_premises_total": 3,
             "nDCG@1": 0.0,
-            "nDCG@10": 0.2960819109658652,
+            "nDCG@10": 0.431733884398313,
             "nDCG@100": 0.0,
             "nDCG@5": 0.2960819109658652,
             "nDCG@50": 0.0
@@ -567,37 +567,37 @@
             {
               "embedding_score": 0.8204599022865295,
               "full_name": "AList.lookup_to_alist",
-              "learned_ranker_score": 0.41060925716761293,
+              "learned_ranker_score": 0.9107836603401254,
               "premise_id": "premise:AList.lookup_to_alist",
-              "score": 0.48094582154186527
+              "score": 0.7560417432867471
             },
             {
               "embedding_score": 0.8012900352478027,
               "full_name": "AList.lookup",
-              "learned_ranker_score": 0.4174367291874179,
+              "learned_ranker_score": 0.9140979794675484,
               "premise_id": "premise:AList.lookup",
-              "score": 0.478963523267479
-            },
-            {
-              "embedding_score": 0.7510013580322266,
-              "full_name": "List.lookup",
-              "learned_ranker_score": 0.26373998831224765,
-              "premise_id": "premise:List.lookup",
-              "score": 0.37741340912959753
+              "score": 0.7521272109215508
             },
             {
               "embedding_score": 0.7629333138465881,
               "full_name": "AList.lookup_eq_none",
-              "learned_ranker_score": 0.25097548867019703,
+              "learned_ranker_score": 0.7887791865699267,
               "premise_id": "premise:AList.lookup_eq_none",
-              "score": 0.3752441128056644
+              "score": 0.6710361466505157
             },
             {
               "embedding_score": 0.761119544506073,
               "full_name": "AList.lookup_isSome",
-              "learned_ranker_score": 0.24975270563425936,
+              "learned_ranker_score": 0.7865398629699191,
               "premise_id": "premise:AList.lookup_isSome",
-              "score": 0.374016568717701
+              "score": 0.6692495052523139
+            },
+            {
+              "embedding_score": 0.7671421766281128,
+              "full_name": "AList.perm_lookup",
+              "learned_ranker_score": 0.6540726483246787,
+              "premise_id": "premise:AList.perm_lookup",
+              "score": 0.5977354626267759
             }
           ]
         },
@@ -612,37 +612,37 @@
             {
               "embedding_score": 0.8516644239425659,
               "full_name": "UniformSpace.Completion.extension_comp_coe",
-              "learned_ranker_score": 0.8003447817902731,
+              "learned_ranker_score": 0.8819471695296753,
               "premise_id": "premise:UniformSpace.Completion.extension_comp_coe",
-              "score": 0.7423374052495371
+              "score": 0.7872187185062083
             },
             {
               "embedding_score": 0.7989178895950317,
               "full_name": "BoundedLatticeHom.coe_comp",
-              "learned_ranker_score": 0.7115670834670645,
+              "learned_ranker_score": 0.8068049404603364,
               "premise_id": "premise:BoundedLatticeHom.coe_comp",
-              "score": 0.6750807701229653
+              "score": 0.7274615914692648
             },
             {
               "embedding_score": 0.8061606287956238,
               "full_name": "Valued.closure_coe_completion_v_lt",
-              "learned_ranker_score": 0.6347828372009271,
+              "learned_ranker_score": 0.714943047323247,
               "premise_id": "premise:Valued.closure_coe_completion_v_lt",
-              "score": 0.6347085700148279
+              "score": 0.6787966855821039
             },
             {
-              "embedding_score": 0.7887153625488281,
-              "full_name": "AbsoluteValue.comp",
-              "learned_ranker_score": 0.6217022793659924,
-              "premise_id": "premise:AbsoluteValue.comp",
-              "score": 0.6218545831626658
+              "embedding_score": 0.7981046438217163,
+              "full_name": "Valued.extension",
+              "learned_ranker_score": 0.6165728168976863,
+              "premise_id": "premise:Valued.extension",
+              "score": 0.6211029274460298
             },
             {
               "embedding_score": 0.8272745609283447,
               "full_name": "UniformSpace.Completion.extensionHom",
-              "learned_ranker_score": 0.4978255897070097,
+              "learned_ranker_score": 0.5952195529658919,
               "premise_id": "premise:UniformSpace.Completion.extensionHom",
-              "score": 0.5643685682437984
+              "score": 0.6179352480361836
             }
           ]
         },
@@ -659,37 +659,37 @@
             {
               "embedding_score": 0.8352179527282715,
               "full_name": "Action.Hom.id",
-              "learned_ranker_score": 0.3921024724147404,
+              "learned_ranker_score": 0.8822454739097898,
               "premise_id": "premise:Action.Hom.id",
-              "score": 0.4747687676486726
-            },
-            {
-              "embedding_score": 0.8515900373458862,
-              "full_name": "Rep.\u03c1_hom",
-              "learned_ranker_score": 0.37372291723732143,
-              "premise_id": "premise:Rep.\u03c1_hom",
-              "score": 0.46775915590836803
-            },
-            {
-              "embedding_score": 0.826767086982727,
-              "full_name": "Action.full_res",
-              "learned_ranker_score": 0.36031744505266244,
-              "premise_id": "premise:Action.full_res",
-              "score": 0.4550403233956788
+              "score": 0.7443474184709498
             },
             {
               "embedding_score": 0.8208795785903931,
               "full_name": "Action.id_hom",
-              "learned_ranker_score": 0.3570591689740588,
+              "learned_ranker_score": 0.8697587198469988,
               "premise_id": "premise:Action.id_hom",
-              "score": 0.45132169398439265
+              "score": 0.7333064469645096
             },
             {
-              "embedding_score": 0.7990200519561768,
-              "full_name": "Grp.Hom.Simps.hom",
-              "learned_ranker_score": 0.31916245900078066,
-              "premise_id": "premise:Grp.Hom.Simps.hom",
-              "score": 0.42172698834901945
+              "embedding_score": 0.819179892539978,
+              "full_name": "Action.res",
+              "learned_ranker_score": 0.754690167674095,
+              "premise_id": "premise:Action.res",
+              "score": 0.6689629250522713
+            },
+            {
+              "embedding_score": 0.8228293657302856,
+              "full_name": "Action.hom_ext",
+              "learned_ranker_score": 0.7403042791669531,
+              "premise_id": "premise:Action.hom_ext",
+              "score": 0.6622031394552916
+            },
+            {
+              "embedding_score": 0.8515900373458862,
+              "full_name": "Rep.\u03c1_hom",
+              "learned_ranker_score": 0.7162682916808106,
+              "premise_id": "premise:Rep.\u03c1_hom",
+              "score": 0.6561591118522871
             }
           ]
         },
@@ -703,37 +703,37 @@
             {
               "embedding_score": 0.8418198823928833,
               "full_name": "AddChar.to_mulShift_inj_of_isPrimitive",
-              "learned_ranker_score": 0.7928835639615602,
+              "learned_ranker_score": 0.971542453756949,
               "premise_id": "premise:AddChar.to_mulShift_inj_of_isPrimitive",
-              "score": 0.7001828441910805
+              "score": 0.7984452335785444
+            },
+            {
+              "embedding_score": 0.817188560962677,
+              "full_name": "AddChar.IsPrimitive",
+              "learned_ranker_score": 0.8941470788013887,
+              "premise_id": "premise:AddChar.IsPrimitive",
+              "score": 0.745778092995343
             },
             {
               "embedding_score": 0.7919825315475464,
               "full_name": "AddChar.mulShift",
-              "learned_ranker_score": 0.5893856781840803,
+              "learned_ranker_score": 0.8203590093831615,
               "premise_id": "premise:AddChar.mulShift",
-              "score": 0.5698837776547934
+              "score": 0.6969191098142881
             },
             {
               "embedding_score": 0.7528934478759766,
               "full_name": "AddChar.mulShift_mul",
-              "learned_ranker_score": 0.5510582558404274,
+              "learned_ranker_score": 0.8334072029677859,
               "premise_id": "premise:AddChar.mulShift_mul",
-              "score": 0.5383424357622839
+              "score": 0.6936343566823311
             },
             {
               "embedding_score": 0.7474581003189087,
               "full_name": "AddChar.mulShift_spec'",
-              "learned_ranker_score": 0.5512463341553646,
+              "learned_ranker_score": 0.8363016554872474,
               "premise_id": "premise:AddChar.mulShift_spec'",
-              "score": 0.5357693817812823
-            },
-            {
-              "embedding_score": 0.7808209657669067,
-              "full_name": "AddChar.inv_mulShift",
-              "learned_ranker_score": 0.505585341460151,
-              "premise_id": "premise:AddChar.inv_mulShift",
-              "score": 0.5203781533277566
+              "score": 0.6925498085138179
             }
           ]
         },
@@ -750,37 +750,37 @@
             {
               "embedding_score": 0.8418198823928833,
               "full_name": "AddChar.to_mulShift_inj_of_isPrimitive",
-              "learned_ranker_score": 0.7928835639615602,
+              "learned_ranker_score": 0.971542453756949,
               "premise_id": "premise:AddChar.to_mulShift_inj_of_isPrimitive",
-              "score": 0.7001828441910805
+              "score": 0.7984452335785444
+            },
+            {
+              "embedding_score": 0.817188560962677,
+              "full_name": "AddChar.IsPrimitive",
+              "learned_ranker_score": 0.8941470788013887,
+              "premise_id": "premise:AddChar.IsPrimitive",
+              "score": 0.745778092995343
             },
             {
               "embedding_score": 0.7919825315475464,
               "full_name": "AddChar.mulShift",
-              "learned_ranker_score": 0.5893856781840803,
+              "learned_ranker_score": 0.8203590093831615,
               "premise_id": "premise:AddChar.mulShift",
-              "score": 0.5698837776547934
+              "score": 0.6969191098142881
             },
             {
               "embedding_score": 0.7528934478759766,
               "full_name": "AddChar.mulShift_mul",
-              "learned_ranker_score": 0.5510582558404274,
+              "learned_ranker_score": 0.8334072029677859,
               "premise_id": "premise:AddChar.mulShift_mul",
-              "score": 0.5383424357622839
+              "score": 0.6936343566823311
             },
             {
               "embedding_score": 0.7474581003189087,
               "full_name": "AddChar.mulShift_spec'",
-              "learned_ranker_score": 0.5512463341553646,
+              "learned_ranker_score": 0.8363016554872474,
               "premise_id": "premise:AddChar.mulShift_spec'",
-              "score": 0.5357693817812823
-            },
-            {
-              "embedding_score": 0.7808209657669067,
-              "full_name": "AddChar.inv_mulShift",
-              "learned_ranker_score": 0.505585341460151,
-              "premise_id": "premise:AddChar.inv_mulShift",
-              "score": 0.5203781533277566
+              "score": 0.6925498085138179
             }
           ]
         },
@@ -794,37 +794,37 @@
             {
               "embedding_score": 0.8644944429397583,
               "full_name": "AddCircle.continuousAt_equivIoc",
-              "learned_ranker_score": 0.7162392922476284,
+              "learned_ranker_score": 0.9354877182003227,
               "premise_id": "premise:AddCircle.continuousAt_equivIoc",
-              "score": 0.6995294102757617
+              "score": 0.8201160445497435
             },
             {
               "embedding_score": 0.8531449437141418,
               "full_name": "AddCircle.continuousAt_equivIco",
-              "learned_ranker_score": 0.39391472042665204,
+              "learned_ranker_score": 0.768739919936047,
               "premise_id": "premise:AddCircle.continuousAt_equivIco",
-              "score": 0.516965449011186
-            },
-            {
-              "embedding_score": 0.807059645652771,
-              "full_name": "AddCircle.equivIoc",
-              "learned_ranker_score": 0.38401357453337615,
-              "premise_id": "premise:AddCircle.equivIoc",
-              "score": 0.49731771756310483
+              "score": 0.7231193087413532
             },
             {
               "embedding_score": 0.8389780521392822,
               "full_name": "AddCircle.continuous_equivIoc_symm",
-              "learned_ranker_score": 0.3319014645251465,
+              "learned_ranker_score": 0.7070215686481273,
               "premise_id": "premise:AddCircle.continuous_equivIoc_symm",
-              "score": 0.47954808944345095
+              "score": 0.6858641467110904
             },
             {
-              "embedding_score": 0.7905999422073364,
-              "full_name": "Equiv.equivPUnit",
-              "learned_ranker_score": 0.3157498588146543,
-              "premise_id": "premise:Equiv.equivPUnit",
-              "score": 0.4528227239617505
+              "embedding_score": 0.807059645652771,
+              "full_name": "AddCircle.equivIoc",
+              "learned_ranker_score": 0.6945234945330738,
+              "premise_id": "premise:AddCircle.equivIoc",
+              "score": 0.6680981735629385
+            },
+            {
+              "embedding_score": 0.8048856258392334,
+              "full_name": "Continuous.continuousAt",
+              "learned_ranker_score": 0.669264430994531,
+              "premise_id": "premise:Continuous.continuousAt",
+              "score": 0.6183370701327449
             }
           ]
         },
@@ -841,37 +841,37 @@
             {
               "embedding_score": 0.8470081090927124,
               "full_name": "AddCircle.continuousAt_equivIoc",
-              "learned_ranker_score": 0.7033018251349024,
+              "learned_ranker_score": 0.927245692406755,
               "premise_id": "premise:AddCircle.continuousAt_equivIoc",
-              "score": 0.6870629852065664
+              "score": 0.8102321122060854
             },
             {
               "embedding_score": 0.837796688079834,
               "full_name": "AddCircle.continuousAt_equivIco",
-              "learned_ranker_score": 0.38083198511794203,
+              "learned_ranker_score": 0.7479881129554369,
               "premise_id": "premise:AddCircle.continuousAt_equivIco",
-              "score": 0.5050733783672974
-            },
-            {
-              "embedding_score": 0.8007225394248962,
-              "full_name": "AddCircle.equivIoc",
-              "learned_ranker_score": 0.3786433745108849,
-              "premise_id": "premise:AddCircle.equivIoc",
-              "score": 0.492424953045005
+              "score": 0.7070092486779196
             },
             {
               "embedding_score": 0.8327902555465698,
               "full_name": "AddCircle.continuous_equivIoc_symm",
-              "learned_ranker_score": 0.3269913247953528,
+              "learned_ranker_score": 0.6974711772539133,
               "premise_id": "premise:AddCircle.continuous_equivIoc_symm",
-              "score": 0.47495404683469444
+              "score": 0.6787179656869027
             },
             {
-              "embedding_score": 0.7827537655830383,
-              "full_name": "PiLp.continuous_equiv",
-              "learned_ranker_score": 0.30537284463398445,
-              "premise_id": "premise:PiLp.continuous_equiv",
-              "score": 0.4457277168171012
+              "embedding_score": 0.8007225394248962,
+              "full_name": "AddCircle.equivIoc",
+              "learned_ranker_score": 0.68450937869205,
+              "premise_id": "premise:AddCircle.equivIoc",
+              "score": 0.6606512553446457
+            },
+            {
+              "embedding_score": 0.7881290912628174,
+              "full_name": "Continuous.continuousAt",
+              "learned_ranker_score": 0.6413355256541711,
+              "premise_id": "premise:Continuous.continuousAt",
+              "score": 0.5978486726151636
             }
           ]
         },
@@ -883,39 +883,39 @@
           "split": "test",
           "top_retrieved_premises": [
             {
+              "embedding_score": 0.8171553015708923,
+              "full_name": "AddCircle.continuousAt_equivIoc",
+              "learned_ranker_score": 0.6936230387950547,
+              "premise_id": "premise:AddCircle.continuousAt_equivIoc",
+              "score": 0.6718814793322588
+            },
+            {
               "embedding_score": 0.7974632382392883,
               "full_name": "GCongr.Filter.map_le_map",
-              "learned_ranker_score": 0.5684780896472205,
+              "learned_ranker_score": 0.6627905017118576,
               "premise_id": "premise:GCongr.Filter.map_le_map",
-              "score": 0.5955367002071934
+              "score": 0.6474085268427439
             },
             {
               "embedding_score": 0.7930667400360107,
               "full_name": "Filter.map_equiv_symm",
-              "learned_ranker_score": 0.5551545836745947,
+              "learned_ranker_score": 0.6510267814867513,
               "premise_id": "premise:Filter.map_equiv_symm",
-              "score": 0.5879884434720464
+              "score": 0.6407181522687325
             },
             {
-              "embedding_score": 0.8183201551437378,
-              "full_name": "DHashMap.filterMap_equiv_filter",
-              "learned_ranker_score": 0.44593421401959366,
-              "premise_id": "premise:DHashMap.filterMap_equiv_filter",
-              "score": 0.5341447851847603
+              "embedding_score": 0.8044055700302124,
+              "full_name": "AddCircle.equivIoc",
+              "learned_ranker_score": 0.6204571850994286,
+              "premise_id": "premise:AddCircle.equivIoc",
+              "score": 0.6265495562339307
             },
             {
-              "embedding_score": 0.7921919822692871,
-              "full_name": "Finset.map_filter'",
-              "learned_ranker_score": 0.4519769718854872,
-              "premise_id": "premise:Finset.map_filter'",
-              "score": 0.5284830811114198
-            },
-            {
-              "embedding_score": 0.8013318181037903,
-              "full_name": "GCongr.Filter.comap_le_comap",
-              "learned_ranker_score": 0.4454013551547426,
-              "premise_id": "premise:GCongr.Filter.comap_le_comap",
-              "score": 0.5275845316748683
+              "embedding_score": 0.7934503555297852,
+              "full_name": "Filter.map_le_iff_le_comap",
+              "learned_ranker_score": 0.6862703972961003,
+              "premise_id": "premise:Filter.map_le_iff_le_comap",
+              "score": 0.6233608230443178
             }
           ]
         },
@@ -934,39 +934,39 @@
           "split": "test",
           "top_retrieved_premises": [
             {
+              "embedding_score": 0.8437860012054443,
+              "full_name": "AddCommGroup.modEq_iff_toIcoMod_add_period_eq_toIocMod",
+              "learned_ranker_score": 0.9202556860062255,
+              "premise_id": "premise:AddCommGroup.modEq_iff_toIcoMod_add_period_eq_toIocMod",
+              "score": 0.8067141436722901
+            },
+            {
               "embedding_score": 0.805900514125824,
               "full_name": "AddCommGroup.ModEq.add_iff_right",
-              "learned_ranker_score": 0.6290606058803007,
+              "learned_ranker_score": 0.9023451857340432,
               "premise_id": "premise:AddCommGroup.ModEq.add_iff_right",
-              "score": 0.6346960334138104
+              "score": 0.7850025523333688
             },
             {
               "embedding_score": 0.7995011210441589,
               "full_name": "AddCommGroup.ModEq.add_iff_left",
-              "learned_ranker_score": 0.6236809933601701,
+              "learned_ranker_score": 0.8981026699623675,
               "premise_id": "premise:AddCommGroup.ModEq.add_iff_left",
-              "score": 0.6297790322447492
-            },
-            {
-              "embedding_score": 0.8437860012054443,
-              "full_name": "AddCommGroup.modEq_iff_toIcoMod_add_period_eq_toIocMod",
-              "learned_ranker_score": 0.5902313141405808,
-              "premise_id": "premise:AddCommGroup.modEq_iff_toIcoMod_add_period_eq_toIocMod",
-              "score": 0.6252007391461855
+              "score": 0.7807109543759577
             },
             {
               "embedding_score": 0.8001309633255005,
               "full_name": "AddCommGroup.modEq_iff_eq_mod_zmultiples",
-              "learned_ranker_score": 0.43411525577839094,
+              "learned_ranker_score": 0.8163511005922152,
               "premise_id": "premise:AddCommGroup.modEq_iff_eq_mod_zmultiples",
-              "score": 0.5256034654557182
+              "score": 0.7358331801033215
             },
             {
               "embedding_score": 0.8077094554901123,
               "full_name": "AddCommGroup.ModEq.trans",
-              "learned_ranker_score": 0.3973941693017246,
+              "learned_ranker_score": 0.7947818749475951,
               "premise_id": "premise:AddCommGroup.ModEq.trans",
-              "score": 0.5052031592231956
+              "score": 0.7237663973284244
             }
           ]
         },
@@ -983,37 +983,37 @@
             {
               "embedding_score": 0.8179498910903931,
               "full_name": "Int.natCast_modEq_iff",
-              "learned_ranker_score": 0.7499530316867273,
+              "learned_ranker_score": 0.8869791568912676,
               "premise_id": "premise:Int.natCast_modEq_iff",
-              "score": 0.702478553399606
+              "score": 0.7778429222621032
             },
             {
-              "embedding_score": 0.792565107345581,
-              "full_name": "ZMod.natCast_eq_natCast_iff",
-              "learned_ranker_score": 0.5863976862408823,
-              "premise_id": "premise:ZMod.natCast_eq_natCast_iff",
-              "score": 0.6031686502802331
+              "embedding_score": 0.8161623477935791,
+              "full_name": "AddCommGroup.ModEq.trans",
+              "learned_ranker_score": 0.8679310784427284,
+              "premise_id": "premise:AddCommGroup.ModEq.trans",
+              "score": 0.7668577715683359
             },
             {
-              "embedding_score": 0.7985410690307617,
-              "full_name": "Nat.ModEq.comm",
-              "learned_ranker_score": 0.5732474892309393,
-              "premise_id": "premise:Nat.ModEq.comm",
-              "score": 0.5999146862004298
+              "embedding_score": 0.8082288503646851,
+              "full_name": "AddCommGroup.ModEq.nsmul",
+              "learned_ranker_score": 0.8610722377546612,
+              "premise_id": "premise:AddCommGroup.ModEq.nsmul",
+              "score": 0.7606577589766573
             },
             {
-              "embedding_score": 0.7786812782287598,
-              "full_name": "Nat.mod_modEq",
-              "learned_ranker_score": 0.5742521973328186,
-              "premise_id": "premise:Nat.mod_modEq",
-              "score": 0.5944901796710508
+              "embedding_score": 0.80418860912323,
+              "full_name": "AddCommGroup.ModEq.of_nsmul",
+              "learned_ranker_score": 0.8574658509397912,
+              "premise_id": "premise:AddCommGroup.ModEq.of_nsmul",
+              "score": 0.7574379324085936
             },
             {
-              "embedding_score": 0.7880257964134216,
-              "full_name": "ZMod.eq_iff_modEq_nat",
-              "learned_ranker_score": 0.5537453371985203,
-              "premise_id": "premise:ZMod.eq_iff_modEq_nat",
-              "score": 0.5848458291616931
+              "embedding_score": 0.8005940914154053,
+              "full_name": "AddCommGroup.ModEq.of_zsmul",
+              "learned_ranker_score": 0.8541920190863873,
+              "premise_id": "premise:AddCommGroup.ModEq.of_zsmul",
+              "score": 0.7545374024706271
             }
           ]
         }
@@ -1031,9 +1031,9 @@
         "rank_buckets": {
           "miss_top_10": 13,
           "no_train_gold": 1,
-          "rank_1": 1,
+          "rank_1": 2,
           "rank_2_to_5": 4,
-          "rank_6_to_10": 1
+          "rank_6_to_10": 0
         },
         "retrievable_queries": 19,
         "zero_recall_at_max_k": 13,
@@ -1057,20 +1057,20 @@
         ]
       },
       "metrics": {
-        "MAP": 0.07660818713450292,
-        "MRR": 0.1456140350877193,
-        "Recall@1": 0.02631578947368421,
-        "Recall@10": 0.1513157894736842,
-        "Recall@5": 0.12061403508771928,
+        "MAP": 0.07650375939849624,
+        "MRR": 0.17982456140350878,
+        "Recall@1": 0.03289473684210526,
+        "Recall@10": 0.16885964912280702,
+        "Recall@5": 0.1337719298245614,
         "evaluated_queries": 20,
         "evaluated_retrievable_queries": 19,
         "gold_premise_coverage": 0.8771929824561403,
         "gold_premises_in_train_index": 50,
         "gold_premises_missing_from_train_index": 7,
         "gold_premises_total": 57,
-        "nDCG@1": 0.05263157894736842,
-        "nDCG@10": 0.11480395621121713,
-        "nDCG@5": 0.10233570120794566
+        "nDCG@1": 0.10526315789473684,
+        "nDCG@10": 0.12376565228608487,
+        "nDCG@5": 0.11293087792113359
       },
       "worst_cases": [
         {
