@@ -33,7 +33,7 @@ Out of current production scope:
 | Premise positive/negative supervision | 69,461 positive edges, 663,198 negative edges, positive/negative overlap removed: 4,088 | Delivered |
 | Larger real-data pipeline | `configs/proofatlas.yaml`, 292,012 current split rows, 10,000 requested theorems, 350,000 source rows | Delivered |
 | GPU BGE embeddings | `outputs/embeddings/embedding_config.json`: `BAAI/bge-base-en-v1.5`, devices `cuda:0` to `cuda:6`, proof-state template `full_name + goal_text` | Delivered |
-| ANN performance | `outputs/reports/index_benchmark.json`: hnswlib premise retrieval 20.0x faster than exact cosine at Recall@10 vs exact 0.993 | Delivered |
+| ANN performance | `outputs/reports/index_benchmark.json`: hnswlib premise retrieval 19.0x faster than exact cosine at Recall@10 vs exact 0.994 | Delivered |
 | API readiness/security review | `outputs/reports/deployment_security_review.json`, `docs/proofatlas_deployment_guide.md` | MVP delivered |
 | Real Lean proof-state extraction for new queries | `src/leanrank_kg/lean_check.py` extracts proof states from Lean unsolved-goal diagnostics when validation is requested | Partial |
 | Full Lean server/session extraction | Explicitly out of current LeanRank-data production scope | Out of scope |
@@ -64,18 +64,25 @@ From `outputs/reports/index_benchmark.json` and `outputs/reports/pipeline_perfor
 
 | Entity | Backend | Rows | Exact ms/query | Indexed ms/query | Speedup | Recall@10 vs exact |
 | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| Premise | hnswlib | 127,561 | 69.2717 | 3.4585 | 20.0292 | 0.9930 |
-| ProofState | hnswlib | 23,723 | 12.7351 | 0.8292 | 15.3578 | 0.9640 |
-| Theorem | hnswlib | 8,000 | 4.2275 | 0.2369 | 17.8457 | 0.9930 |
+| Premise | hnswlib | 127,561 | 69.0399 | 3.6328 | 19.0044 | 0.9940 |
+| ProofState | hnswlib | 23,723 | 12.7668 | 0.8265 | 15.4460 | 0.9580 |
+| Theorem | hnswlib | 8,000 | 4.0973 | 0.2318 | 17.6785 | 0.9910 |
 
 Pipeline bottleneck profile:
 
 | Stage group | Field | Value |
 | --- | --- | ---: |
-| Primary bottleneck | stage | evaluate |
-| Primary bottleneck | seconds | 211.3259 |
-| Primary bottleneck | share of total | 0.2855 |
-| Top-3 timed stages | share of total | 0.5962 |
+| Primary bottleneck | stage | embed |
+| Primary bottleneck | seconds | 149.1632 |
+| Primary bottleneck | share of total | 0.2704 |
+| Top-3 timed stages | share of total | 0.5195 |
+
+Pipeline timing:
+
+- Total seconds: 551.6511
+- Saved full-pipeline evaluate stage: 19.1237 seconds
+- Current standalone full-heldout evaluation: 23.8288 seconds
+- Timing freshness: current; full-pipeline evaluate timing and standalone evaluation timing are aligned.
 
 Pipeline scale profile:
 
@@ -106,7 +113,7 @@ make verify-delivery
 Recent passing result:
 
 ```text
-pytest: 72 passed, 4 skipped
+pytest: 74 passed, 4 skipped
 audit: 167/167 checks passed
 git diff --check: passed
 ```

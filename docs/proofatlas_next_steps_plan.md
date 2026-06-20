@@ -111,9 +111,11 @@ Performance snapshot:
 - Train premise index rows: 127,561
 - Train proof-state index rows: 23,723
 - Train theorem index rows: 8,000
-- Premise hnswlib speedup vs exact cosine: 18.3x at Recall@10 vs exact 0.989
-- Proof-state hnswlib speedup vs exact cosine: 15.2x at Recall@10 vs exact 0.991
-- Theorem hnswlib speedup vs exact cosine: 12.8x at Recall@10 vs exact 0.994
+- Full production pipeline timing: 551.7s with 19 executed / 0 skipped stages
+- Current timing bottleneck: embedding, 149.2s, 27.0% of the timed run
+- Premise hnswlib speedup vs exact cosine: 19.0x at Recall@10 vs exact 0.994
+- Proof-state hnswlib speedup vs exact cosine: 15.4x at Recall@10 vs exact 0.958
+- Theorem hnswlib speedup vs exact cosine: 17.7x at Recall@10 vs exact 0.991
 
 ## Completed Roadmap Items
 

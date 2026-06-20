@@ -105,6 +105,31 @@ def test_readme_performance_snapshot_matches_committed_artifacts() -> None:
     assert _readme_table_row(readme, "Top-3 timed stages", "share of total")[2] == f"{float(bottleneck['top3_stage_share_of_total']):.4f}"
 
 
+def test_delivery_audit_performance_snapshot_matches_committed_artifacts() -> None:
+    repo = Path(__file__).resolve().parents[1]
+    audit = (repo / "docs/proofatlas_delivery_audit.md").read_text(encoding="utf-8")
+    benchmark = json.loads((repo / "outputs/reports/index_benchmark.json").read_text(encoding="utf-8"))
+    profile = json.loads((repo / "outputs/reports/pipeline_performance_report.json").read_text(encoding="utf-8"))
+    timing = json.loads((repo / "outputs/reports/pipeline_run_timings.json").read_text(encoding="utf-8"))
+
+    display_names = {"premise": "Premise", "proof_state": "ProofState", "theorem": "Theorem"}
+    for key, label in display_names.items():
+        row = benchmark["entities"][key]
+        cells = _readme_table_row(audit, label)
+        assert cells[2] == f"{int(row['rows']):,}"
+        assert cells[3] == f"{float(row['exact_ms_per_query']):.4f}"
+        assert cells[4] == f"{float(row['indexed_ms_per_query']):.4f}"
+        assert cells[5] == f"{float(row['speedup_vs_exact']):.4f}"
+        assert cells[6] == f"{float(row['recall_at_10_vs_exact']):.4f}"
+
+    bottleneck = profile["throughput_profile"]["bottleneck_profile"]
+    assert _readme_table_row(audit, "Primary bottleneck", "stage")[2] == bottleneck["primary_stage"]
+    assert _readme_table_row(audit, "Primary bottleneck", "seconds")[2] == f"{float(bottleneck['primary_stage_seconds']):.4f}"
+    assert _readme_table_row(audit, "Primary bottleneck", "share of total")[2] == f"{float(bottleneck['primary_stage_share_of_total']):.4f}"
+    assert _readme_table_row(audit, "Top-3 timed stages", "share of total")[2] == f"{float(bottleneck['top3_stage_share_of_total']):.4f}"
+    assert f"Total seconds: {float(timing['total_seconds']):.4f}" in audit
+
+
 def test_readme_premise_supervision_snapshot_matches_committed_artifacts() -> None:
     repo = Path(__file__).resolve().parents[1]
     readme = (repo / "README.md").read_text(encoding="utf-8")
