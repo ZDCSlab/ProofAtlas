@@ -375,6 +375,22 @@
     "gold_premise_coverage": 0.69,
     "proof_technique_label_coverage": 0.8280274834597932
   },
+  "overview": {
+    "max_difficulty_count": 4423,
+    "max_domain_count": 8634,
+    "max_split_edges": 245514,
+    "max_split_nodes": 62808,
+    "max_technique_count": 3398,
+    "missing_graph_endpoints": 0,
+    "networkx_ok": true,
+    "schema_errors": 0,
+    "split_leakage": false,
+    "total_edges": 335938,
+    "total_nodes": 92640,
+    "train_premises": 53668,
+    "train_proof_states": 4722,
+    "train_theorems": 1667
+  },
   "proof_techniques": [
     {
       "count": 3398,
@@ -1432,6 +1448,48 @@
           "score": 0.8084047436714172
         }
       ]
+    }
+  ],
+  "top_domains": [
+    {
+      "count": 8634,
+      "domain": "RingTheory",
+      "share": 0.1439
+    },
+    {
+      "count": 8402,
+      "domain": "Analysis",
+      "share": 0.14003333333333334
+    },
+    {
+      "count": 6190,
+      "domain": "MeasureTheory",
+      "share": 0.10316666666666667
+    },
+    {
+      "count": 5434,
+      "domain": "NumberTheory",
+      "share": 0.09056666666666667
+    },
+    {
+      "count": 5295,
+      "domain": "Algebra",
+      "share": 0.08825
+    },
+    {
+      "count": 4477,
+      "domain": "Data",
+      "share": 0.07461666666666666
+    },
+    {
+      "count": 4386,
+      "domain": "LinearAlgebra",
+      "share": 0.0731
+    },
+    {
+      "count": 3499,
+      "domain": "Topology",
+      "share": 0.05831666666666667
     }
   ],
   "validation": {
