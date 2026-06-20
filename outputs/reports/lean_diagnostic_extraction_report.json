@@ -1,5 +1,5 @@
 {
-  "case_count": 5,
+  "case_count": 6,
   "cases": [
     {
       "checks": {
@@ -153,6 +153,66 @@
     {
       "checks": {
         "extracted_count_matches": true,
+        "proof_states_have_retrieval_text": true,
+        "proof_states_have_stable_ids": true
+      },
+      "description": "Multiple Lean goals can be split even when diagnostics omit blank-line or case separators.",
+      "expected_extracted_count": 2,
+      "extracted_count": 2,
+      "failure_reason": null,
+      "name": "adjacent_goals_without_blank_lines",
+      "passed": true,
+      "proof_states": [
+        {
+          "block_index": 0,
+          "context_line_count": 2,
+          "extraction_method": "lean_unsolved_goals_diagnostic",
+          "goal_text": "x = x",
+          "hypothesis_count": 1,
+          "local_hypotheses": [
+            "x : Nat"
+          ],
+          "namespace_hints": [],
+          "proof_state_id": "lean_diag:103c85be27b23de5",
+          "raw_text": "x : Nat\n\u22a2 x = x",
+          "retrieval_text": "x : Nat\n\u22a2 x = x",
+          "symbol_count": 3,
+          "symbols": [
+            "=",
+            "Nat",
+            "x"
+          ],
+          "typeclass_hints": []
+        },
+        {
+          "block_index": 1,
+          "context_line_count": 2,
+          "extraction_method": "lean_unsolved_goals_diagnostic",
+          "goal_text": "y = y",
+          "hypothesis_count": 1,
+          "local_hypotheses": [
+            "y : Nat"
+          ],
+          "namespace_hints": [],
+          "proof_state_id": "lean_diag:54f19652349d074d",
+          "raw_text": "y : Nat\n\u22a2 y = y",
+          "retrieval_text": "y : Nat\n\u22a2 y = y",
+          "symbol_count": 3,
+          "symbols": [
+            "=",
+            "Nat",
+            "y"
+          ],
+          "typeclass_hints": []
+        }
+      ],
+      "raw_block_count": 2,
+      "rejected_blocks": [],
+      "rejected_count": 0
+    },
+    {
+      "checks": {
+        "extracted_count_matches": true,
         "failure_reason_matches": true,
         "proof_states_have_retrieval_text": true,
         "proof_states_have_stable_ids": true
@@ -210,15 +270,16 @@
     }
   ],
   "method": "lean_unsolved_goals_diagnostic",
-  "passed_case_count": 5,
+  "passed_case_count": 6,
   "production_pipeline_role": "optional query diagnostics only; not a corpus extractor and not part of the default LeanRank-data pipeline",
   "quality_checks": {
     "all_cases_passed": true,
     "all_extracted_states_have_retrieval_text": true,
+    "has_adjacent_goal_split_case": true,
     "has_failure_explanation_case": true,
     "has_successful_extraction_case": true,
     "has_timeout_stderr_extraction_case": true
   },
   "scope": "query-time Lean unsolved-goals diagnostic proof-state extraction",
-  "total_extracted_proof_states": 5
+  "total_extracted_proof_states": 7
 }

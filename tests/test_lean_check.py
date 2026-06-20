@@ -77,6 +77,20 @@ h : x = x
     assert states[0]["retrieval_text"].endswith("⊢ x = x")
 
 
+def test_extract_proof_states_splits_adjacent_goals_without_blank_lines():
+    stderr = """
+error: unsolved goals
+x : Nat
+⊢ x = x
+y : Nat
+⊢ y = y
+"""
+    states = lean_check.extract_proof_states_from_diagnostics(stderr=stderr)
+    assert [state["goal_text"] for state in states] == ["x = x", "y = y"]
+    assert states[0]["local_hypotheses"] == ["x : Nat"]
+    assert states[1]["local_hypotheses"] == ["y : Nat"]
+
+
 def test_extract_proof_state_report_explains_failures():
     report = lean_check.extract_proof_state_report(stderr="error: unsolved goals\ncase h\nno goal marker")
     assert report["has_unsolved_goals"] is True

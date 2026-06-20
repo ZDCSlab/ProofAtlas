@@ -18,6 +18,39 @@ def _lean_command() -> list[str] | None:
 
 
 def _extract_goal_blocks(text: str) -> list[str]:
+    def split_goal_block(block: list[str]) -> list[list[str]]:
+        if sum(1 for line in block if "⊢" in line) <= 1:
+            return [block]
+        blocks: list[list[str]] = []
+        current_prefix: list[str] = []
+        current_goal: list[str] = []
+        next_context: list[str] = []
+        goal_seen = False
+        for line in block:
+            if "⊢" in line:
+                if goal_seen:
+                    blocks.append(current_prefix + current_goal)
+                    current_prefix = next_context
+                    current_goal = [line]
+                    next_context = []
+                else:
+                    current_goal = [line]
+                    goal_seen = True
+                continue
+            if goal_seen:
+                next_context.append(line)
+            else:
+                current_prefix.append(line)
+        if goal_seen:
+            blocks.append(current_prefix + current_goal + next_context)
+        return [part for part in blocks if any("⊢" in line for line in part)]
+
+    def flush_current() -> None:
+        nonlocal current
+        if current:
+            blocks.extend(split_goal_block(current))
+            current = []
+
     blocks: list[list[str]] = []
     current: list[str] = []
     in_goals = False
@@ -26,29 +59,23 @@ def _extract_goal_blocks(text: str) -> list[str]:
         stripped = line.strip()
         if "unsolved goals" in stripped:
             in_goals = True
-            if current:
-                blocks.append(current)
-                current = []
+            flush_current()
             continue
         if not in_goals:
             continue
         if not stripped:
-            if current:
-                blocks.append(current)
-                current = []
+            flush_current()
             continue
         if stripped.startswith("case ") and current:
-            blocks.append(current)
+            flush_current()
             current = [stripped]
             continue
         if stripped.startswith(("error:", "warning:", "info:")) and current:
-            blocks.append(current)
-            current = []
+            flush_current()
             in_goals = "unsolved goals" in stripped
             continue
         current.append(stripped)
-    if current:
-        blocks.append(current)
+    flush_current()
     return ["\n".join(block) for block in blocks if any("⊢" in line for line in block)]
 
 

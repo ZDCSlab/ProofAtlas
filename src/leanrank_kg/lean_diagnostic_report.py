@@ -52,6 +52,18 @@ x : Nat
         "expected_rejected_count": 1,
     },
     {
+        "name": "adjacent_goals_without_blank_lines",
+        "description": "Multiple Lean goals can be split even when diagnostics omit blank-line or case separators.",
+        "stderr": """
+error: unsolved goals
+x : Nat
+⊢ x = x
+y : Nat
+⊢ y = y
+""",
+        "expected_extracted_count": 2,
+    },
+    {
         "name": "missing_turnstile",
         "description": "Malformed diagnostics explain why no proof state was extracted.",
         "stderr": """
@@ -124,6 +136,10 @@ def build_report() -> dict[str, Any]:
             "has_failure_explanation_case": any(case["failure_reason"] for case in cases),
             "has_timeout_stderr_extraction_case": any(
                 case["name"] == "timeout_stderr_unsolved_goal" and case["extracted_count"] > 0
+                for case in cases
+            ),
+            "has_adjacent_goal_split_case": any(
+                case["name"] == "adjacent_goals_without_blank_lines" and case["extracted_count"] == 2
                 for case in cases
             ),
             "all_extracted_states_have_retrieval_text": all(
