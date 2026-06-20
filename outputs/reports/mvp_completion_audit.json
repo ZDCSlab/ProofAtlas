@@ -5,6 +5,11 @@
       "passed": true,
       "path": "docs/proofatlas_deployment_guide.md"
     },
+    "artifact:docs/proofatlas_project_summary_en.md": {
+      "detail": "exists",
+      "passed": true,
+      "path": "docs/proofatlas_project_summary_en.md"
+    },
     "artifact:homepage/assets/graph_visualization.json": {
       "detail": "exists",
       "passed": true,
@@ -780,6 +785,11 @@
       "passed": true,
       "path": "outputs/reports/premise_trace_supervision_report.json"
     },
+    "validation:project_summary_evidence": {
+      "detail": "missing=[]",
+      "passed": true,
+      "path": "docs/proofatlas_project_summary_en.md"
+    },
     "validation:ranker_ablation": {
       "detail": "ranker_ablation={'validation_auc': 0.825379, 'groups': ['difficulty', 'embedding_similarity', 'frequency', 'graph', 'namespace_domain', 'proof_technique', 'symbol_overlap', 'theorem_neighborhood'], 'has_ablation': True}",
       "passed": true,
@@ -843,5 +853,5 @@
   },
   "failed_checks": [],
   "passed": true,
-  "total_checks": 168
+  "total_checks": 170
 }

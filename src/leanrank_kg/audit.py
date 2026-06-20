@@ -141,6 +141,7 @@ def build_audit() -> dict[str, Any]:
         "homepage/assets/refresh_trend.json",
         "homepage/assets/refresh_history.json",
         "docs/proofatlas_deployment_guide.md",
+        "docs/proofatlas_project_summary_en.md",
         "notebooks/leanrank_kg_demo.ipynb",
     ]:
         checks[f"artifact:{path}"] = _exists(path)
@@ -563,6 +564,17 @@ def build_audit() -> dict[str, Any]:
             "--require-ready",
             "security-review",
             "deployment_security_review.json",
+        ],
+    )
+    checks["validation:project_summary_evidence"] = _file_contains(
+        "docs/proofatlas_project_summary_en.md",
+        [
+            "Current Production Evidence",
+            "erbacher/LeanRank-data",
+            "candidate_pool_miss_top_100",
+            "7 CUDA devices",
+            "`torch_cuda` batched top-k",
+            "custom Lean server/source extractor",
         ],
     )
     passed = all(check["passed"] for check in checks.values())

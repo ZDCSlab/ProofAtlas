@@ -24,6 +24,8 @@ def test_audit_covers_refined_theorem_guidance_artifacts(tmp_path, monkeypatch):
         (tmp_path / "schemas" / schema.name).write_text(schema.read_text(encoding="utf-8"), encoding="utf-8")
     deployment_guide = repo / "docs/proofatlas_deployment_guide.md"
     (tmp_path / "docs/proofatlas_deployment_guide.md").write_text(deployment_guide.read_text(encoding="utf-8"), encoding="utf-8")
+    project_summary = repo / "docs/proofatlas_project_summary_en.md"
+    (tmp_path / "docs/proofatlas_project_summary_en.md").write_text(project_summary.read_text(encoding="utf-8"), encoding="utf-8")
     (tmp_path / "README.md").write_text((repo / "README.md").read_text(encoding="utf-8"), encoding="utf-8")
     (tmp_path / "pyproject.toml").write_text("[project]\nname='proofatlas-test'\n", encoding="utf-8")
     (tmp_path / "Makefile").write_text("demo:\n\ttrue\n", encoding="utf-8")
@@ -49,3 +51,4 @@ def test_audit_covers_refined_theorem_guidance_artifacts(tmp_path, monkeypatch):
     assert result["checks"]["validation:graph_visualization"]["passed"] is True
     assert result["checks"]["validation:homepage_sections"]["passed"] is True
     assert result["checks"]["validation:deployment_guide"]["passed"] is True
+    assert result["checks"]["validation:project_summary_evidence"]["passed"] is True
