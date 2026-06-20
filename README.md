@@ -4,7 +4,9 @@ ProofAtlas builds a non-GNN LeanRank-style math proof knowledge graph. It proces
 
 ## Dataset Source
 
-The target source is `erbacher/LeanRank-data`. The default config uses a deterministic synthetic LeanRank-shaped sample so the MVP can run quickly and reproducibly without relying on a large external download. Set `use_huggingface: true` in `configs/sample.yaml` to attempt loading the real Hugging Face dataset.
+The production experiment source is `erbacher/LeanRank-data`, configured by `configs/proofatlas.yaml`. It uses theorem-first sampling from the Hugging Face dataset and is the source for the committed experiment report and homepage assets.
+
+`configs/sample.yaml` remains the lightweight smoke-test config. It uses a deterministic synthetic LeanRank-shaped sample by default so tests and local demos can run quickly without a large external download. Set `use_huggingface: true` in a sample config to load real Hugging Face rows for smaller exploratory runs.
 
 ## What Processed Dataset Is Included
 
