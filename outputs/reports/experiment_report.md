@@ -487,6 +487,49 @@ These timings split the `evaluate` pipeline stage into proof-state retrieval, th
 | `test_theorem_retrieval` | 0.4232 | 1000 | torch_cuda |
 | `val_theorem_retrieval` | 0.3153 | 1000 | torch_cuda |
 
+## Resource And Parallelism Profile
+
+This profile records the resource choices used by the committed LeanRank-data run. It is intended to explain which stages use GPU/vectorized paths and which stages remain CPU/IO-heavy.
+
+### Embedding
+
+- Backend/model: `sentence_transformers` / `BAAI/bge-base-en-v1.5`
+- Requested device: `cuda`
+- Devices: `['cuda:0', 'cuda:1', 'cuda:2', 'cuda:3', 'cuda:4', 'cuda:5', 'cuda:6']`
+- Device count: `7`
+- Multi-process encoding: `True`
+- Batch size: `512`
+- Total embedding rows: `244391`
+- Embedding rows/sec during embed stage: `1638.4137466782227`
+
+### Evaluation
+
+- Ranking backend: `batched_embedding_topk`
+- Requested GPU: `use_gpu=True`, device `cuda:0`
+- Actual backends: `['torch_cuda']`
+- Test proof-state backend: `torch_cuda`
+- Test theorem backend: `torch_cuda`
+- Candidate count: `127561`
+- Fallback reasons: `[]`
+
+### Indexing
+
+- Backend/requested backend: `hnswlib` / `auto`
+- Metric: `cosine`
+- hnswlib parameters: `M=16`, `ef_construction=200`, `ef_search=100`
+- Indexed entities: `['premise', 'proof_state', 'theorem']`
+- Mean speedup vs exact: `17.376305276865946`
+- Minimum recall vs exact: `0.9580000000000001`
+
+### CPU/IO-Heavy Stages
+
+| Stage | Seconds | Share of total |
+| --- | ---: | ---: |
+| `sample` | 82.1005 | 0.1488 |
+| `train_ranker` | 55.3123 | 0.1003 |
+| `augment_graph` | 50.9153 | 0.0923 |
+| `compute_difficulty` | 48.5632 | 0.0880 |
+
 ## Pipeline Performance And Scale-Up Notes
 
 - Pipeline profile: `outputs/reports/pipeline_performance_report.json`

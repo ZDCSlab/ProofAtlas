@@ -17,6 +17,11 @@ dist/
 *.log
 *.prof
 .DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
+tmp/
 
 # The homepage is the demo deliverable, so keep generated static assets tracked.
 !homepage/

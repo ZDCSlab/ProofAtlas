@@ -3489,6 +3489,80 @@
       "training_repeat_policy": "Do not retrain by default. Reuse embeddings, indexes, and trained models for report/homepage refreshes; rerun ranker training only after ranker feature, label, split, or relevant config changes."
     },
     "requested_source_rows": 350000,
+    "resource_parallelism_profile": {
+      "cpu_or_io_heavy_stages": [
+        {
+          "name": "sample",
+          "seconds": 82.1005248860456,
+          "share_of_total": 0.14882691328748682
+        },
+        {
+          "name": "train_ranker",
+          "seconds": 55.312271517002955,
+          "share_of_total": 0.1002667723284445
+        },
+        {
+          "name": "augment_graph",
+          "seconds": 50.915316165890545,
+          "share_of_total": 0.09229623506723654
+        },
+        {
+          "name": "compute_difficulty",
+          "seconds": 48.56320890900679,
+          "share_of_total": 0.0880324759347708
+        }
+      ],
+      "embedding_parallelism": {
+        "backend": "sentence_transformers",
+        "batch_size": 512,
+        "device_count": 7,
+        "devices": [
+          "cuda:0",
+          "cuda:1",
+          "cuda:2",
+          "cuda:3",
+          "cuda:4",
+          "cuda:5",
+          "cuda:6"
+        ],
+        "embed_stage_seconds": 149.16317718615755,
+        "embedding_rows_per_embed_second": 1638.4137466782227,
+        "model_name": "BAAI/bge-base-en-v1.5",
+        "multi_process": true,
+        "requested_device": "cuda",
+        "total_embedding_rows": 244391
+      },
+      "evaluation_parallelism": {
+        "actual_backends": [
+          "torch_cuda"
+        ],
+        "batch_size": 256,
+        "candidate_count": 127561,
+        "fallback_reasons": [],
+        "ranking_backend": "batched_embedding_topk",
+        "requested_gpu_device": "cuda:0",
+        "requested_use_gpu": true,
+        "test_proof_state_backend": "torch_cuda",
+        "test_proof_state_queries": 3053,
+        "test_theorem_backend": "torch_cuda",
+        "test_theorem_queries": 1000
+      },
+      "index_parallelism": {
+        "backend": "hnswlib",
+        "hnsw_M": 16,
+        "hnsw_ef_construction": 200,
+        "hnsw_ef_search": 100,
+        "indexed_entities": [
+          "premise",
+          "proof_state",
+          "theorem"
+        ],
+        "mean_speedup_vs_exact": 17.376305276865946,
+        "metric": "cosine",
+        "min_recall_vs_exact": 0.9580000000000001,
+        "requested_backend": "auto"
+      }
+    },
     "retrieval_bottleneck_profile": {
       "proof_state": {
         "primary_accuracy_bottleneck": "candidate_generation_or_embeddings",

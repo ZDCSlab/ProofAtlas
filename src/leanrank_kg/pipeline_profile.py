@@ -804,6 +804,92 @@ def _refresh_reuse_profile(
     }
 
 
+def _resource_parallelism_profile(
+    config: dict[str, Any],
+    embeddings: dict[str, Any],
+    index: dict[str, Any],
+    benchmark: dict[str, Any],
+    evaluation: dict[str, Any],
+    throughput: dict[str, Any],
+) -> dict[str, Any]:
+    embedding_config = embeddings.get("config") or {}
+    config_embedding = config.get("embedding", {}) or {}
+    configured_devices = embedding_config.get("devices") or config_embedding.get("devices") or []
+    if isinstance(configured_devices, str):
+        configured_devices = [part.strip() for part in configured_devices.split(",") if part.strip()]
+    requested_device = embedding_config.get("device") or config_embedding.get("device")
+    if not configured_devices and requested_device:
+        configured_devices = [requested_device]
+    evaluation_scope = ((evaluation.get("test_set_evaluation") or {}).get("evaluation_scope") or {}) if isinstance(evaluation, dict) else {}
+    actual_backend_info = evaluation_scope.get("actual_backend_info", {}) if isinstance(evaluation_scope, dict) else {}
+    actual_backends = sorted(
+        {
+            row.get("actual_backend")
+            for task in actual_backend_info.values()
+            if isinstance(task, dict)
+            for row in task.values()
+            if isinstance(row, dict) and row.get("actual_backend")
+        }
+    )
+    test_proof_backend = (actual_backend_info.get("proof_state") or {}).get("test", {}) if isinstance(actual_backend_info, dict) else {}
+    test_theorem_backend = (actual_backend_info.get("theorem") or {}).get("test", {}) if isinstance(actual_backend_info, dict) else {}
+    benchmark_entities = benchmark.get("entities", {}) if isinstance(benchmark, dict) else {}
+    bottleneck_rows = (throughput.get("bottleneck_profile") or {}).get("top_stages", []) if isinstance(throughput, dict) else []
+    non_gpu_stage_names = {"sample", "normalize", "build_graph", "augment_graph", "compute_difficulty", "train_ranker", "validate"}
+    cpu_or_io_stages = [
+        row
+        for row in bottleneck_rows
+        if isinstance(row, dict) and row.get("name") in non_gpu_stage_names
+    ]
+    return {
+        "embedding_parallelism": {
+            "backend": embedding_config.get("backend") or config_embedding.get("backend"),
+            "model_name": embedding_config.get("model_name") or config_embedding.get("model_name"),
+            "requested_device": requested_device,
+            "devices": configured_devices,
+            "device_count": len(configured_devices),
+            "multi_process": bool(embedding_config.get("multi_process") or len(configured_devices) > 1),
+            "batch_size": embedding_config.get("batch_size") or config_embedding.get("batch_size"),
+            "total_embedding_rows": throughput.get("total_embedding_rows"),
+            "embed_stage_seconds": (throughput.get("embedding_bottleneck_profile") or {}).get("embed_stage_seconds"),
+            "embedding_rows_per_embed_second": (throughput.get("embedding_bottleneck_profile") or {}).get("embedding_rows_per_embed_second"),
+        },
+        "evaluation_parallelism": {
+            "ranking_backend": evaluation_scope.get("ranking_backend"),
+            "requested_use_gpu": evaluation_scope.get("use_gpu"),
+            "requested_gpu_device": evaluation_scope.get("gpu_device"),
+            "batch_size": evaluation_scope.get("batch_size"),
+            "actual_backends": actual_backends,
+            "test_proof_state_backend": test_proof_backend.get("actual_backend"),
+            "test_theorem_backend": test_theorem_backend.get("actual_backend"),
+            "test_proof_state_queries": test_proof_backend.get("query_count"),
+            "test_theorem_queries": test_theorem_backend.get("query_count"),
+            "candidate_count": test_proof_backend.get("candidate_count") or test_theorem_backend.get("candidate_count"),
+            "fallback_reasons": sorted(
+                {
+                    str(row.get("fallback_reason"))
+                    for task in actual_backend_info.values()
+                    if isinstance(task, dict)
+                    for row in task.values()
+                    if isinstance(row, dict) and row.get("fallback_reason")
+                }
+            ),
+        },
+        "index_parallelism": {
+            "backend": (index.get("summary") or {}).get("backend") or (config.get("index") or {}).get("backend"),
+            "requested_backend": (index.get("summary") or {}).get("requested_backend") or (config.get("index") or {}).get("backend"),
+            "metric": (index.get("summary") or {}).get("metric") or (config.get("index") or {}).get("metric"),
+            "hnsw_M": (config.get("index") or {}).get("M"),
+            "hnsw_ef_construction": (config.get("index") or {}).get("ef_construction"),
+            "hnsw_ef_search": (config.get("index") or {}).get("ef_search"),
+            "indexed_entities": sorted(benchmark_entities.keys()),
+            "mean_speedup_vs_exact": throughput.get("mean_index_speedup_vs_exact"),
+            "min_recall_vs_exact": throughput.get("min_index_recall_vs_exact"),
+        },
+        "cpu_or_io_heavy_stages": cpu_or_io_stages,
+    }
+
+
 def _recommendations(
     config: dict[str, Any],
     sample: dict[str, Any],
@@ -968,6 +1054,7 @@ def build_report(config_path: str = "configs/proofatlas.yaml") -> dict[str, Any]
     throughput["rapid_convergence_profile"] = _rapid_convergence_profile(evaluation, readiness, throughput)
     throughput["metric_uncertainty_profile"] = _metric_uncertainty_profile(evaluation)
     throughput["refresh_reuse_profile"] = _refresh_reuse_profile(config, sample, embeddings, index)
+    throughput["resource_parallelism_profile"] = _resource_parallelism_profile(config, embeddings, index, benchmark, evaluation, throughput)
     recommendations = _recommendations(config, sample, benchmark, readiness, scale, throughput, evaluation)
     return {
         "config_path": config_path,

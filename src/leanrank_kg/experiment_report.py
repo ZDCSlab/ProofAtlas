@@ -256,6 +256,18 @@ def _refresh_reuse_table(profile: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def _cpu_stage_table(rows: list[dict[str, Any]]) -> str:
+    lines = [
+        "| Stage | Seconds | Share of total |",
+        "| --- | ---: | ---: |",
+    ]
+    for row in rows[:5]:
+        lines.append(f"| `{row.get('name', 'n/a')}` | {_fmt(row.get('seconds'))} | {_fmt(row.get('share_of_total'))} |")
+    if len(lines) == 2:
+        lines.append("| n/a | n/a | n/a |")
+    return "\n".join(lines)
+
+
 def _split_counts(manifest: dict[str, Any]) -> str:
     counts = manifest.get("split_counts", {}) if isinstance(manifest, dict) else {}
     if not counts:
@@ -312,6 +324,10 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     metric_uncertainty = throughput.get("metric_uncertainty_profile", {}) if isinstance(throughput, dict) else {}
     refresh_reuse = throughput.get("refresh_reuse_profile", {}) if isinstance(throughput, dict) else {}
     refresh_cache = refresh_reuse.get("artifact_cache", {}) if isinstance(refresh_reuse, dict) else {}
+    resource_parallelism = throughput.get("resource_parallelism_profile", {}) if isinstance(throughput, dict) else {}
+    embedding_parallel = resource_parallelism.get("embedding_parallelism", {}) if isinstance(resource_parallelism, dict) else {}
+    evaluation_parallel = resource_parallelism.get("evaluation_parallelism", {}) if isinstance(resource_parallelism, dict) else {}
+    index_parallel = resource_parallelism.get("index_parallelism", {}) if isinstance(resource_parallelism, dict) else {}
     bench_entities = benchmark.get("entities", {}) if isinstance(benchmark, dict) else {}
     actual_backend_info = evaluation_scope.get("actual_backend_info", {}) if isinstance(evaluation_scope, dict) else {}
     actual_proof_backend = actual_backend_info.get("proof_state", {}).get("test", {}).get("actual_backend", "n/a")
@@ -669,6 +685,48 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
             "These timings split the `evaluate` pipeline stage into proof-state retrieval, theorem retrieval, reranked retrieval, and query-representation diagnostics so scaling work can target the slowest internal path.",
             "",
             _evaluation_substage_table(evaluation_substages),
+        ]
+    )
+    lines.extend(
+        [
+            "",
+            "## Resource And Parallelism Profile",
+            "",
+            "This profile records the resource choices used by the committed LeanRank-data run. It is intended to explain which stages use GPU/vectorized paths and which stages remain CPU/IO-heavy.",
+            "",
+            "### Embedding",
+            "",
+            f"- Backend/model: `{embedding_parallel.get('backend', 'n/a')}` / `{embedding_parallel.get('model_name', 'n/a')}`",
+            f"- Requested device: `{embedding_parallel.get('requested_device', 'n/a')}`",
+            f"- Devices: `{embedding_parallel.get('devices', [])}`",
+            f"- Device count: `{embedding_parallel.get('device_count', 'n/a')}`",
+            f"- Multi-process encoding: `{embedding_parallel.get('multi_process', 'n/a')}`",
+            f"- Batch size: `{embedding_parallel.get('batch_size', 'n/a')}`",
+            f"- Total embedding rows: `{embedding_parallel.get('total_embedding_rows', 'n/a')}`",
+            f"- Embedding rows/sec during embed stage: `{embedding_parallel.get('embedding_rows_per_embed_second', 'n/a')}`",
+            "",
+            "### Evaluation",
+            "",
+            f"- Ranking backend: `{evaluation_parallel.get('ranking_backend', 'n/a')}`",
+            f"- Requested GPU: `use_gpu={evaluation_parallel.get('requested_use_gpu', 'n/a')}`, device `{evaluation_parallel.get('requested_gpu_device', 'n/a')}`",
+            f"- Actual backends: `{evaluation_parallel.get('actual_backends', [])}`",
+            f"- Test proof-state backend: `{evaluation_parallel.get('test_proof_state_backend', 'n/a')}`",
+            f"- Test theorem backend: `{evaluation_parallel.get('test_theorem_backend', 'n/a')}`",
+            f"- Candidate count: `{evaluation_parallel.get('candidate_count', 'n/a')}`",
+            f"- Fallback reasons: `{evaluation_parallel.get('fallback_reasons', [])}`",
+            "",
+            "### Indexing",
+            "",
+            f"- Backend/requested backend: `{index_parallel.get('backend', 'n/a')}` / `{index_parallel.get('requested_backend', 'n/a')}`",
+            f"- Metric: `{index_parallel.get('metric', 'n/a')}`",
+            f"- hnswlib parameters: `M={index_parallel.get('hnsw_M', 'n/a')}`, `ef_construction={index_parallel.get('hnsw_ef_construction', 'n/a')}`, `ef_search={index_parallel.get('hnsw_ef_search', 'n/a')}`",
+            f"- Indexed entities: `{index_parallel.get('indexed_entities', [])}`",
+            f"- Mean speedup vs exact: `{index_parallel.get('mean_speedup_vs_exact', 'n/a')}`",
+            f"- Minimum recall vs exact: `{index_parallel.get('min_recall_vs_exact', 'n/a')}`",
+            "",
+            "### CPU/IO-Heavy Stages",
+            "",
+            _cpu_stage_table(resource_parallelism.get("cpu_or_io_heavy_stages", []) if isinstance(resource_parallelism, dict) else []),
         ]
     )
     lines.extend(

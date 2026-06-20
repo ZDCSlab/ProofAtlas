@@ -68,6 +68,28 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
                     {"name": "test_theorem_retrieval", "seconds": 1.5, "evaluated_queries": 5, "actual_backend": "torch_cuda"},
                     {"name": "test_proof_state_retrieval", "seconds": 1.0, "evaluated_queries": 10, "actual_backend": "torch_cuda"},
                 ],
+                "actual_backend_info": {
+                    "proof_state": {
+                        "test": {
+                            "actual_backend": "torch_cuda",
+                            "actual_gpu_device": "cuda:0",
+                            "candidate_count": 6000,
+                            "query_count": 10,
+                            "requested_gpu_device": "cuda:0",
+                            "requested_use_gpu": True,
+                        }
+                    },
+                    "theorem": {
+                        "test": {
+                            "actual_backend": "torch_cuda",
+                            "actual_gpu_device": "cuda:0",
+                            "candidate_count": 6000,
+                            "query_count": 5,
+                            "requested_gpu_device": "cuda:0",
+                            "requested_use_gpu": True,
+                        }
+                    },
+                },
             },
             "test": {
                 "proof_state_retrieval": {"metrics": {"evaluated_queries": 10, "Recall@10": 0.1, "Recall@100": 0.2, "MRR": 0.15, "MAP": 0.12}},
@@ -186,6 +208,14 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
     ranker_scenario = next(row for row in refresh_reuse["scenarios"] if row["scenario"] == "ranker_feature_or_label_change")
     assert ranker_scenario["rerun_embedding"] is False
     assert ranker_scenario["rerun_ranker_training"] is True
+    resources = report["throughput_profile"]["resource_parallelism_profile"]
+    assert resources["embedding_parallelism"]["requested_device"] == "cuda"
+    assert resources["embedding_parallelism"]["device_count"] == 1
+    assert resources["embedding_parallelism"]["batch_size"] == 512
+    assert resources["evaluation_parallelism"]["actual_backends"] == ["torch_cuda"]
+    assert resources["evaluation_parallelism"]["test_proof_state_backend"] == "torch_cuda"
+    assert resources["index_parallelism"]["backend"] == "sklearn"
+    assert resources["index_parallelism"]["indexed_entities"] == ["premise"]
     assert report["stages"]["evaluation"]["evaluation_timing"]["total_seconds"] == 2.5
     assert report["stages"]["evaluation"]["evaluation_timing"]["substage_count"] == 2
     assert report["stages"]["evaluation"]["evaluation_timing"]["slowest_substages"][0]["name"] == "test_theorem_retrieval"
