@@ -169,12 +169,10 @@ To refresh the production evaluation artifacts after changing retrieval code or 
 
 ```bash
 conda activate leanrank_kg
-leanrank-kg evaluate --config configs/proofatlas.yaml
-leanrank-kg profile-pipeline --config configs/proofatlas.yaml
-leanrank-kg build-experiment-report --config configs/proofatlas.yaml
-leanrank-kg build-homepage --config configs/proofatlas.yaml
-leanrank-kg audit --config configs/proofatlas.yaml
+make refresh-production-report
 ```
+
+This runs `evaluate`, `profile-pipeline`, `build-experiment-report`, `build-homepage`, and `audit` with `configs/proofatlas.yaml`. Override the production config with `make refresh-production-report PRODUCTION_CONFIG=<path>`.
 
 The proof-state-level and theorem-level retrieval metrics separately report held-out gold premise counts that exist in the train premise index and counts missing from the train index, so Recall/MRR/MAP/nDCG are interpreted against the actually retrievable gold set.
 
