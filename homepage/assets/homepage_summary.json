@@ -387,6 +387,7 @@
     "split_leakage": false,
     "total_edges": 335938,
     "total_nodes": 92640,
+    "total_theorems": 2084,
     "train_premises": 53668,
     "train_proof_states": 4722,
     "train_theorems": 1667

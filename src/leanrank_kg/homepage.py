@@ -102,7 +102,7 @@ HTML = """<!doctype html>
     <div class="hero-panel">
       <h2>What the reviewer should see first</h2>
       <div class="chips">
-        <span class="pill ok">Real dataset: {{ dataset.sample_rows }} rows</span>
+        <span class="pill ok">Theorem-disjoint KG: {{ overview.total_theorems }} theorems</span>
         <span class="pill info">{{ embedding.model_name }}</span>
         <span class="pill info">GPU: {{ embedding.device }}</span>
         <span class="pill ok">Schema errors: {{ overview.schema_errors }}</span>
@@ -125,7 +125,7 @@ HTML = """<!doctype html>
   <section>
     <h2>Executive Snapshot</h2>
     <div class="kpi-grid">
-      <div class="kpi"><div class="label">Rows loaded</div><div class="value">{{ dataset.sample_rows }}</div><div class="note">Original plan: {{ dataset.configured_rows }}</div></div>
+      <div class="kpi"><div class="label">Theorem nodes</div><div class="value">{{ overview.total_theorems }}</div><div class="note">{{ dataset.sample_rows }} LeanRank rows sampled</div></div>
       <div class="kpi"><div class="label">Train premises</div><div class="value">{{ overview.train_premises }}</div><div class="note">{{ overview.train_proof_states }} proof states</div></div>
       <div class="kpi"><div class="label">Graph scale</div><div class="value">{{ overview.total_edges }}</div><div class="note">{{ overview.total_nodes }} nodes across splits</div></div>
       <div class="kpi dark"><div class="label">Embedding model</div><div class="value">{{ embedding.model_name }}</div><div class="note">{{ embedding.backend }} on {{ embedding.device }}, batch {{ embedding.batch_size }}</div></div>

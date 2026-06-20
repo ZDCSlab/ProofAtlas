@@ -64,6 +64,8 @@ pip install -e ".[hf]"
 leanrank-kg full-pipeline --config configs/proofatlas.yaml
 ```
 
+`configs/proofatlas.yaml` now uses theorem-first sampling for the real run. It pulls a larger Hugging Face candidate pool, samples theorem IDs, and keeps all candidate rows for those theorems. This makes the KG scale and evaluation theorem-centric instead of row-centric, which is important for held-out theorem retrieval and recall.
+
 TF-IDF is the default embedding backend because it is fast and reproducible. To experiment with Hugging Face sentence embeddings:
 
 ```bash

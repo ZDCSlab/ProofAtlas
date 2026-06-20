@@ -90,6 +90,30 @@ def _try_huggingface(config: dict[str, Any], limit: int) -> pd.DataFrame | None:
         return None
 
 
+def _sample_by_theorem(df: pd.DataFrame, total_theorems: int, seed: int) -> pd.DataFrame:
+    if df.empty or total_theorems <= 0:
+        return df.head(0).copy()
+    rng = random.Random(seed)
+    names = sorted(df["full_name"].dropna().unique())
+    rng.shuffle(names)
+    selected = set(names[: min(total_theorems, len(names))])
+    out = df[df["full_name"].isin(selected)].copy()
+    return out.sort_values(["full_name", "tactic_idx", "context"]).reset_index(drop=True)
+
+
+def _sample_plan(config: dict[str, Any], debug_rows: int | None) -> dict[str, Any]:
+    sample = config["sample"]
+    if debug_rows is not None:
+        return {"unit": "row", "target_rows": int(debug_rows), "source_rows": int(debug_rows)}
+    unit = str(sample.get("unit", "row")).lower()
+    if unit == "theorem":
+        total_theorems = int(sample.get("total_theorems", sample.get("total_rows", 0)))
+        source_rows = int(sample.get("hf_source_rows", max(int(sample.get("total_rows", 0)), total_theorems * 40)))
+        return {"unit": "theorem", "target_theorems": total_theorems, "source_rows": source_rows}
+    total_rows = int(sample["total_rows"])
+    return {"unit": "row", "target_rows": total_rows, "source_rows": total_rows}
+
+
 def _adapt_premise(value: Any) -> dict[str, Any]:
     if isinstance(value, dict):
         name = value.get("full_name") or value.get("name") or value.get("premise") or str(value)
@@ -165,12 +189,12 @@ def split_by_theorem(df: pd.DataFrame, seed: int, ratios: dict[str, float]) -> d
 def run(config_path: str, debug_rows: int | None = None) -> None:
     ensure_dirs()
     config = load_config(config_path)
-    total_rows = int(debug_rows if debug_rows is not None else config["sample"]["total_rows"])
+    plan = _sample_plan(config, debug_rows)
     seed = int(config["random_seed"])
-    raw = _try_huggingface(config, total_rows)
+    raw = _try_huggingface(config, int(plan["source_rows"]))
     if raw is None:
-        raw = synthetic_rows(total_rows, seed)
-    raw = raw.head(total_rows).reset_index(drop=True)
+        raw = synthetic_rows(int(plan["source_rows"]), seed)
+    raw = raw.head(int(plan["source_rows"])).reset_index(drop=True)
     schema = {
         "columns": {col: str(dtype) for col, dtype in raw.dtypes.items()},
         "observed_shapes": {
@@ -181,6 +205,23 @@ def run(config_path: str, debug_rows: int | None = None) -> None:
     write_json("outputs/reports/raw_schema.json", schema)
     write_jsonl("outputs/reports/raw_preview.jsonl", raw.head(5).to_dict(orient="records"))
     df = adapt_rows(raw)
+    source_theorems = int(df["full_name"].nunique()) if not df.empty else 0
+    if plan["unit"] == "theorem":
+        df = _sample_by_theorem(df, int(plan["target_theorems"]), seed)
+    else:
+        df = df.head(int(plan["target_rows"])).reset_index(drop=True)
+    write_json(
+        "outputs/reports/sampling_report.json",
+        {
+            "unit": plan["unit"],
+            "source_rows": int(plan["source_rows"]),
+            "source_theorems": source_theorems,
+            "target_rows": int(plan.get("target_rows", len(df))),
+            "target_theorems": int(plan.get("target_theorems", df["full_name"].nunique() if not df.empty else 0)),
+            "sampled_rows": int(len(df)),
+            "sampled_theorems": int(df["full_name"].nunique()) if not df.empty else 0,
+        },
+    )
     write_parquet(df, "data/sample/all_rows.parquet")
     splits = split_by_theorem(df, seed, config["split"])
     domain_report: dict[str, dict[str, int]] = defaultdict(dict)

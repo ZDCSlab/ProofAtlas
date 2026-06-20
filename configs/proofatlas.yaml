@@ -3,6 +3,9 @@ project_name: ProofAtlas
 random_seed: 42
 use_huggingface: true
 sample:
+  unit: theorem
+  total_theorems: 10000
+  hf_source_rows: 350000
   total_rows: 60000
   small_debug_rows: 1000
   committed_demo_rows: 3000

@@ -52,11 +52,13 @@ def _overview(dataset: dict[str, Any], graph_stats: dict[str, Any], validation: 
     train = next((row for row in split_counts if row["split"] == "train"), {})
     total_nodes = sum(int(stats.get("node_count", 0)) for stats in graph_stats.values())
     total_edges = sum(int(stats.get("edge_count", 0)) for stats in graph_stats.values())
+    total_theorems = sum(int(row.get("theorems", 0)) for row in split_counts if row.get("split") in {"train", "val", "test"})
     graph_validation = validation.get("graph", {})
     missing_endpoints = sum(int(row.get("missing_endpoint_count", 0)) for row in graph_validation.values())
     networkx_ok = all(bool(row.get("networkx_loadable", False)) for row in graph_validation.values()) if graph_validation else False
     return {
         "train_theorems": int(train.get("theorems", 0)),
+        "total_theorems": total_theorems,
         "train_proof_states": int(train.get("proof_states", 0)),
         "train_premises": int(train.get("premises", 0)),
         "total_nodes": total_nodes,
