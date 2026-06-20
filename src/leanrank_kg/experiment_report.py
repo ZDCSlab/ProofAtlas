@@ -1,9 +1,10 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Any
 
-from .utils import load_config, read_json
+from .utils import load_config, read_json, stable_hash
 
 
 def _fmt(value: Any) -> str:
@@ -76,6 +77,7 @@ def _split_counts(manifest: dict[str, Any]) -> str:
 
 def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     config = load_config(config_path)
+    config_hash = stable_hash(json.dumps(config, sort_keys=True), 16)
     manifest = read_json("outputs/reports/corpus_manifest.json", {}) or {}
     test_eval = read_json("outputs/reports/test_set_evaluation.json", {}) or {}
     pipeline = read_json("outputs/reports/pipeline_performance_report.json", {}) or {}
@@ -104,6 +106,8 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     actual_backend_info = evaluation_scope.get("actual_backend_info", {}) if isinstance(evaluation_scope, dict) else {}
     actual_proof_backend = actual_backend_info.get("proof_state", {}).get("test", {}).get("actual_backend", "n/a")
     actual_theorem_backend = actual_backend_info.get("theorem", {}).get("test", {}).get("actual_backend", "n/a")
+    timing_config_hash = timings.get("config_hash") if isinstance(timings, dict) else None
+    timing_config_matches = timing_config_hash == config_hash if timing_config_hash else None
 
     proof_keys = [
         "evaluated_queries",
@@ -345,6 +349,9 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
             "",
             f"- Total seconds: `{timings.get('total_seconds', 'n/a')}`",
             f"- Stage count: `{timings.get('stage_count', 'n/a')}`",
+            f"- Executed/skipped stages: `{timings.get('executed_stage_count', 'n/a')}` / `{timings.get('skipped_stage_count', 'n/a')}`",
+            f"- Timing config matches current report config: `{timing_config_matches if timing_config_matches is not None else 'n/a'}`",
+            f"- Timing generated at: `{timings.get('generated_at', 'n/a')}`",
             f"- Timing report: `outputs/reports/pipeline_run_timings.json`",
             "",
             "| Stage | Seconds |",
@@ -370,6 +377,9 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
             f"- Embedding devices: `{pipeline.get('scale_profile', {}).get('embedding_devices', [])}`",
             f"- ANN backend availability: `{pipeline.get('scale_profile', {}).get('ann_backend_availability', {})}`",
             f"- Total embedding rows: `{throughput.get('total_embedding_rows', 'n/a')}`",
+            f"- Timing config matches current report config: `{throughput.get('timing_config_matches_current', 'n/a')}`",
+            f"- Throughput timing basis: `{throughput.get('throughput_basis', 'n/a')}`",
+            f"- Scale estimate reliable: `{throughput.get('scale_estimate_reliable', 'n/a')}`",
             f"- Embedding rows by entity: `{throughput.get('embedding_rows_by_entity', {})}`",
             f"- Processed rows/sec: `{throughput.get('processed_rows_per_second', 'n/a')}`",
             f"- Pipeline seconds per 100k processed rows: `{throughput.get('pipeline_seconds_per_100k_processed_rows', 'n/a')}`",

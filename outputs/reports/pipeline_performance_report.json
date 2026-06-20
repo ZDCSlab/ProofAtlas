@@ -1986,74 +1986,82 @@
       "total_split_rows": 292012
     },
     "timings": {
+      "config_hash": "375be84aecb4e7d9",
+      "config_matches_current": true,
+      "config_path": "configs/proofatlas.yaml",
+      "executed_stage_count": 4,
       "exists": true,
+      "expected_config_hash": "375be84aecb4e7d9",
+      "generated_at": "2026-06-20T16:45:55.593158+00:00",
+      "has_skipped_stages": true,
       "passed": true,
       "path": "outputs/reports/pipeline_run_timings.json",
+      "skipped_stage_count": 15,
       "slowest_stages": [
         {
-          "name": "evaluate",
-          "seconds": 0.7713274869602174
-        },
-        {
-          "name": "validate",
-          "seconds": 0.7055891670752317
-        },
-        {
-          "name": "normalize",
-          "seconds": 0.6338117111008614
-        },
-        {
-          "name": "compute_difficulty",
-          "seconds": 0.5077923759818077
-        },
-        {
-          "name": "train_ranker",
-          "seconds": 0.2961821330245584
-        },
-        {
-          "name": "augment_graph",
-          "seconds": 0.2610417869873345
-        },
-        {
-          "name": "build_graph",
-          "seconds": 0.16650403710082173
+          "name": "pipeline_profile",
+          "seconds": 9.943877021083608
         },
         {
           "name": "homepage",
-          "seconds": 0.13950243196450174
+          "seconds": 5.467826904961839
         },
         {
-          "name": "embed",
-          "seconds": 0.11111249588429928
+          "name": "audit",
+          "seconds": 0.2670641641598195
         },
         {
-          "name": "pipeline_profile",
-          "seconds": 0.10683665191754699
+          "name": "experiment_report",
+          "seconds": 0.007166214985772967
+        },
+        {
+          "name": "sample",
+          "seconds": 0.0
+        },
+        {
+          "name": "normalize",
+          "seconds": 0.0
+        },
+        {
+          "name": "build_graph",
+          "seconds": 0.0
+        },
+        {
+          "name": "label_techniques",
+          "seconds": 0.0
+        },
+        {
+          "name": "compute_difficulty",
+          "seconds": 0.0
+        },
+        {
+          "name": "premise_trace_supervision",
+          "seconds": 0.0
         }
       ],
       "stage_count": 19,
       "stage_seconds": {
-        "audit": 0.030059436103329062,
-        "augment_graph": 0.2610417869873345,
-        "benchmark_index": 0.01507668406702578,
-        "build_graph": 0.16650403710082173,
-        "build_index": 0.03927870490588248,
-        "compute_difficulty": 0.5077923759818077,
-        "deployment_security": 0.0006097140721976757,
-        "embed": 0.11111249588429928,
-        "evaluate": 0.7713274869602174,
-        "experiment_report": 0.005627359030768275,
-        "homepage": 0.13950243196450174,
-        "label_techniques": 0.05671381205320358,
-        "normalize": 0.6338117111008614,
-        "pipeline_profile": 0.10683665191754699,
-        "premise_trace_supervision": 0.052529524778947234,
-        "sample": 0.029836331959813833,
-        "train_difficulty": 0.10172297107055783,
-        "train_ranker": 0.2961821330245584,
-        "validate": 0.7055891670752317
+        "audit": 0.2670641641598195,
+        "augment_graph": 0.0,
+        "benchmark_index": 0.0,
+        "build_graph": 0.0,
+        "build_index": 0.0,
+        "compute_difficulty": 0.0,
+        "deployment_security": 0.0,
+        "embed": 0.0,
+        "evaluate": 0.0,
+        "experiment_report": 0.007166214985772967,
+        "homepage": 5.467826904961839,
+        "label_techniques": 0.0,
+        "normalize": 0.0,
+        "pipeline_profile": 9.943877021083608,
+        "premise_trace_supervision": 0.0,
+        "sample": 0.0,
+        "train_difficulty": 0.0,
+        "train_ranker": 0.0,
+        "validate": 0.0
       },
-      "total_seconds": 4.03193892003037
+      "total_seconds": 15.690514276968315
     }
   },
   "throughput_profile": {
@@ -2069,39 +2077,47 @@
       "train": 159284,
       "val": 40114
     },
-    "embedding_rows_per_second": 60613.76544815295,
-    "estimated_seconds_at_requested_source_rows": 4.832604899835039,
+    "embedding_rows_per_second": 15575.716365061086,
+    "estimated_seconds_at_requested_source_rows": 18.806350413472426,
     "index_build_seconds_total": 7.234744182555005,
     "mean_index_speedup_vs_exact": 15.42905823807312,
     "min_index_recall_vs_exact": 0.9890000000000001,
-    "pipeline_seconds_per_100k_embedding_rows": 1.6497902623379626,
-    "pipeline_seconds_per_100k_processed_rows": 1.3807442570957256,
-    "processed_rows_per_second": 72424.70825867582,
+    "pipeline_seconds_per_100k_embedding_rows": 6.420250449880853,
+    "pipeline_seconds_per_100k_processed_rows": 5.373242975277836,
+    "processed_rows_per_second": 18610.73479462917,
     "requested_source_rows": 350000,
+    "scale_estimate_reliable": false,
     "scale_factor_from_current_to_requested_source_rows": 1.1985808802377984,
-    "slowest_stage": "evaluate",
+    "slowest_stage": "pipeline_profile",
+    "throughput_basis": "cached_or_partial_pipeline_run",
     "timed_stage_seconds": {
-      "audit": 0.030059436103329062,
-      "augment_graph": 0.2610417869873345,
-      "benchmark_index": 0.01507668406702578,
-      "build_graph": 0.16650403710082173,
-      "build_index": 0.03927870490588248,
-      "compute_difficulty": 0.5077923759818077,
-      "deployment_security": 0.0006097140721976757,
-      "embed": 0.11111249588429928,
-      "evaluate": 0.7713274869602174,
-      "experiment_report": 0.005627359030768275,
-      "homepage": 0.13950243196450174,
-      "label_techniques": 0.05671381205320358,
-      "normalize": 0.6338117111008614,
-      "pipeline_profile": 0.10683665191754699,
-      "premise_trace_supervision": 0.052529524778947234,
-      "sample": 0.029836331959813833,
-      "train_difficulty": 0.10172297107055783,
-      "train_ranker": 0.2961821330245584,
-      "validate": 0.7055891670752317
+      "audit": 0.2670641641598195,
+      "augment_graph": 0.0,
+      "benchmark_index": 0.0,
+      "build_graph": 0.0,
+      "build_index": 0.0,
+      "compute_difficulty": 0.0,
+      "deployment_security": 0.0,
+      "embed": 0.0,
+      "evaluate": 0.0,
+      "experiment_report": 0.007166214985772967,
+      "homepage": 5.467826904961839,
+      "label_techniques": 0.0,
+      "normalize": 0.0,
+      "pipeline_profile": 9.943877021083608,
+      "premise_trace_supervision": 0.0,
+      "sample": 0.0,
+      "train_difficulty": 0.0,
+      "train_ranker": 0.0,
+      "validate": 0.0
     },
+    "timing_config_hash": "375be84aecb4e7d9",
+    "timing_config_matches_current": true,
+    "timing_executed_stage_count": 4,
+    "timing_generated_at": "2026-06-20T16:45:55.593158+00:00",
+    "timing_has_skipped_stages": true,
+    "timing_skipped_stage_count": 15,
     "total_embedding_rows": 244391,
-    "total_pipeline_seconds": 4.03193892003037
+    "total_pipeline_seconds": 15.690514276968315
   }
 }

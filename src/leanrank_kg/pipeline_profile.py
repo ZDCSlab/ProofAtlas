@@ -181,15 +181,27 @@ def _benchmark_stage() -> dict[str, Any]:
     return {"path": "outputs/reports/index_benchmark.json", "exists": Path("outputs/reports/index_benchmark.json").exists(), "entities": compact}
 
 
-def _timing_stage() -> dict[str, Any]:
+def _timing_stage(expected_config_hash: str | None = None) -> dict[str, Any]:
     data = read_json("outputs/reports/pipeline_run_timings.json", {}) or {}
     stages = data.get("stages", []) if isinstance(data, dict) else []
+    timing_config_hash = data.get("config_hash")
+    config_matches = timing_config_hash == expected_config_hash if timing_config_hash and expected_config_hash else None
+    executed_stage_count = sum(1 for row in stages if isinstance(row, dict) and row.get("status") == "passed")
+    skipped_stage_count = sum(1 for row in stages if isinstance(row, dict) and row.get("status") == "skipped")
     return {
         "path": "outputs/reports/pipeline_run_timings.json",
         "exists": Path("outputs/reports/pipeline_run_timings.json").exists(),
+        "config_path": data.get("config_path"),
+        "config_hash": timing_config_hash,
+        "expected_config_hash": expected_config_hash,
+        "config_matches_current": config_matches,
+        "generated_at": data.get("generated_at"),
         "passed": data.get("passed"),
         "total_seconds": data.get("total_seconds"),
         "stage_count": data.get("stage_count"),
+        "executed_stage_count": executed_stage_count,
+        "skipped_stage_count": skipped_stage_count,
+        "has_skipped_stages": skipped_stage_count > 0,
         "slowest_stages": data.get("slowest_stages", []),
         "stage_seconds": {row.get("name"): row.get("seconds") for row in stages if isinstance(row, dict) and row.get("name")},
     }
@@ -347,8 +359,18 @@ def _throughput_profile(sample: dict[str, Any], embeddings: dict[str, Any], inde
     requested_rows = int((sample.get("sample_plan") or {}).get("source_rows") or current_rows or 0)
     scale_factor = (requested_rows / current_rows) if current_rows else None
     estimated_seconds_at_requested_source = (total_seconds * scale_factor) if scale_factor is not None else None
+    has_skipped_stages = bool(timings.get("has_skipped_stages"))
+    timing_config_matches = timings.get("config_matches_current")
     return {
         **matrix_rows,
+        "timing_config_hash": timings.get("config_hash"),
+        "timing_config_matches_current": timing_config_matches,
+        "timing_generated_at": timings.get("generated_at"),
+        "timing_executed_stage_count": timings.get("executed_stage_count"),
+        "timing_skipped_stage_count": timings.get("skipped_stage_count"),
+        "timing_has_skipped_stages": has_skipped_stages,
+        "throughput_basis": "cached_or_partial_pipeline_run" if has_skipped_stages else "executed_pipeline_run",
+        "scale_estimate_reliable": bool(timing_config_matches is True and not has_skipped_stages and total_seconds > 0),
         "total_pipeline_seconds": total_seconds,
         "processed_rows_per_second": (current_rows / total_seconds) if total_seconds > 0 else None,
         "embedding_rows_per_second": (embedding_rows / total_seconds) if total_seconds > 0 else None,
@@ -427,6 +449,7 @@ def _recommendations(config: dict[str, Any], sample: dict[str, Any], benchmark: 
 
 def build_report(config_path: str = "configs/proofatlas.yaml") -> dict[str, Any]:
     config = load_config(config_path)
+    config_hash = _config_hash(config)
     manifest = read_json("outputs/reports/corpus_manifest.json", {}) or {}
     sample = _sample_stage(manifest, config)
     processed = _processed_stage()
@@ -434,7 +457,7 @@ def build_report(config_path: str = "configs/proofatlas.yaml") -> dict[str, Any]
     embeddings = _embedding_stage()
     index = _index_stage()
     benchmark = _benchmark_stage()
-    timings = _timing_stage()
+    timings = _timing_stage(expected_config_hash=config_hash)
     evaluation = _evaluation_stage()
     readiness = _readiness_stage()
     scale = _scale_profile(config, sample, index, readiness)
@@ -442,7 +465,7 @@ def build_report(config_path: str = "configs/proofatlas.yaml") -> dict[str, Any]
     recommendations = _recommendations(config, sample, benchmark, readiness, scale)
     return {
         "config_path": config_path,
-        "config_hash": _config_hash(config),
+        "config_hash": config_hash,
         "project_name": config.get("project_name"),
         "dataset_name": sample.get("dataset_name"),
         "source_kind": sample.get("source_kind"),

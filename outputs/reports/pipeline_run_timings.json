@@ -1,0 +1,203 @@
+{
+  "config_hash": "375be84aecb4e7d9",
+  "config_path": "configs/proofatlas.yaml",
+  "executed_stage_count": 4,
+  "generated_at": "2026-06-20T16:45:55.593158+00:00",
+  "has_skipped_stages": true,
+  "passed": true,
+  "skipped_stage_count": 15,
+  "slowest_stages": [
+    {
+      "name": "pipeline_profile",
+      "seconds": 9.943877021083608
+    },
+    {
+      "name": "homepage",
+      "seconds": 5.467826904961839
+    },
+    {
+      "name": "audit",
+      "seconds": 0.2670641641598195
+    },
+    {
+      "name": "experiment_report",
+      "seconds": 0.007166214985772967
+    },
+    {
+      "name": "sample",
+      "seconds": 0.0
+    },
+    {
+      "name": "normalize",
+      "seconds": 0.0
+    },
+    {
+      "name": "build_graph",
+      "seconds": 0.0
+    },
+    {
+      "name": "label_techniques",
+      "seconds": 0.0
+    },
+    {
+      "name": "compute_difficulty",
+      "seconds": 0.0
+    },
+    {
+      "name": "premise_trace_supervision",
+      "seconds": 0.0
+    }
+  ],
+  "stage_count": 19,
+  "stages": [
+    {
+      "error": null,
+      "name": "sample",
+      "order": 1,
+      "reason": "cached_artifacts_present",
+      "seconds": 0.0,
+      "status": "skipped"
+    },
+    {
+      "error": null,
+      "name": "normalize",
+      "order": 2,
+      "reason": "cached_artifacts_present",
+      "seconds": 0.0,
+      "status": "skipped"
+    },
+    {
+      "error": null,
+      "name": "build_graph",
+      "order": 3,
+      "reason": "cached_artifacts_present",
+      "seconds": 0.0,
+      "status": "skipped"
+    },
+    {
+      "error": null,
+      "name": "label_techniques",
+      "order": 4,
+      "reason": "cached_artifacts_present",
+      "seconds": 0.0,
+      "status": "skipped"
+    },
+    {
+      "error": null,
+      "name": "compute_difficulty",
+      "order": 5,
+      "reason": "cached_artifacts_present",
+      "seconds": 0.0,
+      "status": "skipped"
+    },
+    {
+      "error": null,
+      "name": "premise_trace_supervision",
+      "order": 6,
+      "reason": "cached_artifacts_present",
+      "seconds": 0.0,
+      "status": "skipped"
+    },
+    {
+      "error": null,
+      "name": "train_difficulty",
+      "order": 7,
+      "reason": "cached_artifacts_present",
+      "seconds": 0.0,
+      "status": "skipped"
+    },
+    {
+      "error": null,
+      "name": "embed",
+      "order": 8,
+      "reason": "cached_artifacts_present",
+      "seconds": 0.0,
+      "status": "skipped"
+    },
+    {
+      "error": null,
+      "name": "build_index",
+      "order": 9,
+      "reason": "cached_artifacts_present",
+      "seconds": 0.0,
+      "status": "skipped"
+    },
+    {
+      "error": null,
+      "name": "benchmark_index",
+      "order": 10,
+      "reason": "cached_artifacts_present",
+      "seconds": 0.0,
+      "status": "skipped"
+    },
+    {
+      "error": null,
+      "name": "augment_graph",
+      "order": 11,
+      "reason": "cached_artifacts_present",
+      "seconds": 0.0,
+      "status": "skipped"
+    },
+    {
+      "error": null,
+      "name": "train_ranker",
+      "order": 12,
+      "reason": "cached_artifacts_present",
+      "seconds": 0.0,
+      "status": "skipped"
+    },
+    {
+      "error": null,
+      "name": "evaluate",
+      "order": 13,
+      "reason": "cached_artifacts_present",
+      "seconds": 0.0,
+      "status": "skipped"
+    },
+    {
+      "error": null,
+      "name": "validate",
+      "order": 14,
+      "reason": "cached_artifacts_present",
+      "seconds": 0.0,
+      "status": "skipped"
+    },
+    {
+      "error": null,
+      "name": "homepage",
+      "order": 15,
+      "seconds": 5.467826904961839,
+      "status": "passed"
+    },
+    {
+      "error": null,
+      "name": "deployment_security",
+      "order": 16,
+      "reason": "cached_artifacts_present",
+      "seconds": 0.0,
+      "status": "skipped"
+    },
+    {
+      "error": null,
+      "name": "pipeline_profile",
+      "order": 17,
+      "seconds": 9.943877021083608,
+      "status": "passed"
+    },
+    {
+      "error": null,
+      "name": "experiment_report",
+      "order": 18,
+      "seconds": 0.007166214985772967,
+      "status": "passed"
+    },
+    {
+      "error": null,
+      "name": "audit",
+      "order": 19,
+      "seconds": 0.2670641641598195,
+      "status": "passed"
+    }
+  ],
+  "total_seconds": 15.690514276968315
+}

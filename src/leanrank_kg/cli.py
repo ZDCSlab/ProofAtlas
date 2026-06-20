@@ -227,7 +227,7 @@ def full_pipeline(
     force: bool = False,
     force_stages: str = "",
 ) -> None:
-    timer = PipelineTimer()
+    timer = PipelineTimer(config)
     forced = _force_stage_set(force_stages)
     try:
         _run_or_skip(timer, "sample", download_or_sample.run, config, debug_rows, force=force, force_stages=forced)

@@ -267,22 +267,25 @@ The current ranking labels come from normalized LeanRank-data premise supervisio
 
 ## Pipeline Timing
 
-- Total seconds: `4.03193892003037`
+- Total seconds: `15.690514276968315`
 - Stage count: `19`
+- Executed/skipped stages: `4` / `15`
+- Timing config matches current report config: `True`
+- Timing generated at: `2026-06-20T16:45:55.593158+00:00`
 - Timing report: `outputs/reports/pipeline_run_timings.json`
 
 | Stage | Seconds |
 | --- | ---: |
-| `evaluate` | 0.7713 |
-| `validate` | 0.7056 |
-| `normalize` | 0.6338 |
-| `compute_difficulty` | 0.5078 |
-| `train_ranker` | 0.2962 |
-| `augment_graph` | 0.2610 |
-| `build_graph` | 0.1665 |
-| `homepage` | 0.1395 |
-| `embed` | 0.1111 |
-| `pipeline_profile` | 0.1068 |
+| `pipeline_profile` | 9.9439 |
+| `homepage` | 5.4678 |
+| `audit` | 0.2671 |
+| `experiment_report` | 0.0072 |
+| `sample` | 0.0000 |
+| `normalize` | 0.0000 |
+| `build_graph` | 0.0000 |
+| `label_techniques` | 0.0000 |
+| `compute_difficulty` | 0.0000 |
+| `premise_trace_supervision` | 0.0000 |
 
 ## Pipeline Performance And Scale-Up Notes
 
@@ -296,13 +299,16 @@ The current ranking labels come from normalized LeanRank-data premise supervisio
 - Embedding devices: `['cuda:0', 'cuda:1', 'cuda:2', 'cuda:3', 'cuda:4', 'cuda:5', 'cuda:6']`
 - ANN backend availability: `{'faiss': False, 'hnswlib': True, 'lancedb': False}`
 - Total embedding rows: `244391`
+- Timing config matches current report config: `True`
+- Throughput timing basis: `cached_or_partial_pipeline_run`
+- Scale estimate reliable: `False`
 - Embedding rows by entity: `{'premise': 203601, 'proof_state': 30498, 'theorem': 10292}`
-- Processed rows/sec: `72424.70825867582`
-- Pipeline seconds per 100k processed rows: `1.3807442570957256`
-- Slowest timed stage: `evaluate`
+- Processed rows/sec: `18610.73479462917`
+- Pipeline seconds per 100k processed rows: `5.373242975277836`
+- Slowest timed stage: `pipeline_profile`
 - Mean index speedup vs exact: `15.42905823807312`
 - Minimum index recall vs exact: `0.9890000000000001`
-- Estimated seconds at requested source rows: `4.832604899835039`
+- Estimated seconds at requested source rows: `18.806350413472426`
 
 ## Recommendations
 

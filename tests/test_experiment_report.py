@@ -1,5 +1,7 @@
+import json
+
 from leanrank_kg import experiment_report
-from leanrank_kg.utils import write_json
+from leanrank_kg.utils import stable_hash, write_json
 
 
 def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monkeypatch):
@@ -15,6 +17,17 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
             ]
         ),
         encoding="utf-8",
+    )
+    config_hash = stable_hash(
+        json.dumps(
+            {
+                "dataset_name": "erbacher/LeanRank-data",
+                "embedding": {"backend": "tfidf"},
+                "index": {"backend": "sklearn"},
+            },
+            sort_keys=True,
+        ),
+        16,
     )
     write_json(
         "outputs/reports/corpus_manifest.json",
@@ -58,6 +71,9 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
             "scale_profile": {"leanrank_premise_supervision_ready": True},
             "throughput_profile": {
                 "total_embedding_rows": 42,
+                "timing_config_matches_current": True,
+                "throughput_basis": "executed_pipeline_run",
+                "scale_estimate_reliable": True,
                 "embedding_rows_by_entity": {"proof_state": 10, "premise": 20, "theorem": 12},
                 "processed_rows_per_second": 1000.0,
                 "pipeline_seconds_per_100k_processed_rows": 100.0,
@@ -69,7 +85,17 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
             "recommendations": [],
         },
     )
-    write_json("outputs/reports/pipeline_run_timings.json", {"total_seconds": 12.5, "stage_count": 3, "slowest_stages": [{"name": "embed", "seconds": 5.0}]})
+    write_json(
+        "outputs/reports/pipeline_run_timings.json",
+        {
+            "config_hash": config_hash,
+            "generated_at": "2026-06-20T00:00:00+00:00",
+            "total_seconds": 12.5,
+            "stage_count": 3,
+            "stages": [{"name": "embed", "status": "passed", "seconds": 5.0}],
+            "slowest_stages": [{"name": "embed", "seconds": 5.0}],
+        },
+    )
 
     result = experiment_report.run("configs/proofatlas.yaml")
     text = (tmp_path / result["path"]).read_text(encoding="utf-8")
@@ -91,6 +117,10 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "Data supervision" in text
     assert "Local Lean/mathlib source extraction is out of scope" in text
     assert "Pipeline Timing" in text
+    assert "Timing config matches current report config" in text
+    assert "Timing config matches current report config: `True`" in text
+    assert "Throughput timing basis" in text
+    assert "Scale estimate reliable" in text
     assert "LeanRank premise supervision ready" in text
     assert "Total embedding rows" in text
     assert "Mean index speedup vs exact" in text

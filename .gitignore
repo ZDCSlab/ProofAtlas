@@ -30,6 +30,7 @@ outputs/reports/*
 !outputs/reports/metrics.json
 !outputs/reports/mvp_completion_audit.json
 !outputs/reports/pipeline_performance_report.json
+!outputs/reports/pipeline_run_timings.json
 !outputs/reports/premise_trace_supervision_report.json
 !outputs/reports/ranker_validation_metrics.json
 !outputs/reports/test_set_evaluation.json

@@ -38,3 +38,10 @@ def test_production_refresh_uses_configurable_pipeline_runner() -> None:
     assert "VERIFY_RUN ?= $(PIPELINE_RUN)" in makefile
     assert "$(PIPELINE_RUN) leanrank-kg evaluate --config $(PRODUCTION_CONFIG)" in makefile
     assert "$(PIPELINE_RUN) leanrank-kg audit --config $(PRODUCTION_CONFIG)" in makefile
+
+
+def test_delivery_artifact_allowlist_includes_pipeline_timings() -> None:
+    repo = Path(__file__).resolve().parents[1]
+    gitignore = (repo / ".gitignore").read_text(encoding="utf-8")
+
+    assert "!outputs/reports/pipeline_run_timings.json" in gitignore
