@@ -408,6 +408,9 @@ def test_text_query_retrieval_and_theorem_guidance_are_json_serializable(tmp_pat
     assert "Evaluation And Examples" in html
     assert "Local asset fallback" in html
     assert "renderLocalFallback" in html
+    assert "Gold premises:" in html
+    assert "Gold premise: <code></code>" not in html
+    assert "<b></b>" not in html
     assert "localCaseScore" in html
     assert "API unavailable; showing nearest precomputed case study" in html
     assert "Query theorem" in html

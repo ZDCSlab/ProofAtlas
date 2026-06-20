@@ -328,6 +328,7 @@ def build_audit() -> dict[str, Any]:
             and data.get("quality_checks", {}).get("all_cases_passed") is True
             and data.get("quality_checks", {}).get("has_successful_extraction_case") is True
             and data.get("quality_checks", {}).get("has_failure_explanation_case") is True
+            and data.get("quality_checks", {}).get("has_timeout_stderr_extraction_case") is True
             and data.get("total_extracted_proof_states", 0) > 0
             and "not a corpus extractor" in data.get("production_pipeline_role", ""),
             {
@@ -335,6 +336,7 @@ def build_audit() -> dict[str, Any]:
                 "case_count": data.get("case_count"),
                 "passed_case_count": data.get("passed_case_count"),
                 "total_extracted_proof_states": data.get("total_extracted_proof_states"),
+                "quality_checks": data.get("quality_checks"),
                 "pipeline_role": data.get("production_pipeline_role"),
             },
         ),

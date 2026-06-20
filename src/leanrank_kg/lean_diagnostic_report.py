@@ -62,6 +62,18 @@ no goal marker here
         "expected_extracted_count": 0,
         "expected_failure_reason": "no_goal_blocks_with_turnstile",
     },
+    {
+        "name": "timeout_stderr_unsolved_goal",
+        "description": "A timed-out Lean check can still preserve stderr diagnostics for proof-state extraction.",
+        "stderr": """
+error: unsolved goals
+case timeout
+y : Nat
+⊢ y = y
+""",
+        "expected_extracted_count": 1,
+        "expected_timeout_preserved": True,
+    },
 ]
 
 
@@ -79,6 +91,8 @@ def _case_result(case: dict[str, Any]) -> dict[str, Any]:
         checks["rejected_count_matches"] = len(report["rejected_blocks"]) == int(expected_rejected)
     if expected_failure is not None:
         checks["failure_reason_matches"] = report["failure_reason"] == expected_failure
+    if case.get("expected_timeout_preserved") is not None:
+        checks["timeout_diagnostic_preserved"] = bool(case.get("expected_timeout_preserved")) and report["extracted_count"] > 0
     return {
         "name": case["name"],
         "description": case["description"],
@@ -108,6 +122,10 @@ def build_report() -> dict[str, Any]:
             "all_cases_passed": all(case["passed"] for case in cases),
             "has_successful_extraction_case": any(case["extracted_count"] > 0 for case in cases),
             "has_failure_explanation_case": any(case["failure_reason"] for case in cases),
+            "has_timeout_stderr_extraction_case": any(
+                case["name"] == "timeout_stderr_unsolved_goal" and case["extracted_count"] > 0
+                for case in cases
+            ),
             "all_extracted_states_have_retrieval_text": all(
                 row.get("retrieval_text")
                 for case in cases

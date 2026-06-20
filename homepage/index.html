@@ -785,10 +785,13 @@ X.ρ (f a) ≫ g.hom = g.hom ≫ Y.ρ (f a)</div>
     <h2>Live Retrieval Examples</h2>
     <p class="section-lead">Each example starts from a Lean proof goal and retrieves likely useful premises from the train index using BGE cosine similarity.</p>
 
+
+
+
     <div class="example">
       <h3>ps:AList.lookup_to_alist:0:308b5669ece7</h3>
       <div class="goal">lookup a s.toAList = dlookup a s</div>
-      <p class="muted">Gold premise: <code></code> | in train index: <b></b></p>
+      <p class="muted">Gold premises: <code>premise:AList.lookup, premise:List.dlookup_dedupKeys, premise:List.toAList</code> | train-index status: <b>reported in case study</b></p>
       <div class="ranked">
 
         <div class="rank">
@@ -824,10 +827,13 @@ X.ρ (f a) ≫ g.hom = g.hom ≫ Y.ρ (f a)</div>
       </div>
     </div>
 
+
+
+
     <div class="example">
       <h3>ps:AbsoluteValue.Completion.extensionEmbedding_of_comp_coe:0:7b7f180d15af</h3>
       <div class="goal">(extensionEmbedding_of_comp h) ↑x = f x</div>
-      <p class="muted">Gold premise: <code></code> | in train index: <b></b></p>
+      <p class="muted">Gold premises: <code>premise:UniformSpace.Completion.extensionHom_coe, premise:WithAbs.isUniformInducing_of_comp</code> | train-index status: <b>reported in case study</b></p>
       <div class="ranked">
 
         <div class="rank">
@@ -863,10 +869,13 @@ X.ρ (f a) ≫ g.hom = g.hom ≫ Y.ρ (f a)</div>
       </div>
     </div>
 
+
+
+
     <div class="example">
       <h3>ps:Action.full_res:4:d6f01be8f029</h3>
       <div class="goal">X.ρ (f a) ≫ g.hom = g.hom ≫ Y.ρ (f a)</div>
-      <p class="muted">Gold premise: <code></code> | in train index: <b></b></p>
+      <p class="muted">Gold premises: <code>premise:Action, premise:Action.res, premise:Prefunctor</code> | train-index status: <b>reported in case study</b></p>
       <div class="ranked">
 
         <div class="rank">
@@ -902,10 +911,13 @@ X.ρ (f a) ≫ g.hom = g.hom ≫ Y.ρ (f a)</div>
       </div>
     </div>
 
+
+
+
     <div class="example">
       <h3>ps:AddChar.to_mulShift_inj_of_isPrimitive:1:014ac10cbfd3</h3>
       <div class="goal">a = b</div>
-      <p class="muted">Gold premise: <code></code> | in train index: <b></b></p>
+      <p class="muted">Gold premises: <code>premise:AddChar.mulShift</code> | train-index status: <b>reported in case study</b></p>
       <div class="ranked">
 
         <div class="rank">

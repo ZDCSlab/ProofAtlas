@@ -4,9 +4,13 @@
 __pycache__/
 *.py[cod]
 .pytest_cache/
+.hypothesis/
 .mypy_cache/
 .ruff_cache/
+.tox/
+.nox/
 .coverage
+.coverage.*
 coverage.xml
 htmlcov/
 .ipynb_checkpoints/
@@ -18,6 +22,7 @@ dist/
 *.prof
 *.tmp
 *.temp
+*.jsonl
 *.sqlite
 *.sqlite3
 *.db
@@ -31,6 +36,10 @@ dist/
 *.swo
 .idea/
 .vscode/
+node_modules/
+.parcel-cache/
+.next/
+site/
 tmp/
 
 # The homepage is the demo deliverable, so keep generated static assets tracked.

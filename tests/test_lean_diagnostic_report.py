@@ -12,10 +12,14 @@ def test_lean_diagnostic_report_covers_success_dedup_and_failure_cases(tmp_path,
     assert report["quality_checks"]["all_cases_passed"] is True
     assert report["quality_checks"]["has_successful_extraction_case"] is True
     assert report["quality_checks"]["has_failure_explanation_case"] is True
+    assert report["quality_checks"]["has_timeout_stderr_extraction_case"] is True
     assert report["total_extracted_proof_states"] > 0
     duplicate_case = next(case for case in report["cases"] if case["name"] == "duplicate_goal_context")
     assert duplicate_case["rejected_count"] == 1
     missing_case = next(case for case in report["cases"] if case["name"] == "missing_turnstile")
     assert missing_case["failure_reason"] == "no_goal_blocks_with_turnstile"
+    timeout_case = next(case for case in report["cases"] if case["name"] == "timeout_stderr_unsolved_goal")
+    assert timeout_case["extracted_count"] == 1
+    assert timeout_case["checks"]["timeout_diagnostic_preserved"] is True
     assert (tmp_path / "outputs/reports/lean_diagnostic_extraction_report.json").exists()
     json.dumps(report, allow_nan=False)

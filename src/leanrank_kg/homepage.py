@@ -462,10 +462,13 @@ HTML = """<!doctype html>
     <h2>Live Retrieval Examples</h2>
     <p class="section-lead">Each example starts from a Lean proof goal and retrieves likely useful premises from the train index using BGE cosine similarity.</p>
     {% for ex in retrieval_examples[:4] %}
+    {% set gold_list = ex.gold_positive_premises|default([]) %}
+    {% set gold_text = ", ".join(gold_list[:3]) if gold_list else ex.gold_positive_premise|default("not recorded") %}
+    {% set train_status = ex.gold_in_train_index|default("reported in case study") %}
     <div class="example">
       <h3>{{ ex.proof_state_id }}</h3>
       <div class="goal">{{ ex.proof_state }}</div>
-      <p class="muted">Gold premise: <code>{{ ex.gold_positive_premise }}</code> | in train index: <b>{{ ex.gold_in_train_index }}</b></p>
+      <p class="muted">Gold premises: <code>{{ gold_text }}</code> | train-index status: <b>{{ train_status }}</b></p>
       <div class="ranked">
         {% for r in ex.top_retrieved_premises %}
         <div class="rank">

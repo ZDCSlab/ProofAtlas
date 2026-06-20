@@ -781,7 +781,7 @@
       "path": "outputs/indexes/index_summary.json"
     },
     "validation:lean_diagnostic_extraction": {
-      "detail": "lean_diagnostic_extraction={'scope': 'query-time Lean unsolved-goals diagnostic proof-state extraction', 'case_count': 4, 'passed_case_count': 4, 'total_extracted_proof_states': 4, 'pipeline_role': 'optional query diagnostics only; not a corpus extractor and not part of the default LeanRank-data pipeline'}",
+      "detail": "lean_diagnostic_extraction={'scope': 'query-time Lean unsolved-goals diagnostic proof-state extraction', 'case_count': 5, 'passed_case_count': 5, 'total_extracted_proof_states': 5, 'quality_checks': {'all_cases_passed': True, 'all_extracted_states_have_retrieval_text': True, 'has_failure_explanation_case': True, 'has_successful_extraction_case': True, 'has_timeout_stderr_extraction_case': True}, 'pipeline_role': 'optional query diagnostics only; not a corpus extractor and not part of the default LeanRank-data pipeline'}",
       "passed": true,
       "path": "outputs/reports/lean_diagnostic_extraction_report.json"
     },
