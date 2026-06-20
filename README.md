@@ -167,6 +167,15 @@ Current `configs/proofatlas.yaml` full held-out test results:
 | Theorem-level premise retrieval | MRR | 0.5609 |
 | Learned premise ranker | validation AUC | 0.8254 |
 
+Current retrieval failure diagnosis:
+
+| Task | Diagnosis | Queries | Share of evaluated | Share of retrievable |
+| --- | --- | ---: | ---: | ---: |
+| Proof-state premise retrieval | candidate_pool_miss_top_100 | 1,823 | 59.7% | 64.4% |
+| Proof-state premise retrieval | reranking_headroom_after_top10 | 458 | 15.0% | 16.2% |
+| Theorem-level premise retrieval | candidate_pool_miss_top_100 | 55 | 5.5% | 5.8% |
+| Theorem-level premise retrieval | reranking_headroom_after_top10 | 133 | 13.3% | 13.9% |
+
 Current held-out metric uncertainty:
 
 | Task | Metric | n | 95% CI low | 95% CI high | Half-width |

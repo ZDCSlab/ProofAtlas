@@ -81,6 +81,25 @@ def test_readme_metric_uncertainty_matches_committed_profile() -> None:
         assert cells[5] == f"{float(row['ci95_half_width']):.4f}"
 
 
+def test_readme_failure_diagnosis_matches_committed_homepage_summary() -> None:
+    repo = Path(__file__).resolve().parents[1]
+    readme = (repo / "README.md").read_text(encoding="utf-8")
+    summary = json.loads((repo / "outputs/reports/homepage_summary.json").read_text(encoding="utf-8"))
+    diagnosis = summary["production_evidence"]["failure_diagnosis"]
+    expected = {
+        ("Proof-state premise retrieval", "candidate_pool_miss_top_100"): diagnosis["proof_state"]["candidate_pool_miss_top_100"],
+        ("Proof-state premise retrieval", "reranking_headroom_after_top10"): diagnosis["proof_state"]["reranking_headroom_after_top10"],
+        ("Theorem-level premise retrieval", "candidate_pool_miss_top_100"): diagnosis["theorem"]["candidate_pool_miss_top_100"],
+        ("Theorem-level premise retrieval", "reranking_headroom_after_top10"): diagnosis["theorem"]["reranking_headroom_after_top10"],
+    }
+
+    for (task, label), row in expected.items():
+        cells = _readme_table_row(readme, task, label)
+        assert cells[2] == f"{int(row['queries']):,}"
+        assert cells[3] == f"{float(row['share_of_evaluated']):.1%}"
+        assert cells[4] == f"{float(row['share_of_retrievable']):.1%}"
+
+
 def test_readme_production_snapshot_matches_committed_artifacts() -> None:
     repo = Path(__file__).resolve().parents[1]
     readme = (repo / "README.md").read_text(encoding="utf-8")
