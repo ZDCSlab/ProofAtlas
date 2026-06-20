@@ -375,6 +375,31 @@ def _scale_projection_table(profile: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def _hard_negative_quality_table(profile: dict[str, Any]) -> str:
+    rows = profile.get("bucket_counts", []) if isinstance(profile, dict) else []
+    lines = [
+        "| Hardness bucket | Proof states | Negative rows | Row share | Mean hardness |",
+        "| --- | ---: | ---: | ---: | ---: |",
+    ]
+    for row in rows:
+        lines.append(
+            "| "
+            + " | ".join(
+                [
+                    f"`{row.get('bucket', 'n/a')}`",
+                    _fmt(row.get("proof_state_count")),
+                    _fmt(row.get("negative_candidate_rows")),
+                    _fmt(row.get("negative_candidate_row_share")),
+                    _fmt(row.get("mean_hardness")),
+                ]
+            )
+            + " |"
+        )
+    if len(lines) == 2:
+        lines.append("| n/a | n/a | n/a | n/a | n/a |")
+    return "\n".join(lines)
+
+
 def _split_counts(manifest: dict[str, Any]) -> str:
     counts = manifest.get("split_counts", {}) if isinstance(manifest, dict) else {}
     if not counts:
@@ -757,6 +782,7 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
 
     current_trace = premise_trace.get("current_artifact_supervision", {}) if isinstance(premise_trace, dict) else {}
     train_trace = premise_trace.get("splits", {}).get("train", {}) if isinstance(premise_trace, dict) else {}
+    hard_negative_quality = train_trace.get("hard_negative_quality_profile", {}) if isinstance(train_trace, dict) else {}
     label_conflicts = premise_trace.get("normalization_label_conflicts", {}) if isinstance(premise_trace, dict) else {}
     lines.extend(
         [
@@ -775,8 +801,16 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
             f"- Train positive/negative pair overlap count: `{train_trace.get('positive_negative_pair_overlap_count', 'n/a')}`",
             f"- Removed positive/negative label conflicts during normalization: `{label_conflicts.get('total_positive_negative_overlap_removed', 'n/a')}`",
             f"- Train negative-candidate hardness mean: `{train_trace.get('negative_candidate_hardness', {}).get('mean', 'n/a')}`",
+            f"- Train high-hardness negative rows: `{hard_negative_quality.get('high_hardness_negative_candidate_rows', 'n/a')}`",
+            f"- Train high-hardness negative row share: `{hard_negative_quality.get('high_hardness_negative_candidate_share', 'n/a')}`",
             f"- Supervision quality checks: `{current_trace.get('quality_checks', {})}`",
             f"- Supervision scope: `{premise_trace.get('scope', 'erbacher/LeanRank-data normalized positive/negative premise supervision')}`",
+            "",
+            "### Hard-Negative Quality Profile",
+            "",
+            "Hardness buckets are derived from the normalized positive/negative premise features. This table shows whether the train split contains enough non-trivial negative candidates for ranking and difficulty experiments.",
+            "",
+            _hard_negative_quality_table(hard_negative_quality),
             "",
             "## Pipeline Timing",
             "",

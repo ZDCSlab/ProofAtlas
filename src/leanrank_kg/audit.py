@@ -356,6 +356,8 @@ def build_audit() -> dict[str, Any]:
             "Final Artifacts",
             "ML Task Definition",
             "Proof-State-Level Premise Ranking",
+            "Hard-Negative Quality Profile",
+            "Train high-hardness negative rows",
             "Theorem-Level Premise Ranking",
             "Candidate pool",
             "homepage/index.html",

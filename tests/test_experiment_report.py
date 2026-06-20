@@ -337,6 +337,38 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
         },
     )
     write_json(
+        "outputs/reports/premise_trace_supervision_report.json",
+        {
+            "scope": "erbacher/LeanRank-data normalized positive/negative premise supervision",
+            "current_artifact_supervision": {
+                "total_positive_edges": 10,
+                "total_negative_edges": 90,
+                "negative_to_positive_edge_ratio": 9.0,
+                "quality_checks": {"all_positive_negative_pairs_disjoint": True},
+            },
+            "normalization_label_conflicts": {"total_positive_negative_overlap_removed": 1},
+            "splits": {
+                "train": {
+                    "proof_states_with_positive_edges": 8,
+                    "proof_states_with_negative_edges": 8,
+                    "positive_proof_state_coverage": 1.0,
+                    "negative_proof_state_coverage": 1.0,
+                    "positive_negative_pair_overlap_count": 0,
+                    "negative_candidate_hardness": {"mean": 0.6},
+                    "hard_negative_quality_profile": {
+                        "high_hardness_negative_candidate_rows": 20,
+                        "high_hardness_negative_candidate_share": 0.25,
+                        "bucket_counts": [
+                            {"bucket": "low", "proof_state_count": 2, "negative_candidate_rows": 10, "negative_candidate_row_share": 0.125, "mean_hardness": 0.3},
+                            {"bucket": "medium", "proof_state_count": 4, "negative_candidate_rows": 60, "negative_candidate_row_share": 0.75, "mean_hardness": 0.6},
+                            {"bucket": "high", "proof_state_count": 2, "negative_candidate_rows": 20, "negative_candidate_row_share": 0.25, "mean_hardness": 0.85},
+                        ],
+                    },
+                }
+            },
+        },
+    )
+    write_json(
         "outputs/reports/index_benchmark.json",
         {
             "entities": {
@@ -457,3 +489,6 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "Scale Projection" in text
     assert "linear_projection_from_current_timed_pipeline" in text
     assert "current_2x" in text
+    assert "Hard-Negative Quality Profile" in text
+    assert "Train high-hardness negative rows" in text
+    assert "high" in text

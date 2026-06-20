@@ -469,8 +469,21 @@ The current ranking labels come from normalized LeanRank-data premise supervisio
 - Train positive/negative pair overlap count: `0`
 - Removed positive/negative label conflicts during normalization: `4088`
 - Train negative-candidate hardness mean: `0.6030019312643399`
+- Train high-hardness negative rows: `128855`
+- Train high-hardness negative row share: `0.24293333685260354`
 - Supervision quality checks: `{'all_negative_edges_have_valid_endpoints': True, 'all_positive_edges_have_valid_endpoints': True, 'all_positive_negative_pairs_disjoint': True}`
 - Supervision scope: `erbacher/LeanRank-data normalized positive/negative premise supervision`
+
+### Hard-Negative Quality Profile
+
+Hardness buckets are derived from the normalized positive/negative premise features. This table shows whether the train split contains enough non-trivial negative candidates for ranking and difficulty experiments.
+
+| Hardness bucket | Proof states | Negative rows | Row share | Mean hardness |
+| --- | ---: | ---: | ---: | ---: |
+| `none` | 0 | 0 | 0.0000 | 0.0000 |
+| `low` | 8251 | 145935 | 0.2751 | 0.3731 |
+| `medium` | 8470 | 255623 | 0.4819 | 0.6249 |
+| `high` | 7002 | 128855 | 0.2429 | 0.8474 |
 
 ## Pipeline Timing
 
