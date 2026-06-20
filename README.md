@@ -216,6 +216,21 @@ Current pipeline bottleneck profile:
 | Primary bottleneck | share of total | 0.2704 |
 | Top-3 timed stages | share of total | 0.5195 |
 
+Current resource and parallelism profile:
+
+| Component | Field | Value |
+| --- | --- | ---: |
+| Embedding | backend/model | sentence_transformers / BAAI/bge-base-en-v1.5 |
+| Embedding | device count | 7 |
+| Embedding | multi-process | True |
+| Embedding | batch size | 512 |
+| Embedding | rows/sec during embed stage | 1638.4137 |
+| Evaluation | actual backends | torch_cuda |
+| Evaluation | candidate count | 127,561 |
+| Indexing | backend | hnswlib |
+| Indexing | hnswlib parameters | M=16, ef_construction=200, ef_search=100 |
+| Indexing | min recall vs exact | 0.9580 |
+
 Current artifact reuse and retraining policy:
 
 | Artifact | Field | Value |

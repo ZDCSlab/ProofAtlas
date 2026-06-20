@@ -155,6 +155,33 @@ def test_readme_performance_snapshot_matches_committed_artifacts() -> None:
     assert _readme_table_row(readme, "Top-3 timed stages", "share of total")[2] == f"{float(bottleneck['top3_stage_share_of_total']):.4f}"
 
 
+def test_readme_resource_parallelism_profile_matches_committed_profile() -> None:
+    repo = Path(__file__).resolve().parents[1]
+    readme = (repo / "README.md").read_text(encoding="utf-8")
+    profile = json.loads((repo / "outputs/reports/pipeline_performance_report.json").read_text(encoding="utf-8"))
+    resources = profile["throughput_profile"]["resource_parallelism_profile"]
+    embedding = resources["embedding_parallelism"]
+    evaluation = resources["evaluation_parallelism"]
+    indexing = resources["index_parallelism"]
+
+    assert _readme_table_row(readme, "Embedding", "backend/model")[2] == (
+        f"{embedding['backend']} / {embedding['model_name']}"
+    )
+    assert _readme_table_row(readme, "Embedding", "device count")[2] == str(embedding["device_count"])
+    assert _readme_table_row(readme, "Embedding", "multi-process")[2] == str(embedding["multi_process"])
+    assert _readme_table_row(readme, "Embedding", "batch size")[2] == str(embedding["batch_size"])
+    assert _readme_table_row(readme, "Embedding", "rows/sec during embed stage")[2] == (
+        f"{float(embedding['embedding_rows_per_embed_second']):.4f}"
+    )
+    assert _readme_table_row(readme, "Evaluation", "actual backends")[2] == ", ".join(evaluation["actual_backends"])
+    assert _readme_table_row(readme, "Evaluation", "candidate count")[2] == f"{int(evaluation['candidate_count']):,}"
+    assert _readme_table_row(readme, "Indexing", "backend")[2] == indexing["backend"]
+    assert _readme_table_row(readme, "Indexing", "hnswlib parameters")[2] == (
+        f"M={indexing['hnsw_M']}, ef_construction={indexing['hnsw_ef_construction']}, ef_search={indexing['hnsw_ef_search']}"
+    )
+    assert _readme_table_row(readme, "Indexing", "min recall vs exact")[2] == f"{float(indexing['min_recall_vs_exact']):.4f}"
+
+
 def test_readme_artifact_reuse_policy_matches_committed_profile() -> None:
     repo = Path(__file__).resolve().parents[1]
     readme = (repo / "README.md").read_text(encoding="utf-8")
