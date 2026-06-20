@@ -273,6 +273,15 @@ HTML = """<!doctype html>
       <div class="status"><div class="label">Hardness mean</div><div class="value">{{ "%.3f"|format(production_evidence.supervision.train_negative_hardness_mean or 0) }}</div><div class="note">train negative candidate hardness</div></div>
       <div class="status"><div class="label">Embedding throughput</div><div class="value">{{ "%.1f"|format(production_evidence.timing.embedding_rows_per_second or 0) }}</div><div class="note">embedding rows per second</div></div>
     </div>
+    {% set bottleneck = production_evidence.timing.bottleneck_profile|default({}) %}
+    {% set bottleneck_stages = bottleneck.top_stages|default([]) %}
+    <div class="status-row" style="margin-top:12px">
+      <div class="status warn"><div class="label">Pipeline bottleneck</div><div class="value">{{ bottleneck.primary_stage|default(production_evidence.timing.slowest_stage|default("unknown")) }}</div><div class="note">{{ "%.1f"|format((bottleneck.primary_stage_share_of_total|default(0) or 0) * 100) }}% of timed production run</div></div>
+      <div class="status"><div class="label">Top-3 timed stages</div><div class="value">{{ "%.1f"|format((bottleneck.top3_stage_share_of_total|default(0) or 0) * 100) }}%</div><div class="note">combined share of pipeline wall time</div></div>
+      {% for row in bottleneck_stages[:2] %}
+      <div class="status"><div class="label">{{ row.name }}</div><div class="value">{{ "%.1f"|format(row.seconds|default(0) or 0) }}s</div><div class="note">{{ "%.1f"|format((row.share_of_total|default(0) or 0) * 100) }}% of timed run</div></div>
+      {% endfor %}
+    </div>
     {% set failure_profile = production_evidence.failure_profile|default({}) %}
     {% set proof_failure = failure_profile.proof_state|default({}) %}
     {% set theorem_failure = failure_profile.theorem|default({}) %}

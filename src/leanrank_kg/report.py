@@ -288,6 +288,7 @@ def _production_evidence(
     current_supervision = premise_supervision.get("current_artifact_supervision", {})
     train_supervision = premise_supervision.get("splits", {}).get("train", {})
     throughput = pipeline_performance.get("throughput_profile", {})
+    bottleneck_profile = throughput.get("bottleneck_profile", {}) if isinstance(throughput, dict) else {}
     scale = pipeline_performance.get("scale_profile", {})
     timing_summary = pipeline_performance.get("stages", {}).get("pipeline_run_timings", {})
     test_eval = test_set_evaluation.get("test", {}) if isinstance(test_set_evaluation, dict) else {}
@@ -324,6 +325,7 @@ def _production_evidence(
             "embedding_device": scale.get("embedding_device"),
             "embedding_devices": scale.get("embedding_devices", []),
             "slowest_stage": throughput.get("slowest_stage"),
+            "bottleneck_profile": bottleneck_profile,
         },
         "failure_profile": {
             "proof_state": proof_failure,
