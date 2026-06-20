@@ -287,6 +287,20 @@ def test_readme_premise_supervision_snapshot_matches_committed_artifacts() -> No
     assert _readme_artifact_field(readme, "Train hard negatives", "hardness mean") == f"{float(train['negative_candidate_hardness']['mean']):.4f}"
 
 
+def test_delivery_audit_premise_supervision_snapshot_matches_committed_artifacts() -> None:
+    repo = Path(__file__).resolve().parents[1]
+    audit = (repo / "docs/proofatlas_delivery_audit.md").read_text(encoding="utf-8")
+    supervision = json.loads((repo / "outputs/reports/premise_trace_supervision_report.json").read_text(encoding="utf-8"))
+    current = supervision["current_artifact_supervision"]
+    conflicts = supervision["normalization_label_conflicts"]
+    cells = _readme_table_row(audit, "Premise positive/negative supervision")
+
+    assert f"{int(current['total_positive_edges']):,} positive edges" in cells[1]
+    assert f"{int(current['total_negative_edges']):,} negative edges" in cells[1]
+    assert f"positive/negative overlap removed: {int(conflicts['total_positive_negative_overlap_removed']):,}" in cells[1]
+    assert cells[2] == "Delivered"
+
+
 def test_production_refresh_uses_configurable_pipeline_runner() -> None:
     repo = Path(__file__).resolve().parents[1]
     makefile = (repo / "Makefile").read_text(encoding="utf-8")
