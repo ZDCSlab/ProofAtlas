@@ -26,6 +26,12 @@ def test_premise_trace_supervision_report_uses_leanrank_labels_without_custom_ex
     assert report["current_artifact_supervision"]["negative_to_positive_edge_ratio"] > 0
     assert "quality_checks" in report["current_artifact_supervision"]
     assert report["current_artifact_supervision"]["quality_checks"]["all_positive_negative_pairs_disjoint"] is True
+    training_profile = report["training_supervision_profile"]
+    assert training_profile["method"] == "leanrank_data_positive_negative_premise_supervision_readiness"
+    assert training_profile["summary"]["required_gates_passed"] is True
+    assert training_profile["train"]["positive_edges"] == report["splits"]["train"]["positive_edges"]
+    assert training_profile["heldout"]["total_positive_edges"] > 0
+    assert next(row for row in training_profile["gates"] if row["name"] == "hard_negative_signal_present")["passed"] is True
     assert "normalization_label_conflicts" in report
     assert "total_positive_negative_overlap_removed" in report["normalization_label_conflicts"]
     assert "negative_candidate_hardness" in report["splits"]["train"]

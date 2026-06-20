@@ -296,6 +296,108 @@ def _hard_negative_quality_profile(features: pd.DataFrame, negative_counts: pd.S
     }
 
 
+def _training_supervision_profile(splits: dict[str, dict[str, Any]], current: dict[str, Any]) -> dict[str, Any]:
+    train = splits.get("train", {}) if isinstance(splits, dict) else {}
+    val = splits.get("val", {}) if isinstance(splits, dict) else {}
+    test = splits.get("test", {}) if isinstance(splits, dict) else {}
+    train_hard_negative_quality = train.get("hard_negative_quality_profile", {}) if isinstance(train, dict) else {}
+    train_hardness = train.get("negative_candidate_hardness", {}) if isinstance(train, dict) else {}
+    heldout_positive_edges = int(val.get("positive_edges") or 0) + int(test.get("positive_edges") or 0)
+    heldout_negative_edges = int(val.get("negative_edges") or 0) + int(test.get("negative_edges") or 0)
+    gates = [
+        {
+            "name": "train_positive_edges_present",
+            "severity": "required",
+            "passed": int(train.get("positive_edges") or 0) > 0,
+            "value": train.get("positive_edges"),
+            "threshold": ">0 train positive premise edges",
+        },
+        {
+            "name": "train_negative_candidates_present",
+            "severity": "required",
+            "passed": int(train.get("negative_edges") or 0) > 0,
+            "value": train.get("negative_edges"),
+            "threshold": ">0 train negative candidate edges",
+        },
+        {
+            "name": "train_pair_disjoint",
+            "severity": "required",
+            "passed": train.get("quality_checks", {}).get("positive_negative_pairs_disjoint") is True,
+            "value": train.get("positive_negative_pair_overlap_count"),
+            "threshold": "no train proof_state/premise pair is both positive and negative",
+        },
+        {
+            "name": "hard_negative_signal_present",
+            "severity": "required",
+            "passed": bool(current.get("has_negative_candidate_hardness"))
+            and (
+                int(train_hard_negative_quality.get("high_hardness_negative_candidate_rows") or 0) > 0
+                or float(train_hardness.get("max") or 0.0) > 0.0
+            ),
+            "value": {
+                "has_negative_candidate_hardness": current.get("has_negative_candidate_hardness"),
+                "train_hardness_max": train_hardness.get("max"),
+                "high_hardness_negative_candidate_rows": train_hard_negative_quality.get("high_hardness_negative_candidate_rows"),
+            },
+            "threshold": "negative_candidate_hardness exists and train has nonzero hard-negative signal",
+        },
+        {
+            "name": "heldout_positive_labels_present",
+            "severity": "required",
+            "passed": heldout_positive_edges > 0,
+            "value": {"val_positive_edges": val.get("positive_edges"), "test_positive_edges": test.get("positive_edges")},
+            "threshold": ">0 val/test positive premise labels",
+        },
+        {
+            "name": "train_both_label_coverage",
+            "severity": "advisory",
+            "passed": float(train.get("both_label_coverage") or 0.0) > 0.0,
+            "value": train.get("both_label_coverage"),
+            "threshold": ">0 train proof-state coverage with both positive and negative labels",
+        },
+        {
+            "name": "heldout_negative_candidates_present",
+            "severity": "advisory",
+            "passed": heldout_negative_edges > 0,
+            "value": {"val_negative_edges": val.get("negative_edges"), "test_negative_edges": test.get("negative_edges")},
+            "threshold": ">0 val/test negative candidates for diagnostics",
+        },
+    ]
+    required = [gate for gate in gates if gate["severity"] == "required"]
+    advisory = [gate for gate in gates if gate["severity"] == "advisory"]
+    return {
+        "method": "leanrank_data_positive_negative_premise_supervision_readiness",
+        "task": "supervised premise ranking and held-out retrieval evaluation",
+        "train": {
+            "proof_states": train.get("proof_states"),
+            "positive_edges": train.get("positive_edges"),
+            "negative_edges": train.get("negative_edges"),
+            "proof_states_with_both_positive_and_negative_edges": train.get("proof_states_with_both_positive_and_negative_edges"),
+            "both_label_coverage": train.get("both_label_coverage"),
+            "negative_to_positive_edge_ratio": train.get("negative_to_positive_edge_ratio"),
+            "high_hardness_negative_candidate_rows": train_hard_negative_quality.get("high_hardness_negative_candidate_rows"),
+            "high_hardness_negative_candidate_share": train_hard_negative_quality.get("high_hardness_negative_candidate_share"),
+        },
+        "heldout": {
+            "val_positive_edges": val.get("positive_edges"),
+            "test_positive_edges": test.get("positive_edges"),
+            "total_positive_edges": heldout_positive_edges,
+            "val_negative_edges": val.get("negative_edges"),
+            "test_negative_edges": test.get("negative_edges"),
+            "total_negative_edges": heldout_negative_edges,
+        },
+        "summary": {
+            "required_gates_passed": all(gate["passed"] for gate in required),
+            "advisory_gates_passed": all(gate["passed"] for gate in advisory),
+            "passed_gate_count": sum(1 for gate in gates if gate["passed"]),
+            "total_gate_count": len(gates),
+            "required_gate_count": len(required),
+            "advisory_gate_count": len(advisory),
+        },
+        "gates": gates,
+    }
+
+
 def _split_report(split: str) -> dict[str, Any]:
     try:
         proof_states = pd.read_parquet(f"data/processed/{split}/proof_states.parquet")
@@ -400,6 +502,23 @@ def build_report() -> dict[str, Any]:
     has_positive = total_positive > 0
     has_negative = total_negative > 0
     quality_rows = [row.get("quality_checks", {}) for row in splits.values() if row.get("exists")]
+    current_artifact_supervision = {
+        "has_positive_edges": has_positive,
+        "has_negative_candidates": has_negative,
+        "has_negative_candidate_hardness": any(
+            bool(row.get("negative_candidate_hardness", {}).get("max", 0.0) > 0.0)
+            for row in splits.values()
+            if row.get("exists")
+        ),
+        "total_positive_edges": int(total_positive),
+        "total_negative_edges": int(total_negative),
+        "negative_to_positive_edge_ratio": float(total_negative / max(1, total_positive)),
+        "quality_checks": {
+            "all_positive_edges_have_valid_endpoints": all(row.get("positive_edges_have_valid_endpoints", False) for row in quality_rows),
+            "all_negative_edges_have_valid_endpoints": all(row.get("negative_edges_have_valid_endpoints", False) for row in quality_rows),
+            "all_positive_negative_pairs_disjoint": all(row.get("positive_negative_pairs_disjoint", False) for row in quality_rows),
+        },
+    }
     return {
         "dataset_name": manifest.get("dataset_name"),
         "source_kind": manifest.get("source_kind"),
@@ -407,23 +526,8 @@ def build_report() -> dict[str, Any]:
         "label_semantics": supervision.get("premise_label_semantics", "unknown"),
         "scope": "erbacher/LeanRank-data normalized positive/negative premise supervision",
         "normalization_label_conflicts": normalization_conflicts,
-        "current_artifact_supervision": {
-            "has_positive_edges": has_positive,
-            "has_negative_candidates": has_negative,
-            "has_negative_candidate_hardness": any(
-                bool(row.get("negative_candidate_hardness", {}).get("max", 0.0) > 0.0)
-                for row in splits.values()
-                if row.get("exists")
-            ),
-            "total_positive_edges": int(total_positive),
-            "total_negative_edges": int(total_negative),
-            "negative_to_positive_edge_ratio": float(total_negative / max(1, total_positive)),
-            "quality_checks": {
-                "all_positive_edges_have_valid_endpoints": all(row.get("positive_edges_have_valid_endpoints", False) for row in quality_rows),
-                "all_negative_edges_have_valid_endpoints": all(row.get("negative_edges_have_valid_endpoints", False) for row in quality_rows),
-                "all_positive_negative_pairs_disjoint": all(row.get("positive_negative_pairs_disjoint", False) for row in quality_rows),
-            },
-        },
+        "current_artifact_supervision": current_artifact_supervision,
+        "training_supervision_profile": _training_supervision_profile(splits, current_artifact_supervision),
         "splits": splits,
     }
 

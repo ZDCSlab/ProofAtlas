@@ -192,6 +192,25 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
                     "all_positive_negative_pairs_disjoint": True,
                 },
             },
+            "training_supervision_profile": {
+                "method": "leanrank_data_positive_negative_premise_supervision_readiness",
+                "task": "supervised premise ranking and held-out retrieval evaluation",
+                "train": {
+                    "positive_edges": 10,
+                    "negative_edges": 90,
+                    "both_label_coverage": 1.0,
+                    "negative_to_positive_edge_ratio": 9.0,
+                    "high_hardness_negative_candidate_rows": 7,
+                },
+                "heldout": {"total_positive_edges": 3, "total_negative_edges": 27},
+                "summary": {
+                    "required_gates_passed": True,
+                    "advisory_gates_passed": True,
+                    "passed_gate_count": 7,
+                    "total_gate_count": 7,
+                },
+                "gates": [{"name": "hard_negative_signal_present", "passed": True, "severity": "required"}],
+            },
             "normalization_label_conflicts": {"total_positive_negative_overlap_removed": 1},
             "splits": {
                 "train": {
@@ -305,6 +324,9 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
     assert supervision_acceptance["summary"]["advisory_gates_passed"] is True
     assert supervision_acceptance["label_conflicts_removed"] == 1
     assert next(row for row in supervision_acceptance["gates"] if row["name"] == "hard_negative_pair_evidence")["passed"] is True
+    training_supervision = report["stages"]["readiness"]["premise_trace_supervision"]["training_supervision_profile"]
+    assert training_supervision["method"] == "leanrank_data_positive_negative_premise_supervision_readiness"
+    assert training_supervision["summary"]["required_gates_passed"] is True
     lean_acceptance = report["throughput_profile"]["lean_diagnostic_acceptance_profile"]
     assert lean_acceptance["summary"]["required_gates_passed"] is True
     assert lean_acceptance["summary"]["advisory_gates_passed"] is True

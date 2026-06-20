@@ -76,18 +76,24 @@ The current default experiment uses `erbacher/LeanRank-data` only. Local Lean/ma
 
 These gates collect the experiment provenance and held-out evaluation assumptions needed to rerun or audit the current LeanRank-data retrieval report.
 
-- Method: `n/a`
-- Config path/hash: `n/a` / `n/a`
-- Dataset/source: `n/a` / `n/a`
-- Random seed: `n/a`
-- Sample plan: `{}`
-- Required gates passed: `n/a`
-- Advisory gates passed: `n/a`
-- Passed gates: `n/a` / `n/a`
+- Method: `experiment_reproducibility_and_artifact_consistency_gates`
+- Config path/hash: `configs/proofatlas.yaml` / `37ec7d5d3cf4d7b9`
+- Dataset/source: `erbacher/LeanRank-data` / `huggingface`
+- Random seed: `42`
+- Sample plan: `{'source_rows': 350000, 'target_theorems': 10000, 'unit': 'theorem'}`
+- Required gates passed: `True`
+- Advisory gates passed: `True`
+- Passed gates: `7` / `7`
 
 | Gate | Severity | Passed | Value | Threshold |
 | --- | --- | ---: | --- | --- |
-| n/a | n/a | n/a | n/a | n/a |
+| `target_dataset_source` | required | True | {'dataset_name': 'erbacher/LeanRank-data', 'source_kind': 'huggingface'} | dataset_name=erbacher/LeanRank-data and source_kind recorded |
+| `config_hash_consistent` | required | True | {'artifact_compatibility_passed': True, 'current_config_hash': '37ec7d5d3cf4d7b9', 'manifest_config_hash': '37ec7d5d3cf4d7b9'} | manifest hash matches current config and artifact compatibility passes |
+| `theorem_disjoint_split` | required | True | {'has_leakage': False, 'theorem_counts': {'test': 1000, 'train': 8000, 'val': 1000}} | no theorem overlap across train/val/test |
+| `held_out_label_policy` | required | True | {'candidate_pool': 'train premise index', 'label_policy': 'held-out test positive_edges are used only for evaluation'} | test positives are labels only; train premise index is the candidate pool |
+| `full_heldout_core_eval` | required | True | {'full_heldout_override': True, 'is_sampled': False, 'proof_state_limits': {'test': None, 'val': None}, 'theorem_limits': {'test': None, 'val': None}} | core proof-state/theorem evaluation covers the held-out split |
+| `timing_config_current` | advisory | True | {'config_matches_current': True, 'generated_at': '2026-06-20T22:46:12.435080+00:00', 'has_skipped_stages': False} | timing artifact hash matches current config and has no skipped stages |
+| `random_seed_recorded` | advisory | True | 42 | manifest records random_seed |
 
 ## Candidate Pool Diagnostic
 
@@ -599,6 +605,28 @@ The current ranking labels come from normalized LeanRank-data premise supervisio
 - Supervision quality checks: `{'all_negative_edges_have_valid_endpoints': True, 'all_positive_edges_have_valid_endpoints': True, 'all_positive_negative_pairs_disjoint': True}`
 - Supervision scope: `erbacher/LeanRank-data normalized positive/negative premise supervision`
 
+### Training Supervision Profile
+
+This profile summarizes whether the train split has usable positive/negative premise supervision and whether val/test retain positive labels for held-out retrieval evaluation.
+
+- Method: `leanrank_data_positive_negative_premise_supervision_readiness`
+- Task: `supervised premise ranking and held-out retrieval evaluation`
+- Train profile: `{'both_label_coverage': 1.0, 'high_hardness_negative_candidate_rows': 128855, 'high_hardness_negative_candidate_share': 0.24293333685260354, 'negative_edges': 530413, 'negative_to_positive_edge_ratio': 9.66196695629998, 'positive_edges': 54897, 'proof_states': 23723, 'proof_states_with_both_positive_and_negative_edges': 23723}`
+- Held-out labels: `{'test_negative_edges': 68132, 'test_positive_edges': 7054, 'total_negative_edges': 131885, 'total_positive_edges': 13664, 'val_negative_edges': 63753, 'val_positive_edges': 6610}`
+- Required gates passed: `True`
+- Advisory gates passed: `True`
+- Passed gates: `7` / `7`
+
+| Gate | Severity | Passed | Value | Threshold |
+| --- | --- | ---: | --- | --- |
+| `train_positive_edges_present` | required | True | 54897 | >0 train positive premise edges |
+| `train_negative_candidates_present` | required | True | 530413 | >0 train negative candidate edges |
+| `train_pair_disjoint` | required | True | 0 | no train proof_state/premise pair is both positive and negative |
+| `hard_negative_signal_present` | required | True | {'has_negative_candidate_hardness': True, 'high_hardness_negative_candidate_rows': 128855, 'train_hardness_max': 0.9788105780287333} | negative_candidate_hardness exists and train has nonzero hard-negative signal |
+| `heldout_positive_labels_present` | required | True | {'test_positive_edges': 7054, 'val_positive_edges': 6610} | >0 val/test positive premise labels |
+| `train_both_label_coverage` | advisory | True | 1.0000 | >0 train proof-state coverage with both positive and negative labels |
+| `heldout_negative_candidates_present` | advisory | True | {'test_negative_edges': 68132, 'val_negative_edges': 63753} | >0 val/test negative candidates for diagnostics |
+
 ### Supervision Acceptance Gates
 
 These gates summarize whether the normalized LeanRank-data positive premise and hard-negative candidate labels are usable for the retrieval/ranking experiment.
@@ -872,9 +900,9 @@ These linear projections use the current timed pipeline as a capacity-planning b
 This profile records the local footprint of generated LeanRank-data artifacts. It is a practical scale-up signal because embeddings and ANN indexes can dominate disk usage before model training becomes the bottleneck.
 
 - Method: `filesystem_artifact_footprint_with_linear_scale_projection`
-- Total artifact bytes: `3052735937`
-- Total artifact GiB: `2.843081892468035`
-- Bytes per processed row: `10454.145504294343`
+- Total artifact bytes: `3052747392`
+- Total artifact GiB: `2.8430925607681274`
+- Bytes per processed row: `10454.184732134296`
 - Unreferenced index artifact bytes: `1502501178`
 - Unreferenced index artifact count: `12`
 
@@ -882,7 +910,7 @@ This profile records the local footprint of generated LeanRank-data artifacts. I
 | --- | ---: | ---: | ---: |
 | `current_1x` | 292012 | 1.0000 | 2.8431 |
 | `current_2x` | 584024 | 2.0000 | 5.6862 |
-| `current_5x` | 1460060 | 5.0000 | 14.2154 |
+| `current_5x` | 1460060 | 5.0000 | 14.2155 |
 | `configured_source_rows` | 350000 | 1.1986 | 3.4077 |
 
 Largest generated artifact files:

@@ -1051,6 +1051,8 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     train_trace = premise_trace.get("splits", {}).get("train", {}) if isinstance(premise_trace, dict) else {}
     hard_negative_quality = train_trace.get("hard_negative_quality_profile", {}) if isinstance(train_trace, dict) else {}
     hard_negative_pair_evidence = train_trace.get("hard_negative_pair_evidence", {}) if isinstance(train_trace, dict) else {}
+    training_supervision = premise_trace.get("training_supervision_profile", {}) if isinstance(premise_trace, dict) else {}
+    training_supervision_summary = training_supervision.get("summary", {}) if isinstance(training_supervision, dict) else {}
     label_conflicts = premise_trace.get("normalization_label_conflicts", {}) if isinstance(premise_trace, dict) else {}
     ranker_utilization = ranker_metrics.get("training_pair_utilization", {}) if isinstance(ranker_metrics, dict) else {}
     raw_pair_counts = ranker_utilization.get("raw_pair_counts", {}) if isinstance(ranker_utilization, dict) else {}
@@ -1079,6 +1081,20 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
             f"- Train high-hardness negative row share: `{hard_negative_quality.get('high_hardness_negative_candidate_share', 'n/a')}`",
             f"- Supervision quality checks: `{current_trace.get('quality_checks', {})}`",
             f"- Supervision scope: `{premise_trace.get('scope', 'erbacher/LeanRank-data normalized positive/negative premise supervision')}`",
+            "",
+            "### Training Supervision Profile",
+            "",
+            "This profile summarizes whether the train split has usable positive/negative premise supervision and whether val/test retain positive labels for held-out retrieval evaluation.",
+            "",
+            f"- Method: `{training_supervision.get('method', 'n/a')}`",
+            f"- Task: `{training_supervision.get('task', 'n/a')}`",
+            f"- Train profile: `{training_supervision.get('train', {})}`",
+            f"- Held-out labels: `{training_supervision.get('heldout', {})}`",
+            f"- Required gates passed: `{training_supervision_summary.get('required_gates_passed', 'n/a')}`",
+            f"- Advisory gates passed: `{training_supervision_summary.get('advisory_gates_passed', 'n/a')}`",
+            f"- Passed gates: `{training_supervision_summary.get('passed_gate_count', 'n/a')}` / `{training_supervision_summary.get('total_gate_count', 'n/a')}`",
+            "",
+            _performance_gate_table(training_supervision),
             "",
             "### Supervision Acceptance Gates",
             "",

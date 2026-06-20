@@ -337,10 +337,14 @@ def build_audit() -> dict[str, Any]:
             and data.get("splits", {}).get("train", {}).get("hard_negative_quality_profile", {}).get("high_hardness_negative_candidate_rows", 0) >= 0
             and data.get("splits", {}).get("train", {}).get("hard_negative_pair_evidence", {}).get("pair_count", 0) > 0
             and bool(data.get("splits", {}).get("train", {}).get("example_traces"))
+            and data.get("training_supervision_profile", {}).get("method")
+            == "leanrank_data_positive_negative_premise_supervision_readiness"
+            and data.get("training_supervision_profile", {}).get("summary", {}).get("required_gates_passed") is True
             and data.get("scope") == "erbacher/LeanRank-data normalized positive/negative premise supervision",
             {
                 "dataset_name": data.get("dataset_name"),
                 "current": data.get("current_artifact_supervision"),
+                "training_supervision_profile": data.get("training_supervision_profile"),
                 "train_trace_profile": data.get("splits", {}).get("train", {}).get("trace_profile"),
                 "train_hard_negative_quality": data.get("splits", {}).get("train", {}).get("hard_negative_quality_profile"),
                 "train_hard_negative_pair_evidence": data.get("splits", {}).get("train", {}).get("hard_negative_pair_evidence"),

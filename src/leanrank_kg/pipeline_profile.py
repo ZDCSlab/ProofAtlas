@@ -333,6 +333,7 @@ def _readiness_stage() -> dict[str, Any]:
             "path": "outputs/reports/premise_trace_supervision_report.json",
             "exists": Path("outputs/reports/premise_trace_supervision_report.json").exists(),
             "current_artifact_supervision": premise_trace.get("current_artifact_supervision", {}),
+            "training_supervision_profile": premise_trace.get("training_supervision_profile", {}),
             "normalization_label_conflicts": premise_trace.get("normalization_label_conflicts", {}),
             "train_split": (premise_trace.get("splits", {}) or {}).get("train", {}),
             "scope": premise_trace.get("scope"),

@@ -596,6 +596,43 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                 "quality_checks": {"all_positive_negative_pairs_disjoint": True},
             },
             "normalization_label_conflicts": {"total_positive_negative_overlap_removed": 1},
+            "training_supervision_profile": {
+                "method": "leanrank_data_positive_negative_premise_supervision_readiness",
+                "task": "supervised premise ranking and held-out retrieval evaluation",
+                "train": {
+                    "proof_states": 8,
+                    "positive_edges": 10,
+                    "negative_edges": 90,
+                    "proof_states_with_both_positive_and_negative_edges": 8,
+                    "both_label_coverage": 1.0,
+                    "negative_to_positive_edge_ratio": 9.0,
+                    "high_hardness_negative_candidate_rows": 20,
+                    "high_hardness_negative_candidate_share": 0.25,
+                },
+                "heldout": {
+                    "val_positive_edges": 4,
+                    "test_positive_edges": 6,
+                    "total_positive_edges": 10,
+                    "val_negative_edges": 40,
+                    "test_negative_edges": 50,
+                    "total_negative_edges": 90,
+                },
+                "summary": {
+                    "required_gates_passed": True,
+                    "advisory_gates_passed": True,
+                    "passed_gate_count": 7,
+                    "total_gate_count": 7,
+                },
+                "gates": [
+                    {
+                        "name": "hard_negative_signal_present",
+                        "severity": "required",
+                        "passed": True,
+                        "value": {"high_hardness_negative_candidate_rows": 20},
+                        "threshold": "negative_candidate_hardness exists and train has nonzero hard-negative signal",
+                    }
+                ],
+            },
             "splits": {
                 "train": {
                     "proof_states_with_positive_edges": 8,
@@ -734,6 +771,9 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "ps_bad" in text
     assert "Mathlib.Bad" in text
     assert "Data supervision" in text
+    assert "Training Supervision Profile" in text
+    assert "leanrank_data_positive_negative_premise_supervision_readiness" in text
+    assert "hard_negative_signal_present" in text
     assert "Proof-state query representation: `full_name_goal`" in text
     assert "Local Lean/mathlib source extraction is out of scope" in text
     assert "Reproducibility Profile" in text

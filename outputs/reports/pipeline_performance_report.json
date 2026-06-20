@@ -4401,7 +4401,8 @@
           "unique_negative_premises": 123451,
           "unique_negative_to_positive_premise_ratio": 5.944861793315997,
           "unique_positive_premises": 20766
-        }
+        },
+        "training_supervision_profile": {}
       }
     },
     "sample": {
@@ -4542,7 +4543,7 @@
         "outputs/reports",
         "homepage/assets"
       ],
-      "bytes_per_processed_row": 10454.162616604797,
+      "bytes_per_processed_row": 10454.184732134296,
       "directories": {
         "data/processed": {
           "bytes": 46533700,
@@ -4551,7 +4552,7 @@
           "path": "data/processed"
         },
         "homepage/assets": {
-          "bytes": 2054884,
+          "bytes": 2054662,
           "exists": true,
           "file_count": 11,
           "path": "homepage/assets"
@@ -4569,7 +4570,7 @@
           "path": "outputs/indexes"
         },
         "outputs/reports": {
-          "bytes": 19310111,
+          "bytes": 19316791,
           "exists": true,
           "file_count": 39,
           "path": "outputs/reports"
@@ -4625,36 +4626,36 @@
       ],
       "projections": [
         {
-          "estimated_artifact_bytes": 3052740934.0,
-          "estimated_artifact_gib": 2.8430865462869406,
+          "estimated_artifact_bytes": 3052747392.0,
+          "estimated_artifact_gib": 2.8430925607681274,
           "label": "current_1x",
           "scale_factor_vs_current": 1.0,
           "target_processed_rows": 292012
         },
         {
-          "estimated_artifact_bytes": 6105481868.0,
-          "estimated_artifact_gib": 5.686173092573881,
+          "estimated_artifact_bytes": 6105494784.0,
+          "estimated_artifact_gib": 5.686185121536255,
           "label": "current_2x",
           "scale_factor_vs_current": 2.0,
           "target_processed_rows": 584024
         },
         {
-          "estimated_artifact_bytes": 15263704670.0,
-          "estimated_artifact_gib": 14.215432731434703,
+          "estimated_artifact_bytes": 15263736960.0,
+          "estimated_artifact_gib": 14.215462803840637,
           "label": "current_5x",
           "scale_factor_vs_current": 5.0,
           "target_processed_rows": 1460060
         },
         {
-          "estimated_artifact_bytes": 3658956915.811679,
-          "estimated_artifact_gib": 3.4076691752408435,
+          "estimated_artifact_bytes": 3658964656.2470036,
+          "estimated_artifact_gib": 3.4076763840829987,
           "label": "configured_source_rows",
           "scale_factor_vs_current": 1.1985808802377984,
           "target_processed_rows": 350000
         }
       ],
-      "total_artifact_bytes": 3052740934,
-      "total_artifact_gib": 2.8430865462869406,
+      "total_artifact_bytes": 3052747392,
+      "total_artifact_gib": 2.8430925607681274,
       "unreferenced_index_artifact_bytes": 1502501178,
       "unreferenced_index_artifact_count": 12,
       "unreferenced_index_artifact_gib": 1.3993132654577494,
