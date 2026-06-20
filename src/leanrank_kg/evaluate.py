@@ -114,6 +114,78 @@ def _worst_cases(rows: list[dict], top_ks: list[int], *, id_keys: list[str], lim
     return out
 
 
+def _failure_profile(rows: list[dict], top_ks: list[int]) -> dict[str, Any]:
+    if not rows:
+        return {
+            "evaluated_queries": 0,
+            "retrievable_queries": 0,
+            "queries_without_train_gold": 0,
+            "queries_with_missing_gold": 0,
+            "zero_recall_at_max_k": 0,
+            "rank_buckets": {},
+            "gold_coverage_buckets": {},
+            "zero_recall_domains": [],
+        }
+    observed_top_ks = [k for k in top_ks if any(f"Recall@{k}" in row for row in rows)]
+    max_k = max(observed_top_ks or top_ks)
+    retrievable_rows = [row for row in rows if int(row.get("gold_in_train_index_count", 0) or 0) > 0]
+    rank_buckets = {"rank_1": 0}
+    if max_k >= 5:
+        rank_buckets["rank_2_to_5"] = 0
+    if max_k >= 10:
+        rank_buckets["rank_6_to_10"] = 0
+    if max_k >= 50:
+        rank_buckets["rank_11_to_50"] = 0
+    if max_k >= 100:
+        rank_buckets["rank_51_to_100"] = 0
+    rank_buckets[f"miss_top_{max_k}"] = 0
+    rank_buckets["no_train_gold"] = 0
+    coverage_buckets = {"full_train_gold_coverage": 0, "partial_train_gold_coverage": 0, "no_train_gold_coverage": 0}
+    zero_recall_domain_counts: dict[str, int] = {}
+    for row in rows:
+        gold_total = int(row.get("gold_total_count", 0) or 0)
+        gold_in_train = int(row.get("gold_in_train_index_count", 0) or 0)
+        coverage = gold_in_train / gold_total if gold_total else 0.0
+        if gold_in_train <= 0:
+            rank_buckets["no_train_gold"] += 1
+            coverage_buckets["no_train_gold_coverage"] += 1
+        elif coverage >= 1.0:
+            coverage_buckets["full_train_gold_coverage"] += 1
+        else:
+            coverage_buckets["partial_train_gold_coverage"] += 1
+        rank = row.get("rank_of_first_gold")
+        if gold_in_train > 0:
+            if rank == 1:
+                rank_buckets["rank_1"] += 1
+            elif isinstance(rank, int) and 2 <= rank <= 5 and "rank_2_to_5" in rank_buckets:
+                rank_buckets["rank_2_to_5"] += 1
+            elif isinstance(rank, int) and 6 <= rank <= 10 and "rank_6_to_10" in rank_buckets:
+                rank_buckets["rank_6_to_10"] += 1
+            elif isinstance(rank, int) and 11 <= rank <= 50 and "rank_11_to_50" in rank_buckets:
+                rank_buckets["rank_11_to_50"] += 1
+            elif isinstance(rank, int) and 51 <= rank <= 100 and "rank_51_to_100" in rank_buckets:
+                rank_buckets["rank_51_to_100"] += 1
+            else:
+                rank_buckets[f"miss_top_{max_k}"] += 1
+            if float(row.get(f"Recall@{max_k}", 0.0) or 0.0) == 0.0:
+                domain = str(row.get("domain_tag", "Unknown") or "Unknown")
+                zero_recall_domain_counts[domain] = zero_recall_domain_counts.get(domain, 0) + 1
+    return {
+        "evaluated_queries": len(rows),
+        "retrievable_queries": len(retrievable_rows),
+        "queries_without_train_gold": len(rows) - len(retrievable_rows),
+        "queries_with_missing_gold": sum(1 for row in rows if int(row.get("gold_missing_from_train_index_count", 0) or 0) > 0),
+        "zero_recall_at_max_k": sum(1 for row in retrievable_rows if float(row.get(f"Recall@{max_k}", 0.0) or 0.0) == 0.0),
+        "max_k": max_k,
+        "rank_buckets": rank_buckets,
+        "gold_coverage_buckets": coverage_buckets,
+        "zero_recall_domains": [
+            {"domain_tag": domain, "zero_recall_queries": count}
+            for domain, count in sorted(zero_recall_domain_counts.items(), key=lambda item: item[1], reverse=True)[:12]
+        ],
+    }
+
+
 def _ranking_row(retrieved_ids: list[str], gold_all: set[str], train_premises: set[str], top_ks: list[int]) -> dict:
     gold_in_index = gold_all & train_premises
     gold_missing = gold_all - train_premises
@@ -760,6 +832,7 @@ def run(config_path: str, full_heldout: bool = False) -> None:
             "proof_state_retrieval": {
                 "metrics": proof_state_by_split["test"]["metrics"],
                 "domain_breakdown": _domain_breakdown(proof_state_by_split["test"].get("per_query", []), top_ks),
+                "failure_profile": _failure_profile(proof_state_by_split["test"].get("per_query", []), top_ks),
                 "worst_cases": _worst_cases(proof_state_by_split["test"].get("per_query", []), top_ks, id_keys=["proof_state_id"]),
                 "examples": proof_state_by_split["test"]["examples"],
             },
@@ -768,6 +841,7 @@ def run(config_path: str, full_heldout: bool = False) -> None:
                 "backend_info": reranked_proof_state_eval["backend_info"],
                 "candidate_k_ablation": reranked_proof_state_eval.get("candidate_k_ablation", []),
                 "domain_breakdown": _domain_breakdown(reranked_proof_state_eval.get("per_query", []), top_ks),
+                "failure_profile": _failure_profile(reranked_proof_state_eval.get("per_query", []), top_ks),
                 "worst_cases": _worst_cases(reranked_proof_state_eval.get("per_query", []), top_ks, id_keys=["proof_state_id"]),
                 "examples": reranked_proof_state_eval["examples"],
             },
@@ -775,6 +849,7 @@ def run(config_path: str, full_heldout: bool = False) -> None:
             "theorem_retrieval": {
                 "metrics": theorem_by_split["test"]["metrics"],
                 "domain_breakdown": _domain_breakdown(theorem_by_split["test"].get("per_query", []), top_ks, metric_prefix="theorem_retrieval_"),
+                "failure_profile": _failure_profile(theorem_by_split["test"].get("per_query", []), top_ks),
                 "worst_cases": _worst_cases(theorem_by_split["test"].get("per_query", []), top_ks, id_keys=["theorem_id", "full_name"]),
                 "case_studies": case_studies,
             },
@@ -783,10 +858,12 @@ def run(config_path: str, full_heldout: bool = False) -> None:
             "proof_state_retrieval": {
                 "metrics": proof_state_by_split["val"]["metrics"],
                 "domain_breakdown": _domain_breakdown(proof_state_by_split["val"].get("per_query", []), top_ks),
+                "failure_profile": _failure_profile(proof_state_by_split["val"].get("per_query", []), top_ks),
             },
             "theorem_retrieval": {
                 "metrics": theorem_by_split["val"]["metrics"],
                 "domain_breakdown": _domain_breakdown(theorem_by_split["val"].get("per_query", []), top_ks, metric_prefix="theorem_retrieval_"),
+                "failure_profile": _failure_profile(theorem_by_split["val"].get("per_query", []), top_ks),
             },
         },
     }

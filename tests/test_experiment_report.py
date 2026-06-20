@@ -51,11 +51,31 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                 "proof_state_retrieval": {
                     "metrics": {"evaluated_queries": 3, "Recall@10": 0.5, "MRR": 0.4, "MAP": 0.3, "nDCG@10": 0.45},
                     "domain_breakdown": [{"domain_tag": "Algebra", "metrics": {"evaluated_queries": 2, "Recall@10": 0.5, "MRR": 0.4, "MAP": 0.3, "nDCG@10": 0.45, "gold_premise_coverage": 1.0}}],
+                    "failure_profile": {
+                        "evaluated_queries": 3,
+                        "retrievable_queries": 2,
+                        "queries_without_train_gold": 1,
+                        "queries_with_missing_gold": 1,
+                        "zero_recall_at_max_k": 1,
+                        "rank_buckets": {"rank_1": 1, "miss_top_100": 1, "no_train_gold": 1},
+                        "gold_coverage_buckets": {"full_train_gold_coverage": 1, "partial_train_gold_coverage": 1, "no_train_gold_coverage": 1},
+                        "zero_recall_domains": [{"domain_tag": "Algebra", "zero_recall_queries": 1}],
+                    },
                     "worst_cases": [{"proof_state_id": "ps_bad", "rank_of_first_gold": 27, "Recall@10": 0.0, "MRR": 0.0, "gold_premises_total": 1, "gold_premises_in_train_index": 1}],
                 },
                 "theorem_retrieval": {
                     "metrics": {"theorem_retrieval_evaluated_theorems": 2, "theorem_retrieval_Recall@10": 0.25},
                     "domain_breakdown": [{"domain_tag": "Algebra", "metrics": {"theorem_retrieval_evaluated_queries": 1, "theorem_retrieval_Recall@10": 0.25}}],
+                    "failure_profile": {
+                        "evaluated_queries": 2,
+                        "retrievable_queries": 1,
+                        "queries_without_train_gold": 1,
+                        "queries_with_missing_gold": 1,
+                        "zero_recall_at_max_k": 1,
+                        "rank_buckets": {"miss_top_100": 1, "no_train_gold": 1},
+                        "gold_coverage_buckets": {"partial_train_gold_coverage": 1, "no_train_gold_coverage": 1},
+                        "zero_recall_domains": [{"domain_tag": "Algebra", "zero_recall_queries": 1}],
+                    },
                     "worst_cases": [{"full_name": "Mathlib.Bad", "rank_of_first_gold": 19, "theorem_retrieval_Recall@10": 0.0, "theorem_retrieval_MRR": 0.0, "gold_premises_total": 2, "gold_premises_in_train_index": 1}],
                 },
             },
@@ -122,6 +142,12 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "Domain Breakdown" in text
     assert "Test Proof-State-Level Domains" in text
     assert "Error Analysis" in text
+    assert "Failure Profile Summary" in text
+    assert "Proof-State Failure Profile" in text
+    assert "Theorem Failure Profile" in text
+    assert "zero_recall_at_max_k" in text
+    assert "miss_top_100" in text
+    assert "Proof-state zero-recall domains" in text
     assert "Worst Proof-State Queries" in text
     assert "Worst Theorem Queries" in text
     assert "ps_bad" in text

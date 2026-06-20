@@ -61,6 +61,50 @@ def _worst_case_table(rows: list[dict[str, Any]], id_key: str, recall_key: str =
     return "\n".join(lines)
 
 
+def _failure_profile_table(profile: dict[str, Any]) -> str:
+    lines = ["| Signal | Value |", "| --- | ---: |"]
+    for key in [
+        "evaluated_queries",
+        "retrievable_queries",
+        "queries_without_train_gold",
+        "queries_with_missing_gold",
+        "zero_recall_at_max_k",
+        "max_k",
+    ]:
+        lines.append(f"| `{key}` | {_fmt(profile.get(key))} |")
+    return "\n".join(lines)
+
+
+def _rank_bucket_table(profile: dict[str, Any]) -> str:
+    buckets = profile.get("rank_buckets", {}) if isinstance(profile, dict) else {}
+    lines = ["| Rank bucket | Queries |", "| --- | ---: |"]
+    for key, value in buckets.items():
+        lines.append(f"| `{key}` | {_fmt(value)} |")
+    if len(lines) == 2:
+        lines.append("| n/a | n/a |")
+    return "\n".join(lines)
+
+
+def _coverage_bucket_table(profile: dict[str, Any]) -> str:
+    buckets = profile.get("gold_coverage_buckets", {}) if isinstance(profile, dict) else {}
+    lines = ["| Gold coverage bucket | Queries |", "| --- | ---: |"]
+    for key, value in buckets.items():
+        lines.append(f"| `{key}` | {_fmt(value)} |")
+    if len(lines) == 2:
+        lines.append("| n/a | n/a |")
+    return "\n".join(lines)
+
+
+def _zero_recall_domain_table(profile: dict[str, Any]) -> str:
+    rows = profile.get("zero_recall_domains", []) if isinstance(profile, dict) else []
+    lines = ["| Domain | Zero-recall queries |", "| --- | ---: |"]
+    for row in rows[:10]:
+        lines.append(f"| {row.get('domain_tag', 'Unknown')} | {_fmt(row.get('zero_recall_queries'))} |")
+    if len(lines) == 2:
+        lines.append("| n/a | n/a |")
+    return "\n".join(lines)
+
+
 def _split_counts(manifest: dict[str, Any]) -> str:
     counts = manifest.get("split_counts", {}) if isinstance(manifest, dict) else {}
     if not counts:
@@ -95,6 +139,9 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     theorem_metrics = test_eval.get("test", {}).get("theorem_retrieval", {}).get("metrics", {})
     proof_domain_breakdown = test_eval.get("test", {}).get("proof_state_retrieval", {}).get("domain_breakdown", [])
     theorem_domain_breakdown = test_eval.get("test", {}).get("theorem_retrieval", {}).get("domain_breakdown", [])
+    proof_failure_profile = test_eval.get("test", {}).get("proof_state_retrieval", {}).get("failure_profile", {})
+    theorem_failure_profile = test_eval.get("test", {}).get("theorem_retrieval", {}).get("failure_profile", {})
+    reranked_failure_profile = reranked_proof_state.get("failure_profile", {})
     proof_worst_cases = test_eval.get("test", {}).get("proof_state_retrieval", {}).get("worst_cases", [])
     theorem_worst_cases = test_eval.get("test", {}).get("theorem_retrieval", {}).get("worst_cases", [])
     validation_proof_metrics = test_eval.get("validation", {}).get("proof_state_retrieval", {}).get("metrics", {})
@@ -279,6 +326,46 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
         "## Error Analysis",
         "",
         "Worst-case rows are held-out test queries with train-index gold premises but low top-k recovery. These are the first examples to inspect when improving embeddings, reranking features, or candidate depth.",
+        "",
+        "### Failure Profile Summary",
+        "",
+        "These aggregate buckets quantify where held-out retrieval fails without storing every per-query row in the committed report. `zero_recall_at_max_k` counts retrievable queries where no train-side gold premise appeared within the largest evaluated candidate pool.",
+        "",
+        "#### Proof-State Failure Profile",
+        "",
+        _failure_profile_table(proof_failure_profile),
+        "",
+        "Proof-state rank buckets:",
+        "",
+        _rank_bucket_table(proof_failure_profile),
+        "",
+        "Proof-state gold coverage buckets:",
+        "",
+        _coverage_bucket_table(proof_failure_profile),
+        "",
+        "Proof-state zero-recall domains:",
+        "",
+        _zero_recall_domain_table(proof_failure_profile),
+        "",
+        "#### Theorem Failure Profile",
+        "",
+        _failure_profile_table(theorem_failure_profile),
+        "",
+        "Theorem rank buckets:",
+        "",
+        _rank_bucket_table(theorem_failure_profile),
+        "",
+        "Theorem gold coverage buckets:",
+        "",
+        _coverage_bucket_table(theorem_failure_profile),
+        "",
+        "Theorem zero-recall domains:",
+        "",
+        _zero_recall_domain_table(theorem_failure_profile),
+        "",
+        "#### Reranked Proof-State Diagnostic Failure Profile",
+        "",
+        _failure_profile_table(reranked_failure_profile),
         "",
         "### Worst Proof-State Queries",
         "",

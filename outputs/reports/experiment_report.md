@@ -180,6 +180,113 @@ These tables show held-out test metrics grouped by LeanRank-data domain. They he
 
 Worst-case rows are held-out test queries with train-index gold premises but low top-k recovery. These are the first examples to inspect when improving embeddings, reranking features, or candidate depth.
 
+### Failure Profile Summary
+
+These aggregate buckets quantify where held-out retrieval fails without storing every per-query row in the committed report. `zero_recall_at_max_k` counts retrievable queries where no train-side gold premise appeared within the largest evaluated candidate pool.
+
+#### Proof-State Failure Profile
+
+| Signal | Value |
+| --- | ---: |
+| `evaluated_queries` | 3053 |
+| `retrievable_queries` | 2832 |
+| `queries_without_train_gold` | 221 |
+| `queries_with_missing_gold` | 562 |
+| `zero_recall_at_max_k` | 1823 |
+| `max_k` | 100 |
+
+Proof-state rank buckets:
+
+| Rank bucket | Queries |
+| --- | ---: |
+| `miss_top_100` | 1823 |
+| `no_train_gold` | 221 |
+| `rank_1` | 68 |
+| `rank_11_to_50` | 317 |
+| `rank_2_to_5` | 319 |
+| `rank_51_to_100` | 141 |
+| `rank_6_to_10` | 164 |
+
+Proof-state gold coverage buckets:
+
+| Gold coverage bucket | Queries |
+| --- | ---: |
+| `full_train_gold_coverage` | 2491 |
+| `no_train_gold_coverage` | 221 |
+| `partial_train_gold_coverage` | 341 |
+
+Proof-state zero-recall domains:
+
+| Domain | Zero-recall queries |
+| --- | ---: |
+| Analysis | 255 |
+| MeasureTheory | 230 |
+| Topology | 229 |
+| RingTheory | 177 |
+| Data | 154 |
+| Algebra | 153 |
+| CategoryTheory | 89 |
+| NumberTheory | 83 |
+| Probability | 82 |
+| LinearAlgebra | 77 |
+
+#### Theorem Failure Profile
+
+| Signal | Value |
+| --- | ---: |
+| `evaluated_queries` | 1000 |
+| `retrievable_queries` | 955 |
+| `queries_without_train_gold` | 45 |
+| `queries_with_missing_gold` | 358 |
+| `zero_recall_at_max_k` | 55 |
+| `max_k` | 100 |
+
+Theorem rank buckets:
+
+| Rank bucket | Queries |
+| --- | ---: |
+| `miss_top_100` | 55 |
+| `no_train_gold` | 45 |
+| `rank_1` | 403 |
+| `rank_11_to_50` | 100 |
+| `rank_2_to_5` | 294 |
+| `rank_51_to_100` | 33 |
+| `rank_6_to_10` | 70 |
+
+Theorem gold coverage buckets:
+
+| Gold coverage bucket | Queries |
+| --- | ---: |
+| `full_train_gold_coverage` | 642 |
+| `no_train_gold_coverage` | 45 |
+| `partial_train_gold_coverage` | 313 |
+
+Theorem zero-recall domains:
+
+| Domain | Zero-recall queries |
+| --- | ---: |
+| Analysis | 8 |
+| MeasureTheory | 7 |
+| NumberTheory | 6 |
+| CategoryTheory | 5 |
+| Algebra | 5 |
+| Topology | 5 |
+| Data | 4 |
+| RingTheory | 3 |
+| GroupTheory | 2 |
+| Order | 2 |
+
+#### Reranked Proof-State Diagnostic Failure Profile
+
+| Signal | Value |
+| --- | ---: |
+| `evaluated_queries` | 20 |
+| `retrievable_queries` | 19 |
+| `queries_without_train_gold` | 1 |
+| `queries_with_missing_gold` | 5 |
+| `zero_recall_at_max_k` | 13 |
+| `max_k` | 10 |
+
 ### Worst Proof-State Queries
 
 | Item | Domain | Gold in train | Missing gold | Recall@10 | MRR contribution | MAP contribution |
