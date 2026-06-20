@@ -5,9 +5,9 @@
   "project_name": "ProofAtlas",
   "recommendations": [
     {
-      "area": "monitoring",
-      "priority": "low",
-      "recommendation": "Keep this profile report as the baseline and compare it after every larger LeanRank-data refresh."
+      "area": "performance_timing",
+      "priority": "high",
+      "recommendation": "Refresh pipeline timings with a non-cached production run before using throughput numbers for scale-up planning. Run `make refresh-production-report` after a full `leanrank-kg full-pipeline --config configs/proofatlas.yaml --force` timing pass, or keep the current throughput fields marked as cached/partial diagnostics only."
     }
   ],
   "scale_profile": {

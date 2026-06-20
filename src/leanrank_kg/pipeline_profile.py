@@ -387,7 +387,14 @@ def _throughput_profile(sample: dict[str, Any], embeddings: dict[str, Any], inde
     }
 
 
-def _recommendations(config: dict[str, Any], sample: dict[str, Any], benchmark: dict[str, Any], readiness: dict[str, Any], scale: dict[str, Any]) -> list[dict[str, str]]:
+def _recommendations(
+    config: dict[str, Any],
+    sample: dict[str, Any],
+    benchmark: dict[str, Any],
+    readiness: dict[str, Any],
+    scale: dict[str, Any],
+    throughput: dict[str, Any],
+) -> list[dict[str, str]]:
     recommendations: list[dict[str, str]] = []
     if sample.get("dataset_name") != "erbacher/LeanRank-data":
         recommendations.append(
@@ -436,6 +443,18 @@ def _recommendations(config: dict[str, Any], sample: dict[str, Any], benchmark: 
                 "recommendation": "Use embedding.device: cuda and a larger batch size for the large LeanRank-data embedding pass when GPU is available.",
             }
         )
+    if throughput.get("scale_estimate_reliable") is not True:
+        recommendations.append(
+            {
+                "priority": "high",
+                "area": "performance_timing",
+                "recommendation": (
+                    "Refresh pipeline timings with a non-cached production run before using throughput numbers for scale-up planning. "
+                    "Run `make refresh-production-report` after a full `leanrank-kg full-pipeline --config configs/proofatlas.yaml --force` timing pass, "
+                    "or keep the current throughput fields marked as cached/partial diagnostics only."
+                ),
+            }
+        )
     if not recommendations:
         recommendations.append(
             {
@@ -462,7 +481,7 @@ def build_report(config_path: str = "configs/proofatlas.yaml") -> dict[str, Any]
     readiness = _readiness_stage()
     scale = _scale_profile(config, sample, index, readiness)
     throughput = _throughput_profile(sample, embeddings, index, benchmark, timings)
-    recommendations = _recommendations(config, sample, benchmark, readiness, scale)
+    recommendations = _recommendations(config, sample, benchmark, readiness, scale, throughput)
     return {
         "config_path": config_path,
         "config_hash": config_hash,

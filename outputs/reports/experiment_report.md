@@ -312,7 +312,7 @@ The current ranking labels come from normalized LeanRank-data premise supervisio
 
 ## Recommendations
 
-- `low` `monitoring`: Keep this profile report as the baseline and compare it after every larger LeanRank-data refresh.
+- `high` `performance_timing`: Refresh pipeline timings with a non-cached production run before using throughput numbers for scale-up planning. Run `make refresh-production-report` after a full `leanrank-kg full-pipeline --config configs/proofatlas.yaml --force` timing pass, or keep the current throughput fields marked as cached/partial diagnostics only.
 
 ## Interpretation
 
