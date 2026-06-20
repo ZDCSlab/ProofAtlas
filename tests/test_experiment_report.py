@@ -441,6 +441,24 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                             {"bucket": "high", "proof_state_count": 2, "negative_candidate_rows": 20, "negative_candidate_row_share": 0.25, "mean_hardness": 0.85},
                         ],
                     },
+                    "hard_negative_pair_evidence": {
+                        "pair_count": 90,
+                        "same_namespace_pair_share": 0.2,
+                        "same_domain_pair_share": 0.7,
+                        "same_subdomain_pair_share": 0.4,
+                        "nonzero_name_token_overlap_pair_share": 0.5,
+                        "mean_max_name_token_overlap": 0.15,
+                        "mean_proof_state_hardness": 0.6,
+                        "examples": [
+                            {
+                                "proof_state_id": "ps1",
+                                "negative_full_name": "Mathlib.Algebra.Group.mul_left_cancel",
+                                "positive_full_name": "Mathlib.Algebra.Group.mul_assoc",
+                                "proof_state_hardness": 0.9,
+                                "name_token_overlap": 0.25,
+                            }
+                        ],
+                    },
                 }
             },
         },
@@ -610,6 +628,9 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "Unreferenced index artifacts not pointed to by current manifests" in text
     assert "outputs/indexes/train_premise_neighbors.joblib" in text
     assert "Hard-Negative Quality Profile" in text
+    assert "Hard-Negative Pair Evidence" in text
+    assert "same namespace share" in text
+    assert "Mathlib.Algebra.Group.mul_left_cancel" in text
     assert "Ranker Training Pair Utilization" in text
     assert "data/processed/train/negative_edges.parquet label=0" in text
     assert "Training hard-negative/positive ratio: `9.0`" in text

@@ -35,6 +35,15 @@ def test_premise_trace_supervision_report_uses_leanrank_labels_without_custom_ex
     assert {row["bucket"] for row in quality["bucket_counts"]} == {"none", "low", "medium", "high"}
     assert sum(row["proof_state_count"] for row in quality["bucket_counts"]) == report["splits"]["train"]["proof_states"]
     assert quality["high_hardness_threshold"] == 0.75
+    pair_evidence = report["splits"]["train"]["hard_negative_pair_evidence"]
+    assert pair_evidence["method"] == "compare_each_negative_candidate_to_positive_premises_in_the_same_proof_state"
+    assert pair_evidence["pair_count"] == report["splits"]["train"]["negative_edges"]
+    assert 0.0 <= pair_evidence["same_namespace_pair_share"] <= 1.0
+    assert 0.0 <= pair_evidence["same_domain_pair_share"] <= 1.0
+    assert 0.0 <= pair_evidence["same_subdomain_pair_share"] <= 1.0
+    assert 0.0 <= pair_evidence["nonzero_name_token_overlap_pair_share"] <= 1.0
+    assert pair_evidence["examples"]
+    assert {"proof_state_id", "negative_premise_id", "positive_premise_id", "name_token_overlap"} <= set(pair_evidence["examples"][0])
     assert "trace_profile" in report["splits"]["train"]
     assert report["splits"]["train"]["trace_profile"]["positive_trace_rows"] > 0
     assert report["splits"]["train"]["trace_profile"]["negative_candidate_rows"] > 0

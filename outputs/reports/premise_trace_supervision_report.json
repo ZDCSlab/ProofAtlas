@@ -206,6 +206,114 @@
         }
       ],
       "exists": true,
+      "hard_negative_pair_evidence": {
+        "examples": [
+          {
+            "name_token_overlap": 0.25,
+            "negative_full_name": "ADEInequality.Admissible",
+            "negative_premise_id": "premise:ADEInequality.Admissible",
+            "positive_full_name": "ADEInequality.sumInv_pqr",
+            "positive_premise_id": "premise:ADEInequality.sumInv_pqr",
+            "proof_state_hardness": 0.8945056561085973,
+            "proof_state_id": "ps:ADEInequality.lt_four:2:565396ff3bd2",
+            "same_domain": true,
+            "same_namespace": true,
+            "same_subdomain": true
+          },
+          {
+            "name_token_overlap": 0.25,
+            "negative_full_name": "ADEInequality.E7",
+            "negative_premise_id": "premise:ADEInequality.E7",
+            "positive_full_name": "ADEInequality.sumInv_pqr",
+            "positive_premise_id": "premise:ADEInequality.sumInv_pqr",
+            "proof_state_hardness": 0.8945056561085973,
+            "proof_state_id": "ps:ADEInequality.lt_four:2:565396ff3bd2",
+            "same_domain": true,
+            "same_namespace": true,
+            "same_subdomain": true
+          },
+          {
+            "name_token_overlap": 0.25,
+            "negative_full_name": "ADEInequality.A",
+            "negative_premise_id": "premise:ADEInequality.A",
+            "positive_full_name": "ADEInequality.sumInv_pqr",
+            "positive_premise_id": "premise:ADEInequality.sumInv_pqr",
+            "proof_state_hardness": 0.8945056561085973,
+            "proof_state_id": "ps:ADEInequality.lt_four:2:565396ff3bd2",
+            "same_domain": true,
+            "same_namespace": true,
+            "same_subdomain": true
+          },
+          {
+            "name_token_overlap": 0.25,
+            "negative_full_name": "ADEInequality.E8",
+            "negative_premise_id": "premise:ADEInequality.E8",
+            "positive_full_name": "ADEInequality.sumInv_pqr",
+            "positive_premise_id": "premise:ADEInequality.sumInv_pqr",
+            "proof_state_hardness": 0.8945056561085973,
+            "proof_state_id": "ps:ADEInequality.lt_four:2:565396ff3bd2",
+            "same_domain": true,
+            "same_namespace": true,
+            "same_subdomain": true
+          },
+          {
+            "name_token_overlap": 0.2,
+            "negative_full_name": "ADEInequality.admissible_E8",
+            "negative_premise_id": "premise:ADEInequality.admissible_E8",
+            "positive_full_name": "ADEInequality.sumInv_pqr",
+            "positive_premise_id": "premise:ADEInequality.sumInv_pqr",
+            "proof_state_hardness": 0.8945056561085973,
+            "proof_state_id": "ps:ADEInequality.lt_four:2:565396ff3bd2",
+            "same_domain": true,
+            "same_namespace": true,
+            "same_subdomain": true
+          },
+          {
+            "name_token_overlap": 0.2,
+            "negative_full_name": "ADEInequality.admissible_E'3",
+            "negative_premise_id": "premise:ADEInequality.admissible_E'3",
+            "positive_full_name": "ADEInequality.sumInv_pqr",
+            "positive_premise_id": "premise:ADEInequality.sumInv_pqr",
+            "proof_state_hardness": 0.8945056561085973,
+            "proof_state_id": "ps:ADEInequality.lt_four:2:565396ff3bd2",
+            "same_domain": true,
+            "same_namespace": true,
+            "same_subdomain": true
+          },
+          {
+            "name_token_overlap": 0.2,
+            "negative_full_name": "ADEInequality.admissible_E'5",
+            "negative_premise_id": "premise:ADEInequality.admissible_E'5",
+            "positive_full_name": "ADEInequality.sumInv_pqr",
+            "positive_premise_id": "premise:ADEInequality.sumInv_pqr",
+            "proof_state_hardness": 0.8945056561085973,
+            "proof_state_id": "ps:ADEInequality.lt_four:2:565396ff3bd2",
+            "same_domain": true,
+            "same_namespace": true,
+            "same_subdomain": true
+          },
+          {
+            "name_token_overlap": 0.2,
+            "negative_full_name": "ADEInequality.admissible_D'",
+            "negative_premise_id": "premise:ADEInequality.admissible_D'",
+            "positive_full_name": "ADEInequality.sumInv_pqr",
+            "positive_premise_id": "premise:ADEInequality.sumInv_pqr",
+            "proof_state_hardness": 0.8945056561085973,
+            "proof_state_id": "ps:ADEInequality.lt_four:2:565396ff3bd2",
+            "same_domain": true,
+            "same_namespace": true,
+            "same_subdomain": true
+          }
+        ],
+        "mean_max_name_token_overlap": 0.20619420394420393,
+        "mean_proof_state_hardness": 0.5970182079478539,
+        "method": "compare_each_negative_candidate_to_positive_premises_in_the_same_proof_state",
+        "nonzero_name_token_overlap_pair_share": 0.6777777777777778,
+        "pair_count": 900,
+        "same_domain_pair_share": 0.9933333333333333,
+        "same_namespace_pair_share": 0.4111111111111111,
+        "same_subdomain_pair_share": 0.9922222222222222
+      },
       "hard_negative_quality_profile": {
         "bucket_counts": [
           {
@@ -492,6 +600,114 @@
         }
       ],
       "exists": true,
+      "hard_negative_pair_evidence": {
+        "examples": [
+          {
+            "name_token_overlap": 0.8,
+            "negative_full_name": "MeasureTheory.Measure.restrict_apply_univ",
+            "negative_premise_id": "premise:MeasureTheory.Measure.restrict_apply_univ",
+            "positive_full_name": "MeasureTheory.Measure.restrict_apply",
+            "positive_premise_id": "premise:MeasureTheory.Measure.restrict_apply",
+            "proof_state_hardness": 0.9767624120321922,
+            "proof_state_id": "ps:MeasureTheory.Measure.restrict_restrict_of_subset:1:de42ed5cf00b",
+            "same_domain": true,
+            "same_namespace": true,
+            "same_subdomain": true
+          },
+          {
+            "name_token_overlap": 0.8,
+            "negative_full_name": "MeasureTheory.Measure.restrict_apply_le",
+            "negative_premise_id": "premise:MeasureTheory.Measure.restrict_apply_le",
+            "positive_full_name": "MeasureTheory.Measure.restrict_apply",
+            "positive_premise_id": "premise:MeasureTheory.Measure.restrict_apply",
+            "proof_state_hardness": 0.9767624120321922,
+            "proof_state_id": "ps:MeasureTheory.Measure.restrict_restrict_of_subset:1:de42ed5cf00b",
+            "same_domain": true,
+            "same_namespace": true,
+            "same_subdomain": true
+          },
+          {
+            "name_token_overlap": 0.8,
+            "negative_full_name": "MeasureTheory.Measure.le_restrict_apply",
+            "negative_premise_id": "premise:MeasureTheory.Measure.le_restrict_apply",
+            "positive_full_name": "MeasureTheory.Measure.restrict_apply",
+            "positive_premise_id": "premise:MeasureTheory.Measure.restrict_apply",
+            "proof_state_hardness": 0.9767624120321922,
+            "proof_state_id": "ps:MeasureTheory.Measure.restrict_restrict_of_subset:1:de42ed5cf00b",
+            "same_domain": true,
+            "same_namespace": true,
+            "same_subdomain": true
+          },
+          {
+            "name_token_overlap": 0.75,
+            "negative_full_name": "MeasureTheory.Measure.restrict_restrict",
+            "negative_premise_id": "premise:MeasureTheory.Measure.restrict_restrict",
+            "positive_full_name": "MeasureTheory.Measure.restrict_apply",
+            "positive_premise_id": "premise:MeasureTheory.Measure.restrict_apply",
+            "proof_state_hardness": 0.9767624120321922,
+            "proof_state_id": "ps:MeasureTheory.Measure.restrict_restrict_of_subset:1:de42ed5cf00b",
+            "same_domain": true,
+            "same_namespace": true,
+            "same_subdomain": true
+          },
+          {
+            "name_token_overlap": 0.6666666666666666,
+            "negative_full_name": "MeasureTheory.Measure.restrict_le_self",
+            "negative_premise_id": "premise:MeasureTheory.Measure.restrict_le_self",
+            "positive_full_name": "MeasureTheory.Measure.restrict_eq_self",
+            "positive_premise_id": "premise:MeasureTheory.Measure.restrict_eq_self",
+            "proof_state_hardness": 0.9767624120321922,
+            "proof_state_id": "ps:MeasureTheory.Measure.restrict_restrict_of_subset:1:de42ed5cf00b",
+            "same_domain": true,
+            "same_namespace": true,
+            "same_subdomain": true
+          },
+          {
+            "name_token_overlap": 0.6,
+            "negative_full_name": "MeasureTheory.Measure.restrict_smul",
+            "negative_premise_id": "premise:MeasureTheory.Measure.restrict_smul",
+            "positive_full_name": "MeasureTheory.Measure.restrict_apply",
+            "positive_premise_id": "premise:MeasureTheory.Measure.restrict_apply",
+            "proof_state_hardness": 0.9767624120321922,
+            "proof_state_id": "ps:MeasureTheory.Measure.restrict_restrict_of_subset:1:de42ed5cf00b",
+            "same_domain": true,
+            "same_namespace": true,
+            "same_subdomain": true
+          },
+          {
+            "name_token_overlap": 0.6,
+            "negative_full_name": "MeasureTheory.Measure.restrict_apply\u2080'",
+            "negative_premise_id": "premise:MeasureTheory.Measure.restrict_apply\u2080'",
+            "positive_full_name": "MeasureTheory.Measure.restrict_apply",
+            "positive_premise_id": "premise:MeasureTheory.Measure.restrict_apply",
+            "proof_state_hardness": 0.9767624120321922,
+            "proof_state_id": "ps:MeasureTheory.Measure.restrict_restrict_of_subset:1:de42ed5cf00b",
+            "same_domain": true,
+            "same_namespace": true,
+            "same_subdomain": true
+          },
+          {
+            "name_token_overlap": 0.6,
+            "negative_full_name": "MeasureTheory.Measure.restrict_apply\u2080",
+            "negative_premise_id": "premise:MeasureTheory.Measure.restrict_apply\u2080",
+            "positive_full_name": "MeasureTheory.Measure.restrict_apply",
+            "positive_premise_id": "premise:MeasureTheory.Measure.restrict_apply",
+            "proof_state_hardness": 0.9767624120321922,
+            "proof_state_id": "ps:MeasureTheory.Measure.restrict_restrict_of_subset:1:de42ed5cf00b",
+            "same_domain": true,
+            "same_namespace": true,
+            "same_subdomain": true
+          }
+        ],
+        "mean_max_name_token_overlap": 0.21568063591479392,
+        "mean_proof_state_hardness": 0.6076207690084809,
+        "method": "compare_each_negative_candidate_to_positive_premises_in_the_same_proof_state",
+        "nonzero_name_token_overlap_pair_share": 0.6868138319732284,
+        "pair_count": 68132,
+        "same_domain_pair_share": 0.9807285856866084,
+        "same_namespace_pair_share": 0.44936300123290085,
+        "same_subdomain_pair_share": 0.9772206892502788
+      },
       "hard_negative_quality_profile": {
         "bucket_counts": [
           {
@@ -793,6 +1009,114 @@
         }
       ],
       "exists": true,
+      "hard_negative_pair_evidence": {
+        "examples": [
+          {
+            "name_token_overlap": 0.6,
+            "negative_full_name": "CategoryTheory.Functor.relativelyRepresentable.w",
+            "negative_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.w",
+            "positive_full_name": "CategoryTheory.Functor.relativelyRepresentable.lift'",
+            "positive_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.lift'",
+            "proof_state_hardness": 0.9788105780287333,
+            "proof_state_id": "ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625",
+            "same_domain": true,
+            "same_namespace": true,
+            "same_subdomain": true
+          },
+          {
+            "name_token_overlap": 0.6,
+            "negative_full_name": "CategoryTheory.Functor.relativelyRepresentable.lift",
+            "negative_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.lift",
+            "positive_full_name": "CategoryTheory.Functor.relativelyRepresentable.lift'",
+            "positive_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.lift'",
+            "proof_state_hardness": 0.9788105780287333,
+            "proof_state_id": "ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625",
+            "same_domain": true,
+            "same_namespace": true,
+            "same_subdomain": true
+          },
+          {
+            "name_token_overlap": 0.6,
+            "negative_full_name": "CategoryTheory.Functor.relativelyRepresentable.fst",
+            "negative_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.fst",
+            "positive_full_name": "CategoryTheory.Functor.relativelyRepresentable.lift'",
+            "positive_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.lift'",
+            "proof_state_hardness": 0.9788105780287333,
+            "proof_state_id": "ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625",
+            "same_domain": true,
+            "same_namespace": true,
+            "same_subdomain": true
+          },
+          {
+            "name_token_overlap": 0.6,
+            "negative_full_name": "CategoryTheory.Functor.relativelyRepresentable.isPullback'",
+            "negative_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.isPullback'",
+            "positive_full_name": "CategoryTheory.Functor.relativelyRepresentable.lift'",
+            "positive_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.lift'",
+            "proof_state_hardness": 0.9788105780287333,
+            "proof_state_id": "ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625",
+            "same_domain": true,
+            "same_namespace": true,
+            "same_subdomain": true
+          },
+          {
+            "name_token_overlap": 0.6,
+            "negative_full_name": "CategoryTheory.Functor.relativelyRepresentable.snd",
+            "negative_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.snd",
+            "positive_full_name": "CategoryTheory.Functor.relativelyRepresentable.lift'",
+            "positive_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.lift'",
+            "proof_state_hardness": 0.9788105780287333,
+            "proof_state_id": "ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625",
+            "same_domain": true,
+            "same_namespace": true,
+            "same_subdomain": true
+          },
+          {
+            "name_token_overlap": 0.6,
+            "negative_full_name": "CategoryTheory.Functor.relativelyRepresentable.isPullback",
+            "negative_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.isPullback",
+            "positive_full_name": "CategoryTheory.Functor.relativelyRepresentable.lift'",
+            "positive_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.lift'",
+            "proof_state_hardness": 0.9788105780287333,
+            "proof_state_id": "ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625",
+            "same_domain": true,
+            "same_namespace": true,
+            "same_subdomain": true
+          },
+          {
+            "name_token_overlap": 0.5,
+            "negative_full_name": "CategoryTheory.Functor.relativelyRepresentable.hom_ext",
+            "negative_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.hom_ext",
+            "positive_full_name": "CategoryTheory.Functor.relativelyRepresentable.lift'",
+            "positive_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.lift'",
+            "proof_state_hardness": 0.9788105780287333,
+            "proof_state_id": "ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625",
+            "same_domain": true,
+            "same_namespace": true,
+            "same_subdomain": true
+          },
+          {
+            "name_token_overlap": 0.5,
+            "negative_full_name": "CategoryTheory.Functor.relativelyRepresentable.lift_fst",
+            "negative_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.lift_fst",
+            "positive_full_name": "CategoryTheory.Functor.relativelyRepresentable.lift'",
+            "positive_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.lift'",
+            "proof_state_hardness": 0.9788105780287333,
+            "proof_state_id": "ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625",
+            "same_domain": true,
+            "same_namespace": true,
+            "same_subdomain": true
+          }
+        ],
+        "mean_max_name_token_overlap": 0.21689385183778534,
+        "mean_proof_state_hardness": 0.6125851575382798,
+        "method": "compare_each_negative_candidate_to_positive_premises_in_the_same_proof_state",
+        "nonzero_name_token_overlap_pair_share": 0.6909879659812259,
+        "pair_count": 530413,
+        "same_domain_pair_share": 0.9811675053213251,
+        "same_namespace_pair_share": 0.4550963117419822,
+        "same_subdomain_pair_share": 0.9767087156611923
+      },
       "hard_negative_quality_profile": {
         "bucket_counts": [
           {
@@ -1084,6 +1408,114 @@
         }
       ],
       "exists": true,
+      "hard_negative_pair_evidence": {
+        "examples": [
+          {
+            "name_token_overlap": 1.0,
+            "negative_full_name": "AlgebraicGeometry.Scheme.Pullback.t'_snd_fst_snd",
+            "negative_premise_id": "premise:AlgebraicGeometry.Scheme.Pullback.t'_snd_fst_snd",
+            "positive_full_name": "AlgebraicGeometry.Scheme.Pullback.t'_fst_snd",
+            "positive_premise_id": "premise:AlgebraicGeometry.Scheme.Pullback.t'_fst_snd",
+            "proof_state_hardness": 0.9761908837416429,
+            "proof_state_id": "ps:AlgebraicGeometry.Scheme.Pullback.cocycle_fst_snd:0:f0b8c6df9586",
+            "same_domain": true,
+            "same_namespace": true,
+            "same_subdomain": true
+          },
+          {
+            "name_token_overlap": 1.0,
+            "negative_full_name": "AlgebraicGeometry.Scheme.Pullback.t'_snd_fst_fst",
+            "negative_premise_id": "premise:AlgebraicGeometry.Scheme.Pullback.t'_snd_fst_fst",
+            "positive_full_name": "AlgebraicGeometry.Scheme.Pullback.t'_fst_snd",
+            "positive_premise_id": "premise:AlgebraicGeometry.Scheme.Pullback.t'_fst_snd",
+            "proof_state_hardness": 0.9761908837416429,
+            "proof_state_id": "ps:AlgebraicGeometry.Scheme.Pullback.cocycle_fst_snd:0:f0b8c6df9586",
+            "same_domain": true,
+            "same_namespace": true,
+            "same_subdomain": true
+          },
+          {
+            "name_token_overlap": 1.0,
+            "negative_full_name": "AlgebraicGeometry.Scheme.Pullback.t'_fst_fst_snd",
+            "negative_premise_id": "premise:AlgebraicGeometry.Scheme.Pullback.t'_fst_fst_snd",
+            "positive_full_name": "AlgebraicGeometry.Scheme.Pullback.t'_fst_snd",
+            "positive_premise_id": "premise:AlgebraicGeometry.Scheme.Pullback.t'_fst_snd",
+            "proof_state_hardness": 0.9761908837416429,
+            "proof_state_id": "ps:AlgebraicGeometry.Scheme.Pullback.cocycle_fst_snd:0:f0b8c6df9586",
+            "same_domain": true,
+            "same_namespace": true,
+            "same_subdomain": true
+          },
+          {
+            "name_token_overlap": 0.8,
+            "negative_full_name": "AlgebraicGeometry.Scheme.Pullback.t'",
+            "negative_premise_id": "premise:AlgebraicGeometry.Scheme.Pullback.t'",
+            "positive_full_name": "AlgebraicGeometry.Scheme.Pullback.t'_fst_fst_fst",
+            "positive_premise_id": "premise:AlgebraicGeometry.Scheme.Pullback.t'_fst_fst_fst",
+            "proof_state_hardness": 0.9761908837416429,
+            "proof_state_id": "ps:AlgebraicGeometry.Scheme.Pullback.cocycle_fst_snd:0:f0b8c6df9586",
+            "same_domain": true,
+            "same_namespace": true,
+            "same_subdomain": true
+          },
+          {
+            "name_token_overlap": 0.7142857142857143,
+            "negative_full_name": "AlgebraicGeometry.Scheme.Pullback.cocycle_fst_fst_snd",
+            "negative_premise_id": "premise:AlgebraicGeometry.Scheme.Pullback.cocycle_fst_fst_snd",
+            "positive_full_name": "AlgebraicGeometry.Scheme.Pullback.t'_fst_snd",
+            "positive_premise_id": "premise:AlgebraicGeometry.Scheme.Pullback.t'_fst_snd",
+            "proof_state_hardness": 0.9761908837416429,
+            "proof_state_id": "ps:AlgebraicGeometry.Scheme.Pullback.cocycle_fst_snd:0:f0b8c6df9586",
+            "same_domain": true,
+            "same_namespace": true,
+            "same_subdomain": true
+          },
+          {
+            "name_token_overlap": 0.7142857142857143,
+            "negative_full_name": "AlgebraicGeometry.Scheme.Pullback.t_fst_snd",
+            "negative_premise_id": "premise:AlgebraicGeometry.Scheme.Pullback.t_fst_snd",
+            "positive_full_name": "AlgebraicGeometry.Scheme.Pullback.t'_fst_snd",
+            "positive_premise_id": "premise:AlgebraicGeometry.Scheme.Pullback.t'_fst_snd",
+            "proof_state_hardness": 0.9761908837416429,
+            "proof_state_id": "ps:AlgebraicGeometry.Scheme.Pullback.cocycle_fst_snd:0:f0b8c6df9586",
+            "same_domain": true,
+            "same_namespace": true,
+            "same_subdomain": true
+          },
+          {
+            "name_token_overlap": 0.6666666666666666,
+            "negative_full_name": "AlgebraicGeometry.Scheme.Pullback.t_fst_fst",
+            "negative_premise_id": "premise:AlgebraicGeometry.Scheme.Pullback.t_fst_fst",
+            "positive_full_name": "AlgebraicGeometry.Scheme.Pullback.t'_fst_fst_fst",
+            "positive_premise_id": "premise:AlgebraicGeometry.Scheme.Pullback.t'_fst_fst_fst",
+            "proof_state_hardness": 0.9761908837416429,
+            "proof_state_id": "ps:AlgebraicGeometry.Scheme.Pullback.cocycle_fst_snd:0:f0b8c6df9586",
+            "same_domain": true,
+            "same_namespace": true,
+            "same_subdomain": true
+          },
+          {
+            "name_token_overlap": 0.6666666666666666,
+            "negative_full_name": "AlgebraicGeometry.Scheme.Pullback.t_snd",
+            "negative_premise_id": "premise:AlgebraicGeometry.Scheme.Pullback.t_snd",
+            "positive_full_name": "AlgebraicGeometry.Scheme.Pullback.t'_snd_snd",
+            "positive_premise_id": "premise:AlgebraicGeometry.Scheme.Pullback.t'_snd_snd",
+            "proof_state_hardness": 0.9761908837416429,
+            "proof_state_id": "ps:AlgebraicGeometry.Scheme.Pullback.cocycle_fst_snd:0:f0b8c6df9586",
+            "same_domain": true,
+            "same_namespace": true,
+            "same_subdomain": true
+          }
+        ],
+        "mean_max_name_token_overlap": 0.22275651915551395,
+        "mean_proof_state_hardness": 0.6155994675285065,
+        "method": "compare_each_negative_candidate_to_positive_premises_in_the_same_proof_state",
+        "nonzero_name_token_overlap_pair_share": 0.7020846077831632,
+        "pair_count": 63753,
+        "same_domain_pair_share": 0.9816792935234421,
+        "same_namespace_pair_share": 0.46347622856963594,
+        "same_subdomain_pair_share": 0.9781814189136198
+      },
       "hard_negative_quality_profile": {
         "bucket_counts": [
           {

@@ -303,6 +303,11 @@ Current LeanRank-data premise supervision snapshot:
 | Train hard negatives | hardness mean | 0.6030 |
 | Train hard negatives | high-hardness rows | 128855 |
 | Train hard negatives | high-hardness row share | 0.2429 |
+| Train hard-negative pair evidence | compared negative candidates | 530413 |
+| Train hard-negative pair evidence | same namespace share | 0.4551 |
+| Train hard-negative pair evidence | same domain share | 0.9812 |
+| Train hard-negative pair evidence | same subdomain share | 0.9767 |
+| Train hard-negative pair evidence | nonzero name-token overlap share | 0.6910 |
 | Ranker training sample | positive pairs | 10000 |
 | Ranker training sample | hard negative pairs | 10000 |
 | Ranker training sample | hard-negative/positive ratio | 1.0000 |

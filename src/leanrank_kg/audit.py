@@ -335,6 +335,7 @@ def build_audit() -> dict[str, Any]:
             and data.get("splits", {}).get("train", {}).get("trace_profile", {}).get("negative_candidate_rows", 0) > 0
             and len(data.get("splits", {}).get("train", {}).get("hard_negative_quality_profile", {}).get("bucket_counts", [])) >= 4
             and data.get("splits", {}).get("train", {}).get("hard_negative_quality_profile", {}).get("high_hardness_negative_candidate_rows", 0) >= 0
+            and data.get("splits", {}).get("train", {}).get("hard_negative_pair_evidence", {}).get("pair_count", 0) > 0
             and bool(data.get("splits", {}).get("train", {}).get("example_traces"))
             and data.get("scope") == "erbacher/LeanRank-data normalized positive/negative premise supervision",
             {
@@ -342,6 +343,7 @@ def build_audit() -> dict[str, Any]:
                 "current": data.get("current_artifact_supervision"),
                 "train_trace_profile": data.get("splits", {}).get("train", {}).get("trace_profile"),
                 "train_hard_negative_quality": data.get("splits", {}).get("train", {}).get("hard_negative_quality_profile"),
+                "train_hard_negative_pair_evidence": data.get("splits", {}).get("train", {}).get("hard_negative_pair_evidence"),
                 "train_example_trace_count": len(data.get("splits", {}).get("train", {}).get("example_traces", [])),
                 "scope": data.get("scope"),
             },

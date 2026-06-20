@@ -450,6 +450,52 @@ def _hard_negative_quality_table(profile: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def _hard_negative_pair_evidence_table(profile: dict[str, Any]) -> str:
+    if not isinstance(profile, dict):
+        profile = {}
+    rows = [
+        ("pair count", profile.get("pair_count")),
+        ("same namespace share", profile.get("same_namespace_pair_share")),
+        ("same domain share", profile.get("same_domain_pair_share")),
+        ("same subdomain share", profile.get("same_subdomain_pair_share")),
+        ("nonzero name-token overlap share", profile.get("nonzero_name_token_overlap_pair_share")),
+        ("mean max name-token overlap", profile.get("mean_max_name_token_overlap")),
+        ("mean proof-state hardness", profile.get("mean_proof_state_hardness")),
+    ]
+    lines = [
+        "| Signal | Value |",
+        "| --- | ---: |",
+    ]
+    for label, value in rows:
+        lines.append(f"| {label} | {_fmt(value)} |")
+    return "\n".join(lines)
+
+
+def _hard_negative_examples_table(profile: dict[str, Any]) -> str:
+    rows = profile.get("examples", []) if isinstance(profile, dict) else []
+    lines = [
+        "| Proof state | Negative candidate | Closest positive premise | State hardness | Token overlap |",
+        "| --- | --- | --- | ---: | ---: |",
+    ]
+    for row in rows[:5]:
+        lines.append(
+            "| "
+            + " | ".join(
+                [
+                    f"`{row.get('proof_state_id', 'n/a')}`",
+                    f"`{row.get('negative_full_name') or row.get('negative_premise_id', 'n/a')}`",
+                    f"`{row.get('positive_full_name') or row.get('positive_premise_id', 'n/a')}`",
+                    _fmt(row.get("proof_state_hardness")),
+                    _fmt(row.get("name_token_overlap")),
+                ]
+            )
+            + " |"
+        )
+    if len(lines) == 2:
+        lines.append("| n/a | n/a | n/a | n/a | n/a |")
+    return "\n".join(lines)
+
+
 def _split_counts(manifest: dict[str, Any]) -> str:
     counts = manifest.get("split_counts", {}) if isinstance(manifest, dict) else {}
     if not counts:
@@ -868,6 +914,7 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     current_trace = premise_trace.get("current_artifact_supervision", {}) if isinstance(premise_trace, dict) else {}
     train_trace = premise_trace.get("splits", {}).get("train", {}) if isinstance(premise_trace, dict) else {}
     hard_negative_quality = train_trace.get("hard_negative_quality_profile", {}) if isinstance(train_trace, dict) else {}
+    hard_negative_pair_evidence = train_trace.get("hard_negative_pair_evidence", {}) if isinstance(train_trace, dict) else {}
     label_conflicts = premise_trace.get("normalization_label_conflicts", {}) if isinstance(premise_trace, dict) else {}
     ranker_utilization = ranker_metrics.get("training_pair_utilization", {}) if isinstance(ranker_metrics, dict) else {}
     raw_pair_counts = ranker_utilization.get("raw_pair_counts", {}) if isinstance(ranker_utilization, dict) else {}
@@ -902,6 +949,14 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
             "Hardness buckets are derived from the normalized positive/negative premise features. This table shows whether the train split contains enough non-trivial negative candidates for ranking and difficulty experiments.",
             "",
             _hard_negative_quality_table(hard_negative_quality),
+            "",
+            "### Hard-Negative Pair Evidence",
+            "",
+            "For each train negative candidate, this diagnostic compares it against the positive premises attached to the same proof state. High namespace/domain overlap or name-token overlap indicates harder negatives than random unrelated premises.",
+            "",
+            _hard_negative_pair_evidence_table(hard_negative_pair_evidence),
+            "",
+            _hard_negative_examples_table(hard_negative_pair_evidence),
             "",
             "### Ranker Training Pair Utilization",
             "",

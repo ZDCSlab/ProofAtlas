@@ -47,6 +47,138 @@ def _list_like_len(value: Any) -> int:
         return 0
 
 
+def _namespace(full_name: Any) -> str:
+    parts = str(full_name or "").split(".")
+    return ".".join(parts[:-1]) if len(parts) > 1 else ""
+
+
+def _tokens(value: Any) -> set[str]:
+    return {part for part in str(value or "").replace(".", "_").split("_") if part}
+
+
+def _hard_negative_pair_evidence(
+    positives: pd.DataFrame,
+    negatives: pd.DataFrame,
+    premises: pd.DataFrame,
+    features: pd.DataFrame,
+    limit: int = 8,
+) -> dict[str, Any]:
+    if positives.empty or negatives.empty or premises.empty:
+        return {
+            "method": "compare_each_negative_candidate_to_positive_premises_in_the_same_proof_state",
+            "pair_count": 0,
+            "same_namespace_pair_share": 0.0,
+            "same_domain_pair_share": 0.0,
+            "same_subdomain_pair_share": 0.0,
+            "nonzero_name_token_overlap_pair_share": 0.0,
+            "mean_max_name_token_overlap": 0.0,
+            "mean_proof_state_hardness": 0.0,
+            "examples": [],
+        }
+    premise_meta = premises[["id", "full_name", "domain_tag", "subdomain_tag"]].rename(
+        columns={"id": "premise_id", "full_name": "premise_full_name"}
+    )
+    pos = positives[["proof_state_id", "premise_id"]].merge(premise_meta, on="premise_id", how="left")
+    neg = negatives[["proof_state_id", "premise_id"]].merge(premise_meta, on="premise_id", how="left")
+    if pos.empty or neg.empty:
+        return {
+            "method": "compare_each_negative_candidate_to_positive_premises_in_the_same_proof_state",
+            "pair_count": 0,
+            "same_namespace_pair_share": 0.0,
+            "same_domain_pair_share": 0.0,
+            "same_subdomain_pair_share": 0.0,
+            "nonzero_name_token_overlap_pair_share": 0.0,
+            "mean_max_name_token_overlap": 0.0,
+            "mean_proof_state_hardness": 0.0,
+            "examples": [],
+        }
+    hardness = (
+        features.set_index("id")["negative_candidate_hardness"]
+        if not features.empty and {"id", "negative_candidate_hardness"} <= set(features.columns)
+        else pd.Series(dtype=float)
+    )
+    pos_by_state = {proof_state_id: rows.to_dict(orient="records") for proof_state_id, rows in pos.groupby("proof_state_id")}
+    evidence_rows: list[dict[str, Any]] = []
+    for neg_row in neg.to_dict(orient="records"):
+        proof_state_id = neg_row.get("proof_state_id")
+        positives_for_state = pos_by_state.get(proof_state_id, [])
+        if not positives_for_state:
+            continue
+        neg_name = str(neg_row.get("premise_full_name", ""))
+        neg_namespace = _namespace(neg_name)
+        neg_tokens = _tokens(neg_name)
+        best = {
+            "same_namespace": False,
+            "same_domain": False,
+            "same_subdomain": False,
+            "name_token_overlap": 0.0,
+            "positive_premise_id": "",
+            "positive_full_name": "",
+        }
+        for pos_row in positives_for_state:
+            pos_name = str(pos_row.get("premise_full_name", ""))
+            union = neg_tokens | _tokens(pos_name)
+            overlap = float(len(neg_tokens & _tokens(pos_name)) / max(1, len(union)))
+            candidate = {
+                "same_namespace": bool(neg_namespace and neg_namespace == _namespace(pos_name)),
+                "same_domain": bool(neg_row.get("domain_tag") == pos_row.get("domain_tag")),
+                "same_subdomain": bool(neg_row.get("subdomain_tag") == pos_row.get("subdomain_tag")),
+                "name_token_overlap": overlap,
+                "positive_premise_id": str(pos_row.get("premise_id", "")),
+                "positive_full_name": pos_name,
+            }
+            if (
+                float(candidate["same_namespace"])
+                + float(candidate["same_subdomain"])
+                + float(candidate["same_domain"])
+                + candidate["name_token_overlap"]
+                > float(best["same_namespace"]) + float(best["same_subdomain"]) + float(best["same_domain"]) + best["name_token_overlap"]
+            ):
+                best = candidate
+        evidence_rows.append(
+            {
+                "proof_state_id": str(proof_state_id),
+                "negative_premise_id": str(neg_row.get("premise_id", "")),
+                "negative_full_name": neg_name,
+                "proof_state_hardness": float(hardness.get(proof_state_id, 0.0)),
+                **best,
+            }
+        )
+    if not evidence_rows:
+        return {
+            "method": "compare_each_negative_candidate_to_positive_premises_in_the_same_proof_state",
+            "pair_count": 0,
+            "same_namespace_pair_share": 0.0,
+            "same_domain_pair_share": 0.0,
+            "same_subdomain_pair_share": 0.0,
+            "nonzero_name_token_overlap_pair_share": 0.0,
+            "mean_max_name_token_overlap": 0.0,
+            "mean_proof_state_hardness": 0.0,
+            "examples": [],
+        }
+    evidence = pd.DataFrame(evidence_rows)
+    evidence["same_namespace"] = evidence["same_namespace"].astype(bool)
+    evidence["same_domain"] = evidence["same_domain"].astype(bool)
+    evidence["same_subdomain"] = evidence["same_subdomain"].astype(bool)
+    evidence["name_token_overlap"] = evidence["name_token_overlap"].astype(float)
+    evidence["proof_state_hardness"] = evidence["proof_state_hardness"].astype(float)
+    examples = evidence.sort_values(
+        ["proof_state_hardness", "same_namespace", "same_subdomain", "same_domain", "name_token_overlap"],
+        ascending=False,
+    ).head(limit)
+    return {
+        "method": "compare_each_negative_candidate_to_positive_premises_in_the_same_proof_state",
+        "pair_count": int(len(evidence)),
+        "same_namespace_pair_share": float(evidence["same_namespace"].mean()),
+        "same_domain_pair_share": float(evidence["same_domain"].mean()),
+        "same_subdomain_pair_share": float(evidence["same_subdomain"].mean()),
+        "nonzero_name_token_overlap_pair_share": float((evidence["name_token_overlap"] > 0).mean()),
+        "mean_max_name_token_overlap": float(evidence["name_token_overlap"].mean()),
+        "mean_proof_state_hardness": float(evidence["proof_state_hardness"].mean()),
+        "examples": examples.to_dict(orient="records"),
+    }
+
+
 def _proof_state_trace_examples(
     proof_states: pd.DataFrame,
     positives: pd.DataFrame,
@@ -235,6 +367,7 @@ def _split_report(split: str) -> dict[str, Any]:
         "max_negative_edges_per_proof_state": int(negative_counts.max()) if not negative_counts.empty else 0,
         "negative_candidate_hardness": _quantiles(hardness),
         "hard_negative_quality_profile": _hard_negative_quality_profile(features, negative_counts),
+        "hard_negative_pair_evidence": _hard_negative_pair_evidence(positives, negatives, premises, features),
         "trace_profile": {
             "proof_state_rows": int(len(proof_states)),
             "positive_trace_rows": positive_edge_count,
