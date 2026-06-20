@@ -526,6 +526,19 @@ These timings split the `evaluate` pipeline stage into proof-state retrieval, th
 
 This profile records the resource choices used by the committed LeanRank-data run. It is intended to explain which stages use GPU/vectorized paths and which stages remain CPU/IO-heavy.
 
+### Execution Mode Summary
+
+- Embedding mode: `multi_gpu_sentence_transformer`
+- Multi-GPU embedding active: `True`
+- Evaluation mode: `batched_gpu_retrieval_evaluation`
+- Evaluation GPU active: `True`
+- Index mode: `hnswlib_ann_candidate_generation`
+- ANN index active: `True`
+- Primary timed bottleneck: `embed`
+- CPU/IO-heavy stages: `['sample', 'train_ranker', 'augment_graph', 'compute_difficulty']`
+- Artifact reuse by default: `True`
+- Bottleneck interpretation: embedding is still the largest timed stage even with GPU encoding, so artifact reuse matters for report and reranking refreshes
+
 ### Embedding
 
 - Backend/model: `sentence_transformers` / `BAAI/bge-base-en-v1.5`

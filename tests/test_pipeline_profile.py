@@ -216,6 +216,15 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
     assert resources["evaluation_parallelism"]["test_proof_state_backend"] == "torch_cuda"
     assert resources["index_parallelism"]["backend"] == "sklearn"
     assert resources["index_parallelism"]["indexed_entities"] == ["premise"]
+    execution_mode = report["throughput_profile"]["execution_mode_summary"]
+    assert execution_mode["embedding_mode"] == "single_gpu_sentence_transformer"
+    assert execution_mode["embedding_gpu_active"] is True
+    assert execution_mode["multi_gpu_embedding"] is False
+    assert execution_mode["evaluation_mode"] == "batched_gpu_retrieval_evaluation"
+    assert execution_mode["evaluation_gpu_active"] is True
+    assert execution_mode["index_mode"] == "sklearn_indexed_candidate_generation"
+    assert execution_mode["primary_timed_bottleneck"] == "evaluate"
+    assert execution_mode["artifact_reuse_by_default"] is False
     acceptance = report["throughput_profile"]["performance_acceptance_profile"]
     assert acceptance["summary"]["total_gate_count"] >= 8
     assert acceptance["summary"]["required_gates_passed"] is False

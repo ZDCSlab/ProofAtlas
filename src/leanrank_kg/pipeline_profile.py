@@ -890,6 +890,74 @@ def _resource_parallelism_profile(
     }
 
 
+def _execution_mode_summary(throughput: dict[str, Any]) -> dict[str, Any]:
+    resources = throughput.get("resource_parallelism_profile", {}) if isinstance(throughput, dict) else {}
+    embedding = resources.get("embedding_parallelism", {}) if isinstance(resources, dict) else {}
+    evaluation = resources.get("evaluation_parallelism", {}) if isinstance(resources, dict) else {}
+    indexing = resources.get("index_parallelism", {}) if isinstance(resources, dict) else {}
+    refresh_reuse = throughput.get("refresh_reuse_profile", {}) if isinstance(throughput, dict) else {}
+    bottleneck = throughput.get("bottleneck_profile", {}) if isinstance(throughput, dict) else {}
+    cpu_or_io = resources.get("cpu_or_io_heavy_stages", []) if isinstance(resources, dict) else []
+
+    embedding_device_count = int(embedding.get("device_count") or 0)
+    embedding_gpu_active = embedding.get("requested_device") == "cuda" and embedding_device_count > 0
+    multi_gpu_embedding = embedding_gpu_active and embedding_device_count > 1 and bool(embedding.get("multi_process"))
+    evaluation_backends = set(evaluation.get("actual_backends") or [])
+    evaluation_gpu_active = "torch_cuda" in evaluation_backends
+    index_backend = indexing.get("backend")
+    indexed_entities = indexing.get("indexed_entities") or []
+    ann_index_active = index_backend in {"hnswlib", "faiss", "lancedb"} and bool(indexed_entities)
+    primary_stage = bottleneck.get("primary_stage")
+    cpu_stage_names = [row.get("name") for row in cpu_or_io if isinstance(row, dict) and row.get("name")]
+
+    if multi_gpu_embedding:
+        embedding_mode = "multi_gpu_sentence_transformer"
+    elif embedding_gpu_active:
+        embedding_mode = "single_gpu_sentence_transformer"
+    else:
+        embedding_mode = "cpu_or_non_neural_embedding"
+
+    if evaluation_gpu_active:
+        evaluation_mode = "batched_gpu_retrieval_evaluation"
+    elif evaluation_backends:
+        evaluation_mode = "non_cuda_batched_retrieval_evaluation"
+    else:
+        evaluation_mode = "evaluation_backend_not_recorded"
+
+    if ann_index_active:
+        index_mode = f"{index_backend}_ann_candidate_generation"
+    elif indexed_entities:
+        index_mode = f"{index_backend or 'unknown'}_indexed_candidate_generation"
+    else:
+        index_mode = "no_persistent_index_recorded"
+
+    if primary_stage == "embed" and embedding_gpu_active:
+        bottleneck_interpretation = "embedding is still the largest timed stage even with GPU encoding, so artifact reuse matters for report and reranking refreshes"
+    elif primary_stage == "evaluate" and evaluation_gpu_active:
+        bottleneck_interpretation = "evaluation is the largest timed stage despite batched GPU scoring, so sampled development evaluation and full final evaluation should stay separate"
+    elif primary_stage:
+        bottleneck_interpretation = f"{primary_stage} is the largest timed stage and should be inspected before scaling further"
+    else:
+        bottleneck_interpretation = "no primary timed bottleneck was recorded"
+
+    return {
+        "embedding_mode": embedding_mode,
+        "embedding_gpu_active": embedding_gpu_active,
+        "multi_gpu_embedding": multi_gpu_embedding,
+        "embedding_device_count": embedding_device_count,
+        "evaluation_mode": evaluation_mode,
+        "evaluation_gpu_active": evaluation_gpu_active,
+        "evaluation_actual_backends": sorted(evaluation_backends),
+        "index_mode": index_mode,
+        "ann_index_active": ann_index_active,
+        "primary_timed_bottleneck": primary_stage,
+        "cpu_or_io_heavy_stage_names": cpu_stage_names,
+        "artifact_reuse_by_default": refresh_reuse.get("reuse_by_default"),
+        "ranker_retrain_policy": refresh_reuse.get("training_repeat_policy"),
+        "bottleneck_interpretation": bottleneck_interpretation,
+    }
+
+
 def _performance_acceptance_profile(
     scale: dict[str, Any],
     throughput: dict[str, Any],
@@ -1227,6 +1295,7 @@ def build_report(config_path: str = "configs/proofatlas.yaml") -> dict[str, Any]
     throughput["metric_uncertainty_profile"] = _metric_uncertainty_profile(evaluation)
     throughput["refresh_reuse_profile"] = _refresh_reuse_profile(config, sample, embeddings, index)
     throughput["resource_parallelism_profile"] = _resource_parallelism_profile(config, embeddings, index, benchmark, evaluation, throughput)
+    throughput["execution_mode_summary"] = _execution_mode_summary(throughput)
     throughput["performance_acceptance_profile"] = _performance_acceptance_profile(scale, throughput, evaluation)
     throughput["scale_projection_profile"] = _scale_projection_profile(scale, throughput)
     recommendations = _recommendations(config, sample, benchmark, readiness, scale, throughput, evaluation)

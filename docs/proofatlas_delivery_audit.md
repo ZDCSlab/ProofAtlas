@@ -112,6 +112,22 @@ Scale projection:
 | current_5x | 1460060 | 2758.2553 | 745.8159 | 33.5972 |
 | configured_source_rows | 350000 | 661.1984 | 178.7841 | 8.0538 |
 
+Execution mode summary:
+
+| Execution | Field | Value |
+| --- | --- | ---: |
+| Embedding mode | value | multi_gpu_sentence_transformer |
+| Embedding GPU | active | True |
+| Embedding GPU | multi GPU | True |
+| Evaluation mode | value | batched_gpu_retrieval_evaluation |
+| Evaluation GPU | active | True |
+| Index mode | value | hnswlib_ann_candidate_generation |
+| ANN index | active | True |
+| Primary bottleneck | stage | embed |
+| Artifact reuse | default | True |
+
+embedding is still the largest timed stage even with GPU encoding, so artifact reuse matters for report and reranking refreshes
+
 Artifact reuse and retraining policy:
 
 | Artifact | Field | Value |

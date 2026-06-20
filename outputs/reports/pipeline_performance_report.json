@@ -3153,6 +3153,29 @@
       "timed_pipeline_evaluate_seconds": 19.123737015994266,
       "timed_to_current_ratio": 0.8025485309485165
     },
+    "execution_mode_summary": {
+      "ann_index_active": true,
+      "artifact_reuse_by_default": true,
+      "bottleneck_interpretation": "embedding is still the largest timed stage even with GPU encoding, so artifact reuse matters for report and reranking refreshes",
+      "cpu_or_io_heavy_stage_names": [
+        "sample",
+        "train_ranker",
+        "augment_graph",
+        "compute_difficulty"
+      ],
+      "embedding_device_count": 7,
+      "embedding_gpu_active": true,
+      "embedding_mode": "multi_gpu_sentence_transformer",
+      "evaluation_actual_backends": [
+        "torch_cuda"
+      ],
+      "evaluation_gpu_active": true,
+      "evaluation_mode": "batched_gpu_retrieval_evaluation",
+      "index_mode": "hnswlib_ann_candidate_generation",
+      "multi_gpu_embedding": true,
+      "primary_timed_bottleneck": "embed",
+      "ranker_retrain_policy": "Do not retrain by default. Reuse embeddings, indexes, and trained models for report/homepage refreshes; rerun ranker training only after ranker feature, label, split, or relevant config changes."
+    },
     "index_build_seconds_total": 6.719438847154379,
     "mean_index_speedup_vs_exact": 17.376305276865946,
     "metric_uncertainty_profile": {

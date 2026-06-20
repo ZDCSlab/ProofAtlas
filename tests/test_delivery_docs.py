@@ -182,6 +182,24 @@ def test_readme_resource_parallelism_profile_matches_committed_profile() -> None
     assert _readme_table_row(readme, "Indexing", "min recall vs exact")[2] == f"{float(indexing['min_recall_vs_exact']):.4f}"
 
 
+def test_readme_execution_mode_summary_matches_committed_profile() -> None:
+    repo = Path(__file__).resolve().parents[1]
+    readme = (repo / "README.md").read_text(encoding="utf-8")
+    profile = json.loads((repo / "outputs/reports/pipeline_performance_report.json").read_text(encoding="utf-8"))
+    summary = profile["throughput_profile"]["execution_mode_summary"]
+
+    assert _readme_table_row(readme, "Embedding mode", "value")[2] == summary["embedding_mode"]
+    assert _readme_table_row(readme, "Embedding GPU", "active")[2] == str(summary["embedding_gpu_active"])
+    assert _readme_table_row(readme, "Embedding GPU", "multi GPU")[2] == str(summary["multi_gpu_embedding"])
+    assert _readme_table_row(readme, "Evaluation mode", "value")[2] == summary["evaluation_mode"]
+    assert _readme_table_row(readme, "Evaluation GPU", "active")[2] == str(summary["evaluation_gpu_active"])
+    assert _readme_table_row(readme, "Index mode", "value")[2] == summary["index_mode"]
+    assert _readme_table_row(readme, "ANN index", "active")[2] == str(summary["ann_index_active"])
+    assert _readme_table_row(readme, "Primary bottleneck", "stage")[2] == summary["primary_timed_bottleneck"]
+    assert _readme_table_row(readme, "Artifact reuse", "default")[2] == str(summary["artifact_reuse_by_default"])
+    assert summary["bottleneck_interpretation"] in readme
+
+
 def test_readme_performance_acceptance_gates_match_committed_profile() -> None:
     repo = Path(__file__).resolve().parents[1]
     readme = (repo / "README.md").read_text(encoding="utf-8")
@@ -246,6 +264,16 @@ def test_delivery_audit_performance_snapshot_matches_committed_artifacts() -> No
     assert _readme_table_row(audit, "Primary bottleneck", "seconds")[2] == f"{float(bottleneck['primary_stage_seconds']):.4f}"
     assert _readme_table_row(audit, "Primary bottleneck", "share of total")[2] == f"{float(bottleneck['primary_stage_share_of_total']):.4f}"
     assert _readme_table_row(audit, "Top-3 timed stages", "share of total")[2] == f"{float(bottleneck['top3_stage_share_of_total']):.4f}"
+    execution = profile["throughput_profile"]["execution_mode_summary"]
+    assert _readme_table_row(audit, "Embedding mode", "value")[2] == execution["embedding_mode"]
+    assert _readme_table_row(audit, "Embedding GPU", "active")[2] == str(execution["embedding_gpu_active"])
+    assert _readme_table_row(audit, "Embedding GPU", "multi GPU")[2] == str(execution["multi_gpu_embedding"])
+    assert _readme_table_row(audit, "Evaluation mode", "value")[2] == execution["evaluation_mode"]
+    assert _readme_table_row(audit, "Evaluation GPU", "active")[2] == str(execution["evaluation_gpu_active"])
+    assert _readme_table_row(audit, "Index mode", "value")[2] == execution["index_mode"]
+    assert _readme_table_row(audit, "ANN index", "active")[2] == str(execution["ann_index_active"])
+    assert _readme_table_row(audit, "Artifact reuse", "default")[2] == str(execution["artifact_reuse_by_default"])
+    assert execution["bottleneck_interpretation"] in audit
     acceptance = profile["throughput_profile"]["performance_acceptance_profile"]["summary"]
     assert _readme_table_row(audit, "Required gates", "passed")[2] == str(acceptance["required_gates_passed"])
     assert _readme_table_row(audit, "Advisory gates", "passed")[2] == str(acceptance["advisory_gates_passed"])

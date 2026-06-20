@@ -233,6 +233,22 @@ Current resource and parallelism profile:
 | Indexing | hnswlib parameters | M=16, ef_construction=200, ef_search=100 |
 | Indexing | min recall vs exact | 0.9580 |
 
+Current execution mode summary:
+
+| Execution | Field | Value |
+| --- | --- | ---: |
+| Embedding mode | value | multi_gpu_sentence_transformer |
+| Embedding GPU | active | True |
+| Embedding GPU | multi GPU | True |
+| Evaluation mode | value | batched_gpu_retrieval_evaluation |
+| Evaluation GPU | active | True |
+| Index mode | value | hnswlib_ann_candidate_generation |
+| ANN index | active | True |
+| Primary bottleneck | stage | embed |
+| Artifact reuse | default | True |
+
+embedding is still the largest timed stage even with GPU encoding, so artifact reuse matters for report and reranking refreshes
+
 Current performance acceptance gates:
 
 | Gate group | Field | Value |

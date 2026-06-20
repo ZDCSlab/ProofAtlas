@@ -457,6 +457,7 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     refresh_reuse = throughput.get("refresh_reuse_profile", {}) if isinstance(throughput, dict) else {}
     refresh_cache = refresh_reuse.get("artifact_cache", {}) if isinstance(refresh_reuse, dict) else {}
     resource_parallelism = throughput.get("resource_parallelism_profile", {}) if isinstance(throughput, dict) else {}
+    execution_mode = throughput.get("execution_mode_summary", {}) if isinstance(throughput, dict) else {}
     performance_acceptance = throughput.get("performance_acceptance_profile", {}) if isinstance(throughput, dict) else {}
     performance_acceptance_summary = performance_acceptance.get("summary", {}) if isinstance(performance_acceptance, dict) else {}
     scale_projection = throughput.get("scale_projection_profile", {}) if isinstance(throughput, dict) else {}
@@ -847,6 +848,19 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
             "## Resource And Parallelism Profile",
             "",
             "This profile records the resource choices used by the committed LeanRank-data run. It is intended to explain which stages use GPU/vectorized paths and which stages remain CPU/IO-heavy.",
+            "",
+            "### Execution Mode Summary",
+            "",
+            f"- Embedding mode: `{execution_mode.get('embedding_mode', 'n/a')}`",
+            f"- Multi-GPU embedding active: `{execution_mode.get('multi_gpu_embedding', 'n/a')}`",
+            f"- Evaluation mode: `{execution_mode.get('evaluation_mode', 'n/a')}`",
+            f"- Evaluation GPU active: `{execution_mode.get('evaluation_gpu_active', 'n/a')}`",
+            f"- Index mode: `{execution_mode.get('index_mode', 'n/a')}`",
+            f"- ANN index active: `{execution_mode.get('ann_index_active', 'n/a')}`",
+            f"- Primary timed bottleneck: `{execution_mode.get('primary_timed_bottleneck', 'n/a')}`",
+            f"- CPU/IO-heavy stages: `{execution_mode.get('cpu_or_io_heavy_stage_names', [])}`",
+            f"- Artifact reuse by default: `{execution_mode.get('artifact_reuse_by_default', 'n/a')}`",
+            f"- Bottleneck interpretation: {execution_mode.get('bottleneck_interpretation', 'n/a')}",
             "",
             "### Embedding",
             "",

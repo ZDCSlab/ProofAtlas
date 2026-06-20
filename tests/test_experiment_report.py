@@ -240,6 +240,19 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                     },
                     "cpu_or_io_heavy_stages": [{"name": "validate", "seconds": 2.0, "share_of_total": 0.1}],
                 },
+                "execution_mode_summary": {
+                    "embedding_mode": "cpu_or_non_neural_embedding",
+                    "embedding_gpu_active": False,
+                    "multi_gpu_embedding": False,
+                    "evaluation_mode": "batched_gpu_retrieval_evaluation",
+                    "evaluation_gpu_active": True,
+                    "index_mode": "hnswlib_ann_candidate_generation",
+                    "ann_index_active": True,
+                    "primary_timed_bottleneck": "evaluate",
+                    "cpu_or_io_heavy_stage_names": ["validate"],
+                    "artifact_reuse_by_default": True,
+                    "bottleneck_interpretation": "evaluation is the largest timed stage despite batched GPU scoring",
+                },
                 "processed_rows_per_second": 1000.0,
                 "pipeline_seconds_per_100k_processed_rows": 100.0,
                 "slowest_stage": "evaluate",
@@ -477,6 +490,10 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "embedding_model_or_text_change" in text
     assert "Premise ranker artifact exists" in text
     assert "Resource And Parallelism Profile" in text
+    assert "Execution Mode Summary" in text
+    assert "Embedding mode: `cpu_or_non_neural_embedding`" in text
+    assert "Evaluation mode: `batched_gpu_retrieval_evaluation`" in text
+    assert "Index mode: `hnswlib_ann_candidate_generation`" in text
     assert "Multi-process encoding" in text
     assert "Actual backends" in text
     assert "torch_cuda" in text
