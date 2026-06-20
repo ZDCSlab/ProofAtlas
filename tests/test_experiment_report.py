@@ -340,6 +340,27 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                         },
                     ],
                 },
+                "artifact_storage_profile": {
+                    "method": "filesystem_artifact_footprint_with_linear_scale_projection",
+                    "total_artifact_bytes": 2048,
+                    "total_artifact_gib": 1.9073486328125e-06,
+                    "bytes_per_processed_row": 2.048,
+                    "projections": [
+                        {
+                            "label": "current_1x",
+                            "target_processed_rows": 1000,
+                            "scale_factor_vs_current": 1.0,
+                            "estimated_artifact_gib": 1.9073486328125e-06,
+                        },
+                        {
+                            "label": "current_2x",
+                            "target_processed_rows": 2000,
+                            "scale_factor_vs_current": 2.0,
+                            "estimated_artifact_gib": 3.814697265625e-06,
+                        },
+                    ],
+                    "largest_files": [{"path": "outputs/indexes/train_premise_neighbors.bin", "bytes": 1024}],
+                },
             },
             "stages": {
                 "evaluation": {
@@ -549,6 +570,10 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "Scale Projection" in text
     assert "linear_projection_from_current_timed_pipeline" in text
     assert "current_2x" in text
+    assert "Artifact Storage Footprint" in text
+    assert "filesystem_artifact_footprint_with_linear_scale_projection" in text
+    assert "Largest generated artifact files" in text
+    assert "outputs/indexes/train_premise_neighbors.bin" in text
     assert "Hard-Negative Quality Profile" in text
     assert "Ranker Training Pair Utilization" in text
     assert "data/processed/train/negative_edges.parquet label=0" in text

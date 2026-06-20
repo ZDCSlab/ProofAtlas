@@ -240,6 +240,12 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
     assert projection["configured_source_rows"] == 60000
     assert len(projection["projections"]) >= 4
     assert next(row for row in projection["projections"] if row["label"] == "current_2x")["scale_factor_vs_current"] == 2.0
+    storage = report["throughput_profile"]["artifact_storage_profile"]
+    assert storage["method"] == "filesystem_artifact_footprint_with_linear_scale_projection"
+    assert "outputs/reports" in storage["directories"]
+    assert storage["total_artifact_bytes"] >= 0
+    assert len(storage["projections"]) >= 4
+    assert next(row for row in storage["projections"] if row["label"] == "current_2x")["scale_factor_vs_current"] == 2.0
     assert report["stages"]["evaluation"]["evaluation_timing"]["total_seconds"] == 2.5
     assert report["stages"]["evaluation"]["evaluation_timing"]["substage_count"] == 2
     assert report["stages"]["evaluation"]["evaluation_timing"]["slowest_substages"][0]["name"] == "test_theorem_retrieval"

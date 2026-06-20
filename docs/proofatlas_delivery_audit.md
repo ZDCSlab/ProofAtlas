@@ -157,6 +157,9 @@ Pipeline scale profile:
 - Embedding devices: `cuda:0` to `cuda:6`
 - Index backend: `hnswlib`
 - LeanRank premise supervision ready: true
+- Artifact storage: 2.8429 GiB total, 10,453.5670 bytes per processed row
+- Largest storage component: `outputs/indexes`, 2,295,001,630 bytes
+- Projected storage at current_5x: 14.2146 GiB
 
 ## Verification Commands
 
@@ -178,7 +181,7 @@ Recent passing result:
 
 ```text
 pytest: 91 passed, 4 skipped
-audit: 177/177 checks passed
+audit: 178/178 checks passed
 git diff --check: passed
 ```
 

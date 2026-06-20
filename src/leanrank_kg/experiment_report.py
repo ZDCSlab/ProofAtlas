@@ -375,6 +375,43 @@ def _scale_projection_table(profile: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def _storage_projection_table(profile: dict[str, Any]) -> str:
+    rows = profile.get("projections", []) if isinstance(profile, dict) else []
+    lines = [
+        "| Projection | Target rows | Scale factor | Artifact GiB |",
+        "| --- | ---: | ---: | ---: |",
+    ]
+    for row in rows:
+        lines.append(
+            "| "
+            + " | ".join(
+                [
+                    f"`{row.get('label', 'n/a')}`",
+                    _fmt(row.get("target_processed_rows")),
+                    _fmt(row.get("scale_factor_vs_current")),
+                    _fmt(row.get("estimated_artifact_gib")),
+                ]
+            )
+            + " |"
+        )
+    if len(lines) == 2:
+        lines.append("| n/a | n/a | n/a | n/a |")
+    return "\n".join(lines)
+
+
+def _largest_files_table(profile: dict[str, Any]) -> str:
+    rows = profile.get("largest_files", []) if isinstance(profile, dict) else []
+    lines = [
+        "| File | Bytes |",
+        "| --- | ---: |",
+    ]
+    for row in rows[:8]:
+        lines.append(f"| `{row.get('path', 'n/a')}` | {_fmt(row.get('bytes'))} |")
+    if len(lines) == 2:
+        lines.append("| n/a | n/a |")
+    return "\n".join(lines)
+
+
 def _hard_negative_quality_table(profile: dict[str, Any]) -> str:
     rows = profile.get("bucket_counts", []) if isinstance(profile, dict) else []
     lines = [
@@ -463,6 +500,7 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     performance_acceptance = throughput.get("performance_acceptance_profile", {}) if isinstance(throughput, dict) else {}
     performance_acceptance_summary = performance_acceptance.get("summary", {}) if isinstance(performance_acceptance, dict) else {}
     scale_projection = throughput.get("scale_projection_profile", {}) if isinstance(throughput, dict) else {}
+    artifact_storage = throughput.get("artifact_storage_profile", {}) if isinstance(throughput, dict) else {}
     embedding_parallel = resource_parallelism.get("embedding_parallelism", {}) if isinstance(resource_parallelism, dict) else {}
     evaluation_parallel = resource_parallelism.get("evaluation_parallelism", {}) if isinstance(resource_parallelism, dict) else {}
     index_parallel = resource_parallelism.get("index_parallelism", {}) if isinstance(resource_parallelism, dict) else {}
@@ -1005,6 +1043,21 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
             f"- Configured source rows: `{scale_projection.get('configured_source_rows', 'n/a')}`",
             "",
             _scale_projection_table(scale_projection),
+            "",
+            "### Artifact Storage Footprint",
+            "",
+            "This profile records the local footprint of generated LeanRank-data artifacts. It is a practical scale-up signal because embeddings and ANN indexes can dominate disk usage before model training becomes the bottleneck.",
+            "",
+            f"- Method: `{artifact_storage.get('method', 'n/a')}`",
+            f"- Total artifact bytes: `{artifact_storage.get('total_artifact_bytes', 'n/a')}`",
+            f"- Total artifact GiB: `{artifact_storage.get('total_artifact_gib', 'n/a')}`",
+            f"- Bytes per processed row: `{artifact_storage.get('bytes_per_processed_row', 'n/a')}`",
+            "",
+            _storage_projection_table(artifact_storage),
+            "",
+            "Largest generated artifact files:",
+            "",
+            _largest_files_table(artifact_storage),
         ]
     )
     lines.extend(

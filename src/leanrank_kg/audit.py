@@ -89,6 +89,19 @@ def _rerank_cost_condition(data: dict[str, Any]) -> tuple[bool, dict[str, Any]]:
     return passed, profile
 
 
+def _artifact_storage_condition(data: dict[str, Any]) -> tuple[bool, dict[str, Any]]:
+    profile = data.get("throughput_profile", {}).get("artifact_storage_profile", {})
+    directories = profile.get("directories", {}) if isinstance(profile, dict) else {}
+    passed = (
+        profile.get("method") == "filesystem_artifact_footprint_with_linear_scale_projection"
+        and profile.get("total_artifact_bytes", 0) >= 0
+        and "outputs/embeddings" in directories
+        and "outputs/indexes" in directories
+        and len(profile.get("projections", [])) >= 3
+    )
+    return passed, profile
+
+
 def build_audit() -> dict[str, Any]:
     checks: dict[str, dict[str, Any]] = {}
     required_root = ["README.md", "pyproject.toml", "Makefile", "configs/sample.yaml", "homepage/index.html"]
@@ -522,6 +535,11 @@ def build_audit() -> dict[str, Any]:
         "outputs/reports/pipeline_performance_report.json",
         _rerank_cost_condition,
         "rerank_evaluation_cost_profile={detail}",
+    )
+    checks["validation:artifact_storage_profile"] = _json_condition(
+        "outputs/reports/pipeline_performance_report.json",
+        _artifact_storage_condition,
+        "artifact_storage_profile={detail}",
     )
     checks["validation:refresh_dashboard"] = _json_condition(
         "outputs/reports/refresh_dashboard.json",

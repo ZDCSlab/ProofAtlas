@@ -143,6 +143,12 @@ def test_readme_production_snapshot_matches_committed_artifacts() -> None:
     assert _readme_artifact_field(readme, "Rerank diagnostic cost", "rerank/batched seconds per query") == (
         f"{float(rerank_cost['rerank_to_batched_seconds_per_query_ratio']):.4f}"
     )
+    storage = throughput["artifact_storage_profile"]
+    assert _readme_artifact_field(readme, "Artifact storage", "total GiB") == f"{float(storage['total_artifact_gib']):.4f}"
+    assert _readme_artifact_field(readme, "Artifact storage", "bytes per processed row") == f"{float(storage['bytes_per_processed_row']):.4f}"
+    assert _readme_artifact_field(readme, "Artifact storage", "index bytes") == str(storage["directories"]["outputs/indexes"]["bytes"])
+    current_5x = next(row for row in storage["projections"] if row["label"] == "current_5x")
+    assert _readme_artifact_field(readme, "Artifact storage", "current_5x projected GiB") == f"{float(current_5x['estimated_artifact_gib']):.4f}"
 
 
 def test_readme_performance_snapshot_matches_committed_artifacts() -> None:
@@ -307,6 +313,12 @@ def test_delivery_audit_performance_snapshot_matches_committed_artifacts() -> No
     ) in audit
     assert f"projected full rerank {float(rerank_cost['projected_full_rerank_seconds']):.4f} seconds" in audit
     assert f"{float(rerank_cost['rerank_to_batched_seconds_per_query_ratio']):.4f}x batched seconds/query" in audit
+    storage = profile["throughput_profile"]["artifact_storage_profile"]
+    assert f"Artifact storage: {float(storage['total_artifact_gib']):.4f} GiB total" in audit
+    assert f"{float(storage['bytes_per_processed_row']):,.4f} bytes per processed row" in audit
+    assert f"Largest storage component: `outputs/indexes`, {int(storage['directories']['outputs/indexes']['bytes']):,} bytes" in audit
+    current_5x = next(row for row in storage["projections"] if row["label"] == "current_5x")
+    assert f"Projected storage at current_5x: {float(current_5x['estimated_artifact_gib']):.4f} GiB" in audit
 
 
 def test_delivery_audit_artifact_reuse_policy_matches_committed_profile() -> None:

@@ -725,6 +725,11 @@
       "passed": true,
       "path": "outputs/reports/artifact_compatibility_report.json"
     },
+    "validation:artifact_storage_profile": {
+      "detail": "artifact_storage_profile={'artifact_roots': ['data/processed', 'outputs/embeddings', 'outputs/indexes', 'outputs/reports', 'homepage/assets'], 'bytes_per_processed_row': 10453.566976699587, 'directories': {'data/processed': {'bytes': 46533700, 'exists': True, 'file_count': 44, 'path': 'data/processed'}, 'homepage/assets': {'bytes': 2051696, 'exists': True, 'file_count': 11, 'path': 'homepage/assets'}, 'outputs/embeddings': {'bytes': 689840196, 'exists': True, 'file_count': 18, 'path': 'outputs/embeddings'}, 'outputs/indexes': {'bytes': 2295001630, 'exists': True, 'file_count': 49, 'path': 'outputs/indexes'}, 'outputs/reports': {'bytes': 19139778, 'exists': True, 'file_count': 39, 'path': 'outputs/reports'}}, 'largest_files': [{'bytes': 784245864, 'path': 'outputs/indexes/train_premise_neighbors.joblib'}, {'bytes': 410816652, 'path': 'outputs/indexes/train_premise_neighbors.bin'}, {'bytes': 366556307, 'path': 'outputs/embeddings/train_premise_embeddings.npz'}, {'bytes': 235665958, 'path': 'outputs/indexes/test_premise_neighbors.joblib'}, {'bytes': 223124038, 'path': 'outputs/indexes/val_premise_neighbors.joblib'}, {'bytes': 145849830, 'path': 'outputs/indexes/train_proof_state_neighbors.joblib'}, {'bytes': 123456212, 'path': 'outputs/indexes/test_premise_neighbors.bin'}, {'bytes': 116887072, 'path': 'outputs/indexes/val_premise_neighbors.bin'}, {'bytes': 110149847, 'path': 'outputs/embeddings/test_premise_embeddings.npz'}, {'bytes': 104286710, 'path': 'outputs/embeddings/val_premise_embeddings.npz'}], 'method': 'filesystem_artifact_footprint_with_linear_scale_projection', 'notes': ['Storage projection scales current artifact bytes linearly with processed row count.', 'Index artifacts dominate current storage and should be monitored when scaling LeanRank-data runs.'], 'projections': [{'estimated_artifact_bytes': 3052567000.0, 'estimated_artifact_gib': 2.8429245576262474, 'label': 'current_1x', 'scale_factor_vs_current': 1.0, 'target_processed_rows': 292012}, {'estimated_artifact_bytes': 6105134000.0, 'estimated_artifact_gib': 5.685849115252495, 'label': 'current_2x', 'scale_factor_vs_current': 2.0, 'target_processed_rows': 584024}, {'estimated_artifact_bytes': 15262835000.0, 'estimated_artifact_gib': 14.214622788131237, 'label': 'current_5x', 'scale_factor_vs_current': 5.0, 'target_processed_rows': 1460060}, {'estimated_artifact_bytes': 3658748441.844856, 'estimated_artifact_gib': 3.4074750187293215, 'label': 'configured_source_rows', 'scale_factor_vs_current': 1.1985808802377984, 'target_processed_rows': 350000}], 'total_artifact_bytes': 3052567000, 'total_artifact_gib': 2.8429245576262474}",
+      "passed": true,
+      "path": "outputs/reports/pipeline_performance_report.json"
+    },
     "validation:corpus_manifest": {
       "detail": "corpus_manifest={'source_kind': 'huggingface', 'data_supervision': 'leanrank_proof_state_rows', 'config_hash': '375be84aecb4e7d9', 'corpus_version': 'erbacher/LeanRank-data@erbacher/LeanRank-data', 'extraction_config_hash': '3e8f863899afdf6c', 'splits': ['test', 'train', 'val']}",
       "passed": true,
@@ -888,5 +893,5 @@
   },
   "failed_checks": [],
   "passed": true,
-  "total_checks": 177
+  "total_checks": 178
 }

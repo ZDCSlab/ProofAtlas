@@ -204,6 +204,10 @@ Current production run coverage and timing:
 | Rerank diagnostic cost | sampled fraction | 0.0066 |
 | Rerank diagnostic cost | projected full rerank seconds | 2180.9495 |
 | Rerank diagnostic cost | rerank/batched seconds per query | 2350.9921 |
+| Artifact storage | total GiB | 2.8429 |
+| Artifact storage | bytes per processed row | 10453.5670 |
+| Artifact storage | index bytes | 2295001630 |
+| Artifact storage | current_5x projected GiB | 14.2146 |
 
 Current production performance snapshot:
 

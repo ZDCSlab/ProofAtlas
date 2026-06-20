@@ -27,6 +27,19 @@ def _file_info(path: str | Path) -> dict[str, Any]:
     }
 
 
+def _directory_size(path: str | Path) -> dict[str, Any]:
+    root = Path(path)
+    if not root.exists():
+        return {"path": str(root), "exists": False, "bytes": 0, "file_count": 0}
+    total = 0
+    file_count = 0
+    for file_path in root.rglob("*"):
+        if file_path.is_file():
+            total += int(file_path.stat().st_size)
+            file_count += 1
+    return {"path": str(root), "exists": True, "bytes": total, "file_count": file_count}
+
+
 def _parquet_rows(path: str | Path) -> dict[str, Any]:
     info = _file_info(path)
     if not info["exists"]:
@@ -1197,6 +1210,60 @@ def _scale_projection_profile(scale: dict[str, Any], throughput: dict[str, Any])
     }
 
 
+def _artifact_storage_profile(scale: dict[str, Any], throughput: dict[str, Any]) -> dict[str, Any]:
+    artifact_roots = [
+        "data/processed",
+        "outputs/embeddings",
+        "outputs/indexes",
+        "outputs/reports",
+        "homepage/assets",
+    ]
+    directories = {path: _directory_size(path) for path in artifact_roots}
+    total_bytes = sum(int(row.get("bytes") or 0) for row in directories.values())
+    current_rows = int(scale.get("current_total_split_rows") or 0)
+    bytes_per_processed_row = (total_bytes / current_rows) if current_rows > 0 else None
+    largest_files: list[dict[str, Any]] = []
+    for root in artifact_roots:
+        root_path = Path(root)
+        if not root_path.exists():
+            continue
+        for file_path in root_path.rglob("*"):
+            if file_path.is_file():
+                largest_files.append({"path": str(file_path), "bytes": int(file_path.stat().st_size)})
+    largest_files.sort(key=lambda row: int(row["bytes"]), reverse=True)
+
+    scale_projection = throughput.get("scale_projection_profile", {}) if isinstance(throughput, dict) else {}
+    projections = []
+    for row in scale_projection.get("projections", []) if isinstance(scale_projection, dict) else []:
+        if not isinstance(row, dict):
+            continue
+        factor = row.get("scale_factor_vs_current")
+        projected_bytes = float(total_bytes) * float(factor) if factor is not None else None
+        projections.append(
+            {
+                "label": row.get("label"),
+                "target_processed_rows": row.get("target_processed_rows"),
+                "scale_factor_vs_current": factor,
+                "estimated_artifact_bytes": projected_bytes,
+                "estimated_artifact_gib": (projected_bytes / (1024**3)) if projected_bytes is not None else None,
+            }
+        )
+    return {
+        "method": "filesystem_artifact_footprint_with_linear_scale_projection",
+        "artifact_roots": artifact_roots,
+        "directories": directories,
+        "total_artifact_bytes": total_bytes,
+        "total_artifact_gib": total_bytes / (1024**3),
+        "bytes_per_processed_row": bytes_per_processed_row,
+        "largest_files": largest_files[:10],
+        "projections": projections,
+        "notes": [
+            "Storage projection scales current artifact bytes linearly with processed row count.",
+            "Index artifacts dominate current storage and should be monitored when scaling LeanRank-data runs.",
+        ],
+    }
+
+
 def _recommendations(
     config: dict[str, Any],
     sample: dict[str, Any],
@@ -1366,6 +1433,7 @@ def build_report(config_path: str = "configs/proofatlas.yaml") -> dict[str, Any]
     throughput["execution_mode_summary"] = _execution_mode_summary(throughput)
     throughput["performance_acceptance_profile"] = _performance_acceptance_profile(scale, throughput, evaluation)
     throughput["scale_projection_profile"] = _scale_projection_profile(scale, throughput)
+    throughput["artifact_storage_profile"] = _artifact_storage_profile(scale, throughput)
     recommendations = _recommendations(config, sample, benchmark, readiness, scale, throughput, evaluation)
     return {
         "config_path": config_path,
