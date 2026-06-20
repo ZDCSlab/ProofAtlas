@@ -290,6 +290,7 @@ def _production_evidence(
     throughput = pipeline_performance.get("throughput_profile", {})
     bottleneck_profile = throughput.get("bottleneck_profile", {}) if isinstance(throughput, dict) else {}
     evaluation_timing_delta = throughput.get("evaluation_timing_delta", {}) if isinstance(throughput, dict) else {}
+    rapid_convergence = throughput.get("rapid_convergence_profile", {}) if isinstance(throughput, dict) else {}
     evaluation_timing = (
         pipeline_performance.get("stages", {}).get("evaluation", {}).get("evaluation_timing", {})
         if isinstance(pipeline_performance, dict)
@@ -340,6 +341,7 @@ def _production_evidence(
             "theorem": theorem_failure,
             "reranked_proof_state": reranked_failure,
         },
+        "rapid_convergence": rapid_convergence,
     }
 
 

@@ -118,6 +118,39 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                         "primary_accuracy_bottleneck": "top10_reranking_or_candidate_ordering",
                     },
                 },
+                "rapid_convergence_profile": {
+                    "accuracy_snapshot": {
+                        "proof_state_recall_at_10": 0.2,
+                        "proof_state_recall_at_100": 0.3,
+                        "theorem_recall_at_10": 0.5,
+                        "theorem_recall_at_100": 0.7,
+                        "reranked_proof_state_recall_at_10": 0.25,
+                        "reranked_minus_embedding_recall_at_10": 0.05,
+                    },
+                    "headroom": {
+                        "proof_state_missing_from_top100": 0.7,
+                        "proof_state_top10_to_top100_gap": 0.1,
+                        "theorem_missing_from_top100": 0.3,
+                        "theorem_top10_to_top100_gap": 0.2,
+                    },
+                    "strongest_ranker_feature_groups": [
+                        {
+                            "group": "symbol_overlap",
+                            "delta_without_group": 0.03,
+                            "auc_group_only": 0.65,
+                            "columns": ["symbol_name_overlap"],
+                        }
+                    ],
+                    "recommended_sequence": [
+                        {
+                            "priority": 1,
+                            "area": "proof_state_query_and_embedding",
+                            "target_metric": "proof_state Recall@100",
+                            "current_value": 0.3,
+                            "reason": "Candidate pool is weak.",
+                        }
+                    ],
+                },
                 "processed_rows_per_second": 1000.0,
                 "pipeline_seconds_per_100k_processed_rows": 100.0,
                 "slowest_stage": "evaluate",
@@ -219,6 +252,10 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "Retrieval Bottleneck Profile" in text
     assert "candidate_generation_or_embeddings" in text
     assert "top10_reranking_or_candidate_ordering" in text
+    assert "Rapid Convergence Plan" in text
+    assert "proof_state_query_and_embedding" in text
+    assert "proof_state_missing_from_top100" in text
+    assert "symbol_overlap" in text
     assert "Pipeline Timing" in text
     assert "Timing config matches current report config" in text
     assert "Timing config matches current report config: `True`" in text

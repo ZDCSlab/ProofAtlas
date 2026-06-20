@@ -315,6 +315,19 @@ HTML = """<!doctype html>
       {% endfor %}
     </div>
     {% endif %}
+    {% set rapid = production_evidence.rapid_convergence|default({}) %}
+    {% set rapid_headroom = rapid.headroom|default({}) %}
+    {% set rapid_steps = rapid.recommended_sequence|default([]) %}
+    {% if rapid_steps %}
+    <h3 style="margin-top:16px">Rapid Convergence Priorities</h3>
+    <div class="status-row">
+      <div class="status warn"><div class="label">Proof-state top-100 miss</div><div class="value">{{ "%.3f"|format(rapid_headroom.proof_state_missing_from_top100|default(0) or 0) }}</div><div class="note">candidate-generation headroom</div></div>
+      <div class="status"><div class="label">Theorem top-10/100 gap</div><div class="value">{{ "%.3f"|format(rapid_headroom.theorem_top10_to_top100_gap|default(0) or 0) }}</div><div class="note">reranking headroom</div></div>
+      {% for row in rapid_steps[:4] %}
+      <div class="status"><div class="label">Priority {{ row.priority }}</div><div class="value">{{ row.area }}</div><div class="note">{{ row.target_metric }}: {{ "%.3f"|format(row.current_value|default(0) or 0) }}</div></div>
+      {% endfor %}
+    </div>
+    {% endif %}
   </section>
 
   <section>

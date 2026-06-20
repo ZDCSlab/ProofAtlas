@@ -368,6 +368,25 @@
 
     </div>
 
+
+
+
+
+    <h3 style="margin-top:16px">Rapid Convergence Priorities</h3>
+    <div class="status-row">
+      <div class="status warn"><div class="label">Proof-state top-100 miss</div><div class="value">0.764</div><div class="note">candidate-generation headroom</div></div>
+      <div class="status"><div class="label">Theorem top-10/100 gap</div><div class="value">0.195</div><div class="note">reranking headroom</div></div>
+
+      <div class="status"><div class="label">Priority 1</div><div class="value">proof_state_query_and_embedding</div><div class="note">proof_state Recall@100: 0.236</div></div>
+
+      <div class="status"><div class="label">Priority 2</div><div class="value">theorem_level_reranking</div><div class="note">theorem_retrieval Recall@10: 0.494</div></div>
+
+      <div class="status"><div class="label">Priority 3</div><div class="value">ranker_feature_iteration</div><div class="note">validation/test Recall@10 and MAP: 0.051</div></div>
+
+      <div class="status"><div class="label">Priority 4</div><div class="value">hard_negative_training</div><div class="note">MRR/MAP after reranking: 9.548</div></div>
+
+    </div>
+
   </section>
 
   <section>

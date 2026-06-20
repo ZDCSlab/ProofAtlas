@@ -227,6 +227,7 @@ def _evaluation_stage() -> dict[str, Any]:
     total_substage_seconds = sum(float(row.get("seconds") or 0.0) for row in timed_substages)
     proof_test_metrics = test_set_evaluation.get("test", {}).get("proof_state_retrieval", {}).get("metrics", {})
     theorem_test_metrics = test_set_evaluation.get("test", {}).get("theorem_retrieval", {}).get("metrics", {})
+    reranked_proof_state = test_set_evaluation.get("test", {}).get("proof_state_reranked_retrieval", {})
     proof_state_test_total = int(_parquet_rows("data/processed/test/proof_states.parquet").get("rows") or 0)
     theorem_test_total = int(_parquet_rows("data/processed/test/theorems.parquet").get("rows") or 0)
     proof_state_test_evaluated = proof_test_metrics.get("evaluated_queries")
@@ -267,6 +268,9 @@ def _evaluation_stage() -> dict[str, Any]:
             "test_metrics": {
                 "proof_state_retrieval": proof_test_metrics,
                 "theorem_retrieval": theorem_test_metrics,
+            },
+            "test": {
+                "proof_state_reranked_retrieval": reranked_proof_state,
             },
             "validation_metrics": {
                 "proof_state_retrieval": test_set_evaluation.get("validation", {}).get("proof_state_retrieval", {}).get("metrics", {}),
@@ -530,6 +534,137 @@ def _retrieval_bottleneck_profile(evaluation: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _rapid_convergence_profile(
+    evaluation: dict[str, Any],
+    readiness: dict[str, Any],
+    throughput: dict[str, Any],
+) -> dict[str, Any]:
+    test_eval = evaluation.get("test_set_evaluation", {}) if isinstance(evaluation, dict) else {}
+    test = test_eval.get("test", {}) if isinstance(test_eval, dict) else {}
+    proof_metrics = test_eval.get("test_metrics", {}).get("proof_state_retrieval", {})
+    theorem_metrics = test_eval.get("test_metrics", {}).get("theorem_retrieval", {})
+    reranked_metrics = test.get("proof_state_reranked_retrieval", {}).get("metrics", {}) if isinstance(test, dict) else {}
+    candidate_k_ablation = test.get("proof_state_reranked_retrieval", {}).get("candidate_k_ablation", []) if isinstance(test, dict) else []
+    retrieval_profile = throughput.get("retrieval_bottleneck_profile", {}) if isinstance(throughput, dict) else {}
+    premise_trace = readiness.get("premise_trace_supervision", {}).get("current_artifact_supervision", {}) if isinstance(readiness, dict) else {}
+    ranker_validation = evaluation.get("ranker_validation", {}) if isinstance(evaluation, dict) else {}
+    feature_groups = (ranker_validation.get("feature_ablation", {}) or {}).get("groups", {}) if isinstance(ranker_validation, dict) else {}
+
+    def _float(value: Any) -> float | None:
+        return float(value) if value is not None else None
+
+    def _best_candidate_k(rows: list[dict[str, Any]]) -> dict[str, Any]:
+        best: dict[str, Any] = {}
+        best_score: float | None = None
+        for row in rows or []:
+            if not isinstance(row, dict):
+                continue
+            metrics = row.get("metrics", {}) if isinstance(row.get("metrics"), dict) else {}
+            score = metrics.get("Recall@10")
+            if score is None:
+                continue
+            score_f = float(score)
+            if best_score is None or score_f > best_score:
+                best_score = score_f
+                best = {"candidate_k": row.get("candidate_k"), "Recall@10": score_f, "MRR": metrics.get("MRR"), "MAP": metrics.get("MAP")}
+        return best
+
+    ranked_feature_groups = []
+    for name, row in feature_groups.items():
+        if not isinstance(row, dict):
+            continue
+        ranked_feature_groups.append(
+            {
+                "group": name,
+                "delta_without_group": row.get("delta_without_group"),
+                "auc_group_only": row.get("auc_group_only"),
+                "auc_without_group": row.get("auc_without_group"),
+                "columns": row.get("columns", []),
+            }
+        )
+    ranked_feature_groups.sort(key=lambda row: float(row.get("delta_without_group") or 0.0), reverse=True)
+
+    proof_recall10 = _float(proof_metrics.get("Recall@10"))
+    proof_recall100 = _float(proof_metrics.get("Recall@100"))
+    theorem_recall10 = _float(theorem_metrics.get("theorem_retrieval_Recall@10"))
+    theorem_recall100 = _float(theorem_metrics.get("theorem_retrieval_Recall@100"))
+    reranked_recall10 = _float(reranked_metrics.get("Recall@10"))
+    rerank_delta = (reranked_recall10 - proof_recall10) if reranked_recall10 is not None and proof_recall10 is not None else None
+
+    recommended_sequence: list[dict[str, Any]] = []
+    proof_bottleneck = (retrieval_profile.get("proof_state") or {}).get("primary_accuracy_bottleneck")
+    theorem_bottleneck = (retrieval_profile.get("theorem") or {}).get("primary_accuracy_bottleneck")
+    if proof_bottleneck == "candidate_generation_or_embeddings":
+        recommended_sequence.append(
+            {
+                "priority": 1,
+                "area": "proof_state_query_and_embedding",
+                "target_metric": "proof_state Recall@100",
+                "current_value": proof_recall100,
+                "reason": "Proof-state gold premises are often absent from the top-100 candidate pool, so top-k reranking cannot recover them.",
+            }
+        )
+    if theorem_bottleneck == "top10_reranking_or_candidate_ordering":
+        recommended_sequence.append(
+            {
+                "priority": 2,
+                "area": "theorem_level_reranking",
+                "target_metric": "theorem_retrieval Recall@10",
+                "current_value": theorem_recall10,
+                "reason": "Theorem-level Recall@100 is substantially higher than Recall@10, leaving useful headroom for ordering candidates already in the pool.",
+            }
+        )
+    if ranked_feature_groups:
+        strongest = ranked_feature_groups[0]
+        recommended_sequence.append(
+            {
+                "priority": 3,
+                "area": "ranker_feature_iteration",
+                "target_metric": "validation/test Recall@10 and MAP",
+                "current_value": strongest.get("delta_without_group"),
+                "reason": f"Ranker ablation says `{strongest.get('group')}` is the strongest currently measured feature group by delta_without_group.",
+            }
+        )
+    if premise_trace.get("has_negative_candidates") and premise_trace.get("has_positive_edges"):
+        recommended_sequence.append(
+            {
+                "priority": 4,
+                "area": "hard_negative_training",
+                "target_metric": "MRR/MAP after reranking",
+                "current_value": premise_trace.get("negative_to_positive_edge_ratio"),
+                "reason": "LeanRank-data already provides positive premises and hard negative candidates, so training/evaluation changes can reuse existing labels without extracting new data.",
+            }
+        )
+
+    return {
+        "accuracy_snapshot": {
+            "proof_state_recall_at_10": proof_recall10,
+            "proof_state_recall_at_100": proof_recall100,
+            "theorem_recall_at_10": theorem_recall10,
+            "theorem_recall_at_100": theorem_recall100,
+            "reranked_proof_state_recall_at_10": reranked_recall10,
+            "reranked_minus_embedding_recall_at_10": rerank_delta,
+        },
+        "headroom": {
+            "proof_state_missing_from_top100": (1.0 - proof_recall100) if proof_recall100 is not None else None,
+            "proof_state_top10_to_top100_gap": (proof_recall100 - proof_recall10) if proof_recall10 is not None and proof_recall100 is not None else None,
+            "theorem_missing_from_top100": (1.0 - theorem_recall100) if theorem_recall100 is not None else None,
+            "theorem_top10_to_top100_gap": (theorem_recall100 - theorem_recall10) if theorem_recall10 is not None and theorem_recall100 is not None else None,
+        },
+        "rerank_candidate_depth": {
+            "best_by_recall_at_10": _best_candidate_k(candidate_k_ablation),
+            "evaluated_candidate_k_values": [row.get("candidate_k") for row in candidate_k_ablation if isinstance(row, dict)],
+        },
+        "strongest_ranker_feature_groups": ranked_feature_groups[:5],
+        "label_supervision": {
+            "has_positive_edges": premise_trace.get("has_positive_edges"),
+            "has_negative_candidates": premise_trace.get("has_negative_candidates"),
+            "negative_to_positive_edge_ratio": premise_trace.get("negative_to_positive_edge_ratio"),
+        },
+        "recommended_sequence": recommended_sequence,
+    }
+
+
 def _recommendations(
     config: dict[str, Any],
     sample: dict[str, Any],
@@ -691,6 +826,7 @@ def build_report(config_path: str = "configs/proofatlas.yaml") -> dict[str, Any]
     scale = _scale_profile(config, sample, index, readiness)
     throughput = _throughput_profile(sample, embeddings, index, benchmark, timings, evaluation)
     throughput["retrieval_bottleneck_profile"] = _retrieval_bottleneck_profile(evaluation)
+    throughput["rapid_convergence_profile"] = _rapid_convergence_profile(evaluation, readiness, throughput)
     recommendations = _recommendations(config, sample, benchmark, readiness, scale, throughput, evaluation)
     return {
         "config_path": config_path,

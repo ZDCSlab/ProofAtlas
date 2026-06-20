@@ -72,7 +72,45 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
             "test": {
                 "proof_state_retrieval": {"metrics": {"Recall@10": 0.1, "Recall@100": 0.2}},
                 "theorem_retrieval": {"metrics": {"theorem_retrieval_Recall@10": 0.55, "theorem_retrieval_Recall@100": 0.7}},
+                "proof_state_reranked_retrieval": {
+                    "metrics": {"Recall@10": 0.15},
+                    "candidate_k_ablation": [
+                        {"candidate_k": 50, "metrics": {"Recall@10": 0.15, "MRR": 0.12, "MAP": 0.08}},
+                        {"candidate_k": 100, "metrics": {"Recall@10": 0.12, "MRR": 0.10, "MAP": 0.07}},
+                    ],
+                },
             },
+        },
+    )
+    write_json(
+        "outputs/reports/ranker_validation_metrics.json",
+        {
+            "feature_ablation": {
+                "groups": {
+                    "symbol_overlap": {
+                        "delta_without_group": 0.03,
+                        "auc_group_only": 0.65,
+                        "auc_without_group": 0.79,
+                        "columns": ["symbol_name_overlap"],
+                    },
+                    "frequency": {
+                        "delta_without_group": 0.01,
+                        "auc_group_only": 0.78,
+                        "auc_without_group": 0.81,
+                        "columns": ["premise_frequency"],
+                    },
+                }
+            }
+        },
+    )
+    write_json(
+        "outputs/reports/premise_trace_supervision_report.json",
+        {
+            "current_artifact_supervision": {
+                "has_positive_edges": True,
+                "has_negative_candidates": True,
+                "negative_to_positive_edge_ratio": 9.0,
+            }
         },
     )
     (tmp_path / "data/processed/test").mkdir(parents=True)
@@ -116,6 +154,12 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
     assert report["throughput_profile"]["evaluation_timing_delta"]["timed_to_current_ratio"] == 1.2
     assert report["throughput_profile"]["retrieval_bottleneck_profile"]["proof_state"]["primary_accuracy_bottleneck"] == "candidate_generation_or_embeddings"
     assert report["throughput_profile"]["retrieval_bottleneck_profile"]["theorem"]["primary_accuracy_bottleneck"] == "top10_reranking_or_candidate_ordering"
+    rapid = report["throughput_profile"]["rapid_convergence_profile"]
+    assert rapid["accuracy_snapshot"]["reranked_minus_embedding_recall_at_10"] == 0.04999999999999999
+    assert rapid["rerank_candidate_depth"]["best_by_recall_at_10"]["candidate_k"] == 50
+    assert rapid["strongest_ranker_feature_groups"][0]["group"] == "symbol_overlap"
+    assert rapid["label_supervision"]["negative_to_positive_edge_ratio"] == 9.0
+    assert rapid["recommended_sequence"][0]["area"] == "proof_state_query_and_embedding"
     assert report["stages"]["evaluation"]["evaluation_timing"]["total_seconds"] == 2.5
     assert report["stages"]["evaluation"]["evaluation_timing"]["substage_count"] == 2
     assert report["stages"]["evaluation"]["evaluation_timing"]["slowest_substages"][0]["name"] == "test_theorem_retrieval"

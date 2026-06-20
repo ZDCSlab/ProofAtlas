@@ -17,6 +17,7 @@ from leanrank_kg.retrieve import (
     retrieve_similar_theorems,
     retrieve_similar_theorems_for_query,
 )
+from leanrank_kg.utils import write_json
 
 
 def test_retrieve_returns_json_serializable_rows(tmp_path, monkeypatch):
@@ -300,6 +301,37 @@ def test_text_query_retrieval_and_theorem_guidance_are_json_serializable(tmp_pat
     assert case_studies
     assert "gold_premises_missing_from_train_index" in case_studies[0]
     assert case_studies[0]["guidance"]["ranked_premises"][0]["ranking_reasons"]
+    write_json(
+        "outputs/reports/pipeline_performance_report.json",
+        {
+            "throughput_profile": {
+                "rapid_convergence_profile": {
+                    "headroom": {
+                        "proof_state_missing_from_top100": 0.75,
+                        "theorem_top10_to_top100_gap": 0.2,
+                    },
+                    "recommended_sequence": [
+                        {
+                            "priority": 1,
+                            "area": "proof_state_query_and_embedding",
+                            "target_metric": "proof_state Recall@100",
+                            "current_value": 0.25,
+                        },
+                        {
+                            "priority": 2,
+                            "area": "theorem_level_reranking",
+                            "target_metric": "theorem_retrieval Recall@10",
+                            "current_value": 0.5,
+                        },
+                    ],
+                },
+                "bottleneck_profile": {"primary_stage": "evaluate", "primary_stage_share_of_total": 0.4, "top3_stage_share_of_total": 0.6},
+                "evaluation_timing_delta": {"current_evaluation_seconds": 1.0, "timed_pipeline_evaluate_seconds": 1.2},
+            },
+            "stages": {"evaluation": {"evaluation_timing": {"slowest_substages": []}}},
+            "scale_profile": {},
+        },
+    )
     homepage.run(cfg)
     assert (tmp_path / "homepage/assets/theorem_retrieval_case_studies.json").exists()
     assert (tmp_path / "homepage/assets/corpus_manifest.json").exists()
@@ -321,6 +353,8 @@ def test_text_query_retrieval_and_theorem_guidance_are_json_serializable(tmp_pat
     assert "heldout" in homepage_summary["production_evidence"]
     assert "supervision" in homepage_summary["production_evidence"]
     assert "timing" in homepage_summary["production_evidence"]
+    assert "rapid_convergence" in homepage_summary["production_evidence"]
+    assert homepage_summary["production_evidence"]["rapid_convergence"]["recommended_sequence"]
     assert "bottleneck_profile" in homepage_summary["production_evidence"]["timing"]
     assert "evaluation_timing" in homepage_summary["production_evidence"]["timing"]
     assert "evaluation_timing_delta" in homepage_summary["production_evidence"]["timing"]
@@ -384,6 +418,9 @@ def test_text_query_retrieval_and_theorem_guidance_are_json_serializable(tmp_pat
     assert "Pipeline eval timing" in html
     assert "Timing freshness" in html
     assert "Pipeline bottleneck" in html
+    assert "Rapid Convergence Priorities" in html
+    assert "proof_state_query_and_embedding" in html
+    assert "Proof-state top-100 miss" in html
     if homepage_summary["production_evidence"]["timing"]["evaluation_timing"].get("slowest_substages"):
         assert "Evaluation bottleneck" in html
     assert "Top-3 timed stages" in html

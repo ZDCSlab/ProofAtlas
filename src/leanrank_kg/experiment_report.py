@@ -152,6 +152,44 @@ def _retrieval_bottleneck_table(profile: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def _rapid_convergence_table(profile: dict[str, Any]) -> str:
+    rows = profile.get("recommended_sequence", []) if isinstance(profile, dict) else []
+    lines = [
+        "| Priority | Area | Target metric | Current value | Reason |",
+        "| ---: | --- | --- | ---: | --- |",
+    ]
+    for row in rows:
+        lines.append(
+            "| "
+            + " | ".join(
+                [
+                    _fmt(row.get("priority")),
+                    f"`{row.get('area', 'n/a')}`",
+                    str(row.get("target_metric", "n/a")),
+                    _fmt(row.get("current_value")),
+                    str(row.get("reason", "")),
+                ]
+            )
+            + " |"
+        )
+    if len(lines) == 2:
+        lines.append("| n/a | n/a | n/a | n/a | n/a |")
+    return "\n".join(lines)
+
+
+def _ranker_feature_group_table(rows: list[dict[str, Any]]) -> str:
+    lines = [
+        "| Feature group | Delta without group | Group-only AUC | Columns |",
+        "| --- | ---: | ---: | --- |",
+    ]
+    for row in rows[:5]:
+        columns = ", ".join(f"`{col}`" for col in row.get("columns", []))
+        lines.append(f"| `{row.get('group', 'n/a')}` | {_fmt(row.get('delta_without_group'))} | {_fmt(row.get('auc_group_only'))} | {columns or 'n/a'} |")
+    if len(lines) == 2:
+        lines.append("| n/a | n/a | n/a | n/a |")
+    return "\n".join(lines)
+
+
 def _evaluation_substage_table(rows: list[dict[str, Any]]) -> str:
     lines = [
         "| Evaluation substage | Seconds | Queries | Backend |",
@@ -227,6 +265,7 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     bottleneck_profile = throughput.get("bottleneck_profile", {}) if isinstance(throughput, dict) else {}
     embedding_bottleneck = throughput.get("embedding_bottleneck_profile", {}) if isinstance(throughput, dict) else {}
     retrieval_bottleneck = throughput.get("retrieval_bottleneck_profile", {}) if isinstance(throughput, dict) else {}
+    rapid_convergence = throughput.get("rapid_convergence_profile", {}) if isinstance(throughput, dict) else {}
     bench_entities = benchmark.get("entities", {}) if isinstance(benchmark, dict) else {}
     actual_backend_info = evaluation_scope.get("actual_backend_info", {}) if isinstance(evaluation_scope, dict) else {}
     actual_proof_backend = actual_backend_info.get("proof_state", {}).get("test", {}).get("actual_backend", "n/a")
@@ -344,6 +383,42 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
         "### Theorem Candidate Pool",
         "",
         _metric_table(theorem_metrics, theorem_candidate_diagnostic_keys),
+        "",
+        "### Rapid Convergence Plan",
+        "",
+        "This plan connects the held-out retrieval metrics, reranked diagnostic, ranker ablation, and LeanRank-data supervision into the next experiments most likely to improve retrieval accuracy.",
+        "",
+        _rapid_convergence_table(rapid_convergence),
+        "",
+        "Accuracy snapshot:",
+        "",
+        _metric_table(
+            rapid_convergence.get("accuracy_snapshot", {}) if isinstance(rapid_convergence, dict) else {},
+            [
+                "proof_state_recall_at_10",
+                "proof_state_recall_at_100",
+                "theorem_recall_at_10",
+                "theorem_recall_at_100",
+                "reranked_proof_state_recall_at_10",
+                "reranked_minus_embedding_recall_at_10",
+            ],
+        ),
+        "",
+        "Headroom:",
+        "",
+        _metric_table(
+            rapid_convergence.get("headroom", {}) if isinstance(rapid_convergence, dict) else {},
+            [
+                "proof_state_missing_from_top100",
+                "proof_state_top10_to_top100_gap",
+                "theorem_missing_from_top100",
+                "theorem_top10_to_top100_gap",
+            ],
+        ),
+        "",
+        "Strongest ranker feature groups:",
+        "",
+        _ranker_feature_group_table(rapid_convergence.get("strongest_ranker_feature_groups", []) if isinstance(rapid_convergence, dict) else []),
         "",
         "### Proof-State Query Representation Diagnostic",
         "",

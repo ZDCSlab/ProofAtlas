@@ -69,6 +69,47 @@ These metrics test whether the embedding/index candidate pool contains the gold 
 | `theorem_retrieval_nDCG@50` | 0.4907 |
 | `theorem_retrieval_nDCG@100` | 0.5060 |
 
+### Rapid Convergence Plan
+
+This plan connects the held-out retrieval metrics, reranked diagnostic, ranker ablation, and LeanRank-data supervision into the next experiments most likely to improve retrieval accuracy.
+
+| Priority | Area | Target metric | Current value | Reason |
+| ---: | --- | --- | ---: | --- |
+| 1 | `proof_state_query_and_embedding` | proof_state Recall@100 | 0.2362 | Proof-state gold premises are often absent from the top-100 candidate pool, so top-k reranking cannot recover them. |
+| 2 | `theorem_level_reranking` | theorem_retrieval Recall@10 | 0.4940 | Theorem-level Recall@100 is substantially higher than Recall@10, leaving useful headroom for ordering candidates already in the pool. |
+| 3 | `ranker_feature_iteration` | validation/test Recall@10 and MAP | 0.0514 | Ranker ablation says `proof_technique` is the strongest currently measured feature group by delta_without_group. |
+| 4 | `hard_negative_training` | MRR/MAP after reranking | 9.5478 | LeanRank-data already provides positive premises and hard negative candidates, so training/evaluation changes can reuse existing labels without extracting new data. |
+
+Accuracy snapshot:
+
+| Metric | Value |
+| --- | ---: |
+| `proof_state_recall_at_10` | 0.1162 |
+| `proof_state_recall_at_100` | 0.2362 |
+| `theorem_recall_at_10` | 0.4940 |
+| `theorem_recall_at_100` | 0.6889 |
+| `reranked_proof_state_recall_at_10` | 0.1513 |
+| `reranked_minus_embedding_recall_at_10` | 0.0351 |
+
+Headroom:
+
+| Metric | Value |
+| --- | ---: |
+| `proof_state_missing_from_top100` | 0.7638 |
+| `proof_state_top10_to_top100_gap` | 0.1199 |
+| `theorem_missing_from_top100` | 0.3111 |
+| `theorem_top10_to_top100_gap` | 0.1948 |
+
+Strongest ranker feature groups:
+
+| Feature group | Delta without group | Group-only AUC | Columns |
+| --- | ---: | ---: | --- |
+| `proof_technique` | 0.0514 | 0.6490 | `proof_technique_overlap` |
+| `symbol_overlap` | 0.0350 | 0.6542 | `symbol_name_overlap`, `symbol_context_overlap` |
+| `difficulty` | 0.0198 | 0.6324 | `proof_state_difficulty`, `negative_candidate_hardness` |
+| `frequency` | 0.0183 | 0.7878 | `premise_frequency` |
+| `embedding_similarity` | 0.0056 | 0.6252 | `cosine_similarity` |
+
 ### Proof-State Query Representation Diagnostic
 
 - Evaluated queries: `50`
