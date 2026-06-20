@@ -143,6 +143,30 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                         "primary_accuracy_bottleneck": "top10_reranking_or_candidate_ordering",
                     },
                 },
+                "retrieval_quality_profile": {
+                    "method": "held_out_test_retrieval_quality_and_candidate_ceiling_summary",
+                    "headline": "theorem_guidance_stronger_than_proof_state_candidate_retrieval",
+                    "held_out_coverage": {"proof_state_coverage_fraction": 1.0, "theorem_coverage_fraction": 1.0},
+                    "proof_state": {
+                        "recall_at_10": 0.2,
+                        "recall_at_100": 0.3,
+                        "mrr": 0.4,
+                        "gold_premise_coverage": 0.8,
+                        "candidate_ceiling_gap_to_one": 0.7,
+                        "quality_limitation": "candidate_generation_or_embedding_ceiling",
+                    },
+                    "theorem": {
+                        "recall_at_10": 0.5,
+                        "recall_at_100": 0.7,
+                        "mrr": 0.6,
+                        "gold_premise_coverage": 0.9,
+                        "candidate_ceiling_gap_to_one": 0.3,
+                        "quality_limitation": "candidate_ordering_or_reranking",
+                    },
+                    "rerank_sample": {"sampled_queries": 20, "recall_at_10_delta": 0.05},
+                    "query_representation": {"stability_recommendation": "do_not_switch_default_yet_best_variant_unstable"},
+                    "next_accuracy_focus": "improve_proof_state_query_embeddings_and_candidate_generation",
+                },
                 "rapid_convergence_profile": {
                     "accuracy_snapshot": {
                         "proof_state_recall_at_10": 0.2,
@@ -684,6 +708,10 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "Retrieval Bottleneck Profile" in text
     assert "candidate_generation_or_embeddings" in text
     assert "top10_reranking_or_candidate_ordering" in text
+    assert "Retrieval Quality Summary" in text
+    assert "theorem_guidance_stronger_than_proof_state_candidate_retrieval" in text
+    assert "improve_proof_state_query_embeddings_and_candidate_generation" in text
+    assert "candidate_generation_or_embedding_ceiling" in text
     assert "Rapid Convergence Plan" in text
     assert "proof_state_query_and_embedding" in text
     assert "proof_state_missing_from_top100" in text

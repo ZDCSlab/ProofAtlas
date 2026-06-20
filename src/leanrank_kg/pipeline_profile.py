@@ -573,6 +573,99 @@ def _retrieval_bottleneck_profile(evaluation: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _retrieval_quality_profile(evaluation: dict[str, Any], throughput: dict[str, Any]) -> dict[str, Any]:
+    test_eval = evaluation.get("test_set_evaluation", {}) if isinstance(evaluation, dict) else {}
+    test_metrics = test_eval.get("test_metrics", {}) if isinstance(test_eval, dict) else {}
+    coverage = evaluation.get("held_out_test_coverage", {}) if isinstance(evaluation, dict) else {}
+    retrieval_bottleneck = throughput.get("retrieval_bottleneck_profile", {}) if isinstance(throughput, dict) else {}
+    rapid = throughput.get("rapid_convergence_profile", {}) if isinstance(throughput, dict) else {}
+    rerank_cost = throughput.get("rerank_evaluation_cost_profile", {}) if isinstance(throughput, dict) else {}
+    query_diag = rapid.get("query_representation_diagnostic", {}) if isinstance(rapid, dict) else {}
+
+    def _float(value: Any) -> float | None:
+        return float(value) if value is not None else None
+
+    def _task_profile(metrics: dict[str, Any], bottleneck: dict[str, Any], *, prefix: str = "") -> dict[str, Any]:
+        def _get(name: str) -> float | None:
+            key = f"{prefix}{name}" if prefix else name
+            return _float(metrics.get(key))
+
+        recall10 = _get("Recall@10")
+        recall100 = _get("Recall@100")
+        ordering_gap = (recall100 - recall10) if recall100 is not None and recall10 is not None else None
+        if recall100 is None:
+            limitation = "missing_retrieval_metrics"
+        elif recall100 < 0.5:
+            limitation = "candidate_generation_or_embedding_ceiling"
+        elif ordering_gap is not None and ordering_gap >= 0.1:
+            limitation = "candidate_ordering_or_reranking"
+        else:
+            limitation = "monitor"
+        coverage_key = f"{prefix}gold_premise_coverage" if prefix else "gold_premise_coverage"
+        return {
+            "evaluated_queries": metrics.get("evaluated_queries") or metrics.get(f"{prefix}evaluated_theorems"),
+            "recall_at_10": recall10,
+            "recall_at_100": recall100,
+            "mrr": _get("MRR"),
+            "map": _get("MAP"),
+            "ndcg_at_10": _get("nDCG@10"),
+            "gold_premise_coverage": _float(metrics.get(coverage_key)),
+            "candidate_ceiling_gap_to_one": (1.0 - recall100) if recall100 is not None else None,
+            "top10_to_top100_gap": ordering_gap,
+            "primary_accuracy_bottleneck": bottleneck.get("primary_accuracy_bottleneck"),
+            "quality_limitation": limitation,
+        }
+
+    proof_state = _task_profile(
+        test_metrics.get("proof_state_retrieval", {}) if isinstance(test_metrics, dict) else {},
+        retrieval_bottleneck.get("proof_state", {}) if isinstance(retrieval_bottleneck, dict) else {},
+    )
+    theorem = _task_profile(
+        test_metrics.get("theorem_retrieval", {}) if isinstance(test_metrics, dict) else {},
+        retrieval_bottleneck.get("theorem", {}) if isinstance(retrieval_bottleneck, dict) else {},
+        prefix="theorem_retrieval_",
+    )
+    proof_recall100 = proof_state.get("recall_at_100")
+    theorem_recall10 = theorem.get("recall_at_10")
+    theorem_recall100 = theorem.get("recall_at_100")
+    if theorem_recall10 is not None and theorem_recall10 >= 0.45 and proof_recall100 is not None and proof_recall100 < 0.5:
+        headline = "theorem_guidance_stronger_than_proof_state_candidate_retrieval"
+    elif proof_recall100 is not None and proof_recall100 < 0.5:
+        headline = "proof_state_candidate_generation_is_primary_accuracy_gap"
+    elif theorem_recall100 is not None and theorem_recall100 >= 0.6:
+        headline = "candidate_pool_has_useful_theorem_level_signal"
+    else:
+        headline = "monitor_retrieval_quality"
+    return {
+        "method": "held_out_test_retrieval_quality_and_candidate_ceiling_summary",
+        "headline": headline,
+        "held_out_coverage": {
+            "proof_state_coverage_fraction": coverage.get("proof_state_coverage_fraction"),
+            "theorem_coverage_fraction": coverage.get("theorem_coverage_fraction"),
+        },
+        "proof_state": proof_state,
+        "theorem": theorem,
+        "rerank_sample": {
+            "sampled_queries": rerank_cost.get("sampled_rerank_queries"),
+            "recall_at_10_delta": rerank_cost.get("sampled_rerank_recall_at_10_delta"),
+            "projected_full_seconds": rerank_cost.get("projected_full_rerank_seconds"),
+            "policy": rerank_cost.get("policy"),
+        },
+        "query_representation": {
+            "validation_best_variant": (query_diag.get("validation", {}) or {}).get("best_variant_by_recall") if isinstance(query_diag, dict) else None,
+            "test_best_variant": (query_diag.get("test", {}) or {}).get("best_variant_by_recall") if isinstance(query_diag, dict) else None,
+            "stability_recommendation": (query_diag.get("stability_profile", {}) or {}).get("recommendation") if isinstance(query_diag, dict) else None,
+        },
+        "next_accuracy_focus": (
+            "improve_proof_state_query_embeddings_and_candidate_generation"
+            if proof_state.get("quality_limitation") == "candidate_generation_or_embedding_ceiling"
+            else "improve_candidate_ordering_and_reranking"
+            if theorem.get("quality_limitation") == "candidate_ordering_or_reranking"
+            else "monitor"
+        ),
+    }
+
+
 def _rapid_convergence_profile(
     evaluation: dict[str, Any],
     readiness: dict[str, Any],
@@ -1799,6 +1892,7 @@ def build_report(config_path: str = "configs/proofatlas.yaml") -> dict[str, Any]
     throughput["rapid_convergence_profile"] = _rapid_convergence_profile(evaluation, readiness, throughput)
     throughput["metric_uncertainty_profile"] = _metric_uncertainty_profile(evaluation)
     throughput["rerank_evaluation_cost_profile"] = _rerank_evaluation_cost_profile(evaluation)
+    throughput["retrieval_quality_profile"] = _retrieval_quality_profile(evaluation, throughput)
     throughput["refresh_reuse_profile"] = _refresh_reuse_profile(config, sample, embeddings, index)
     throughput["resource_parallelism_profile"] = _resource_parallelism_profile(config, embeddings, index, benchmark, evaluation, throughput)
     throughput["execution_mode_summary"] = _execution_mode_summary(throughput)

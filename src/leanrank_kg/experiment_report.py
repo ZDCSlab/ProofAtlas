@@ -208,6 +208,24 @@ def _retrieval_bottleneck_table(profile: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def _retrieval_quality_table(profile: dict[str, Any]) -> str:
+    rows = [
+        ("Proof-state", profile.get("proof_state", {}) if isinstance(profile, dict) else {}),
+        ("Theorem", profile.get("theorem", {}) if isinstance(profile, dict) else {}),
+    ]
+    lines = [
+        "| Task | Recall@10 | Recall@100 | MRR | Gold coverage | Ceiling gap | Limitation |",
+        "| --- | ---: | ---: | ---: | ---: | ---: | --- |",
+    ]
+    for label, row in rows:
+        lines.append(
+            f"| {label} | {_fmt(row.get('recall_at_10'))} | {_fmt(row.get('recall_at_100'))} | "
+            f"{_fmt(row.get('mrr'))} | {_fmt(row.get('gold_premise_coverage'))} | "
+            f"{_fmt(row.get('candidate_ceiling_gap_to_one'))} | `{row.get('quality_limitation', 'n/a')}` |"
+        )
+    return "\n".join(lines)
+
+
 def _rapid_convergence_table(profile: dict[str, Any]) -> str:
     rows = profile.get("recommended_sequence", []) if isinstance(profile, dict) else []
     lines = [
@@ -590,6 +608,7 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     bottleneck_profile = throughput.get("bottleneck_profile", {}) if isinstance(throughput, dict) else {}
     embedding_bottleneck = throughput.get("embedding_bottleneck_profile", {}) if isinstance(throughput, dict) else {}
     retrieval_bottleneck = throughput.get("retrieval_bottleneck_profile", {}) if isinstance(throughput, dict) else {}
+    retrieval_quality = throughput.get("retrieval_quality_profile", {}) if isinstance(throughput, dict) else {}
     rapid_convergence = throughput.get("rapid_convergence_profile", {}) if isinstance(throughput, dict) else {}
     query_representation_stability = (
         rapid_convergence.get("query_representation_diagnostic", {}).get("stability_profile", {})
@@ -751,6 +770,21 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
         "### Retrieval Bottleneck Profile",
         "",
         _retrieval_bottleneck_table(retrieval_bottleneck),
+        "",
+        "### Retrieval Quality Summary",
+        "",
+        "This profile summarizes held-out test retrieval quality, candidate-pool ceiling, and the next accuracy focus without treating low proof-state Recall@100 as solved.",
+        "",
+        f"- Method: `{retrieval_quality.get('method', 'n/a')}`",
+        f"- Headline: `{retrieval_quality.get('headline', 'n/a')}`",
+        f"- Held-out coverage: `{retrieval_quality.get('held_out_coverage', {})}`",
+        f"- Next accuracy focus: `{retrieval_quality.get('next_accuracy_focus', 'n/a')}`",
+        "",
+        _retrieval_quality_table(retrieval_quality),
+        "",
+        f"- Rerank sampled queries: `{retrieval_quality.get('rerank_sample', {}).get('sampled_queries', 'n/a')}`",
+        f"- Rerank Recall@10 delta: `{retrieval_quality.get('rerank_sample', {}).get('recall_at_10_delta', 'n/a')}`",
+        f"- Query representation stability: `{retrieval_quality.get('query_representation', {}).get('stability_recommendation', 'n/a')}`",
         "",
         "### Proof-State Candidate Pool",
         "",

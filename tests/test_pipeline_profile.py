@@ -265,6 +265,12 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
     assert rerank_cost["sampled_rerank_queries"] == 0
     assert rerank_cost["full_proof_state_queries"] == 10
     assert rerank_cost["policy"].startswith("keep reranked proof-state evaluation sampled")
+    retrieval_quality = report["throughput_profile"]["retrieval_quality_profile"]
+    assert retrieval_quality["method"] == "held_out_test_retrieval_quality_and_candidate_ceiling_summary"
+    assert retrieval_quality["headline"] == "theorem_guidance_stronger_than_proof_state_candidate_retrieval"
+    assert retrieval_quality["proof_state"]["quality_limitation"] == "candidate_generation_or_embedding_ceiling"
+    assert retrieval_quality["theorem"]["quality_limitation"] == "candidate_ordering_or_reranking"
+    assert retrieval_quality["next_accuracy_focus"] == "improve_proof_state_query_embeddings_and_candidate_generation"
     supervision_acceptance = report["throughput_profile"]["supervision_acceptance_profile"]
     assert supervision_acceptance["summary"]["required_gates_passed"] is True
     assert supervision_acceptance["summary"]["advisory_gates_passed"] is True

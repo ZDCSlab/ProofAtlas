@@ -4542,7 +4542,7 @@
         "outputs/reports",
         "homepage/assets"
       ],
-      "bytes_per_processed_row": 10454.110070819008,
+      "bytes_per_processed_row": 10454.145504294343,
       "directories": {
         "data/processed": {
           "bytes": 46533700,
@@ -4551,7 +4551,7 @@
           "path": "data/processed"
         },
         "homepage/assets": {
-          "bytes": 2054936,
+          "bytes": 2054910,
           "exists": true,
           "file_count": 11,
           "path": "homepage/assets"
@@ -4569,7 +4569,7 @@
           "path": "outputs/indexes"
         },
         "outputs/reports": {
-          "bytes": 19294715,
+          "bytes": 19305088,
           "exists": true,
           "file_count": 39,
           "path": "outputs/reports"
@@ -4625,36 +4625,36 @@
       ],
       "projections": [
         {
-          "estimated_artifact_bytes": 3052725590.0,
-          "estimated_artifact_gib": 2.8430722560733557,
+          "estimated_artifact_bytes": 3052735937.0,
+          "estimated_artifact_gib": 2.843081892468035,
           "label": "current_1x",
           "scale_factor_vs_current": 1.0,
           "target_processed_rows": 292012
         },
         {
-          "estimated_artifact_bytes": 6105451180.0,
-          "estimated_artifact_gib": 5.686144512146711,
+          "estimated_artifact_bytes": 6105471874.0,
+          "estimated_artifact_gib": 5.68616378493607,
           "label": "current_2x",
           "scale_factor_vs_current": 2.0,
           "target_processed_rows": 584024
         },
         {
-          "estimated_artifact_bytes": 15263627950.0,
-          "estimated_artifact_gib": 14.215361280366778,
+          "estimated_artifact_bytes": 15263679685.0,
+          "estimated_artifact_gib": 14.215409462340176,
           "label": "current_5x",
           "scale_factor_vs_current": 5.0,
           "target_processed_rows": 1460060
         },
         {
-          "estimated_artifact_bytes": 3658938524.7866526,
-          "estimated_artifact_gib": 3.407652047264066,
+          "estimated_artifact_bytes": 3658950926.5030203,
+          "estimated_artifact_gib": 3.4076635972624834,
           "label": "configured_source_rows",
           "scale_factor_vs_current": 1.1985808802377984,
           "target_processed_rows": 350000
         }
       ],
-      "total_artifact_bytes": 3052725590,
-      "total_artifact_gib": 2.8430722560733557,
+      "total_artifact_bytes": 3052735937,
+      "total_artifact_gib": 2.843081892468035,
       "unreferenced_index_artifact_bytes": 1502501178,
       "unreferenced_index_artifact_count": 12,
       "unreferenced_index_artifact_gib": 1.3993132654577494,
@@ -5516,6 +5516,52 @@
         "recall_at_10": 0.49403129986534694,
         "recall_at_100": 0.6888562692074705,
         "top10_fraction_of_top100": 0.7171761685986109,
+        "top10_to_top100_gap": 0.1948249693421235
+      }
+    },
+    "retrieval_quality_profile": {
+      "headline": "theorem_guidance_stronger_than_proof_state_candidate_retrieval",
+      "held_out_coverage": {
+        "proof_state_coverage_fraction": 1.0,
+        "theorem_coverage_fraction": 1.0
+      },
+      "method": "held_out_test_retrieval_quality_and_candidate_ceiling_summary",
+      "next_accuracy_focus": "improve_proof_state_query_embeddings_and_candidate_generation",
+      "proof_state": {
+        "candidate_ceiling_gap_to_one": 0.7638279289934247,
+        "evaluated_queries": 3053,
+        "gold_premise_coverage": 0.9075701729515169,
+        "map": 0.04940290267379889,
+        "mrr": 0.07831169467619567,
+        "ndcg_at_10": 0.06965706738000225,
+        "primary_accuracy_bottleneck": "candidate_generation_or_embeddings",
+        "quality_limitation": "candidate_generation_or_embedding_ceiling",
+        "recall_at_10": 0.11624918291584951,
+        "recall_at_100": 0.23617207100657536,
+        "top10_to_top100_gap": 0.11992288809072585
+      },
+      "query_representation": {
+        "stability_recommendation": "do_not_switch_default_yet_best_variant_unstable",
+        "test_best_variant": "stored_plus_full_name_context_goal",
+        "validation_best_variant": "stored_plus_goal_only"
+      },
+      "rerank_sample": {
+        "policy": "keep reranked proof-state evaluation sampled for development and use full batched embedding evaluation for final held-out coverage",
+        "projected_full_seconds": 2206.382499898586,
+        "recall_at_10_delta": 0.0526104662069575,
+        "sampled_queries": 20
+      },
+      "theorem": {
+        "candidate_ceiling_gap_to_one": 0.31114373079252955,
+        "evaluated_queries": 1000,
+        "gold_premise_coverage": 0.8993919292426755,
+        "map": 0.3741023060807077,
+        "mrr": 0.5608535466914221,
+        "ndcg_at_10": 0.4451927253442335,
+        "primary_accuracy_bottleneck": "top10_reranking_or_candidate_ordering",
+        "quality_limitation": "candidate_ordering_or_reranking",
+        "recall_at_10": 0.49403129986534694,
+        "recall_at_100": 0.6888562692074705,
         "top10_to_top100_gap": 0.1948249693421235
       }
     },

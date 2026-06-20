@@ -524,6 +524,23 @@ def build_audit() -> dict[str, Any]:
         ),
         "performance_acceptance_profile={detail}",
     )
+    checks["validation:retrieval_quality_profile"] = _json_condition(
+        "outputs/reports/pipeline_performance_report.json",
+        lambda data: (
+            data.get("throughput_profile", {}).get("retrieval_quality_profile", {}).get("method")
+            == "held_out_test_retrieval_quality_and_candidate_ceiling_summary"
+            and data.get("throughput_profile", {}).get("retrieval_quality_profile", {}).get("proof_state", {}).get("recall_at_100")
+            is not None
+            and data.get("throughput_profile", {}).get("retrieval_quality_profile", {}).get("theorem", {}).get("recall_at_10")
+            is not None
+            and bool(data.get("throughput_profile", {}).get("retrieval_quality_profile", {}).get("next_accuracy_focus"))
+            and bool(data.get("throughput_profile", {}).get("retrieval_quality_profile", {}).get("headline")),
+            {
+                "profile": data.get("throughput_profile", {}).get("retrieval_quality_profile", {}),
+            },
+        ),
+        "retrieval_quality_profile={detail}",
+    )
     checks["validation:lean_diagnostic_acceptance_profile"] = _json_condition(
         "outputs/reports/pipeline_performance_report.json",
         lambda data: (

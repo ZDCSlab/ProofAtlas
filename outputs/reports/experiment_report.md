@@ -83,6 +83,24 @@ These metrics test whether the embedding/index candidate pool contains the gold 
 | Proof-state premise retrieval | 0.1162 | 0.2362 | 0.1199 | 0.4922 | `candidate_generation_or_embeddings` |
 | Theorem-level premise retrieval | 0.4940 | 0.6889 | 0.1948 | 0.7172 | `top10_reranking_or_candidate_ordering` |
 
+### Retrieval Quality Summary
+
+This profile summarizes held-out test retrieval quality, candidate-pool ceiling, and the next accuracy focus without treating low proof-state Recall@100 as solved.
+
+- Method: `n/a`
+- Headline: `n/a`
+- Held-out coverage: `{}`
+- Next accuracy focus: `n/a`
+
+| Task | Recall@10 | Recall@100 | MRR | Gold coverage | Ceiling gap | Limitation |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| Proof-state | n/a | n/a | n/a | n/a | n/a | `n/a` |
+| Theorem | n/a | n/a | n/a | n/a | n/a | `n/a` |
+
+- Rerank sampled queries: `n/a`
+- Rerank Recall@10 delta: `n/a`
+- Query representation stability: `n/a`
+
 ### Proof-State Candidate Pool
 
 | Metric | Value |
