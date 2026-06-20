@@ -329,3 +329,18 @@ def test_current_plans_keep_production_scope_on_leanrank_data() -> None:
     assert "full mathlib data refresh" not in summary
     assert "larger LeanRank-data refreshes" in summary
     assert "improve LeanRank-data retrieval quality" in plan
+
+
+def test_project_summary_includes_current_production_evidence() -> None:
+    repo = Path(__file__).resolve().parents[1]
+    summary = (repo / "docs/proofatlas_project_summary_en.md").read_text(encoding="utf-8")
+    for token in [
+        "Current Production Evidence",
+        "Theorem-level premise retrieval | Recall@10 | 0.4940",
+        "candidate_pool_miss_top_100 | 1,823",
+        "reranking_headroom_after_top10 | 458",
+        "7 CUDA devices",
+        "`torch_cuda` batched top-k",
+        "Latest timed run: 551.6511 seconds",
+    ]:
+        assert token in summary

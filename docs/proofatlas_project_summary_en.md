@@ -114,6 +114,43 @@ Given a new theorem statement or proof goal
 -> return JSON guidance through CLI, Python API, or the optional web service
 ```
 
+## Current Production Evidence
+
+The current production experiment uses `configs/proofatlas.yaml` over
+`erbacher/LeanRank-data`, with 10,000 requested theorems and a theorem-disjoint
+train/validation/test split. It is evaluated as an ML retrieval/ranking task,
+not as a custom Lean source extraction pipeline.
+
+Held-out test metrics:
+
+| Task | Metric | Value |
+| --- | --- | ---: |
+| Proof-state premise retrieval | Recall@10 | 0.1162 |
+| Proof-state premise retrieval | Recall@100 | 0.2362 |
+| Reranked proof-state diagnostic | Recall@10 | 0.1513 |
+| Theorem-level premise retrieval | Recall@10 | 0.4940 |
+| Theorem-level premise retrieval | Recall@100 | 0.6889 |
+| Theorem-level premise retrieval | MRR | 0.5609 |
+
+Retrieval failure diagnosis:
+
+| Task | Diagnosis | Queries | Share of retrievable |
+| --- | --- | ---: | ---: |
+| Proof-state premise retrieval | candidate_pool_miss_top_100 | 1,823 | 64.4% |
+| Proof-state premise retrieval | reranking_headroom_after_top10 | 458 | 16.2% |
+| Theorem-level premise retrieval | candidate_pool_miss_top_100 | 55 | 5.8% |
+| Theorem-level premise retrieval | reranking_headroom_after_top10 | 133 | 13.9% |
+
+Performance/resource evidence:
+
+| Component | Evidence |
+| --- | --- |
+| Embeddings | BGE sentence-transformer embeddings on 7 CUDA devices, multi-process enabled, 512 batch size |
+| Evaluation | Full held-out proof-state and theorem retrieval use `torch_cuda` batched top-k |
+| Indexing | hnswlib ANN indexes over premise, proof-state, and theorem embeddings |
+| Pipeline timing | Latest timed run: 551.6511 seconds; slowest stage: `embed` |
+| Artifact reuse | Embeddings, indexes, and trained ranker artifacts are reused by default for report/homepage refreshes |
+
 ## Main Remaining Gaps
 
 The current system is a strong MVP, but several gaps remain before it becomes a robust mathlib-scale proof assistance system.
