@@ -269,6 +269,20 @@ def test_text_query_retrieval_and_theorem_guidance_are_json_serializable(tmp_pat
                 "failure_reason": None,
                 "rejected_blocks": [],
             },
+            "tactic_state_trace": {
+                "method": "ordered_lean_diagnostic_tactic_states",
+                "source_variant": "initial_goal_skeleton",
+                "state_count": 1,
+                "has_tactic_state_trace": True,
+                "states": [
+                    {
+                        "tactic_state_id": "lean_trace:initial_goal_skeleton:0:abc",
+                        "proof_state_id": "lean_diag:abc",
+                        "tactic_idx": 0,
+                        "goal_text": "x = x",
+                    }
+                ],
+            },
             "summary": {"has_unsolved_goals": True, "error_count": 1, "warning_count": 0},
             "source_variant": "initial_goal_skeleton",
             "fallback_attempted": True,
@@ -282,6 +296,8 @@ def test_text_query_retrieval_and_theorem_guidance_are_json_serializable(tmp_pat
     assert lean_guidance["query"]["lean_proof_state_extraction"]["source_variant"] == "initial_goal_skeleton"
     assert lean_guidance["query"]["lean_proof_state_extraction"]["fallback_attempted"] is True
     assert lean_guidance["query"]["lean_proof_state_extraction"]["fallback_reason"] == "original_no_proof_states"
+    assert lean_guidance["query"]["lean_proof_state_extraction"]["tactic_state_count"] == 1
+    assert lean_guidance["query"]["lean_proof_state_extraction"]["has_tactic_state_trace"] is True
     assert lean_guidance["lean_diagnostics"]["summary"]["has_unsolved_goals"] is True
     json.dumps(guidance, allow_nan=False)
     evaluate.run(cfg)

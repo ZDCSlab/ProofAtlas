@@ -1110,6 +1110,7 @@ def _diagnostic_proof_state_text(lean_diagnostics: dict[str, Any]) -> str:
 
 def _lean_extraction_metadata(lean_diagnostics: dict[str, Any]) -> dict[str, Any]:
     extraction = lean_diagnostics.get("proof_state_extraction") or {}
+    trace = lean_diagnostics.get("tactic_state_trace") or {}
     states = lean_diagnostics.get("proof_states") or []
     return {
         "method": extraction.get("method", "lean_unsolved_goals_diagnostic"),
@@ -1121,6 +1122,9 @@ def _lean_extraction_metadata(lean_diagnostics: dict[str, Any]) -> dict[str, Any
         "source_variant": lean_diagnostics.get("source_variant"),
         "fallback_attempted": lean_diagnostics.get("fallback_attempted", False),
         "fallback_reason": lean_diagnostics.get("fallback_reason"),
+        "tactic_state_trace_method": trace.get("method"),
+        "tactic_state_count": int(trace.get("state_count", 0) or 0),
+        "has_tactic_state_trace": bool(trace.get("has_tactic_state_trace", False)),
     }
 
 
@@ -1157,6 +1161,13 @@ def retrieve_knowledge_for_theorem(
                 "extracted_count": 0,
                 "failure_reason": "lean_validation_not_requested",
                 "rejected_blocks": [],
+            },
+            "tactic_state_trace": {
+                "method": "ordered_lean_diagnostic_tactic_states",
+                "source_variant": "not_checked",
+                "state_count": 0,
+                "has_tactic_state_trace": False,
+                "states": [],
             },
             "summary": {"has_unsolved_goals": False},
             "source_variant": "not_checked",

@@ -30,6 +30,18 @@
 - Machine-readable held-out evaluation: `outputs/reports/test_set_evaluation.json`
 - Pipeline performance profile: `outputs/reports/pipeline_performance_report.json`
 
+## Query-Time Lean Diagnostics
+
+Lean validation is optional and is not part of the default `erbacher/LeanRank-data` corpus extraction path. When enabled for an interactive theorem query, diagnostics from `lake env lean` or `lean` are parsed into retrieval proof states and an ordered tactic-state trace.
+
+- Diagnostic method: `lean_unsolved_goals_diagnostic`
+- Case coverage: `7` / `7`
+- Extracted fixture proof states: `8`
+- Has initial-goal skeleton case: `True`
+- Has ordered tactic-state trace case: `True`
+- Tactic trace counts match extracted proof states: `True`
+- Pipeline role: `optional query diagnostics only; not a corpus extractor and not part of the default LeanRank-data pipeline`
+
 ## ML Task Definition
 
 ProofAtlas is evaluated as a supervised ranking/retrieval system over a theorem-disjoint train/validation/test split. The train split supplies the candidate premise index and graph evidence. The held-out validation and test positive edges are never used as retrieval candidates; they are used only as gold labels for scoring.

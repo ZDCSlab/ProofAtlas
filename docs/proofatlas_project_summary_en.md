@@ -168,7 +168,7 @@ Next steps:
 
 ### 2. LeanRank Proof-State Utilization
 
-Production proof-state retrieval uses processed LeanRank proof states from `erbacher/LeanRank-data`. Optional Lean `unsolved goals` diagnostics can turn an interactive user query into a retrieval proof state, but this is not a corpus extractor and is not required for the ML evaluation pipeline.
+Production proof-state retrieval uses processed LeanRank proof states from `erbacher/LeanRank-data`. Optional Lean `unsolved goals` diagnostics can turn an interactive user query into retrieval proof states and an ordered tactic-state trace, but this is not a corpus extractor and is not required for the ML evaluation pipeline.
 
 Next steps:
 

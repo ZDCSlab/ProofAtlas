@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from .lean_check import _initial_goal_skeleton_source, extract_proof_state_report
+from .lean_check import _initial_goal_skeleton_source, build_tactic_state_trace, extract_proof_state_report
 from .utils import write_json
 
 
@@ -104,6 +104,7 @@ x : Nat
 
 def _case_result(case: dict[str, Any]) -> dict[str, Any]:
     report = extract_proof_state_report(stdout=case.get("stdout", ""), stderr=case.get("stderr", ""))
+    trace = build_tactic_state_trace(report["proof_states"], source_variant=str(case.get("source_variant", "fixture")))
     expected_extracted = int(case.get("expected_extracted_count", 0))
     expected_rejected = case.get("expected_rejected_count")
     expected_failure = case.get("expected_failure_reason")
@@ -111,6 +112,8 @@ def _case_result(case: dict[str, Any]) -> dict[str, Any]:
         "extracted_count_matches": report["extracted_count"] == expected_extracted,
         "proof_states_have_retrieval_text": all(bool(row.get("retrieval_text")) for row in report["proof_states"]),
         "proof_states_have_stable_ids": all(str(row.get("proof_state_id", "")).startswith("lean_diag:") for row in report["proof_states"]),
+        "tactic_trace_count_matches": trace["state_count"] == report["extracted_count"],
+        "tactic_trace_has_stable_ids": all(str(row.get("tactic_state_id", "")).startswith("lean_trace:") for row in trace["states"]),
     }
     if expected_rejected is not None:
         checks["rejected_count_matches"] = len(report["rejected_blocks"]) == int(expected_rejected)
@@ -136,6 +139,7 @@ def _case_result(case: dict[str, Any]) -> dict[str, Any]:
         "checks": checks,
         "passed": all(checks.values()),
         "skeleton_source": skeleton_source,
+        "tactic_state_trace": trace,
         "proof_states": report["proof_states"],
         "rejected_blocks": report["rejected_blocks"],
     }
@@ -173,6 +177,14 @@ def build_report() -> dict[str, Any]:
                 row.get("retrieval_text")
                 for case in cases
                 for row in case["proof_states"]
+            ),
+            "all_tactic_trace_counts_match": all(
+                case["tactic_state_trace"]["state_count"] == case["extracted_count"]
+                for case in cases
+            ),
+            "has_multi_state_tactic_trace_case": any(
+                case["tactic_state_trace"]["state_count"] >= 2
+                for case in cases
             ),
         },
         "cases": cases,

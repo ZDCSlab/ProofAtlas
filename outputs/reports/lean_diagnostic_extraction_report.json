@@ -5,7 +5,9 @@
       "checks": {
         "extracted_count_matches": true,
         "proof_states_have_retrieval_text": true,
-        "proof_states_have_stable_ids": true
+        "proof_states_have_stable_ids": true,
+        "tactic_trace_count_matches": true,
+        "tactic_trace_has_stable_ids": true
       },
       "description": "One Lean unsolved-goal diagnostic with hypotheses and a goal.",
       "expected_extracted_count": 1,
@@ -41,13 +43,35 @@
       "raw_block_count": 1,
       "rejected_blocks": [],
       "rejected_count": 0,
-      "skeleton_source": null
+      "skeleton_source": null,
+      "tactic_state_trace": {
+        "has_tactic_state_trace": true,
+        "method": "ordered_lean_diagnostic_tactic_states",
+        "source_variant": "fixture",
+        "state_count": 1,
+        "states": [
+          {
+            "block_index": 0,
+            "extraction_method": "lean_unsolved_goals_diagnostic",
+            "goal_text": "x = x",
+            "hypothesis_count": 2,
+            "proof_state_id": "lean_diag:2fcd0efa56024f4e",
+            "retrieval_text": "x : Nat\nh : x = x\n\u22a2 x = x",
+            "source_variant": "fixture",
+            "symbol_count": 4,
+            "tactic_idx": 0,
+            "tactic_state_id": "lean_trace:fixture:0:2fcd0efa56024f4e"
+          }
+        ]
+      }
     },
     {
       "checks": {
         "extracted_count_matches": true,
         "proof_states_have_retrieval_text": true,
-        "proof_states_have_stable_ids": true
+        "proof_states_have_stable_ids": true,
+        "tactic_trace_count_matches": true,
+        "tactic_trace_has_stable_ids": true
       },
       "description": "Multiple case blocks emitted by Lean for one diagnostic.",
       "expected_extracted_count": 2,
@@ -104,14 +128,48 @@
       "raw_block_count": 2,
       "rejected_blocks": [],
       "rejected_count": 0,
-      "skeleton_source": null
+      "skeleton_source": null,
+      "tactic_state_trace": {
+        "has_tactic_state_trace": true,
+        "method": "ordered_lean_diagnostic_tactic_states",
+        "source_variant": "fixture",
+        "state_count": 2,
+        "states": [
+          {
+            "block_index": 0,
+            "extraction_method": "lean_unsolved_goals_diagnostic",
+            "goal_text": "n = n",
+            "hypothesis_count": 1,
+            "proof_state_id": "lean_diag:3f520d24e77a2888",
+            "retrieval_text": "n : Nat\n\u22a2 n = n",
+            "source_variant": "fixture",
+            "symbol_count": 3,
+            "tactic_idx": 0,
+            "tactic_state_id": "lean_trace:fixture:0:3f520d24e77a2888"
+          },
+          {
+            "block_index": 1,
+            "extraction_method": "lean_unsolved_goals_diagnostic",
+            "goal_text": "m = m",
+            "hypothesis_count": 2,
+            "proof_state_id": "lean_diag:c94e14fc0c601a69",
+            "retrieval_text": "m : Nat\nh : m = m\n\u22a2 m = m",
+            "source_variant": "fixture",
+            "symbol_count": 4,
+            "tactic_idx": 1,
+            "tactic_state_id": "lean_trace:fixture:1:c94e14fc0c601a69"
+          }
+        ]
+      }
     },
     {
       "checks": {
         "extracted_count_matches": true,
         "proof_states_have_retrieval_text": true,
         "proof_states_have_stable_ids": true,
-        "rejected_count_matches": true
+        "rejected_count_matches": true,
+        "tactic_trace_count_matches": true,
+        "tactic_trace_has_stable_ids": true
       },
       "description": "Repeated goal/context blocks are deduplicated for retrieval.",
       "expected_extracted_count": 1,
@@ -151,13 +209,35 @@
         }
       ],
       "rejected_count": 1,
-      "skeleton_source": null
+      "skeleton_source": null,
+      "tactic_state_trace": {
+        "has_tactic_state_trace": true,
+        "method": "ordered_lean_diagnostic_tactic_states",
+        "source_variant": "fixture",
+        "state_count": 1,
+        "states": [
+          {
+            "block_index": 0,
+            "extraction_method": "lean_unsolved_goals_diagnostic",
+            "goal_text": "x = x",
+            "hypothesis_count": 1,
+            "proof_state_id": "lean_diag:103c85be27b23de5",
+            "retrieval_text": "x : Nat\n\u22a2 x = x",
+            "source_variant": "fixture",
+            "symbol_count": 3,
+            "tactic_idx": 0,
+            "tactic_state_id": "lean_trace:fixture:0:103c85be27b23de5"
+          }
+        ]
+      }
     },
     {
       "checks": {
         "extracted_count_matches": true,
         "proof_states_have_retrieval_text": true,
-        "proof_states_have_stable_ids": true
+        "proof_states_have_stable_ids": true,
+        "tactic_trace_count_matches": true,
+        "tactic_trace_has_stable_ids": true
       },
       "description": "Multiple Lean goals can be split even when diagnostics omit blank-line or case separators.",
       "expected_extracted_count": 2,
@@ -212,14 +292,48 @@
       "raw_block_count": 2,
       "rejected_blocks": [],
       "rejected_count": 0,
-      "skeleton_source": null
+      "skeleton_source": null,
+      "tactic_state_trace": {
+        "has_tactic_state_trace": true,
+        "method": "ordered_lean_diagnostic_tactic_states",
+        "source_variant": "fixture",
+        "state_count": 2,
+        "states": [
+          {
+            "block_index": 0,
+            "extraction_method": "lean_unsolved_goals_diagnostic",
+            "goal_text": "x = x",
+            "hypothesis_count": 1,
+            "proof_state_id": "lean_diag:103c85be27b23de5",
+            "retrieval_text": "x : Nat\n\u22a2 x = x",
+            "source_variant": "fixture",
+            "symbol_count": 3,
+            "tactic_idx": 0,
+            "tactic_state_id": "lean_trace:fixture:0:103c85be27b23de5"
+          },
+          {
+            "block_index": 1,
+            "extraction_method": "lean_unsolved_goals_diagnostic",
+            "goal_text": "y = y",
+            "hypothesis_count": 1,
+            "proof_state_id": "lean_diag:54f19652349d074d",
+            "retrieval_text": "y : Nat\n\u22a2 y = y",
+            "source_variant": "fixture",
+            "symbol_count": 3,
+            "tactic_idx": 1,
+            "tactic_state_id": "lean_trace:fixture:1:54f19652349d074d"
+          }
+        ]
+      }
     },
     {
       "checks": {
         "extracted_count_matches": true,
         "failure_reason_matches": true,
         "proof_states_have_retrieval_text": true,
-        "proof_states_have_stable_ids": true
+        "proof_states_have_stable_ids": true,
+        "tactic_trace_count_matches": true,
+        "tactic_trace_has_stable_ids": true
       },
       "description": "Malformed diagnostics explain why no proof state was extracted.",
       "expected_extracted_count": 0,
@@ -231,13 +345,22 @@
       "raw_block_count": 0,
       "rejected_blocks": [],
       "rejected_count": 0,
-      "skeleton_source": null
+      "skeleton_source": null,
+      "tactic_state_trace": {
+        "has_tactic_state_trace": false,
+        "method": "ordered_lean_diagnostic_tactic_states",
+        "source_variant": "fixture",
+        "state_count": 0,
+        "states": []
+      }
     },
     {
       "checks": {
         "extracted_count_matches": true,
         "proof_states_have_retrieval_text": true,
         "proof_states_have_stable_ids": true,
+        "tactic_trace_count_matches": true,
+        "tactic_trace_has_stable_ids": true,
         "timeout_diagnostic_preserved": true
       },
       "description": "A timed-out Lean check can still preserve stderr diagnostics for proof-state extraction.",
@@ -272,7 +395,27 @@
       "raw_block_count": 1,
       "rejected_blocks": [],
       "rejected_count": 0,
-      "skeleton_source": null
+      "skeleton_source": null,
+      "tactic_state_trace": {
+        "has_tactic_state_trace": true,
+        "method": "ordered_lean_diagnostic_tactic_states",
+        "source_variant": "fixture",
+        "state_count": 1,
+        "states": [
+          {
+            "block_index": 0,
+            "extraction_method": "lean_unsolved_goals_diagnostic",
+            "goal_text": "y = y",
+            "hypothesis_count": 1,
+            "proof_state_id": "lean_diag:54f19652349d074d",
+            "retrieval_text": "y : Nat\n\u22a2 y = y",
+            "source_variant": "fixture",
+            "symbol_count": 3,
+            "tactic_idx": 0,
+            "tactic_state_id": "lean_trace:fixture:0:54f19652349d074d"
+          }
+        ]
+      }
     },
     {
       "checks": {
@@ -280,7 +423,9 @@
         "proof_states_have_retrieval_text": true,
         "proof_states_have_stable_ids": true,
         "skeleton_source_created": true,
-        "skeleton_source_suffix_matches": true
+        "skeleton_source_suffix_matches": true,
+        "tactic_trace_count_matches": true,
+        "tactic_trace_has_stable_ids": true
       },
       "description": "A theorem statement without a proof body can be checked as a temporary `:= by` skeleton to get the initial goal.",
       "expected_extracted_count": 1,
@@ -314,7 +459,27 @@
       "raw_block_count": 1,
       "rejected_blocks": [],
       "rejected_count": 0,
-      "skeleton_source": "theorem t (x : Nat) : x = x := by\n"
+      "skeleton_source": "theorem t (x : Nat) : x = x := by\n",
+      "tactic_state_trace": {
+        "has_tactic_state_trace": true,
+        "method": "ordered_lean_diagnostic_tactic_states",
+        "source_variant": "fixture",
+        "state_count": 1,
+        "states": [
+          {
+            "block_index": 0,
+            "extraction_method": "lean_unsolved_goals_diagnostic",
+            "goal_text": "x = x",
+            "hypothesis_count": 1,
+            "proof_state_id": "lean_diag:103c85be27b23de5",
+            "retrieval_text": "x : Nat\n\u22a2 x = x",
+            "source_variant": "fixture",
+            "symbol_count": 3,
+            "tactic_idx": 0,
+            "tactic_state_id": "lean_trace:fixture:0:103c85be27b23de5"
+          }
+        ]
+      }
     }
   ],
   "method": "lean_unsolved_goals_diagnostic",
@@ -323,9 +488,11 @@
   "quality_checks": {
     "all_cases_passed": true,
     "all_extracted_states_have_retrieval_text": true,
+    "all_tactic_trace_counts_match": true,
     "has_adjacent_goal_split_case": true,
     "has_failure_explanation_case": true,
     "has_initial_goal_skeleton_case": true,
+    "has_multi_state_tactic_trace_case": true,
     "has_successful_extraction_case": true,
     "has_timeout_stderr_extraction_case": true
   },

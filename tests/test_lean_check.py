@@ -58,6 +58,8 @@ x : Nat
     assert result["summary"]["has_unsolved_goals"] is True
     assert result["summary"]["proof_state_extracted_count"] == 1
     assert result["proof_states"][0]["goal_text"] == "x = x"
+    assert result["tactic_state_trace"]["state_count"] == 1
+    assert result["tactic_state_trace"]["states"][0]["tactic_idx"] == 0
 
 
 def test_check_lean_syntax_falls_back_to_initial_goal_skeleton(monkeypatch):
@@ -96,6 +98,8 @@ x : Nat
     assert result["fallback_reason"] == "original_no_proof_states"
     assert result["original_summary"]["proof_state_extracted_count"] == 0
     assert result["proof_states"][0]["goal_text"] == "x = x"
+    assert result["tactic_state_trace"]["source_variant"] == "initial_goal_skeleton"
+    assert result["tactic_state_trace"]["has_tactic_state_trace"] is True
 
 
 def test_check_lean_syntax_does_not_skeleton_completed_declaration(monkeypatch):
@@ -118,6 +122,28 @@ def test_check_lean_syntax_does_not_skeleton_completed_declaration(monkeypatch):
     assert len(calls) == 1
     assert result["source_variant"] == "original"
     assert result["fallback_attempted"] is False
+    assert result["tactic_state_trace"]["state_count"] == 0
+
+
+def test_build_tactic_state_trace_preserves_ordered_diagnostic_states():
+    stderr = """
+error: unsolved goals
+case left
+n : Nat
+⊢ n = n
+
+case right
+m : Nat
+⊢ m = m
+"""
+    report = lean_check.extract_proof_state_report(stderr=stderr)
+    trace = lean_check.build_tactic_state_trace(report["proof_states"], source_variant="fixture")
+
+    assert trace["method"] == "ordered_lean_diagnostic_tactic_states"
+    assert trace["state_count"] == 2
+    assert [state["tactic_idx"] for state in trace["states"]] == [0, 1]
+    assert [state["goal_text"] for state in trace["states"]] == ["n = n", "m = m"]
+    assert trace["states"][0]["tactic_state_id"].startswith("lean_trace:fixture:0:")
 
 
 def test_extract_proof_states_from_unsolved_goals_diagnostics():

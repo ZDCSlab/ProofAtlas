@@ -488,6 +488,21 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
         },
     )
     write_json(
+        "outputs/reports/lean_diagnostic_extraction_report.json",
+        {
+            "method": "lean_unsolved_goals_diagnostic",
+            "case_count": 7,
+            "passed_case_count": 7,
+            "total_extracted_proof_states": 8,
+            "production_pipeline_role": "optional query diagnostics only; not a corpus extractor and not part of the default LeanRank-data pipeline",
+            "quality_checks": {
+                "has_initial_goal_skeleton_case": True,
+                "has_multi_state_tactic_trace_case": True,
+                "all_tactic_trace_counts_match": True,
+            },
+        },
+    )
+    write_json(
         "outputs/reports/index_benchmark.json",
         {
             "entities": {
@@ -612,6 +627,10 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "Multi-process encoding" in text
     assert "Actual backends" in text
     assert "torch_cuda" in text
+    assert "Query-Time Lean Diagnostics" in text
+    assert "ordered tactic-state trace" in text
+    assert "Has ordered tactic-state trace case: `True`" in text
+    assert "not a corpus extractor" in text
     assert "hnswlib parameters" in text
     assert "CPU/IO-Heavy Stages" in text
     assert "Performance Acceptance Gates" in text

@@ -169,6 +169,38 @@ def extract_proof_state_report(stdout: str = "", stderr: str = "") -> dict:
     }
 
 
+def build_tactic_state_trace(
+    proof_states: list[dict],
+    *,
+    source_variant: str,
+    extraction_method: str = "lean_unsolved_goals_diagnostic",
+) -> dict:
+    states = []
+    for tactic_idx, state in enumerate(proof_states):
+        retrieval_text = str(state.get("retrieval_text") or state.get("raw_text") or state.get("goal_text") or "")
+        states.append(
+            {
+                "tactic_state_id": f"lean_trace:{source_variant}:{tactic_idx}:{stable_hash(retrieval_text, 16)}",
+                "proof_state_id": state.get("proof_state_id"),
+                "tactic_idx": tactic_idx,
+                "block_index": int(state.get("block_index", tactic_idx) or 0),
+                "source_variant": source_variant,
+                "extraction_method": extraction_method,
+                "goal_text": state.get("goal_text", ""),
+                "hypothesis_count": int(state.get("hypothesis_count", len(state.get("local_hypotheses") or [])) or 0),
+                "symbol_count": int(state.get("symbol_count", len(state.get("symbols") or [])) or 0),
+                "retrieval_text": retrieval_text,
+            }
+        )
+    return {
+        "method": "ordered_lean_diagnostic_tactic_states",
+        "source_variant": source_variant,
+        "state_count": len(states),
+        "has_tactic_state_trace": bool(states),
+        "states": states,
+    }
+
+
 def extract_proof_states_from_diagnostics(stdout: str = "", stderr: str = "") -> list[dict]:
     return extract_proof_state_report(stdout=stdout, stderr=stderr)["proof_states"]
 
@@ -198,6 +230,7 @@ def _result_from_completed_process(
     stdout = _output_text(proc.stdout)[-4000:]
     stderr = _output_text(proc.stderr)[-4000:]
     extraction = extract_proof_state_report(stdout, stderr)
+    trace = build_tactic_state_trace(extraction["proof_states"], source_variant=source_variant, extraction_method=extraction["method"])
     return {
         "checked": True,
         "available": True,
@@ -208,6 +241,7 @@ def _result_from_completed_process(
         "stderr": stderr,
         "proof_states": extraction["proof_states"],
         "proof_state_extraction": extraction,
+        "tactic_state_trace": trace,
         "summary": _diagnostic_summary(stdout, stderr),
         "source_variant": source_variant,
         "fallback_attempted": fallback_attempted,
@@ -239,6 +273,7 @@ def check_lean_syntax(source: str, timeout_seconds: int = 10) -> dict:
                 "rejected_blocks": [],
             },
             "summary": {"has_unsolved_goals": False, "error_count": 0, "warning_count": 0},
+            "tactic_state_trace": build_tactic_state_trace([], source_variant="original"),
             "source_variant": "original",
             "fallback_attempted": False,
             "fallback_reason": None,
@@ -259,6 +294,7 @@ def check_lean_syntax(source: str, timeout_seconds: int = 10) -> dict:
             stdout = _output_text(exc.stdout)
             timed_out_stderr = _output_text(exc.stderr)
             extraction = extract_proof_state_report(stdout, timed_out_stderr)
+            trace = build_tactic_state_trace(extraction["proof_states"], source_variant="original", extraction_method=extraction["method"])
             stderr = "\n".join(
                 part
                 for part in [
@@ -277,6 +313,7 @@ def check_lean_syntax(source: str, timeout_seconds: int = 10) -> dict:
                 "stderr": stderr,
                 "proof_states": extraction["proof_states"],
                 "proof_state_extraction": extraction,
+                "tactic_state_trace": trace,
                 "summary": _diagnostic_summary(stdout, timed_out_stderr),
                 "source_variant": "original",
                 "fallback_attempted": False,
@@ -305,6 +342,7 @@ def check_lean_syntax(source: str, timeout_seconds: int = 10) -> dict:
             stdout = _output_text(exc.stdout)
             timed_out_stderr = _output_text(exc.stderr)
             extraction = extract_proof_state_report(stdout, timed_out_stderr)
+            trace = build_tactic_state_trace(extraction["proof_states"], source_variant="initial_goal_skeleton", extraction_method=extraction["method"])
             stderr = "\n".join(
                 part
                 for part in [
@@ -323,6 +361,7 @@ def check_lean_syntax(source: str, timeout_seconds: int = 10) -> dict:
                 "stderr": stderr,
                 "proof_states": extraction["proof_states"],
                 "proof_state_extraction": extraction,
+                "tactic_state_trace": trace,
                 "summary": _diagnostic_summary(stdout, timed_out_stderr),
                 "source_variant": "initial_goal_skeleton",
                 "fallback_attempted": True,

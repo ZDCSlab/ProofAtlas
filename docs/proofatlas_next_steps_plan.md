@@ -51,7 +51,7 @@ Completed components include:
   - difficulty profile,
   - ranking explanations.
 - Optional Lean syntax diagnostics through `lake env lean` or `lean`.
-- Structured extraction of proof states from Lean `unsolved goals` diagnostics, with extracted goals used as the retrieval query when available and extraction reports explaining raw blocks, rejected blocks, counts, provenance, theorem-statement initial-goal skeleton fallback, and failure reasons.
+- Structured extraction of proof states from Lean `unsolved goals` diagnostics, with extracted goals used as the retrieval query when available and extraction reports explaining raw blocks, rejected blocks, counts, provenance, ordered tactic-state trace metadata, theorem-statement initial-goal skeleton fallback, and failure reasons.
 - Learned premise-ranker integration when a trained ranker artifact is available.
 - Learned-ranker feature group metadata and ablation report for embedding, namespace/domain, proof-technique, difficulty, frequency, symbol-overlap, graph, and theorem-neighborhood signals.
 - Graph-aware and text-aware ranking reasons for returned premises.

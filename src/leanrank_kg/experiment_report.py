@@ -518,6 +518,7 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     pipeline = read_json("outputs/reports/pipeline_performance_report.json", {}) or {}
     benchmark = read_json("outputs/reports/index_benchmark.json", {}) or {}
     premise_trace = read_json("outputs/reports/premise_trace_supervision_report.json", {}) or {}
+    lean_diagnostic = read_json("outputs/reports/lean_diagnostic_extraction_report.json", {}) or {}
     ranker_metrics = read_json("outputs/reports/ranker_validation_metrics.json", {}) or {}
     timings = read_json("outputs/reports/pipeline_run_timings.json", {}) or {}
     data_supervision = manifest.get("data_supervision", {}) if isinstance(manifest, dict) else {}
@@ -662,6 +663,18 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
         "- Experiment report: `outputs/reports/experiment_report.md`",
         "- Machine-readable held-out evaluation: `outputs/reports/test_set_evaluation.json`",
         "- Pipeline performance profile: `outputs/reports/pipeline_performance_report.json`",
+        "",
+        "## Query-Time Lean Diagnostics",
+        "",
+        "Lean validation is optional and is not part of the default `erbacher/LeanRank-data` corpus extraction path. When enabled for an interactive theorem query, diagnostics from `lake env lean` or `lean` are parsed into retrieval proof states and an ordered tactic-state trace.",
+        "",
+        f"- Diagnostic method: `{lean_diagnostic.get('method', 'n/a')}`",
+        f"- Case coverage: `{lean_diagnostic.get('passed_case_count', 'n/a')}` / `{lean_diagnostic.get('case_count', 'n/a')}`",
+        f"- Extracted fixture proof states: `{lean_diagnostic.get('total_extracted_proof_states', 'n/a')}`",
+        f"- Has initial-goal skeleton case: `{lean_diagnostic.get('quality_checks', {}).get('has_initial_goal_skeleton_case', 'n/a')}`",
+        f"- Has ordered tactic-state trace case: `{lean_diagnostic.get('quality_checks', {}).get('has_multi_state_tactic_trace_case', 'n/a')}`",
+        f"- Tactic trace counts match extracted proof states: `{lean_diagnostic.get('quality_checks', {}).get('all_tactic_trace_counts_match', 'n/a')}`",
+        f"- Pipeline role: `{lean_diagnostic.get('production_pipeline_role', 'n/a')}`",
         "",
         "## ML Task Definition",
         "",
