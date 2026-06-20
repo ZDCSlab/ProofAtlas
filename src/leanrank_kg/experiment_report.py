@@ -100,6 +100,8 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     validation_proof_metrics = test_eval.get("validation", {}).get("proof_state_retrieval", {}).get("metrics", {})
     validation_theorem_metrics = test_eval.get("validation", {}).get("theorem_retrieval", {}).get("metrics", {})
     evaluation_scope = test_eval.get("evaluation_scope", {}) if isinstance(test_eval, dict) else {}
+    evaluation_profile = pipeline.get("stages", {}).get("evaluation", {}) if isinstance(pipeline, dict) else {}
+    held_out_test_coverage = evaluation_profile.get("held_out_test_coverage", {}) if isinstance(evaluation_profile, dict) else {}
     recommendations = pipeline.get("recommendations", [])
     throughput = pipeline.get("throughput_profile", {}) if isinstance(pipeline, dict) else {}
     bench_entities = benchmark.get("entities", {}) if isinstance(benchmark, dict) else {}
@@ -174,6 +176,8 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
         f"- Evaluation scope: `{'sampled held-out splits' if evaluation_scope.get('is_sampled') else 'full held-out splits'}`",
         f"- Proof-state evaluation limits: `{evaluation_scope.get('proof_state_limits', 'n/a')}`",
         f"- Theorem evaluation limits: `{evaluation_scope.get('theorem_limits', 'n/a')}`",
+        f"- Proof-state test coverage: `{held_out_test_coverage.get('proof_state_evaluated_queries', 'n/a')}` / `{held_out_test_coverage.get('proof_state_total', 'n/a')}` (`{held_out_test_coverage.get('proof_state_coverage_fraction', 'n/a')}`)",
+        f"- Theorem test coverage: `{held_out_test_coverage.get('theorem_evaluated_queries', 'n/a')}` / `{held_out_test_coverage.get('theorem_total', 'n/a')}` (`{held_out_test_coverage.get('theorem_coverage_fraction', 'n/a')}`)",
         f"- Ranking backend: `{evaluation_scope.get('ranking_backend', 'n/a')}`",
         f"- Evaluation GPU: `use_gpu={evaluation_scope.get('use_gpu', 'n/a')}`, device `{evaluation_scope.get('gpu_device', 'n/a')}`, batch size `{evaluation_scope.get('batch_size', 'n/a')}`",
         f"- Actual test ranking backend: proof-state `{actual_proof_backend}`, theorem `{actual_theorem_backend}`",

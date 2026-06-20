@@ -82,6 +82,18 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                 "min_index_recall_vs_exact": 0.98,
                 "estimated_seconds_at_requested_source_rows": 350.0,
             },
+            "stages": {
+                "evaluation": {
+                    "held_out_test_coverage": {
+                        "proof_state_evaluated_queries": 3,
+                        "proof_state_total": 30,
+                        "proof_state_coverage_fraction": 0.1,
+                        "theorem_evaluated_queries": 2,
+                        "theorem_total": 20,
+                        "theorem_coverage_fraction": 0.1,
+                    }
+                }
+            },
             "recommendations": [],
         },
     )
@@ -119,6 +131,8 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "Pipeline Timing" in text
     assert "Timing config matches current report config" in text
     assert "Timing config matches current report config: `True`" in text
+    assert "Proof-state test coverage" in text
+    assert "Theorem test coverage" in text
     assert "Throughput timing basis" in text
     assert "Scale estimate reliable" in text
     assert "LeanRank premise supervision ready" in text

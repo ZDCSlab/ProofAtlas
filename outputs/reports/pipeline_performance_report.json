@@ -384,6 +384,16 @@
           "rows": 2822
         }
       },
+      "held_out_test_coverage": {
+        "proof_state_configured_limit": 100,
+        "proof_state_coverage_fraction": 0.03275466754012447,
+        "proof_state_evaluated_queries": 100,
+        "proof_state_total": 3053,
+        "theorem_configured_limit": 50,
+        "theorem_coverage_fraction": 0.05,
+        "theorem_evaluated_queries": 50,
+        "theorem_total": 1000
+      },
       "metrics_exists": true,
       "metrics_path": "outputs/reports/metrics.json",
       "ranker_validation": {

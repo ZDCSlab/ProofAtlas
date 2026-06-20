@@ -1,7 +1,9 @@
 import json
 
+import pandas as pd
+
 from leanrank_kg import pipeline_profile
-from leanrank_kg.utils import stable_hash, write_json
+from leanrank_kg.utils import stable_hash, write_json, write_parquet
 
 
 def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatch):
@@ -64,6 +66,9 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
             }
         },
     )
+    (tmp_path / "data/processed/test").mkdir(parents=True)
+    write_parquet(pd.DataFrame({"proof_state_id": [f"ps{i}" for i in range(10)]}), "data/processed/test/proof_states.parquet")
+    write_parquet(pd.DataFrame({"theorem_id": [f"thm{i}" for i in range(5)]}), "data/processed/test/theorems.parquet")
     write_json(
         "outputs/reports/pipeline_run_timings.json",
         {
@@ -168,13 +173,22 @@ def test_pipeline_profile_recommends_full_timing_for_cached_runs(tmp_path, monke
                 "is_sampled": True,
                 "proof_state_limits": {"test": 100, "val": 100},
                 "theorem_limits": {"test": 50, "val": 50},
-            }
+            },
+            "test": {
+                "proof_state_retrieval": {"metrics": {"evaluated_queries": 100}},
+                "theorem_retrieval": {"metrics": {"theorem_retrieval_evaluated_theorems": 50}},
+            },
         },
     )
+    (tmp_path / "data/processed/test").mkdir(parents=True)
+    write_parquet(pd.DataFrame({"proof_state_id": [f"ps{i}" for i in range(400)]}), "data/processed/test/proof_states.parquet")
+    write_parquet(pd.DataFrame({"theorem_id": [f"thm{i}" for i in range(200)]}), "data/processed/test/theorems.parquet")
 
     report = pipeline_profile.run("configs/proofatlas.yaml")
 
     assert report["throughput_profile"]["throughput_basis"] == "cached_or_partial_pipeline_run"
     assert report["throughput_profile"]["scale_estimate_reliable"] is False
+    assert report["stages"]["evaluation"]["held_out_test_coverage"]["proof_state_coverage_fraction"] == 0.25
+    assert report["stages"]["evaluation"]["held_out_test_coverage"]["theorem_coverage_fraction"] == 0.25
     assert any(row["area"] == "performance_timing" and row["priority"] == "high" for row in report["recommendations"])
     assert any(row["area"] == "evaluation_scope" and row["priority"] == "medium" for row in report["recommendations"])

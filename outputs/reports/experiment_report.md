@@ -10,6 +10,8 @@
 - Evaluation scope: `sampled held-out splits`
 - Proof-state evaluation limits: `{'test': 100, 'val': 100}`
 - Theorem evaluation limits: `{'test': 50, 'val': 50}`
+- Proof-state test coverage: `100` / `3053` (`0.03275466754012447`)
+- Theorem test coverage: `50` / `1000` (`0.05`)
 - Ranking backend: `batched_embedding_topk`
 - Evaluation GPU: `use_gpu=True`, device `cuda:0`, batch size `256`
 - Actual test ranking backend: proof-state `torch_cuda`, theorem `torch_cuda`

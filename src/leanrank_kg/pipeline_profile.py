@@ -215,6 +215,22 @@ def _evaluation_stage() -> dict[str, Any]:
         for key in sorted(metrics)
         if key.lower().startswith(("recall", "mrr", "map", "ndcg", "theorem_retrieval"))
     ]
+    evaluation_scope = test_set_evaluation.get("evaluation_scope", {}) if isinstance(test_set_evaluation, dict) else {}
+    proof_test_metrics = test_set_evaluation.get("test", {}).get("proof_state_retrieval", {}).get("metrics", {})
+    theorem_test_metrics = test_set_evaluation.get("test", {}).get("theorem_retrieval", {}).get("metrics", {})
+    proof_state_test_total = int(_parquet_rows("data/processed/test/proof_states.parquet").get("rows") or 0)
+    theorem_test_total = int(_parquet_rows("data/processed/test/theorems.parquet").get("rows") or 0)
+    proof_state_test_evaluated = proof_test_metrics.get("evaluated_queries")
+    theorem_test_evaluated = theorem_test_metrics.get("theorem_retrieval_evaluated_theorems")
+    proof_state_test_limit = (evaluation_scope.get("proof_state_limits") or {}).get("test")
+    theorem_test_limit = (evaluation_scope.get("theorem_limits") or {}).get("test")
+
+    def _coverage(evaluated: Any, limit: Any, total: int) -> float | None:
+        numerator = evaluated if evaluated is not None else limit
+        if numerator is None or total <= 0:
+            return None
+        return min(float(numerator) / float(total), 1.0)
+
     return {
         "metrics_path": "outputs/reports/metrics.json",
         "metrics_exists": Path("outputs/reports/metrics.json").exists(),
@@ -225,16 +241,26 @@ def _evaluation_stage() -> dict[str, Any]:
             "task": test_set_evaluation.get("task"),
             "candidate_pool": test_set_evaluation.get("candidate_pool"),
             "label_policy": test_set_evaluation.get("label_policy"),
-            "evaluation_scope": test_set_evaluation.get("evaluation_scope", {}),
+            "evaluation_scope": evaluation_scope,
             "top_k": test_set_evaluation.get("top_k"),
             "test_metrics": {
-                "proof_state_retrieval": test_set_evaluation.get("test", {}).get("proof_state_retrieval", {}).get("metrics", {}),
-                "theorem_retrieval": test_set_evaluation.get("test", {}).get("theorem_retrieval", {}).get("metrics", {}),
+                "proof_state_retrieval": proof_test_metrics,
+                "theorem_retrieval": theorem_test_metrics,
             },
             "validation_metrics": {
                 "proof_state_retrieval": test_set_evaluation.get("validation", {}).get("proof_state_retrieval", {}).get("metrics", {}),
                 "theorem_retrieval": test_set_evaluation.get("validation", {}).get("theorem_retrieval", {}).get("metrics", {}),
             },
+        },
+        "held_out_test_coverage": {
+            "proof_state_total": proof_state_test_total,
+            "proof_state_configured_limit": proof_state_test_limit,
+            "proof_state_evaluated_queries": proof_state_test_evaluated,
+            "proof_state_coverage_fraction": _coverage(proof_state_test_evaluated, proof_state_test_limit, proof_state_test_total),
+            "theorem_total": theorem_test_total,
+            "theorem_configured_limit": theorem_test_limit,
+            "theorem_evaluated_queries": theorem_test_evaluated,
+            "theorem_coverage_fraction": _coverage(theorem_test_evaluated, theorem_test_limit, theorem_test_total),
         },
         "ranker_validation": read_json("outputs/reports/ranker_validation_metrics.json", {}) or {},
         "difficulty_estimator": read_json("outputs/reports/difficulty_estimator_metrics.json", {}) or {},
