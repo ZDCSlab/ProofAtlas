@@ -105,6 +105,62 @@ def _zero_recall_domain_table(profile: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def _percent(count: Any, total: Any) -> str:
+    try:
+        denominator = float(total)
+        if denominator <= 0:
+            return "n/a"
+        return f"{float(count) / denominator:.1%}"
+    except (TypeError, ValueError, ZeroDivisionError):
+        return "n/a"
+
+
+def _failure_diagnosis_table(profile: dict[str, Any]) -> str:
+    rank_buckets = profile.get("rank_buckets", {}) if isinstance(profile, dict) else {}
+    evaluated = profile.get("evaluated_queries", 0) if isinstance(profile, dict) else 0
+    retrievable = profile.get("retrievable_queries", 0) if isinstance(profile, dict) else 0
+    max_k = profile.get("max_k", 100) if isinstance(profile, dict) else 100
+    top10_hit = sum(int(rank_buckets.get(key, 0) or 0) for key in ["rank_1", "rank_2_to_5", "rank_6_to_10"])
+    after_top10 = sum(int(rank_buckets.get(key, 0) or 0) for key in ["rank_11_to_50", "rank_51_to_100"])
+    candidate_miss = int(rank_buckets.get(f"miss_top_{max_k}", 0) or profile.get("zero_recall_at_max_k", 0) or 0)
+    no_train_gold = int(rank_buckets.get("no_train_gold", 0) or profile.get("queries_without_train_gold", 0) or 0)
+    missing_some_gold = max(0, int(profile.get("queries_with_missing_gold", 0) or 0) - no_train_gold)
+    rows = [
+        (
+            "no_train_gold",
+            no_train_gold,
+            "Held-out positives have no matching premise in the train candidate index; retrieval cannot score these as hits.",
+        ),
+        (
+            "partial_train_gold_coverage",
+            missing_some_gold,
+            "At least one gold premise is available, but some held-out gold premises are absent from the train candidate index.",
+        ),
+        (
+            f"candidate_pool_miss_top_{max_k}",
+            candidate_miss,
+            f"Train-side gold exists, but no gold premise appears in the top-{max_k} embedding candidate pool.",
+        ),
+        (
+            "reranking_headroom_after_top10",
+            after_top10,
+            "A gold premise appears after rank 10, so better ordering could improve top-10 metrics without changing candidate generation.",
+        ),
+        (
+            "top10_hit",
+            top10_hit,
+            "At least one train-side gold premise already appears in the top 10.",
+        ),
+    ]
+    lines = [
+        "| Diagnosis | Queries | Share of evaluated | Share of retrievable | Interpretation |",
+        "| --- | ---: | ---: | ---: | --- |",
+    ]
+    for label, count, interpretation in rows:
+        lines.append(f"| `{label}` | {_fmt(count)} | {_percent(count, evaluated)} | {_percent(count, retrievable)} | {interpretation} |")
+    return "\n".join(lines)
+
+
 def _index_benchmark_table(bench_entities: dict[str, Any]) -> str:
     lines = [
         "| Entity | Backend | Rows | Exact ms/query | Indexed ms/query | Speedup | Recall@1 vs exact | Recall@5 vs exact | Recall@10 vs exact | Top1 match@10 | Build seconds | Indexed total seconds |",
@@ -576,6 +632,12 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
         "",
         _failure_profile_table(proof_failure_profile),
         "",
+        "Proof-state failure diagnosis:",
+        "",
+        "This table converts the aggregate buckets into actionable causes. Overlap is intentional for train-gold coverage: a query can have partial gold coverage and still be a candidate-pool miss.",
+        "",
+        _failure_diagnosis_table(proof_failure_profile),
+        "",
         "Proof-state rank buckets:",
         "",
         _rank_bucket_table(proof_failure_profile),
@@ -591,6 +653,10 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
         "#### Theorem Failure Profile",
         "",
         _failure_profile_table(theorem_failure_profile),
+        "",
+        "Theorem failure diagnosis:",
+        "",
+        _failure_diagnosis_table(theorem_failure_profile),
         "",
         "Theorem rank buckets:",
         "",

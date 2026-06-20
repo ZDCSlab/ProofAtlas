@@ -133,6 +133,10 @@ Interpretation:
 - Proof-state-level retrieval is harder. Recall@100 at 0.2362 shows candidate
   generation and query representation are still the main bottlenecks for exact
   proof-state premise recovery.
+- The failure diagnosis makes the proof-state bottleneck concrete: 1,823
+  retrievable proof-state queries miss all gold premises in the top-100
+  candidate pool, while 458 have a gold premise after rank 10 and are therefore
+  plausible reranking wins.
 - Reranking helps user-facing examples, but the broad accuracy ceiling is still
   controlled by embedding candidate generation and gold-premise availability in
   the train premise index.
@@ -143,14 +147,17 @@ Current production timing evidence:
 
 | Signal | Value |
 | --- | ---: |
-| Total timed pipeline run | 740.1 seconds |
+| Total timed pipeline run | 552.2 seconds |
 | Executed stages | 19 |
 | Skipped stages | 0 |
 | Throughput basis | executed_pipeline_run |
 | Scale estimate reliable | True |
-| Embedding rows/sec | 330.2 |
-| Processed rows/sec | 394.5 |
-| Slowest stage | evaluate |
+| Embedding rows/sec during embed stage | 1638.4 |
+| Processed rows/sec | 529.3 |
+| Slowest stage | embed |
+| Evaluation backend | torch_cuda |
+| Embedding device count | 7 |
+| ANN index backend | hnswlib |
 
 Current acceleration choices:
 

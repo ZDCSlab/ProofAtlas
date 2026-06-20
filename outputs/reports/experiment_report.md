@@ -269,6 +269,18 @@ These aggregate buckets quantify where held-out retrieval fails without storing 
 | `zero_recall_at_max_k` | 1823 |
 | `max_k` | 100 |
 
+Proof-state failure diagnosis:
+
+This table converts the aggregate buckets into actionable causes. Overlap is intentional for train-gold coverage: a query can have partial gold coverage and still be a candidate-pool miss.
+
+| Diagnosis | Queries | Share of evaluated | Share of retrievable | Interpretation |
+| --- | ---: | ---: | ---: | --- |
+| `no_train_gold` | 221 | 7.2% | 7.8% | Held-out positives have no matching premise in the train candidate index; retrieval cannot score these as hits. |
+| `partial_train_gold_coverage` | 341 | 11.2% | 12.0% | At least one gold premise is available, but some held-out gold premises are absent from the train candidate index. |
+| `candidate_pool_miss_top_100` | 1823 | 59.7% | 64.4% | Train-side gold exists, but no gold premise appears in the top-100 embedding candidate pool. |
+| `reranking_headroom_after_top10` | 458 | 15.0% | 16.2% | A gold premise appears after rank 10, so better ordering could improve top-10 metrics without changing candidate generation. |
+| `top10_hit` | 551 | 18.0% | 19.5% | At least one train-side gold premise already appears in the top 10. |
+
 Proof-state rank buckets:
 
 | Rank bucket | Queries |
@@ -314,6 +326,16 @@ Proof-state zero-recall domains:
 | `queries_with_missing_gold` | 358 |
 | `zero_recall_at_max_k` | 55 |
 | `max_k` | 100 |
+
+Theorem failure diagnosis:
+
+| Diagnosis | Queries | Share of evaluated | Share of retrievable | Interpretation |
+| --- | ---: | ---: | ---: | --- |
+| `no_train_gold` | 45 | 4.5% | 4.7% | Held-out positives have no matching premise in the train candidate index; retrieval cannot score these as hits. |
+| `partial_train_gold_coverage` | 313 | 31.3% | 32.8% | At least one gold premise is available, but some held-out gold premises are absent from the train candidate index. |
+| `candidate_pool_miss_top_100` | 55 | 5.5% | 5.8% | Train-side gold exists, but no gold premise appears in the top-100 embedding candidate pool. |
+| `reranking_headroom_after_top10` | 133 | 13.3% | 13.9% | A gold premise appears after rank 10, so better ordering could improve top-10 metrics without changing candidate generation. |
+| `top10_hit` | 767 | 76.7% | 80.3% | At least one train-side gold premise already appears in the top 10. |
 
 Theorem rank buckets:
 

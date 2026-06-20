@@ -329,6 +329,10 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "Failure Profile Summary" in text
     assert "Proof-State Failure Profile" in text
     assert "Theorem Failure Profile" in text
+    assert "Proof-state failure diagnosis" in text
+    assert "Theorem failure diagnosis" in text
+    assert "candidate_pool_miss_top_100" in text
+    assert "reranking_headroom_after_top10" in text
     assert "zero_recall_at_max_k" in text
     assert "miss_top_100" in text
     assert "Proof-state zero-recall domains" in text
