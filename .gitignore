@@ -16,6 +16,16 @@ dist/
 *.egg-info/
 *.log
 *.prof
+*.tmp
+*.temp
+*.sqlite
+*.sqlite3
+*.db
+*.npy
+*.npz
+*.pt
+*.pth
+*.ckpt
 .DS_Store
 *.swp
 *.swo

@@ -44,6 +44,7 @@ def test_audit_covers_refined_theorem_guidance_artifacts(tmp_path, monkeypatch):
     assert result["checks"]["validation:theorem_retrieval_metrics"]["passed"] is True
     assert result["checks"]["validation:index_summary"]["passed"] is True
     assert result["checks"]["validation:pipeline_performance_report"]["passed"] is True
+    assert result["checks"]["validation:resource_parallelism_profile"]["passed"] is True
     assert result["checks"]["validation:refresh_dashboard"]["passed"] is True
     assert result["checks"]["validation:homepage_summary_supervision"]["passed"] is True
     assert result["checks"]["validation:refresh_trend"]["passed"] is True

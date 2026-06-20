@@ -61,6 +61,23 @@ def _file_contains(path: str, tokens: list[str]) -> dict[str, Any]:
     return {"path": str(p), "passed": not missing, "detail": f"missing={missing}"}
 
 
+def _resource_parallelism_condition(data: dict[str, Any]) -> tuple[bool, dict[str, Any]]:
+    profile = data.get("throughput_profile", {}).get("resource_parallelism_profile", {})
+    embedding = profile.get("embedding_parallelism", {})
+    evaluation = profile.get("evaluation_parallelism", {})
+    index = profile.get("index_parallelism", {})
+    passed = (
+        bool(profile)
+        and bool(embedding.get("backend"))
+        and "device_count" in embedding
+        and "multi_process" in embedding
+        and "actual_backends" in evaluation
+        and bool(index.get("backend"))
+        and "indexed_entities" in index
+    )
+    return passed, profile
+
+
 def build_audit() -> dict[str, Any]:
     checks: dict[str, dict[str, Any]] = {}
     required_root = ["README.md", "pyproject.toml", "Makefile", "configs/sample.yaml", "homepage/index.html"]
@@ -412,6 +429,11 @@ def build_audit() -> dict[str, Any]:
             },
         ),
         "pipeline_performance={detail}",
+    )
+    checks["validation:resource_parallelism_profile"] = _json_condition(
+        "outputs/reports/pipeline_performance_report.json",
+        _resource_parallelism_condition,
+        "resource_parallelism_profile={detail}",
     )
     checks["validation:refresh_dashboard"] = _json_condition(
         "outputs/reports/refresh_dashboard.json",

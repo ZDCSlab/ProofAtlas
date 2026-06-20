@@ -144,7 +144,7 @@ Recent passing result:
 
 ```text
 pytest: 85 passed, 4 skipped
-audit: 171/171 checks passed
+audit: 172/172 checks passed
 git diff --check: passed
 ```
 
