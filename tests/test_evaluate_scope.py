@@ -75,8 +75,10 @@ def test_full_heldout_override_removes_core_evaluation_limits(tmp_path, monkeypa
         "val_theorem_retrieval",
         "test_theorem_retrieval",
         "test_reranked_proof_state_retrieval",
+        "val_proof_state_query_representation_diagnostic",
         "test_proof_state_query_representation_diagnostic",
     ]
+    assert data["evaluation_scope"]["query_representation_diagnostic_splits"] == ["test", "val"]
 
 
 def test_theorem_evaluation_skips_case_study_query_text_when_disabled(tmp_path, monkeypatch):

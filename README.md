@@ -198,14 +198,14 @@ Current production run coverage and timing:
 | Pipeline timing | throughput basis | executed_pipeline_run |
 | Pipeline timing | scale estimate reliable | True |
 | Pipeline timing | saved evaluate seconds | 19.1237 |
-| Pipeline timing | current standalone evaluation seconds | 23.8288 |
-| Pipeline timing | timed/current evaluation ratio | 0.8025 |
+| Pipeline timing | current standalone evaluation seconds | 25.7700 |
+| Pipeline timing | timed/current evaluation ratio | 0.7421 |
 | Rerank diagnostic cost | sampled/full proof-state queries | 20 / 3053 |
 | Rerank diagnostic cost | sampled fraction | 0.0066 |
-| Rerank diagnostic cost | projected full rerank seconds | 2180.9495 |
-| Rerank diagnostic cost | rerank/batched seconds per query | 2350.9921 |
+| Rerank diagnostic cost | projected full rerank seconds | 2263.6750 |
+| Rerank diagnostic cost | rerank/batched seconds per query | 2100.7614 |
 | Artifact storage | total GiB | 2.8429 |
-| Artifact storage | bytes per processed row | 10453.6022 |
+| Artifact storage | bytes per processed row | 10453.6250 |
 | Artifact storage | index bytes | 2295001630 |
 | Artifact storage | unreferenced index bytes | 1502501178 |
 | Artifact storage | unreferenced index GiB | 1.3993 |

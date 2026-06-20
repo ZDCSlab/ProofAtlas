@@ -63,6 +63,15 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                     },
                     "worst_cases": [{"proof_state_id": "ps_bad", "rank_of_first_gold": 27, "Recall@10": 0.0, "MRR": 0.0, "gold_premises_total": 1, "gold_premises_in_train_index": 1}],
                 },
+                "proof_state_query_representation_diagnostic": {
+                    "evaluated_queries": 3,
+                    "selection_metric": "Recall@100",
+                    "best_variant_by_recall": "full_name_goal",
+                    "variants": {
+                        "goal_only": {"metrics": {"Recall@50": 0.2, "Recall@100": 0.25, "MRR": 0.1, "MAP": 0.05}},
+                        "full_name_goal": {"metrics": {"Recall@50": 0.45, "Recall@100": 0.55, "MRR": 0.25, "MAP": 0.15}},
+                    },
+                },
                 "theorem_retrieval": {
                     "metrics": {"theorem_retrieval_evaluated_theorems": 2, "theorem_retrieval_Recall@10": 0.25},
                     "domain_breakdown": [{"domain_tag": "Algebra", "metrics": {"theorem_retrieval_evaluated_queries": 1, "theorem_retrieval_Recall@10": 0.25}}],
@@ -81,6 +90,15 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
             },
             "validation": {
                 "proof_state_retrieval": {"metrics": {"evaluated_queries": 2, "Recall@10": 0.6}},
+                "proof_state_query_representation_diagnostic": {
+                    "evaluated_queries": 2,
+                    "selection_metric": "Recall@100",
+                    "best_variant_by_recall": "goal_only",
+                    "variants": {
+                        "goal_only": {"metrics": {"Recall@50": 0.4, "Recall@100": 0.5, "MRR": 0.2, "MAP": 0.1}},
+                        "full_name_goal": {"metrics": {"Recall@50": 0.3, "Recall@100": 0.4, "MRR": 0.15, "MAP": 0.08}},
+                    },
+                },
                 "theorem_retrieval": {"metrics": {"theorem_retrieval_evaluated_theorems": 1, "theorem_retrieval_Recall@10": 0.2}},
             },
         },
@@ -512,6 +530,10 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "proof_state_query_and_embedding" in text
     assert "proof_state_missing_from_top100" in text
     assert "symbol_overlap" in text
+    assert "Proof-State Query Representation Diagnostic" in text
+    assert "Validation split" in text
+    assert "Test split" in text
+    assert "goal_only" in text
     assert "Metric Uncertainty" in text
     assert "Proof-State Metric Intervals" in text
     assert "Theorem Metric Intervals" in text

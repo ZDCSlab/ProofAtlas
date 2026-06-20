@@ -144,8 +144,8 @@ Pipeline timing:
 
 - Total seconds: 551.6511
 - Saved full-pipeline evaluate stage: 19.1237 seconds
-- Current standalone full-heldout evaluation: 23.8288 seconds
-- Reranked proof-state diagnostic: 20 / 3053 sampled queries; projected full rerank 2180.9495 seconds; 2350.9921x batched seconds/query
+- Current standalone full-heldout evaluation: 25.7700 seconds
+- Reranked proof-state diagnostic: 20 / 3053 sampled queries; projected full rerank 2263.6750 seconds; 2100.7614x batched seconds/query
 - Timing freshness: current; full-pipeline evaluate timing and standalone evaluation timing are aligned.
 
 Pipeline scale profile:
@@ -157,7 +157,7 @@ Pipeline scale profile:
 - Embedding devices: `cuda:0` to `cuda:6`
 - Index backend: `hnswlib`
 - LeanRank premise supervision ready: true
-- Artifact storage: 2.8429 GiB total, 10,453.6022 bytes per processed row
+- Artifact storage: 2.8429 GiB total, 10,453.6250 bytes per processed row
 - Largest storage component: `outputs/indexes`, 2,295,001,630 bytes
 - Unreferenced index artifacts: 1,502,501,178 bytes (1.3993 GiB) not pointed to by current manifests
 - Projected storage at current_5x: 14.2147 GiB

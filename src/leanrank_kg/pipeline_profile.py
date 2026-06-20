@@ -285,6 +285,16 @@ def _evaluation_stage() -> dict[str, Any]:
             },
             "test": {
                 "proof_state_reranked_retrieval": reranked_proof_state,
+                "proof_state_query_representation_diagnostic": test_set_evaluation.get("test", {}).get(
+                    "proof_state_query_representation_diagnostic",
+                    {},
+                ),
+            },
+            "validation": {
+                "proof_state_query_representation_diagnostic": test_set_evaluation.get("validation", {}).get(
+                    "proof_state_query_representation_diagnostic",
+                    {},
+                ),
             },
             "validation_metrics": {
                 "proof_state_retrieval": test_set_evaluation.get("validation", {}).get("proof_state_retrieval", {}).get("metrics", {}),
@@ -559,6 +569,13 @@ def _rapid_convergence_profile(
     theorem_metrics = test_eval.get("test_metrics", {}).get("theorem_retrieval", {})
     reranked_metrics = test.get("proof_state_reranked_retrieval", {}).get("metrics", {}) if isinstance(test, dict) else {}
     candidate_k_ablation = test.get("proof_state_reranked_retrieval", {}).get("candidate_k_ablation", []) if isinstance(test, dict) else []
+    validation = test_eval.get("validation", {}) if isinstance(test_eval, dict) else {}
+    validation_query_representation = (
+        validation.get("proof_state_query_representation_diagnostic", {}) if isinstance(validation, dict) else {}
+    )
+    test_query_representation = (
+        test.get("proof_state_query_representation_diagnostic", {}) if isinstance(test, dict) else {}
+    )
     retrieval_profile = throughput.get("retrieval_bottleneck_profile", {}) if isinstance(throughput, dict) else {}
     premise_trace = readiness.get("premise_trace_supervision", {}).get("current_artifact_supervision", {}) if isinstance(readiness, dict) else {}
     ranker_validation = evaluation.get("ranker_validation", {}) if isinstance(evaluation, dict) else {}
@@ -609,13 +626,17 @@ def _rapid_convergence_profile(
     proof_bottleneck = (retrieval_profile.get("proof_state") or {}).get("primary_accuracy_bottleneck")
     theorem_bottleneck = (retrieval_profile.get("theorem") or {}).get("primary_accuracy_bottleneck")
     if proof_bottleneck == "candidate_generation_or_embeddings":
+        validation_best = validation_query_representation.get("best_variant_by_recall")
         recommended_sequence.append(
             {
                 "priority": 1,
                 "area": "proof_state_query_and_embedding",
                 "target_metric": "proof_state Recall@100",
                 "current_value": proof_recall100,
-                "reason": "Proof-state gold premises are often absent from the top-100 candidate pool, so top-k reranking cannot recover them.",
+                "reason": (
+                    "Proof-state gold premises are often absent from the top-100 candidate pool, so top-k reranking cannot recover them."
+                    + (f" Validation query diagnostic currently favors `{validation_best}`." if validation_best else "")
+                ),
             }
         )
     if theorem_bottleneck == "top10_reranking_or_candidate_ordering":
@@ -668,6 +689,24 @@ def _rapid_convergence_profile(
         "rerank_candidate_depth": {
             "best_by_recall_at_10": _best_candidate_k(candidate_k_ablation),
             "evaluated_candidate_k_values": [row.get("candidate_k") for row in candidate_k_ablation if isinstance(row, dict)],
+        },
+        "query_representation_diagnostic": {
+            "validation": {
+                "evaluated_queries": validation_query_representation.get("evaluated_queries"),
+                "selection_metric": validation_query_representation.get("selection_metric"),
+                "best_variant_by_recall": validation_query_representation.get("best_variant_by_recall"),
+            },
+            "test": {
+                "evaluated_queries": test_query_representation.get("evaluated_queries"),
+                "selection_metric": test_query_representation.get("selection_metric"),
+                "best_variant_by_recall": test_query_representation.get("best_variant_by_recall"),
+            },
+            "validation_test_best_variant_match": (
+                validation_query_representation.get("best_variant_by_recall")
+                == test_query_representation.get("best_variant_by_recall")
+                if validation_query_representation.get("best_variant_by_recall") and test_query_representation.get("best_variant_by_recall")
+                else None
+            ),
         },
         "strongest_ranker_feature_groups": ranked_feature_groups[:5],
         "label_supervision": {

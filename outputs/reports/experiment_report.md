@@ -75,7 +75,7 @@ This plan connects the held-out retrieval metrics, reranked diagnostic, ranker a
 
 | Priority | Area | Target metric | Current value | Reason |
 | ---: | --- | --- | ---: | --- |
-| 1 | `proof_state_query_and_embedding` | proof_state Recall@100 | 0.2362 | Proof-state gold premises are often absent from the top-100 candidate pool, so top-k reranking cannot recover them. |
+| 1 | `proof_state_query_and_embedding` | proof_state Recall@100 | 0.2362 | Proof-state gold premises are often absent from the top-100 candidate pool, so top-k reranking cannot recover them. Validation query diagnostic currently favors `full_name_goal`. |
 | 2 | `theorem_level_reranking` | theorem_retrieval Recall@10 | 0.4940 | Theorem-level Recall@100 is substantially higher than Recall@10, leaving useful headroom for ordering candidates already in the pool. |
 | 3 | `ranker_feature_iteration` | validation/test Recall@10 and MAP | 0.0514 | Ranker ablation says `proof_technique` is the strongest currently measured feature group by delta_without_group. |
 | 4 | `hard_negative_training` | MRR/MAP after reranking | 9.5478 | LeanRank-data already provides positive premises and hard negative candidates, so training/evaluation changes can reuse existing labels without extracting new data. |
@@ -100,6 +100,14 @@ Headroom:
 | `theorem_missing_from_top100` | 0.3111 |
 | `theorem_top10_to_top100_gap` | 0.1948 |
 
+Query representation diagnostic summary:
+
+| Metric | Value |
+| --- | ---: |
+| `validation` | {'best_variant_by_recall': 'full_name_goal', 'evaluated_queries': 50, 'selection_metric': 'Recall@100'} |
+| `test` | {'best_variant_by_recall': 'full_name_goal', 'evaluated_queries': 50, 'selection_metric': 'Recall@100'} |
+| `validation_test_best_variant_match` | True |
+
 Strongest ranker feature groups:
 
 | Feature group | Delta without group | Group-only AUC | Columns |
@@ -111,6 +119,23 @@ Strongest ranker feature groups:
 | `embedding_similarity` | 0.0056 | 0.6252 | `cosine_similarity` |
 
 ### Proof-State Query Representation Diagnostic
+
+Validation diagnostics are the safer signal for choosing proof-state query text variants; test diagnostics are reported to show whether that choice generalizes. The main proof-state retrieval metric remains the committed production evaluation path.
+
+Validation split:
+
+- Evaluated queries: `50`
+- Best variant by `Recall@100`: `full_name_goal`
+
+| Query Representation | Recall@50 | Recall@100 | MRR | MAP |
+| --- | ---: | ---: | ---: | ---: |
+| `context_goal` | 0.0677 | 0.0979 | 0.0386 | 0.0270 |
+| `full_name_context_goal` | 0.1719 | 0.1927 | 0.0707 | 0.0476 |
+| `full_name_goal` | 0.2396 | 0.2604 | 0.0745 | 0.0481 |
+| `goal_only` | 0.1589 | 0.1797 | 0.0727 | 0.0589 |
+| `theorem_id_goal` | 0.2344 | 0.2604 | 0.0764 | 0.0504 |
+
+Test split:
 
 - Evaluated queries: `50`
 - Best variant by `Recall@100`: `full_name_goal`
@@ -509,8 +534,8 @@ This profile verifies that the learned premise ranker uses normalized LeanRank-d
 - Timing config matches current report config: `True`
 - Timing generated at: `2026-06-20T18:53:38.545222+00:00`
 - Timing report: `outputs/reports/pipeline_run_timings.json`
-- Evaluation internal total seconds: `23.828760851873085`
-- Evaluation timed substages: `6`
+- Evaluation internal total seconds: `25.76996100996621`
+- Evaluation timed substages: `7`
 
 | Stage | Seconds |
 | --- | ---: |
@@ -531,12 +556,13 @@ These timings split the `evaluate` pipeline stage into proof-state retrieval, th
 
 | Evaluation substage | Seconds | Queries | Backend |
 | --- | ---: | ---: | --- |
-| `test_reranked_proof_state_retrieval` | 14.2873 | 20 | batched_torch_cuda_then_rerank |
-| `val_proof_state_retrieval` | 6.8903 | 2822 | torch_cuda |
-| `test_proof_state_retrieval` | 0.9277 | 3053 | torch_cuda |
-| `test_proof_state_query_representation_diagnostic` | 0.5394 | 50 | n/a |
-| `test_theorem_retrieval` | 0.4232 | 1000 | torch_cuda |
-| `val_theorem_retrieval` | 0.3153 | 1000 | torch_cuda |
+| `test_reranked_proof_state_retrieval` | 14.8292 | 20 | batched_torch_cuda_then_rerank |
+| `val_proof_state_retrieval` | 6.9826 | 2822 | torch_cuda |
+| `test_proof_state_retrieval` | 1.0775 | 3053 | torch_cuda |
+| `val_proof_state_query_representation_diagnostic` | 0.8492 | 50 | n/a |
+| `test_proof_state_query_representation_diagnostic` | 0.6853 | 50 | n/a |
+| `test_theorem_retrieval` | 0.5263 | 1000 | torch_cuda |
+| `val_theorem_retrieval` | 0.3390 | 1000 | torch_cuda |
 
 ### Rerank Evaluation Cost Profile
 
@@ -548,11 +574,11 @@ The reranked proof-state diagnostic follows the slower homepage/API-style path. 
 - Sampled rerank queries: `20`
 - Full proof-state queries: `3053`
 - Sampled fraction of full proof-state eval: `0.006550933508024894`
-- Rerank seconds/query: `0.7143627502955496`
-- Batched embedding seconds/query: `0.0003038558732538859`
-- Rerank/batched seconds per query: `2350.9920760974264`
-- Projected full rerank seconds: `2180.949476652313`
-- Projected full rerank minutes: `36.34915794420522`
+- Rerank seconds/query: `0.7414592113462277`
+- Batched embedding seconds/query: `0.00035294785000788964`
+- Rerank/batched seconds per query: `2100.761376870984`
+- Projected full rerank seconds: `2263.674972240033`
+- Projected full rerank minutes: `37.72791620400055`
 - Sampled rerank Recall@10 delta: `0.035066606557834695`
 - Policy: keep reranked proof-state evaluation sampled for development and use full batched embedding evaluation for final held-out coverage
 
@@ -658,8 +684,8 @@ These gates summarize whether the committed performance evidence is strong enoug
 - Pipeline seconds per 100k processed rows: `188.91383326197186`
 - Slowest timed stage: `embed`
 - Saved pipeline evaluate seconds: `19.123737015994266`
-- Current standalone evaluation seconds: `23.828760851873085`
-- Timed/current evaluation ratio: `0.8025485309485165`
+- Current standalone evaluation seconds: `25.76996100996621`
+- Timed/current evaluation ratio: `0.7420941385436478`
 - Primary bottleneck share: `0.2703940719938502`
 - Top-3 timed-stage share: `0.5194877576097815`
 - Mean index speedup vs exact: `17.376305276865946`
@@ -695,9 +721,9 @@ These linear projections use the current timed pipeline as a capacity-planning b
 This profile records the local footprint of generated LeanRank-data artifacts. It is a practical scale-up signal because embeddings and ANN indexes can dominate disk usage before model training becomes the bottleneck.
 
 - Method: `filesystem_artifact_footprint_with_linear_scale_projection`
-- Total artifact bytes: `3052577299`
-- Total artifact GiB: `2.8429341493174434`
-- Bytes per processed row: `10453.602245798118`
+- Total artifact bytes: `3052583953`
+- Total artifact GiB: `2.842940346337855`
+- Bytes per processed row: `10453.62503253291`
 - Unreferenced index artifact bytes: `1502501178`
 - Unreferenced index artifact count: `12`
 

@@ -482,6 +482,9 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     reranked_backend = reranked_proof_state.get("backend_info", {})
     reranked_candidate_k_ablation = reranked_proof_state.get("candidate_k_ablation", [])
     query_representation_diagnostic = test_eval.get("test", {}).get("proof_state_query_representation_diagnostic", {}) if isinstance(test_eval, dict) else {}
+    validation_query_representation_diagnostic = (
+        test_eval.get("validation", {}).get("proof_state_query_representation_diagnostic", {}) if isinstance(test_eval, dict) else {}
+    )
     theorem_metrics = test_eval.get("test", {}).get("theorem_retrieval", {}).get("metrics", {})
     proof_domain_breakdown = test_eval.get("test", {}).get("proof_state_retrieval", {}).get("domain_breakdown", [])
     theorem_domain_breakdown = test_eval.get("test", {}).get("theorem_retrieval", {}).get("domain_breakdown", [])
@@ -553,17 +556,22 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
         "theorem_retrieval_nDCG@50",
         "theorem_retrieval_nDCG@100",
     ]
-    query_representation_lines = [
-        "| Query Representation | Recall@50 | Recall@100 | MRR | MAP |",
-        "| --- | ---: | ---: | ---: | ---: |",
-    ]
-    for name, row in sorted((query_representation_diagnostic.get("variants") or {}).items()):
-        metrics = row.get("metrics", {})
-        query_representation_lines.append(
-            f"| `{name}` | {_fmt(metrics.get('Recall@50'))} | {_fmt(metrics.get('Recall@100'))} | {_fmt(metrics.get('MRR'))} | {_fmt(metrics.get('MAP'))} |"
-        )
-    if len(query_representation_lines) == 2:
-        query_representation_lines.append("| n/a | n/a | n/a | n/a | n/a |")
+    def _query_representation_lines(diagnostic: dict[str, Any]) -> list[str]:
+        lines = [
+            "| Query Representation | Recall@50 | Recall@100 | MRR | MAP |",
+            "| --- | ---: | ---: | ---: | ---: |",
+        ]
+        for name, row in sorted((diagnostic.get("variants") or {}).items()):
+            metrics = row.get("metrics", {})
+            lines.append(
+                f"| `{name}` | {_fmt(metrics.get('Recall@50'))} | {_fmt(metrics.get('Recall@100'))} | {_fmt(metrics.get('MRR'))} | {_fmt(metrics.get('MAP'))} |"
+            )
+        if len(lines) == 2:
+            lines.append("| n/a | n/a | n/a | n/a | n/a |")
+        return lines
+
+    validation_query_representation_lines = _query_representation_lines(validation_query_representation_diagnostic)
+    test_query_representation_lines = _query_representation_lines(query_representation_diagnostic)
     reranked_candidate_lines = [
         "| Candidate k | Recall@1 | Recall@5 | Recall@10 | MRR | MAP |",
         "| ---: | ---: | ---: | ---: | ---: | ---: |",
@@ -667,16 +675,38 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
             ],
         ),
         "",
+        "Query representation diagnostic summary:",
+        "",
+        _metric_table(
+            rapid_convergence.get("query_representation_diagnostic", {}) if isinstance(rapid_convergence, dict) else {},
+            [
+                "validation",
+                "test",
+                "validation_test_best_variant_match",
+            ],
+        ),
+        "",
         "Strongest ranker feature groups:",
         "",
         _ranker_feature_group_table(rapid_convergence.get("strongest_ranker_feature_groups", []) if isinstance(rapid_convergence, dict) else []),
         "",
         "### Proof-State Query Representation Diagnostic",
         "",
+        "Validation diagnostics are the safer signal for choosing proof-state query text variants; test diagnostics are reported to show whether that choice generalizes. The main proof-state retrieval metric remains the committed production evaluation path.",
+        "",
+        "Validation split:",
+        "",
+        f"- Evaluated queries: `{validation_query_representation_diagnostic.get('evaluated_queries', 'n/a')}`",
+        f"- Best variant by `{validation_query_representation_diagnostic.get('selection_metric', 'Recall@100')}`: `{validation_query_representation_diagnostic.get('best_variant_by_recall', 'n/a')}`",
+        "",
+        "\n".join(validation_query_representation_lines),
+        "",
+        "Test split:",
+        "",
         f"- Evaluated queries: `{query_representation_diagnostic.get('evaluated_queries', 'n/a')}`",
         f"- Best variant by `{query_representation_diagnostic.get('selection_metric', 'Recall@100')}`: `{query_representation_diagnostic.get('best_variant_by_recall', 'n/a')}`",
         "",
-        "\n".join(query_representation_lines),
+        "\n".join(test_query_representation_lines),
         "",
         "## Held-Out Test Set Metrics",
         "",

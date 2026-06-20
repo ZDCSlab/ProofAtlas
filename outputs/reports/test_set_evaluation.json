@@ -61,6 +61,10 @@
       "val": null
     },
     "query_representation_diagnostic_examples": 50,
+    "query_representation_diagnostic_splits": [
+      "test",
+      "val"
+    ],
     "ranking_backend": "batched_embedding_topk",
     "rerank_candidate_k": 50,
     "rerank_candidate_k_values": [
@@ -73,14 +77,14 @@
         "actual_backend": "torch_cuda",
         "evaluated_queries": 2822,
         "name": "val_proof_state_retrieval",
-        "seconds": 6.8903439049609005,
+        "seconds": 6.982577220071107,
         "split": "val"
       },
       {
         "actual_backend": "torch_cuda",
         "evaluated_queries": 3053,
         "name": "test_proof_state_retrieval",
-        "seconds": 0.9276719810441136,
+        "seconds": 1.077549786074087,
         "split": "test"
       },
       {
@@ -88,7 +92,7 @@
         "case_study_limit": 0,
         "evaluated_queries": 1000,
         "name": "val_theorem_retrieval",
-        "seconds": 0.3152722199447453,
+        "seconds": 0.33903439599089324,
         "split": "val"
       },
       {
@@ -96,7 +100,7 @@
         "case_study_limit": 0,
         "evaluated_queries": 1000,
         "name": "test_theorem_retrieval",
-        "seconds": 0.42323223501443863,
+        "seconds": 0.5262504711281508,
         "split": "test"
       },
       {
@@ -104,14 +108,21 @@
         "candidate_k": 50,
         "evaluated_queries": 20,
         "name": "test_reranked_proof_state_retrieval",
-        "seconds": 14.287255005910993,
+        "seconds": 14.829184226924554,
         "split": "test"
       },
       {
         "best_variant_by_recall": "full_name_goal",
         "evaluated_queries": 50,
+        "name": "val_proof_state_query_representation_diagnostic",
+        "seconds": 0.8492297921329737,
+        "split": "val"
+      },
+      {
+        "best_variant_by_recall": "full_name_goal",
+        "evaluated_queries": 50,
         "name": "test_proof_state_query_representation_diagnostic",
-        "seconds": 0.5394067950546741,
+        "seconds": 0.6853453698568046,
         "split": "test"
       }
     ],
@@ -119,7 +130,7 @@
       "test": null,
       "val": null
     },
-    "total_seconds": 23.828760851873085,
+    "total_seconds": 25.76996100996621,
     "use_gpu": true
   },
   "label_policy": "held-out test positive_edges are used only for evaluation",
@@ -23176,6 +23187,148 @@
     100
   ],
   "validation": {
+    "proof_state_query_representation_diagnostic": {
+      "best_variant_by_recall": "full_name_goal",
+      "evaluated_queries": 50,
+      "selection_metric": "Recall@100",
+      "split": "val",
+      "top_k": [
+        50,
+        100
+      ],
+      "variants": {
+        "context_goal": {
+          "backend_info": {
+            "actual_backend": "torch_cuda",
+            "actual_gpu_device": "cuda:0",
+            "candidate_count": 127561,
+            "fallback_reason": null,
+            "query_count": 50,
+            "requested_gpu_device": "cuda:0",
+            "requested_use_gpu": true,
+            "top_k": 100
+          },
+          "metrics": {
+            "MAP": 0.027040233983723072,
+            "MRR": 0.03863549227934902,
+            "Recall@100": 0.09791666666666667,
+            "Recall@50": 0.06770833333333333,
+            "evaluated_queries": 50,
+            "evaluated_retrievable_queries": 48,
+            "gold_premise_coverage": 0.9333333333333333,
+            "gold_premises_in_train_index": 112,
+            "gold_premises_missing_from_train_index": 8,
+            "gold_premises_total": 120,
+            "nDCG@100": 0.044570868654603,
+            "nDCG@50": 0.03859639817873508
+          }
+        },
+        "full_name_context_goal": {
+          "backend_info": {
+            "actual_backend": "torch_cuda",
+            "actual_gpu_device": "cuda:0",
+            "candidate_count": 127561,
+            "fallback_reason": null,
+            "query_count": 50,
+            "requested_gpu_device": "cuda:0",
+            "requested_use_gpu": true,
+            "top_k": 100
+          },
+          "metrics": {
+            "MAP": 0.04762638364523212,
+            "MRR": 0.07066302153539786,
+            "Recall@100": 0.19270833333333334,
+            "Recall@50": 0.171875,
+            "evaluated_queries": 50,
+            "evaluated_retrievable_queries": 48,
+            "gold_premise_coverage": 0.9333333333333333,
+            "gold_premises_in_train_index": 112,
+            "gold_premises_missing_from_train_index": 8,
+            "gold_premises_total": 120,
+            "nDCG@100": 0.08542225912748912,
+            "nDCG@50": 0.08192332623255075
+          }
+        },
+        "full_name_goal": {
+          "backend_info": {
+            "actual_backend": "torch_cuda",
+            "actual_gpu_device": "cuda:0",
+            "candidate_count": 127561,
+            "fallback_reason": null,
+            "query_count": 50,
+            "requested_gpu_device": "cuda:0",
+            "requested_use_gpu": true,
+            "top_k": 100
+          },
+          "metrics": {
+            "MAP": 0.04809809749496615,
+            "MRR": 0.0745358563591956,
+            "Recall@100": 0.2604166666666667,
+            "Recall@50": 0.23958333333333334,
+            "evaluated_queries": 50,
+            "evaluated_retrievable_queries": 48,
+            "gold_premise_coverage": 0.9333333333333333,
+            "gold_premises_in_train_index": 112,
+            "gold_premises_missing_from_train_index": 8,
+            "gold_premises_total": 120,
+            "nDCG@100": 0.10044147825972982,
+            "nDCG@50": 0.09680432346706219
+          }
+        },
+        "goal_only": {
+          "backend_info": {
+            "actual_backend": "torch_cuda",
+            "actual_gpu_device": "cuda:0",
+            "candidate_count": 127561,
+            "fallback_reason": null,
+            "query_count": 50,
+            "requested_gpu_device": "cuda:0",
+            "requested_use_gpu": true,
+            "top_k": 100
+          },
+          "metrics": {
+            "MAP": 0.05889160735361431,
+            "MRR": 0.07268814396477936,
+            "Recall@100": 0.1796875,
+            "Recall@50": 0.15885416666666666,
+            "evaluated_queries": 50,
+            "evaluated_retrievable_queries": 48,
+            "gold_premise_coverage": 0.9333333333333333,
+            "gold_premises_in_train_index": 112,
+            "gold_premises_missing_from_train_index": 8,
+            "gold_premises_total": 120,
+            "nDCG@100": 0.09161326371997847,
+            "nDCG@50": 0.08680674040648662
+          }
+        },
+        "theorem_id_goal": {
+          "backend_info": {
+            "actual_backend": "torch_cuda",
+            "actual_gpu_device": "cuda:0",
+            "candidate_count": 127561,
+            "fallback_reason": null,
+            "query_count": 50,
+            "requested_gpu_device": "cuda:0",
+            "requested_use_gpu": true,
+            "top_k": 100
+          },
+          "metrics": {
+            "MAP": 0.050414409298154515,
+            "MRR": 0.07642519984833189,
+            "Recall@100": 0.2604166666666667,
+            "Recall@50": 0.234375,
+            "evaluated_queries": 50,
+            "evaluated_retrievable_queries": 48,
+            "gold_premise_coverage": 0.9333333333333333,
+            "gold_premises_in_train_index": 112,
+            "gold_premises_missing_from_train_index": 8,
+            "gold_premises_total": 120,
+            "nDCG@100": 0.10238696571702205,
+            "nDCG@50": 0.09761112936791211
+          }
+        }
+      }
+    },
     "proof_state_retrieval": {
       "domain_breakdown": [
         {

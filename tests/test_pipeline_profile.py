@@ -93,6 +93,11 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
             },
             "test": {
                 "proof_state_retrieval": {"metrics": {"evaluated_queries": 10, "Recall@10": 0.1, "Recall@100": 0.2, "MRR": 0.15, "MAP": 0.12}},
+                "proof_state_query_representation_diagnostic": {
+                    "evaluated_queries": 4,
+                    "selection_metric": "Recall@100",
+                    "best_variant_by_recall": "full_name_goal",
+                },
                 "theorem_retrieval": {
                     "metrics": {
                         "theorem_retrieval_evaluated_theorems": 5,
@@ -108,6 +113,13 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
                         {"candidate_k": 100, "metrics": {"Recall@10": 0.12, "MRR": 0.10, "MAP": 0.07}},
                     ],
                 },
+            },
+            "validation": {
+                "proof_state_query_representation_diagnostic": {
+                    "evaluated_queries": 4,
+                    "selection_metric": "Recall@100",
+                    "best_variant_by_recall": "goal_only",
+                }
             },
         },
     )
@@ -188,7 +200,11 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
     assert rapid["rerank_candidate_depth"]["best_by_recall_at_10"]["candidate_k"] == 50
     assert rapid["strongest_ranker_feature_groups"][0]["group"] == "symbol_overlap"
     assert rapid["label_supervision"]["negative_to_positive_edge_ratio"] == 9.0
+    assert rapid["query_representation_diagnostic"]["validation"]["best_variant_by_recall"] == "goal_only"
+    assert rapid["query_representation_diagnostic"]["test"]["best_variant_by_recall"] == "full_name_goal"
+    assert rapid["query_representation_diagnostic"]["validation_test_best_variant_match"] is False
     assert rapid["recommended_sequence"][0]["area"] == "proof_state_query_and_embedding"
+    assert "Validation query diagnostic currently favors `goal_only`" in rapid["recommended_sequence"][0]["reason"]
     rerank_cost = report["throughput_profile"]["rerank_evaluation_cost_profile"]
     assert rerank_cost["sampled_rerank_queries"] == 0
     assert rerank_cost["full_proof_state_queries"] == 10

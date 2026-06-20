@@ -391,28 +391,35 @@
             "candidate_k": 50,
             "evaluated_queries": 20,
             "name": "test_reranked_proof_state_retrieval",
-            "seconds": 14.287255005910993,
+            "seconds": 14.829184226924554,
             "split": "test"
           },
           {
             "actual_backend": "torch_cuda",
             "evaluated_queries": 2822,
             "name": "val_proof_state_retrieval",
-            "seconds": 6.8903439049609005,
+            "seconds": 6.982577220071107,
             "split": "val"
           },
           {
             "actual_backend": "torch_cuda",
             "evaluated_queries": 3053,
             "name": "test_proof_state_retrieval",
-            "seconds": 0.9276719810441136,
+            "seconds": 1.077549786074087,
             "split": "test"
           },
           {
             "best_variant_by_recall": "full_name_goal",
             "evaluated_queries": 50,
+            "name": "val_proof_state_query_representation_diagnostic",
+            "seconds": 0.8492297921329737,
+            "split": "val"
+          },
+          {
+            "best_variant_by_recall": "full_name_goal",
+            "evaluated_queries": 50,
             "name": "test_proof_state_query_representation_diagnostic",
-            "seconds": 0.5394067950546741,
+            "seconds": 0.6853453698568046,
             "split": "test"
           },
           {
@@ -420,7 +427,7 @@
             "case_study_limit": 0,
             "evaluated_queries": 1000,
             "name": "test_theorem_retrieval",
-            "seconds": 0.42323223501443863,
+            "seconds": 0.5262504711281508,
             "split": "test"
           },
           {
@@ -428,13 +435,13 @@
             "case_study_limit": 0,
             "evaluated_queries": 1000,
             "name": "val_theorem_retrieval",
-            "seconds": 0.3152722199447453,
+            "seconds": 0.33903439599089324,
             "split": "val"
           }
         ],
-        "substage_count": 6,
-        "substage_seconds_total": 23.383182141929865,
-        "total_seconds": 23.828760851873085
+        "substage_count": 7,
+        "substage_seconds_total": 25.28917126217857,
+        "total_seconds": 25.76996100996621
       },
       "held_out_test_coverage": {
         "proof_state_configured_limit": null,
@@ -709,6 +716,10 @@
             "val": null
           },
           "query_representation_diagnostic_examples": 50,
+          "query_representation_diagnostic_splits": [
+            "test",
+            "val"
+          ],
           "ranking_backend": "batched_embedding_topk",
           "rerank_candidate_k": 50,
           "rerank_candidate_k_values": [
@@ -721,14 +732,14 @@
               "actual_backend": "torch_cuda",
               "evaluated_queries": 2822,
               "name": "val_proof_state_retrieval",
-              "seconds": 6.8903439049609005,
+              "seconds": 6.982577220071107,
               "split": "val"
             },
             {
               "actual_backend": "torch_cuda",
               "evaluated_queries": 3053,
               "name": "test_proof_state_retrieval",
-              "seconds": 0.9276719810441136,
+              "seconds": 1.077549786074087,
               "split": "test"
             },
             {
@@ -736,7 +747,7 @@
               "case_study_limit": 0,
               "evaluated_queries": 1000,
               "name": "val_theorem_retrieval",
-              "seconds": 0.3152722199447453,
+              "seconds": 0.33903439599089324,
               "split": "val"
             },
             {
@@ -744,7 +755,7 @@
               "case_study_limit": 0,
               "evaluated_queries": 1000,
               "name": "test_theorem_retrieval",
-              "seconds": 0.42323223501443863,
+              "seconds": 0.5262504711281508,
               "split": "test"
             },
             {
@@ -752,14 +763,21 @@
               "candidate_k": 50,
               "evaluated_queries": 20,
               "name": "test_reranked_proof_state_retrieval",
-              "seconds": 14.287255005910993,
+              "seconds": 14.829184226924554,
               "split": "test"
             },
             {
               "best_variant_by_recall": "full_name_goal",
               "evaluated_queries": 50,
+              "name": "val_proof_state_query_representation_diagnostic",
+              "seconds": 0.8492297921329737,
+              "split": "val"
+            },
+            {
+              "best_variant_by_recall": "full_name_goal",
+              "evaluated_queries": 50,
               "name": "test_proof_state_query_representation_diagnostic",
-              "seconds": 0.5394067950546741,
+              "seconds": 0.6853453698568046,
               "split": "test"
             }
           ],
@@ -767,12 +785,154 @@
             "test": null,
             "val": null
           },
-          "total_seconds": 23.828760851873085,
+          "total_seconds": 25.76996100996621,
           "use_gpu": true
         },
         "label_policy": "held-out test positive_edges are used only for evaluation",
         "task": "premise_ranking_and_theorem_guidance",
         "test": {
+          "proof_state_query_representation_diagnostic": {
+            "best_variant_by_recall": "full_name_goal",
+            "evaluated_queries": 50,
+            "selection_metric": "Recall@100",
+            "split": "test",
+            "top_k": [
+              50,
+              100
+            ],
+            "variants": {
+              "context_goal": {
+                "backend_info": {
+                  "actual_backend": "torch_cuda",
+                  "actual_gpu_device": "cuda:0",
+                  "candidate_count": 127561,
+                  "fallback_reason": null,
+                  "query_count": 50,
+                  "requested_gpu_device": "cuda:0",
+                  "requested_use_gpu": true,
+                  "top_k": 100
+                },
+                "metrics": {
+                  "MAP": 0.03779914507111392,
+                  "MRR": 0.0694865532115254,
+                  "Recall@100": 0.13020833333333334,
+                  "Recall@50": 0.109375,
+                  "evaluated_queries": 50,
+                  "evaluated_retrievable_queries": 48,
+                  "gold_premise_coverage": 0.8796296296296297,
+                  "gold_premises_in_train_index": 95,
+                  "gold_premises_missing_from_train_index": 13,
+                  "gold_premises_total": 108,
+                  "nDCG@100": 0.06283326874130761,
+                  "nDCG@50": 0.057946281997361855
+                }
+              },
+              "full_name_context_goal": {
+                "backend_info": {
+                  "actual_backend": "torch_cuda",
+                  "actual_gpu_device": "cuda:0",
+                  "candidate_count": 127561,
+                  "fallback_reason": null,
+                  "query_count": 50,
+                  "requested_gpu_device": "cuda:0",
+                  "requested_use_gpu": true,
+                  "top_k": 100
+                },
+                "metrics": {
+                  "MAP": 0.05280912548398064,
+                  "MRR": 0.08872851718702202,
+                  "Recall@100": 0.2378472222222222,
+                  "Recall@50": 0.20746527777777776,
+                  "evaluated_queries": 50,
+                  "evaluated_retrievable_queries": 48,
+                  "gold_premise_coverage": 0.8796296296296297,
+                  "gold_premises_in_train_index": 95,
+                  "gold_premises_missing_from_train_index": 13,
+                  "gold_premises_total": 108,
+                  "nDCG@100": 0.1017058269591345,
+                  "nDCG@50": 0.09594150323098659
+                }
+              },
+              "full_name_goal": {
+                "backend_info": {
+                  "actual_backend": "torch_cuda",
+                  "actual_gpu_device": "cuda:0",
+                  "candidate_count": 127561,
+                  "fallback_reason": null,
+                  "query_count": 50,
+                  "requested_gpu_device": "cuda:0",
+                  "requested_use_gpu": true,
+                  "top_k": 100
+                },
+                "metrics": {
+                  "MAP": 0.04907959117211424,
+                  "MRR": 0.07771440677965351,
+                  "Recall@100": 0.26996527777777773,
+                  "Recall@50": 0.24913194444444442,
+                  "evaluated_queries": 50,
+                  "evaluated_retrievable_queries": 48,
+                  "gold_premise_coverage": 0.8796296296296297,
+                  "gold_premises_in_train_index": 95,
+                  "gold_premises_missing_from_train_index": 13,
+                  "gold_premises_total": 108,
+                  "nDCG@100": 0.10333235075672063,
+                  "nDCG@50": 0.09997725134512803
+                }
+              },
+              "goal_only": {
+                "backend_info": {
+                  "actual_backend": "torch_cuda",
+                  "actual_gpu_device": "cuda:0",
+                  "candidate_count": 127561,
+                  "fallback_reason": null,
+                  "query_count": 50,
+                  "requested_gpu_device": "cuda:0",
+                  "requested_use_gpu": true,
+                  "top_k": 100
+                },
+                "metrics": {
+                  "MAP": 0.026509704872143592,
+                  "MRR": 0.05883699342645421,
+                  "Recall@100": 0.18055555555555555,
+                  "Recall@50": 0.18055555555555555,
+                  "evaluated_queries": 50,
+                  "evaluated_retrievable_queries": 48,
+                  "gold_premise_coverage": 0.8796296296296297,
+                  "gold_premises_in_train_index": 95,
+                  "gold_premises_missing_from_train_index": 13,
+                  "gold_premises_total": 108,
+                  "nDCG@100": 0.06432836873664868,
+                  "nDCG@50": 0.06432836873664868
+                }
+              },
+              "theorem_id_goal": {
+                "backend_info": {
+                  "actual_backend": "torch_cuda",
+                  "actual_gpu_device": "cuda:0",
+                  "candidate_count": 127561,
+                  "fallback_reason": null,
+                  "query_count": 50,
+                  "requested_gpu_device": "cuda:0",
+                  "requested_use_gpu": true,
+                  "top_k": 100
+                },
+                "metrics": {
+                  "MAP": 0.04836088860532307,
+                  "MRR": 0.07550609376392109,
+                  "Recall@100": 0.26996527777777773,
+                  "Recall@50": 0.23871527777777776,
+                  "evaluated_queries": 50,
+                  "evaluated_retrievable_queries": 48,
+                  "gold_premise_coverage": 0.8796296296296297,
+                  "gold_premises_in_train_index": 95,
+                  "gold_premises_missing_from_train_index": 13,
+                  "gold_premises_total": 108,
+                  "nDCG@100": 0.10270801061027768,
+                  "nDCG@50": 0.09723599537194814
+                }
+              }
+            }
+          },
           "proof_state_reranked_retrieval": {
             "backend_info": {
               "actual_backend": "batched_torch_cuda_then_rerank",
@@ -1722,6 +1882,150 @@
           50,
           100
         ],
+        "validation": {
+          "proof_state_query_representation_diagnostic": {
+            "best_variant_by_recall": "full_name_goal",
+            "evaluated_queries": 50,
+            "selection_metric": "Recall@100",
+            "split": "val",
+            "top_k": [
+              50,
+              100
+            ],
+            "variants": {
+              "context_goal": {
+                "backend_info": {
+                  "actual_backend": "torch_cuda",
+                  "actual_gpu_device": "cuda:0",
+                  "candidate_count": 127561,
+                  "fallback_reason": null,
+                  "query_count": 50,
+                  "requested_gpu_device": "cuda:0",
+                  "requested_use_gpu": true,
+                  "top_k": 100
+                },
+                "metrics": {
+                  "MAP": 0.027040233983723072,
+                  "MRR": 0.03863549227934902,
+                  "Recall@100": 0.09791666666666667,
+                  "Recall@50": 0.06770833333333333,
+                  "evaluated_queries": 50,
+                  "evaluated_retrievable_queries": 48,
+                  "gold_premise_coverage": 0.9333333333333333,
+                  "gold_premises_in_train_index": 112,
+                  "gold_premises_missing_from_train_index": 8,
+                  "gold_premises_total": 120,
+                  "nDCG@100": 0.044570868654603,
+                  "nDCG@50": 0.03859639817873508
+                }
+              },
+              "full_name_context_goal": {
+                "backend_info": {
+                  "actual_backend": "torch_cuda",
+                  "actual_gpu_device": "cuda:0",
+                  "candidate_count": 127561,
+                  "fallback_reason": null,
+                  "query_count": 50,
+                  "requested_gpu_device": "cuda:0",
+                  "requested_use_gpu": true,
+                  "top_k": 100
+                },
+                "metrics": {
+                  "MAP": 0.04762638364523212,
+                  "MRR": 0.07066302153539786,
+                  "Recall@100": 0.19270833333333334,
+                  "Recall@50": 0.171875,
+                  "evaluated_queries": 50,
+                  "evaluated_retrievable_queries": 48,
+                  "gold_premise_coverage": 0.9333333333333333,
+                  "gold_premises_in_train_index": 112,
+                  "gold_premises_missing_from_train_index": 8,
+                  "gold_premises_total": 120,
+                  "nDCG@100": 0.08542225912748912,
+                  "nDCG@50": 0.08192332623255075
+                }
+              },
+              "full_name_goal": {
+                "backend_info": {
+                  "actual_backend": "torch_cuda",
+                  "actual_gpu_device": "cuda:0",
+                  "candidate_count": 127561,
+                  "fallback_reason": null,
+                  "query_count": 50,
+                  "requested_gpu_device": "cuda:0",
+                  "requested_use_gpu": true,
+                  "top_k": 100
+                },
+                "metrics": {
+                  "MAP": 0.04809809749496615,
+                  "MRR": 0.0745358563591956,
+                  "Recall@100": 0.2604166666666667,
+                  "Recall@50": 0.23958333333333334,
+                  "evaluated_queries": 50,
+                  "evaluated_retrievable_queries": 48,
+                  "gold_premise_coverage": 0.9333333333333333,
+                  "gold_premises_in_train_index": 112,
+                  "gold_premises_missing_from_train_index": 8,
+                  "gold_premises_total": 120,
+                  "nDCG@100": 0.10044147825972982,
+                  "nDCG@50": 0.09680432346706219
+                }
+              },
+              "goal_only": {
+                "backend_info": {
+                  "actual_backend": "torch_cuda",
+                  "actual_gpu_device": "cuda:0",
+                  "candidate_count": 127561,
+                  "fallback_reason": null,
+                  "query_count": 50,
+                  "requested_gpu_device": "cuda:0",
+                  "requested_use_gpu": true,
+                  "top_k": 100
+                },
+                "metrics": {
+                  "MAP": 0.05889160735361431,
+                  "MRR": 0.07268814396477936,
+                  "Recall@100": 0.1796875,
+                  "Recall@50": 0.15885416666666666,
+                  "evaluated_queries": 50,
+                  "evaluated_retrievable_queries": 48,
+                  "gold_premise_coverage": 0.9333333333333333,
+                  "gold_premises_in_train_index": 112,
+                  "gold_premises_missing_from_train_index": 8,
+                  "gold_premises_total": 120,
+                  "nDCG@100": 0.09161326371997847,
+                  "nDCG@50": 0.08680674040648662
+                }
+              },
+              "theorem_id_goal": {
+                "backend_info": {
+                  "actual_backend": "torch_cuda",
+                  "actual_gpu_device": "cuda:0",
+                  "candidate_count": 127561,
+                  "fallback_reason": null,
+                  "query_count": 50,
+                  "requested_gpu_device": "cuda:0",
+                  "requested_use_gpu": true,
+                  "top_k": 100
+                },
+                "metrics": {
+                  "MAP": 0.050414409298154515,
+                  "MRR": 0.07642519984833189,
+                  "Recall@100": 0.2604166666666667,
+                  "Recall@50": 0.234375,
+                  "evaluated_queries": 50,
+                  "evaluated_retrievable_queries": 48,
+                  "gold_premise_coverage": 0.9333333333333333,
+                  "gold_premises_in_train_index": 112,
+                  "gold_premises_missing_from_train_index": 8,
+                  "gold_premises_total": 120,
+                  "nDCG@100": 0.10238696571702205,
+                  "nDCG@50": 0.09761112936791211
+                }
+              }
+            }
+          }
+        },
         "validation_metrics": {
           "proof_state_retrieval": {
             "MAP": 0.05111520702547212,
@@ -3128,7 +3432,7 @@
         "outputs/reports",
         "homepage/assets"
       ],
-      "bytes_per_processed_row": 10453.602245798118,
+      "bytes_per_processed_row": 10453.62503253291,
       "directories": {
         "data/processed": {
           "bytes": 46533700,
@@ -3155,7 +3459,7 @@
           "path": "outputs/indexes"
         },
         "outputs/reports": {
-          "bytes": 19150077,
+          "bytes": 19156731,
           "exists": true,
           "file_count": 39,
           "path": "outputs/reports"
@@ -3211,36 +3515,36 @@
       ],
       "projections": [
         {
-          "estimated_artifact_bytes": 3052577299.0,
-          "estimated_artifact_gib": 2.8429341493174434,
+          "estimated_artifact_bytes": 3052583953.0,
+          "estimated_artifact_gib": 2.842940346337855,
           "label": "current_1x",
           "scale_factor_vs_current": 1.0,
           "target_processed_rows": 292012
         },
         {
-          "estimated_artifact_bytes": 6105154598.0,
-          "estimated_artifact_gib": 5.685868298634887,
+          "estimated_artifact_bytes": 6105167906.0,
+          "estimated_artifact_gib": 5.68588069267571,
           "label": "current_2x",
           "scale_factor_vs_current": 2.0,
           "target_processed_rows": 584024
         },
         {
-          "estimated_artifact_bytes": 15262886495.0,
-          "estimated_artifact_gib": 14.214670746587217,
+          "estimated_artifact_bytes": 15262919765.0,
+          "estimated_artifact_gib": 14.214701731689274,
           "label": "current_5x",
           "scale_factor_vs_current": 5.0,
           "target_processed_rows": 1460060
         },
         {
-          "estimated_artifact_bytes": 3658760786.029341,
-          "estimated_artifact_gib": 3.407486515146998,
+          "estimated_artifact_bytes": 3658768761.3865185,
+          "estimated_artifact_gib": 3.4074939427771778,
           "label": "configured_source_rows",
           "scale_factor_vs_current": 1.1985808802377984,
           "target_processed_rows": 350000
         }
       ],
-      "total_artifact_bytes": 3052577299,
-      "total_artifact_gib": 2.8429341493174434,
+      "total_artifact_bytes": 3052583953,
+      "total_artifact_gib": 2.842940346337855,
       "unreferenced_index_artifact_bytes": 1502501178,
       "unreferenced_index_artifact_count": 12,
       "unreferenced_index_artifact_gib": 1.3993132654577494,
@@ -3361,10 +3665,10 @@
     "embedding_rows_per_second": 443.01736457502517,
     "estimated_seconds_at_requested_source_rows": 661.1984164169015,
     "evaluation_timing_delta": {
-      "current_evaluation_seconds": 23.828760851873085,
+      "current_evaluation_seconds": 25.76996100996621,
       "current_faster_than_pipeline_timing": false,
       "timed_pipeline_evaluate_seconds": 19.123737015994266,
-      "timed_to_current_ratio": 0.8025485309485165
+      "timed_to_current_ratio": 0.7420941385436478
     },
     "execution_mode_summary": {
       "ann_index_active": true,
@@ -3656,12 +3960,25 @@
         "has_positive_edges": true,
         "negative_to_positive_edge_ratio": 9.547775010437512
       },
+      "query_representation_diagnostic": {
+        "test": {
+          "best_variant_by_recall": "full_name_goal",
+          "evaluated_queries": 50,
+          "selection_metric": "Recall@100"
+        },
+        "validation": {
+          "best_variant_by_recall": "full_name_goal",
+          "evaluated_queries": 50,
+          "selection_metric": "Recall@100"
+        },
+        "validation_test_best_variant_match": true
+      },
       "recommended_sequence": [
         {
           "area": "proof_state_query_and_embedding",
           "current_value": 0.23617207100657536,
           "priority": 1,
-          "reason": "Proof-state gold premises are often absent from the top-100 candidate pool, so top-k reranking cannot recover them.",
+          "reason": "Proof-state gold premises are often absent from the top-100 candidate pool, so top-k reranking cannot recover them. Validation query diagnostic currently favors `full_name_goal`.",
           "target_metric": "proof_state Recall@100"
         },
         {
@@ -3831,8 +4148,8 @@
     "requested_source_rows": 350000,
     "rerank_evaluation_cost_profile": {
       "batched_embedding_recall_at_10": 0.11624918291584951,
-      "batched_embedding_seconds": 0.9276719810441136,
-      "batched_embedding_seconds_per_query": 0.0003038558732538859,
+      "batched_embedding_seconds": 1.077549786074087,
+      "batched_embedding_seconds_per_query": 0.00035294785000788964,
       "candidate_k": 50,
       "candidate_k_values": [
         50,
@@ -3841,13 +4158,13 @@
       "full_proof_state_queries": 3053,
       "method": "project_full_rerank_cost_from_user_facing_sampled_rerank_diagnostic",
       "policy": "keep reranked proof-state evaluation sampled for development and use full batched embedding evaluation for final held-out coverage",
-      "projected_full_rerank_minutes": 36.34915794420522,
-      "projected_full_rerank_seconds": 2180.949476652313,
+      "projected_full_rerank_minutes": 37.72791620400055,
+      "projected_full_rerank_seconds": 2263.674972240033,
       "rerank_backend": "batched_torch_cuda_then_rerank",
-      "rerank_seconds": 14.287255005910993,
-      "rerank_seconds_per_query": 0.7143627502955496,
+      "rerank_seconds": 14.829184226924554,
+      "rerank_seconds_per_query": 0.7414592113462277,
       "rerank_stage_name": "test_reranked_proof_state_retrieval",
-      "rerank_to_batched_seconds_per_query_ratio": 2350.9920760974264,
+      "rerank_to_batched_seconds_per_query_ratio": 2100.761376870984,
       "reranked_recall_at_10": 0.1513157894736842,
       "sampled_fraction_of_full_proof_state_eval": 0.006550933508024894,
       "sampled_rerank_queries": 20,

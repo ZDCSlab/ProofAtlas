@@ -819,23 +819,25 @@ def run(config_path: str, full_heldout: bool = False) -> None:
         actual_backend=reranked_proof_state_eval.get("backend_info", {}).get("actual_backend"),
         candidate_k=reranked_proof_state_eval.get("backend_info", {}).get("candidate_k"),
     )
-    stage_started = time.perf_counter()
-    query_representation_diagnostic = _evaluate_proof_state_query_representations(
-        "test",
-        diagnostic_top_ks,
-        train_premises,
-        max_examples=query_representation_diagnostic_examples,
-        batch_size=batch_size,
-        use_gpu=use_gpu,
-        gpu_device=gpu_device,
-    )
-    _record_substage(
-        "test_proof_state_query_representation_diagnostic",
-        stage_started,
-        split="test",
-        evaluated_queries=query_representation_diagnostic.get("evaluated_queries"),
-        best_variant_by_recall=query_representation_diagnostic.get("best_variant_by_recall"),
-    )
+    query_representation_diagnostics = {}
+    for split in ["val", "test"]:
+        stage_started = time.perf_counter()
+        query_representation_diagnostics[split] = _evaluate_proof_state_query_representations(
+            split,
+            diagnostic_top_ks,
+            train_premises,
+            max_examples=query_representation_diagnostic_examples,
+            batch_size=batch_size,
+            use_gpu=use_gpu,
+            gpu_device=gpu_device,
+        )
+        _record_substage(
+            f"{split}_proof_state_query_representation_diagnostic",
+            stage_started,
+            split=split,
+            evaluated_queries=query_representation_diagnostics[split].get("evaluated_queries"),
+            best_variant_by_recall=query_representation_diagnostics[split].get("best_variant_by_recall"),
+        )
     for key, value in reranked_proof_state_eval.get("metrics", {}).items():
         metrics[f"reranked_proof_state_{key}"] = value
     case_studies = theorem_eval["case_studies"]
@@ -871,6 +873,7 @@ def run(config_path: str, full_heldout: bool = False) -> None:
             "rerank_candidate_k": rerank_candidate_k,
             "rerank_candidate_k_values": rerank_candidate_k_values,
             "query_representation_diagnostic_examples": query_representation_diagnostic_examples,
+            "query_representation_diagnostic_splits": sorted(query_representation_diagnostics),
             "total_seconds": time.perf_counter() - evaluation_started,
             "substage_timings": substage_timings,
         },
@@ -894,7 +897,7 @@ def run(config_path: str, full_heldout: bool = False) -> None:
                 "worst_cases": _worst_cases(reranked_proof_state_eval.get("per_query", []), top_ks, id_keys=["proof_state_id"]),
                 "examples": reranked_proof_state_eval["examples"],
             },
-            "proof_state_query_representation_diagnostic": query_representation_diagnostic,
+            "proof_state_query_representation_diagnostic": query_representation_diagnostics.get("test", {}),
             "theorem_retrieval": {
                 "metrics": theorem_by_split["test"]["metrics"],
                 "domain_breakdown": _domain_breakdown(theorem_by_split["test"].get("per_query", []), top_ks, metric_prefix="theorem_retrieval_"),
@@ -909,6 +912,7 @@ def run(config_path: str, full_heldout: bool = False) -> None:
                 "domain_breakdown": _domain_breakdown(proof_state_by_split["val"].get("per_query", []), top_ks),
                 "failure_profile": _failure_profile(proof_state_by_split["val"].get("per_query", []), top_ks),
             },
+            "proof_state_query_representation_diagnostic": query_representation_diagnostics.get("val", {}),
             "theorem_retrieval": {
                 "metrics": theorem_by_split["val"]["metrics"],
                 "domain_breakdown": _domain_breakdown(theorem_by_split["val"].get("per_query", []), top_ks, metric_prefix="theorem_retrieval_"),
