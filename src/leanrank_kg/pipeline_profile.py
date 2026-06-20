@@ -1373,6 +1373,101 @@ def _cpu_io_efficiency_profile(scale: dict[str, Any], throughput: dict[str, Any]
     }
 
 
+def _performance_optimization_plan(scale: dict[str, Any], throughput: dict[str, Any]) -> dict[str, Any]:
+    total_seconds = float(throughput.get("total_pipeline_seconds") or 0.0)
+    current_rows = int(scale.get("current_total_split_rows") or 0)
+    embedding = throughput.get("embedding_bottleneck_profile", {}) if isinstance(throughput, dict) else {}
+    cpu_io = throughput.get("cpu_io_efficiency_profile", {}) if isinstance(throughput, dict) else {}
+    rerank = throughput.get("rerank_evaluation_cost_profile", {}) if isinstance(throughput, dict) else {}
+    resources = throughput.get("resource_parallelism_profile", {}) if isinstance(throughput, dict) else {}
+    index_parallel = resources.get("index_parallelism", {}) if isinstance(resources, dict) else {}
+    refresh_reuse = throughput.get("refresh_reuse_profile", {}) if isinstance(throughput, dict) else {}
+    top_cpu_stage = cpu_io.get("top_stage", {}) if isinstance(cpu_io, dict) else {}
+    embed_seconds = float(embedding.get("embed_stage_seconds") or 0.0)
+    top_cpu_seconds = float(top_cpu_stage.get("seconds") or 0.0)
+    projected_full_rerank_seconds = rerank.get("projected_full_rerank_seconds")
+    sampled_rerank_seconds = rerank.get("rerank_seconds")
+
+    actions: list[dict[str, Any]] = []
+    if embed_seconds > 0:
+        saved = embed_seconds if refresh_reuse.get("reuse_by_default") is True else embed_seconds * 0.5
+        actions.append(
+            {
+                "priority": 1,
+                "area": "embedding_reuse",
+                "action": "reuse_saved_embeddings_for_report_rerank_and_homepage_refreshes",
+                "basis": "embed stage is the largest timed stage and embeddings are immutable unless text/model/config changes",
+                "estimated_seconds_saved": saved,
+                "estimated_pipeline_seconds_after_action": max(0.0, total_seconds - saved) if total_seconds > 0 else None,
+                "accuracy_risk": "none_when_embedding_inputs_are_unchanged",
+            }
+        )
+    if top_cpu_seconds > 0:
+        saved = top_cpu_seconds * 0.25
+        actions.append(
+            {
+                "priority": 2,
+                "area": "cpu_io_stage",
+                "action": f"optimize_{top_cpu_stage.get('name')}_stage_vectorization_or_io",
+                "basis": "top CPU/IO stage normalized by processed rows",
+                "estimated_seconds_saved": saved,
+                "estimated_pipeline_seconds_after_action": max(0.0, total_seconds - saved) if total_seconds > 0 else None,
+                "accuracy_risk": "none_if_outputs_are_schema_and_artifact_compatible",
+            }
+        )
+    if index_parallel.get("backend") in {"hnswlib", "faiss", "lancedb"}:
+        actions.append(
+            {
+                "priority": 3,
+                "area": "ann_candidate_generation",
+                "action": "keep_ann_index_for_interactive_retrieval_and_large_refreshes",
+                "basis": "ANN benchmark records speedup versus exact cosine while preserving recall",
+                "estimated_seconds_saved": None,
+                "estimated_pipeline_seconds_after_action": total_seconds if total_seconds > 0 else None,
+                "accuracy_risk": "monitor_recall_vs_exact_gate",
+                "speedup_vs_exact": index_parallel.get("mean_speedup_vs_exact"),
+                "min_recall_vs_exact": index_parallel.get("min_recall_vs_exact"),
+            }
+        )
+    if projected_full_rerank_seconds and sampled_rerank_seconds:
+        saved = max(0.0, float(projected_full_rerank_seconds) - float(sampled_rerank_seconds))
+        actions.append(
+            {
+                "priority": 4,
+                "area": "rerank_evaluation_policy",
+                "action": "keep_expensive_reranked_proof_state_evaluation_sampled_during_development",
+                "basis": "full rerank cost is projected from the sampled rerank diagnostic",
+                "estimated_seconds_saved": saved,
+                "estimated_pipeline_seconds_after_action": None,
+                "accuracy_risk": "use_full_batched_embedding_eval_for_final_metrics_and_sampled_rerank_only_as_diagnostic",
+            }
+        )
+    total_estimated_savings = sum(float(row.get("estimated_seconds_saved") or 0.0) for row in actions[:2])
+    return {
+        "method": "timed_stage_based_performance_optimization_plan",
+        "current_processed_rows": current_rows,
+        "current_total_seconds": total_seconds,
+        "planning_assumptions": [
+            "Embedding reuse is valid only when embedding text, model, split, and config hashes are unchanged.",
+            "CPU/IO savings use a conservative 25% target for the current top CPU/IO stage.",
+            "ANN recommendations rely on the committed recall-vs-exact benchmark gates.",
+            "Rerank savings compare sampled rerank diagnostics with projected full rerank cost and do not replace final held-out embedding retrieval metrics.",
+        ],
+        "summary": {
+            "action_count": len(actions),
+            "top_action": actions[0]["area"] if actions else None,
+            "estimated_seconds_saved_by_top_two_actions": total_estimated_savings,
+            "estimated_pipeline_seconds_after_top_two_actions": max(0.0, total_seconds - total_estimated_savings) if total_seconds > 0 else None,
+            "estimated_pipeline_speedup_after_top_two_actions": (
+                total_seconds / max(1e-9, total_seconds - total_estimated_savings)
+                if total_seconds > 0 and total_estimated_savings < total_seconds
+                else None
+            ),
+        },
+        "actions": actions,
+    }
+
+
 def _performance_acceptance_profile(
     scale: dict[str, Any],
     throughput: dict[str, Any],
@@ -2005,6 +2100,7 @@ def build_report(config_path: str = "configs/proofatlas.yaml") -> dict[str, Any]
     throughput["resource_parallelism_profile"] = _resource_parallelism_profile(config, embeddings, index, benchmark, evaluation, throughput)
     throughput["execution_mode_summary"] = _execution_mode_summary(throughput)
     throughput["cpu_io_efficiency_profile"] = _cpu_io_efficiency_profile(scale, throughput)
+    throughput["performance_optimization_plan"] = _performance_optimization_plan(scale, throughput)
     throughput["performance_acceptance_profile"] = _performance_acceptance_profile(scale, throughput, evaluation)
     throughput["supervision_acceptance_profile"] = _supervision_acceptance_profile(readiness)
     throughput["lean_diagnostic_acceptance_profile"] = _lean_diagnostic_acceptance_profile(readiness)

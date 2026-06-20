@@ -410,6 +410,34 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                         "optimization_priority": "medium",
                     },
                 },
+                "performance_optimization_plan": {
+                    "method": "timed_stage_based_performance_optimization_plan",
+                    "current_processed_rows": 1000,
+                    "current_total_seconds": 12.5,
+                    "summary": {
+                        "action_count": 2,
+                        "top_action": "embedding_reuse",
+                        "estimated_seconds_saved_by_top_two_actions": 5.5,
+                        "estimated_pipeline_seconds_after_top_two_actions": 7.0,
+                        "estimated_pipeline_speedup_after_top_two_actions": 1.7857142857,
+                    },
+                    "actions": [
+                        {
+                            "priority": 1,
+                            "area": "embedding_reuse",
+                            "action": "reuse_saved_embeddings_for_report_rerank_and_homepage_refreshes",
+                            "estimated_seconds_saved": 5.0,
+                            "accuracy_risk": "none_when_embedding_inputs_are_unchanged",
+                        },
+                        {
+                            "priority": 2,
+                            "area": "cpu_io_stage",
+                            "action": "optimize_validate_stage_vectorization_or_io",
+                            "estimated_seconds_saved": 0.5,
+                            "accuracy_risk": "none_if_outputs_are_schema_and_artifact_compatible",
+                        },
+                    ],
+                },
                 "processed_rows_per_second": 1000.0,
                 "pipeline_seconds_per_100k_processed_rows": 100.0,
                 "slowest_stage": "evaluate",
@@ -863,6 +891,9 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "cpu_io_stage_seconds_normalized_by_processed_rows" in text
     assert "Seconds / 100k rows" in text
     assert "200.0000" in text
+    assert "Performance Optimization Plan" in text
+    assert "timed_stage_based_performance_optimization_plan" in text
+    assert "reuse_saved_embeddings_for_report_rerank_and_homepage_refreshes" in text
     assert "Performance Acceptance Gates" in text
     assert "Required gates passed" in text
     assert "target_dataset" in text

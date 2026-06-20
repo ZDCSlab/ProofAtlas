@@ -528,6 +528,26 @@ def build_audit() -> dict[str, Any]:
         ),
         "performance_acceptance_profile={detail}",
     )
+    checks["validation:performance_optimization_plan"] = _json_condition(
+        "outputs/reports/pipeline_performance_report.json",
+        lambda data: (
+            data.get("throughput_profile", {}).get("performance_optimization_plan", {}).get("method")
+            == "timed_stage_based_performance_optimization_plan"
+            and len(data.get("throughput_profile", {}).get("performance_optimization_plan", {}).get("actions", [])) >= 2
+            and data.get("throughput_profile", {})
+            .get("performance_optimization_plan", {})
+            .get("summary", {})
+            .get("top_action")
+            in {"embedding_reuse", "cpu_io_stage"}
+            and data.get("throughput_profile", {})
+            .get("performance_optimization_plan", {})
+            .get("summary", {})
+            .get("estimated_seconds_saved_by_top_two_actions")
+            is not None,
+            {"profile": data.get("throughput_profile", {}).get("performance_optimization_plan", {})},
+        ),
+        "performance_optimization_plan={detail}",
+    )
     checks["validation:reproducibility_profile"] = _json_condition(
         "outputs/reports/pipeline_performance_report.json",
         lambda data: (

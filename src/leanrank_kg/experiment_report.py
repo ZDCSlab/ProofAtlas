@@ -379,6 +379,30 @@ def _cpu_stage_table(rows: list[dict[str, Any]]) -> str:
     return "\n".join(lines)
 
 
+def _performance_action_table(rows: list[dict[str, Any]]) -> str:
+    lines = [
+        "| Priority | Area | Action | Estimated seconds saved | Accuracy risk |",
+        "| ---: | --- | --- | ---: | --- |",
+    ]
+    for row in rows[:8]:
+        lines.append(
+            "| "
+            + " | ".join(
+                [
+                    _fmt(row.get("priority")),
+                    f"`{row.get('area', 'n/a')}`",
+                    f"`{row.get('action', 'n/a')}`",
+                    _fmt(row.get("estimated_seconds_saved")),
+                    _fmt(row.get("accuracy_risk")),
+                ]
+            )
+            + " |"
+        )
+    if len(lines) == 2:
+        lines.append("| n/a | n/a | n/a | n/a | n/a |")
+    return "\n".join(lines)
+
+
 def _performance_gate_table(profile: dict[str, Any]) -> str:
     rows = profile.get("gates", []) if isinstance(profile, dict) else []
     lines = [
@@ -624,6 +648,8 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     resource_parallelism = throughput.get("resource_parallelism_profile", {}) if isinstance(throughput, dict) else {}
     execution_mode = throughput.get("execution_mode_summary", {}) if isinstance(throughput, dict) else {}
     cpu_io_efficiency = throughput.get("cpu_io_efficiency_profile", {}) if isinstance(throughput, dict) else {}
+    performance_plan = throughput.get("performance_optimization_plan", {}) if isinstance(throughput, dict) else {}
+    performance_plan_summary = performance_plan.get("summary", {}) if isinstance(performance_plan, dict) else {}
     performance_acceptance = throughput.get("performance_acceptance_profile", {}) if isinstance(throughput, dict) else {}
     performance_acceptance_summary = performance_acceptance.get("summary", {}) if isinstance(performance_acceptance, dict) else {}
     supervision_acceptance = throughput.get("supervision_acceptance_profile", {}) if isinstance(throughput, dict) else {}
@@ -1252,6 +1278,19 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
                 if isinstance(resource_parallelism, dict)
                 else []
             ),
+            "",
+            "### Performance Optimization Plan",
+            "",
+            "This plan turns the timed LeanRank-data run into concrete optimization actions. It separates throughput work from retrieval-quality work so performance changes do not silently change the held-out ML task.",
+            "",
+            f"- Method: `{performance_plan.get('method', 'n/a')}`",
+            f"- Action count: `{performance_plan_summary.get('action_count', 'n/a')}`",
+            f"- Top action: `{performance_plan_summary.get('top_action', 'n/a')}`",
+            f"- Estimated seconds saved by top two actions: `{performance_plan_summary.get('estimated_seconds_saved_by_top_two_actions', 'n/a')}`",
+            f"- Estimated pipeline seconds after top two actions: `{performance_plan_summary.get('estimated_pipeline_seconds_after_top_two_actions', 'n/a')}`",
+            f"- Estimated speedup after top two actions: `{performance_plan_summary.get('estimated_pipeline_speedup_after_top_two_actions', 'n/a')}`",
+            "",
+            _performance_action_table(performance_plan.get("actions", []) if isinstance(performance_plan, dict) else []),
             "",
             "### Performance Acceptance Gates",
             "",

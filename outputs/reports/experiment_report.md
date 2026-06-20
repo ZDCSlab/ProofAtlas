@@ -817,6 +817,21 @@ This profile records the resource choices used by the committed LeanRank-data ru
 | `normalize` | 43.7230 | 0.0876 | 14.9730 | `medium` |
 | `validate` | 38.6715 | 0.0774 | 13.2431 | `medium` |
 
+### Performance Optimization Plan
+
+This plan turns the timed LeanRank-data run into concrete optimization actions. It separates throughput work from retrieval-quality work so performance changes do not silently change the held-out ML task.
+
+- Method: `n/a`
+- Action count: `n/a`
+- Top action: `n/a`
+- Estimated seconds saved by top two actions: `n/a`
+- Estimated pipeline seconds after top two actions: `n/a`
+- Estimated speedup after top two actions: `n/a`
+
+| Priority | Area | Action | Estimated seconds saved | Accuracy risk |
+| ---: | --- | --- | ---: | --- |
+| n/a | n/a | n/a | n/a | n/a |
+
 ### Performance Acceptance Gates
 
 These gates summarize whether the committed performance evidence is strong enough for the current LeanRank-data retrieval report. Required gates cover data scale, held-out evaluation scope, timing freshness, and ANN quality; advisory gates cover GPU/resource usage and artifact reuse.

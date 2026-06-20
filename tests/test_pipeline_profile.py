@@ -373,6 +373,11 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
     assert cpu_io_efficiency["current_processed_rows"] == 100
     assert cpu_io_efficiency["stage_count"] == 0
     assert cpu_io_efficiency["total_cpu_io_seconds"] == 0.0
+    performance_plan = report["throughput_profile"]["performance_optimization_plan"]
+    assert performance_plan["method"] == "timed_stage_based_performance_optimization_plan"
+    assert performance_plan["summary"]["top_action"] == "embedding_reuse"
+    assert performance_plan["summary"]["estimated_seconds_saved_by_top_two_actions"] == 1.0
+    assert performance_plan["actions"][0]["action"] == "reuse_saved_embeddings_for_report_rerank_and_homepage_refreshes"
     acceptance = report["throughput_profile"]["performance_acceptance_profile"]
     assert acceptance["summary"]["total_gate_count"] >= 8
     assert acceptance["summary"]["required_gates_passed"] is False
