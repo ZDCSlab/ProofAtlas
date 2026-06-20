@@ -257,6 +257,13 @@ def test_delivery_audit_metric_uncertainty_matches_committed_profile() -> None:
         assert cells[5] == f"{float(row['ci95_half_width']):.4f}"
 
 
+def test_current_status_timing_matches_committed_artifact() -> None:
+    repo = Path(__file__).resolve().parents[1]
+    current = (repo / "docs/proofatlas_current_status_and_gap_to_theorem_retrieval.md").read_text(encoding="utf-8")
+    timing = json.loads((repo / "outputs/reports/pipeline_run_timings.json").read_text(encoding="utf-8"))
+    assert _readme_table_row(current, "Total timed pipeline run")[1] == f"{float(timing['total_seconds']):.4f} seconds"
+
+
 def test_readme_premise_supervision_snapshot_matches_committed_artifacts() -> None:
     repo = Path(__file__).resolve().parents[1]
     readme = (repo / "README.md").read_text(encoding="utf-8")
