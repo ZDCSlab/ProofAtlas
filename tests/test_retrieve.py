@@ -363,6 +363,8 @@ def test_text_query_retrieval_and_theorem_guidance_are_json_serializable(tmp_pat
     assert "production_evidence" in homepage_summary
     assert "heldout" in homepage_summary["production_evidence"]
     assert "supervision" in homepage_summary["production_evidence"]
+    assert "total_positive_negative_overlap_removed" in homepage_summary["production_evidence"]["supervision"]
+    assert "train_positive_negative_pair_overlap_count" in homepage_summary["production_evidence"]["supervision"]
     assert "timing" in homepage_summary["production_evidence"]
     assert "rapid_convergence" in homepage_summary["production_evidence"]
     assert "refresh_reuse" in homepage_summary["production_evidence"]
@@ -429,6 +431,8 @@ def test_text_query_retrieval_and_theorem_guidance_are_json_serializable(tmp_pat
     assert "Rerank miss top" in html
     assert "Positive premise edges" in html
     assert "Negative candidates" in html
+    assert "Label disjoint" in html
+    assert "Train label overlap" in html
     assert "Scale estimate reliable" in html
     assert "Embedding throughput" in html
     assert "Current eval timing" in html

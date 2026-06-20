@@ -536,6 +536,8 @@ def build_audit() -> dict[str, Any]:
             "Retrieval Failure Profile",
             "Proof-state candidate miss",
             "Theorem rerank headroom",
+            "Label disjoint",
+            "Train label overlap",
             "Local asset fallback",
             "renderLocalFallback",
             "Query theorem",

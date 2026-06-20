@@ -287,6 +287,7 @@ def _production_evidence(
 ) -> dict[str, Any]:
     current_supervision = premise_supervision.get("current_artifact_supervision", {})
     train_supervision = premise_supervision.get("splits", {}).get("train", {})
+    label_conflicts = premise_supervision.get("normalization_label_conflicts", {})
     throughput = pipeline_performance.get("throughput_profile", {})
     bottleneck_profile = throughput.get("bottleneck_profile", {}) if isinstance(throughput, dict) else {}
     evaluation_timing_delta = throughput.get("evaluation_timing_delta", {}) if isinstance(throughput, dict) else {}
@@ -326,6 +327,9 @@ def _production_evidence(
             "train_positive_proof_state_coverage": train_supervision.get("positive_proof_state_coverage"),
             "train_negative_proof_state_coverage": train_supervision.get("negative_proof_state_coverage"),
             "train_negative_hardness_mean": train_supervision.get("negative_candidate_hardness", {}).get("mean"),
+            "train_positive_negative_pair_overlap_count": train_supervision.get("positive_negative_pair_overlap_count"),
+            "total_positive_negative_overlap_removed": label_conflicts.get("total_positive_negative_overlap_removed"),
+            "all_positive_negative_pairs_disjoint": current_supervision.get("quality_checks", {}).get("all_positive_negative_pairs_disjoint"),
         },
         "timing": {
             "total_seconds": pipeline_run_timings.get("total_seconds") or timing_summary.get("total_seconds"),
