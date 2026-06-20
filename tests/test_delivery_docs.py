@@ -12,6 +12,14 @@ def _readme_metric(readme: str, task: str, metric: str) -> str:
     raise AssertionError(f"Missing README metric row: {task} / {metric}")
 
 
+def _readme_artifact_field(readme: str, artifact: str, field: str) -> str:
+    prefix = f"| {artifact} | {field} | "
+    for line in readme.splitlines():
+        if line.startswith(prefix):
+            return line.removeprefix(prefix).removesuffix(" |").strip()
+    raise AssertionError(f"Missing README artifact row: {artifact} / {field}")
+
+
 def test_readme_results_snapshot_matches_committed_metrics() -> None:
     repo = Path(__file__).resolve().parents[1]
     readme = (repo / "README.md").read_text(encoding="utf-8")
@@ -28,6 +36,28 @@ def test_readme_results_snapshot_matches_committed_metrics() -> None:
 
     for (task, metric), value in expected.items():
         assert _readme_metric(readme, task, metric) == f"{float(value):.4f}"
+
+
+def test_readme_production_snapshot_matches_committed_artifacts() -> None:
+    repo = Path(__file__).resolve().parents[1]
+    readme = (repo / "README.md").read_text(encoding="utf-8")
+    timing = json.loads((repo / "outputs/reports/pipeline_run_timings.json").read_text(encoding="utf-8"))
+    profile = json.loads((repo / "outputs/reports/pipeline_performance_report.json").read_text(encoding="utf-8"))
+    coverage = profile["stages"]["evaluation"]["held_out_test_coverage"]
+    throughput = profile["throughput_profile"]
+
+    assert _readme_artifact_field(readme, "Held-out proof-state evaluation", "coverage") == (
+        f"{coverage['proof_state_evaluated_queries']} / {coverage['proof_state_total']}"
+    )
+    assert _readme_artifact_field(readme, "Held-out theorem evaluation", "coverage") == (
+        f"{coverage['theorem_evaluated_queries']} / {coverage['theorem_total']}"
+    )
+    assert _readme_artifact_field(readme, "Pipeline timing", "total seconds") == f"{float(timing['total_seconds']):.4f}"
+    assert _readme_artifact_field(readme, "Pipeline timing", "executed/skipped stages") == (
+        f"{timing['executed_stage_count']} / {timing['skipped_stage_count']}"
+    )
+    assert _readme_artifact_field(readme, "Pipeline timing", "throughput basis") == throughput["throughput_basis"]
+    assert _readme_artifact_field(readme, "Pipeline timing", "scale estimate reliable") == str(throughput["scale_estimate_reliable"])
 
 
 def test_production_refresh_uses_configurable_pipeline_runner() -> None:

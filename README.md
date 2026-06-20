@@ -167,6 +167,17 @@ Current `configs/proofatlas.yaml` full held-out test results:
 | Theorem-level premise retrieval | MRR | 0.5609 |
 | Learned premise ranker | validation AUC | 0.8254 |
 
+Current production run coverage and timing:
+
+| Artifact | Field | Value |
+| --- | --- | ---: |
+| Held-out proof-state evaluation | coverage | 3053 / 3053 |
+| Held-out theorem evaluation | coverage | 1000 / 1000 |
+| Pipeline timing | total seconds | 740.1228 |
+| Pipeline timing | executed/skipped stages | 19 / 0 |
+| Pipeline timing | throughput basis | executed_pipeline_run |
+| Pipeline timing | scale estimate reliable | True |
+
 To refresh the production evaluation artifacts after changing retrieval code or config:
 
 ```bash
