@@ -8,6 +8,11 @@
       "area": "pipeline_bottleneck",
       "priority": "medium",
       "recommendation": "Embedding is the current largest timed bottleneck. Reuse cached embeddings when training/reranking only, and keep multi-GPU sentence-transformer encoding enabled for larger LeanRank-data refreshes."
+    },
+    {
+      "area": "retrieval_accuracy",
+      "priority": "medium",
+      "recommendation": "Proof-state Recall@100 is low, so proof-state premise retrieval is currently limited by candidate generation or embeddings before reranking. Prioritize stronger proof-state/query representations, domain-aware candidate pools, and embedding model comparisons before adding heavier rerankers."
     }
   ],
   "scale_profile": {
@@ -2254,6 +2259,22 @@
     "pipeline_seconds_per_100k_processed_rows": 188.91383326197186,
     "processed_rows_per_second": 529.3418606425042,
     "requested_source_rows": 350000,
+    "retrieval_bottleneck_profile": {
+      "proof_state": {
+        "primary_accuracy_bottleneck": "candidate_generation_or_embeddings",
+        "recall_at_10": 0.11624918291584951,
+        "recall_at_100": 0.23617207100657536,
+        "top10_fraction_of_top100": 0.49222239708696536,
+        "top10_to_top100_gap": 0.11992288809072585
+      },
+      "theorem": {
+        "primary_accuracy_bottleneck": "top10_reranking_or_candidate_ordering",
+        "recall_at_10": 0.49403129986534694,
+        "recall_at_100": 0.6888562692074705,
+        "top10_fraction_of_top100": 0.7171761685986109,
+        "top10_to_top100_gap": 0.1948249693421235
+      }
+    },
     "scale_estimate_reliable": true,
     "scale_factor_from_current_to_requested_source_rows": 1.1985808802377984,
     "slowest_stage": "embed",

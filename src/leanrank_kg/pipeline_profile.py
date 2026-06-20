@@ -495,6 +495,41 @@ def _throughput_profile(
     }
 
 
+def _retrieval_bottleneck_profile(evaluation: dict[str, Any]) -> dict[str, Any]:
+    test_metrics = ((evaluation.get("test_set_evaluation") or {}).get("test_metrics") or {}) if isinstance(evaluation, dict) else {}
+
+    def _profile(metrics: dict[str, Any], *, prefix: str = "") -> dict[str, Any]:
+        def _get(name: str) -> float | None:
+            key = f"{prefix}{name}" if prefix else name
+            value = metrics.get(key)
+            return float(value) if value is not None else None
+
+        recall10 = _get("Recall@10")
+        recall100 = _get("Recall@100")
+        gap = (recall100 - recall10) if recall10 is not None and recall100 is not None else None
+        top10_fraction = (recall10 / recall100) if recall10 is not None and recall100 else None
+        if recall100 is None:
+            bottleneck = "missing_metrics"
+        elif recall100 < 0.5:
+            bottleneck = "candidate_generation_or_embeddings"
+        elif gap is not None and gap >= 0.1:
+            bottleneck = "top10_reranking_or_candidate_ordering"
+        else:
+            bottleneck = "monitoring"
+        return {
+            "recall_at_10": recall10,
+            "recall_at_100": recall100,
+            "top10_to_top100_gap": gap,
+            "top10_fraction_of_top100": top10_fraction,
+            "primary_accuracy_bottleneck": bottleneck,
+        }
+
+    return {
+        "proof_state": _profile(test_metrics.get("proof_state_retrieval", {})),
+        "theorem": _profile(test_metrics.get("theorem_retrieval", {}), prefix="theorem_retrieval_"),
+    }
+
+
 def _recommendations(
     config: dict[str, Any],
     sample: dict[str, Any],
@@ -603,6 +638,19 @@ def _recommendations(
                 "recommendation": recommendation,
             }
         )
+    retrieval_profile = throughput.get("retrieval_bottleneck_profile") or {}
+    proof_state_bottleneck = (retrieval_profile.get("proof_state") or {}).get("primary_accuracy_bottleneck")
+    if proof_state_bottleneck == "candidate_generation_or_embeddings":
+        recommendations.append(
+            {
+                "priority": "medium",
+                "area": "retrieval_accuracy",
+                "recommendation": (
+                    "Proof-state Recall@100 is low, so proof-state premise retrieval is currently limited by candidate generation or embeddings before reranking. "
+                    "Prioritize stronger proof-state/query representations, domain-aware candidate pools, and embedding model comparisons before adding heavier rerankers."
+                ),
+            }
+        )
     evaluation_scope = (evaluation.get("test_set_evaluation") or {}).get("evaluation_scope", {})
     if evaluation_scope.get("is_sampled") is True:
         recommendations.append(
@@ -642,6 +690,7 @@ def build_report(config_path: str = "configs/proofatlas.yaml") -> dict[str, Any]
     readiness = _readiness_stage()
     scale = _scale_profile(config, sample, index, readiness)
     throughput = _throughput_profile(sample, embeddings, index, benchmark, timings, evaluation)
+    throughput["retrieval_bottleneck_profile"] = _retrieval_bottleneck_profile(evaluation)
     recommendations = _recommendations(config, sample, benchmark, readiness, scale, throughput, evaluation)
     return {
         "config_path": config_path,

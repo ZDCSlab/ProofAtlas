@@ -102,6 +102,22 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                     "embedding_rows_by_split": {"train": 30, "test": 12},
                     "embedding_matrix_bytes": 1234,
                 },
+                "retrieval_bottleneck_profile": {
+                    "proof_state": {
+                        "recall_at_10": 0.2,
+                        "recall_at_100": 0.3,
+                        "top10_to_top100_gap": 0.1,
+                        "top10_fraction_of_top100": 0.6666666667,
+                        "primary_accuracy_bottleneck": "candidate_generation_or_embeddings",
+                    },
+                    "theorem": {
+                        "recall_at_10": 0.5,
+                        "recall_at_100": 0.7,
+                        "top10_to_top100_gap": 0.2,
+                        "top10_fraction_of_top100": 0.7142857143,
+                        "primary_accuracy_bottleneck": "top10_reranking_or_candidate_ordering",
+                    },
+                },
                 "processed_rows_per_second": 1000.0,
                 "pipeline_seconds_per_100k_processed_rows": 100.0,
                 "slowest_stage": "evaluate",
@@ -200,6 +216,9 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "Mathlib.Bad" in text
     assert "Data supervision" in text
     assert "Local Lean/mathlib source extraction is out of scope" in text
+    assert "Retrieval Bottleneck Profile" in text
+    assert "candidate_generation_or_embeddings" in text
+    assert "top10_reranking_or_candidate_ordering" in text
     assert "Pipeline Timing" in text
     assert "Timing config matches current report config" in text
     assert "Timing config matches current report config: `True`" in text

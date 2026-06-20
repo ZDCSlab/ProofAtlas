@@ -136,6 +136,22 @@ def _index_benchmark_table(bench_entities: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def _retrieval_bottleneck_table(profile: dict[str, Any]) -> str:
+    lines = [
+        "| Task | Recall@10 | Recall@100 | Gap | Top10/Top100 | Primary bottleneck |",
+        "| --- | ---: | ---: | ---: | ---: | --- |",
+    ]
+    labels = {"proof_state": "Proof-state premise retrieval", "theorem": "Theorem-level premise retrieval"}
+    for key, label in labels.items():
+        row = profile.get(key, {}) if isinstance(profile, dict) else {}
+        lines.append(
+            f"| {label} | {_fmt(row.get('recall_at_10'))} | {_fmt(row.get('recall_at_100'))} | "
+            f"{_fmt(row.get('top10_to_top100_gap'))} | {_fmt(row.get('top10_fraction_of_top100'))} | "
+            f"`{row.get('primary_accuracy_bottleneck', 'n/a')}` |"
+        )
+    return "\n".join(lines)
+
+
 def _evaluation_substage_table(rows: list[dict[str, Any]]) -> str:
     lines = [
         "| Evaluation substage | Seconds | Queries | Backend |",
@@ -210,6 +226,7 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     evaluation_timing_delta = throughput.get("evaluation_timing_delta", {}) if isinstance(throughput, dict) else {}
     bottleneck_profile = throughput.get("bottleneck_profile", {}) if isinstance(throughput, dict) else {}
     embedding_bottleneck = throughput.get("embedding_bottleneck_profile", {}) if isinstance(throughput, dict) else {}
+    retrieval_bottleneck = throughput.get("retrieval_bottleneck_profile", {}) if isinstance(throughput, dict) else {}
     bench_entities = benchmark.get("entities", {}) if isinstance(benchmark, dict) else {}
     actual_backend_info = evaluation_scope.get("actual_backend_info", {}) if isinstance(evaluation_scope, dict) else {}
     actual_proof_backend = actual_backend_info.get("proof_state", {}).get("test", {}).get("actual_backend", "n/a")
@@ -315,6 +332,10 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
         "## Candidate Pool Diagnostic",
         "",
         "These metrics test whether the embedding/index candidate pool contains the gold premise before reranking. If Recall@100 is low, the next accuracy bottleneck is candidate generation or embeddings; if Recall@100 is high but Recall@10 is low, the bottleneck is reranking.",
+        "",
+        "### Retrieval Bottleneck Profile",
+        "",
+        _retrieval_bottleneck_table(retrieval_bottleneck),
         "",
         "### Proof-State Candidate Pool",
         "",

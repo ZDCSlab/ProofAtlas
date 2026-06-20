@@ -68,7 +68,11 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
                     {"name": "test_theorem_retrieval", "seconds": 1.5, "evaluated_queries": 5, "actual_backend": "torch_cuda"},
                     {"name": "test_proof_state_retrieval", "seconds": 1.0, "evaluated_queries": 10, "actual_backend": "torch_cuda"},
                 ],
-            }
+            },
+            "test": {
+                "proof_state_retrieval": {"metrics": {"Recall@10": 0.1, "Recall@100": 0.2}},
+                "theorem_retrieval": {"metrics": {"theorem_retrieval_Recall@10": 0.55, "theorem_retrieval_Recall@100": 0.7}},
+            },
         },
     )
     (tmp_path / "data/processed/test").mkdir(parents=True)
@@ -110,11 +114,14 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
     assert report["throughput_profile"]["evaluation_timing_delta"]["timed_pipeline_evaluate_seconds"] == 3.0
     assert report["throughput_profile"]["evaluation_timing_delta"]["current_evaluation_seconds"] == 2.5
     assert report["throughput_profile"]["evaluation_timing_delta"]["timed_to_current_ratio"] == 1.2
+    assert report["throughput_profile"]["retrieval_bottleneck_profile"]["proof_state"]["primary_accuracy_bottleneck"] == "candidate_generation_or_embeddings"
+    assert report["throughput_profile"]["retrieval_bottleneck_profile"]["theorem"]["primary_accuracy_bottleneck"] == "top10_reranking_or_candidate_ordering"
     assert report["stages"]["evaluation"]["evaluation_timing"]["total_seconds"] == 2.5
     assert report["stages"]["evaluation"]["evaluation_timing"]["substage_count"] == 2
     assert report["stages"]["evaluation"]["evaluation_timing"]["slowest_substages"][0]["name"] == "test_theorem_retrieval"
     assert any(row["area"] == "indexing" for row in report["recommendations"])
     assert any(row["area"] == "pipeline_bottleneck" for row in report["recommendations"])
+    assert any(row["area"] == "retrieval_accuracy" for row in report["recommendations"])
     assert (tmp_path / "outputs/reports/pipeline_performance_report.json").exists()
 
 

@@ -44,6 +44,13 @@ The current default experiment uses `erbacher/LeanRank-data` only. Local Lean/ma
 
 These metrics test whether the embedding/index candidate pool contains the gold premise before reranking. If Recall@100 is low, the next accuracy bottleneck is candidate generation or embeddings; if Recall@100 is high but Recall@10 is low, the bottleneck is reranking.
 
+### Retrieval Bottleneck Profile
+
+| Task | Recall@10 | Recall@100 | Gap | Top10/Top100 | Primary bottleneck |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Proof-state premise retrieval | 0.1162 | 0.2362 | 0.1199 | 0.4922 | `candidate_generation_or_embeddings` |
+| Theorem-level premise retrieval | 0.4940 | 0.6889 | 0.1948 | 0.7172 | `top10_reranking_or_candidate_ordering` |
+
 ### Proof-State Candidate Pool
 
 | Metric | Value |
@@ -457,6 +464,7 @@ These timings split the `evaluate` pipeline stage into proof-state retrieval, th
 ## Recommendations
 
 - `medium` `pipeline_bottleneck`: Embedding is the current largest timed bottleneck. Reuse cached embeddings when training/reranking only, and keep multi-GPU sentence-transformer encoding enabled for larger LeanRank-data refreshes.
+- `medium` `retrieval_accuracy`: Proof-state Recall@100 is low, so proof-state premise retrieval is currently limited by candidate generation or embeddings before reranking. Prioritize stronger proof-state/query representations, domain-aware candidate pools, and embedding model comparisons before adding heavier rerankers.
 
 ## Interpretation
 
