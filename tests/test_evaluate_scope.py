@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 
+import numpy as np
 import pandas as pd
 
 from leanrank_kg import evaluate
@@ -67,3 +68,76 @@ def test_full_heldout_override_removes_core_evaluation_limits(tmp_path, monkeypa
     assert theorem_limits == {"val": None, "test": None}
     assert data["evaluation_scope"]["full_heldout_override"] is True
     assert data["evaluation_scope"]["is_sampled"] is False
+
+
+def test_theorem_evaluation_skips_case_study_query_text_when_disabled(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "data/processed/test").mkdir(parents=True)
+    write_parquet(
+        pd.DataFrame(
+            [
+                {"id": "thm:a", "full_name": "A", "domain_tag": "Algebra", "subdomain_tag": "Group"},
+                {"id": "thm:b", "full_name": "B", "domain_tag": "Algebra", "subdomain_tag": "Ring"},
+            ]
+        ),
+        "data/processed/test/theorems.parquet",
+    )
+    write_parquet(
+        pd.DataFrame(
+            [
+                {"id": "ps:a", "theorem_id": "thm:a", "goal_text": "a"},
+                {"id": "ps:b", "theorem_id": "thm:b", "goal_text": "b"},
+            ]
+        ),
+        "data/processed/test/proof_states.parquet",
+    )
+    write_parquet(
+        pd.DataFrame(
+            [
+                {"proof_state_id": "ps:a", "premise_id": "premise:p"},
+                {"proof_state_id": "ps:b", "premise_id": "premise:q"},
+            ]
+        ),
+        "data/processed/test/positive_edges.parquet",
+    )
+
+    train_premises = {"premise:p", "premise:q"}
+    monkeypatch.setattr(
+        evaluate,
+        "_embedding_ids",
+        lambda split, entity_type: ["premise:p", "premise:q"] if entity_type == "Premise" else ["thm:a", "thm:b"],
+    )
+    monkeypatch.setattr(evaluate, "_load_embedding", lambda split, kind: np.asarray([[1.0, 0.0], [0.0, 1.0]], dtype="float32"))
+
+    def fake_ranking_rows_from_embeddings(**kwargs):
+        rows = []
+        for query_id in kwargs["query_ids"]:
+            rows.append(
+                {
+                    "theorem_id": query_id,
+                    **evaluate._ranking_row(["premise:p", "premise:q"], kwargs["gold_by_query"][query_id], train_premises, kwargs["top_ks"]),
+                }
+            )
+        return rows, {}, {"actual_backend": "fake"}
+
+    monkeypatch.setattr(evaluate, "_ranking_rows_from_embeddings", fake_ranking_rows_from_embeddings)
+    monkeypatch.setattr(
+        evaluate,
+        "_theorem_query_text",
+        lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("query text should only be built for case studies")),
+    )
+    monkeypatch.setattr(
+        evaluate,
+        "retrieve_knowledge_for_theorem",
+        lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("guidance retrieval should only run for case studies")),
+    )
+
+    result = evaluate._evaluate_theorem_retrieval_split(
+        "test",
+        top_ks=[1],
+        train_premises=train_premises,
+        case_study_limit=0,
+    )
+
+    assert result["case_studies"] == []
+    assert result["metrics"]["theorem_retrieval_evaluated_theorems"] == 2

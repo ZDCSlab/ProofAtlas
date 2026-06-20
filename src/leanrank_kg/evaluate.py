@@ -420,6 +420,8 @@ def _evaluate_proof_state_retrieval_split(
     )
     examples = []
     for proof_state_id, group in grouped_items:
+        if len(examples) >= 20:
+            break
         if len(examples) < 20 and proof_state_id in proof_states.index:
             pstate = proof_states.loc[proof_state_id]
             retrieved_ids = retrieved_by_query.get(str(proof_state_id), [])[:5]
@@ -950,8 +952,6 @@ def _evaluate_theorem_retrieval_split(
         if theorem_id not in theorems.index:
             continue
         theorem = theorems.loc[theorem_id]
-        theorem_ps = proof_states[proof_states["theorem_id"] == theorem_id]
-        query_text = _theorem_query_text(theorem, theorem_ps)
         gold_all = set(group["premise_id"])
         gold_in_index = gold_all & train_premises
         gold_missing = gold_all - train_premises
@@ -959,6 +959,8 @@ def _evaluate_theorem_retrieval_split(
         total_gold_in_index += len(gold_in_index)
         total_gold_missing += len(gold_missing)
         if len(case_studies) < case_study_limit:
+            theorem_ps = proof_states[proof_states["theorem_id"] == theorem_id]
+            query_text = _theorem_query_text(theorem, theorem_ps)
             guidance = retrieve_knowledge_for_theorem(
                 theorem_text=query_text,
                 full_name=str(theorem.get("full_name", "")),
