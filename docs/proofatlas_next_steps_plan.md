@@ -89,6 +89,32 @@ Given a new theorem statement or proof goal
 -> return JSON guidance through CLI, Python API, or the optional web service
 ```
 
+## Current Production Experiment Snapshot
+
+The current production experiment uses `configs/proofatlas.yaml` over `erbacher/LeanRank-data`, BGE embeddings, and hnswlib ANN indexes. The detailed artifact/evidence audit is in `docs/proofatlas_delivery_audit.md`.
+
+Sampled held-out test metrics:
+
+| Task | Metric | Value |
+| --- | --- | ---: |
+| Proof-state premise retrieval | Recall@10 | 0.1279 |
+| Proof-state premise retrieval | Recall@100 | 0.3090 |
+| Reranked proof-state diagnostic | Recall@10 | 0.1513 |
+| Theorem-level premise retrieval | Recall@10 | 0.4233 |
+| Theorem-level premise retrieval | Recall@100 | 0.6642 |
+| Theorem-level premise retrieval | MRR | 0.5473 |
+| Learned premise ranker | validation AUC | 0.8254 |
+
+Performance snapshot:
+
+- Current split rows: 292,012
+- Train premise index rows: 127,561
+- Train proof-state index rows: 23,723
+- Train theorem index rows: 8,000
+- Premise hnswlib speedup vs exact cosine: 18.3x at Recall@10 vs exact 0.989
+- Proof-state hnswlib speedup vs exact cosine: 15.2x at Recall@10 vs exact 0.991
+- Theorem hnswlib speedup vs exact cosine: 12.8x at Recall@10 vs exact 0.994
+
 ## Completed Roadmap Items
 
 ### Phase 1: KG Semantics
