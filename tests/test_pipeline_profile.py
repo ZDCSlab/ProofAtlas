@@ -70,8 +70,15 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
                 ],
             },
             "test": {
-                "proof_state_retrieval": {"metrics": {"Recall@10": 0.1, "Recall@100": 0.2}},
-                "theorem_retrieval": {"metrics": {"theorem_retrieval_Recall@10": 0.55, "theorem_retrieval_Recall@100": 0.7}},
+                "proof_state_retrieval": {"metrics": {"evaluated_queries": 10, "Recall@10": 0.1, "Recall@100": 0.2, "MRR": 0.15, "MAP": 0.12}},
+                "theorem_retrieval": {
+                    "metrics": {
+                        "theorem_retrieval_evaluated_theorems": 5,
+                        "theorem_retrieval_Recall@10": 0.55,
+                        "theorem_retrieval_Recall@100": 0.7,
+                        "theorem_retrieval_MRR": 0.6,
+                    }
+                },
                 "proof_state_reranked_retrieval": {
                     "metrics": {"Recall@10": 0.15},
                     "candidate_k_ablation": [
@@ -160,6 +167,11 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
     assert rapid["strongest_ranker_feature_groups"][0]["group"] == "symbol_overlap"
     assert rapid["label_supervision"]["negative_to_positive_edge_ratio"] == 9.0
     assert rapid["recommended_sequence"][0]["area"] == "proof_state_query_and_embedding"
+    uncertainty = report["throughput_profile"]["metric_uncertainty_profile"]
+    assert uncertainty["confidence_level"] == 0.95
+    assert uncertainty["proof_state"]["Recall@10"]["n"] == 10
+    assert uncertainty["proof_state"]["Recall@10"]["ci95_half_width"] > 0
+    assert uncertainty["theorem"]["theorem_retrieval_Recall@10"]["n"] == 5
     assert report["stages"]["evaluation"]["evaluation_timing"]["total_seconds"] == 2.5
     assert report["stages"]["evaluation"]["evaluation_timing"]["substage_count"] == 2
     assert report["stages"]["evaluation"]["evaluation_timing"]["slowest_substages"][0]["name"] == "test_theorem_retrieval"

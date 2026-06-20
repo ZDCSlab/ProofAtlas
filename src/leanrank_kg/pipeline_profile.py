@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import math
 from pathlib import Path
 from typing import Any
 
@@ -665,6 +666,59 @@ def _rapid_convergence_profile(
     }
 
 
+def _metric_uncertainty_profile(evaluation: dict[str, Any]) -> dict[str, Any]:
+    test_metrics = ((evaluation.get("test_set_evaluation") or {}).get("test_metrics") or {}) if isinstance(evaluation, dict) else {}
+    proof_metrics = test_metrics.get("proof_state_retrieval", {}) if isinstance(test_metrics, dict) else {}
+    theorem_metrics = test_metrics.get("theorem_retrieval", {}) if isinstance(test_metrics, dict) else {}
+
+    def _bounded_normal_ci(value: Any, n: Any) -> dict[str, Any]:
+        if value is None or n is None:
+            return {"value": value, "n": n, "standard_error": None, "ci95_low": None, "ci95_high": None, "ci95_half_width": None}
+        try:
+            value_f = float(value)
+            n_i = int(n)
+        except (TypeError, ValueError):
+            return {"value": value, "n": n, "standard_error": None, "ci95_low": None, "ci95_high": None, "ci95_half_width": None}
+        if n_i <= 0:
+            return {"value": value_f, "n": n_i, "standard_error": None, "ci95_low": None, "ci95_high": None, "ci95_half_width": None}
+        bounded = min(max(value_f, 0.0), 1.0)
+        standard_error = math.sqrt((bounded * (1.0 - bounded)) / n_i)
+        half_width = 1.96 * standard_error
+        return {
+            "value": value_f,
+            "n": n_i,
+            "standard_error": standard_error,
+            "ci95_low": max(0.0, value_f - half_width),
+            "ci95_high": min(1.0, value_f + half_width),
+            "ci95_half_width": half_width,
+        }
+
+    proof_n = proof_metrics.get("evaluated_queries") or proof_metrics.get("evaluated_retrievable_queries")
+    theorem_n = theorem_metrics.get("theorem_retrieval_evaluated_theorems") or theorem_metrics.get("theorem_retrieval_evaluated_queries")
+    return {
+        "method": "bounded_normal_approximation_for_aggregate_retrieval_metrics",
+        "confidence_level": 0.95,
+        "note": "Intervals are approximate diagnostics for bounded aggregate retrieval metrics, not a replacement for paired bootstrap comparisons.",
+        "proof_state": {
+            metric: _bounded_normal_ci(proof_metrics.get(metric), proof_n)
+            for metric in ["Recall@1", "Recall@5", "Recall@10", "Recall@50", "Recall@100", "MRR", "MAP", "nDCG@10"]
+        },
+        "theorem": {
+            metric: _bounded_normal_ci(theorem_metrics.get(metric), theorem_n)
+            for metric in [
+                "theorem_retrieval_Recall@1",
+                "theorem_retrieval_Recall@5",
+                "theorem_retrieval_Recall@10",
+                "theorem_retrieval_Recall@50",
+                "theorem_retrieval_Recall@100",
+                "theorem_retrieval_MRR",
+                "theorem_retrieval_MAP",
+                "theorem_retrieval_nDCG@10",
+            ]
+        },
+    }
+
+
 def _recommendations(
     config: dict[str, Any],
     sample: dict[str, Any],
@@ -827,6 +881,7 @@ def build_report(config_path: str = "configs/proofatlas.yaml") -> dict[str, Any]
     throughput = _throughput_profile(sample, embeddings, index, benchmark, timings, evaluation)
     throughput["retrieval_bottleneck_profile"] = _retrieval_bottleneck_profile(evaluation)
     throughput["rapid_convergence_profile"] = _rapid_convergence_profile(evaluation, readiness, throughput)
+    throughput["metric_uncertainty_profile"] = _metric_uncertainty_profile(evaluation)
     recommendations = _recommendations(config, sample, benchmark, readiness, scale, throughput, evaluation)
     return {
         "config_path": config_path,

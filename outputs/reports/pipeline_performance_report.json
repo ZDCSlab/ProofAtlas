@@ -3155,6 +3155,143 @@
     },
     "index_build_seconds_total": 6.719438847154379,
     "mean_index_speedup_vs_exact": 17.376305276865946,
+    "metric_uncertainty_profile": {
+      "confidence_level": 0.95,
+      "method": "bounded_normal_approximation_for_aggregate_retrieval_metrics",
+      "note": "Intervals are approximate diagnostics for bounded aggregate retrieval metrics, not a replacement for paired bootstrap comparisons.",
+      "proof_state": {
+        "MAP": {
+          "ci95_half_width": 0.007687181664098842,
+          "ci95_high": 0.05709008433789773,
+          "ci95_low": 0.04171572100970005,
+          "n": 3053,
+          "standard_error": 0.00392203146127492,
+          "value": 0.04940290267379889
+        },
+        "MRR": {
+          "ci95_half_width": 0.009530112313221636,
+          "ci95_high": 0.0878418069894173,
+          "ci95_low": 0.06878158236297403,
+          "n": 3053,
+          "standard_error": 0.004862302200623284,
+          "value": 0.07831169467619567
+        },
+        "Recall@1": {
+          "ci95_half_width": 0.004283262991977264,
+          "ci95_high": 0.01908250271176783,
+          "ci95_low": 0.010515976727813302,
+          "n": 3053,
+          "standard_error": 0.0021853382612128896,
+          "value": 0.014799239719790566
+        },
+        "Recall@10": {
+          "ci95_half_width": 0.011369792475301706,
+          "ci95_high": 0.12761897539115122,
+          "ci95_low": 0.10487939044054781,
+          "n": 3053,
+          "standard_error": 0.005800914528215156,
+          "value": 0.11624918291584951
+        },
+        "Recall@100": {
+          "ci95_half_width": 0.015066233891654892,
+          "ci95_high": 0.25123830489823024,
+          "ci95_low": 0.22110583711492046,
+          "n": 3053,
+          "standard_error": 0.007686854026354537,
+          "value": 0.23617207100657536
+        },
+        "Recall@5": {
+          "ci95_half_width": 0.009610961746374243,
+          "ci95_high": 0.08938345143235266,
+          "ci95_low": 0.07016152793960417,
+          "n": 3053,
+          "standard_error": 0.00490355191141543,
+          "value": 0.07977248968597841
+        },
+        "Recall@50": {
+          "ci95_half_width": 0.014084173907660884,
+          "ci95_high": 0.21018285837192283,
+          "ci95_low": 0.18201451055660103,
+          "n": 3053,
+          "standard_error": 0.007185803014112696,
+          "value": 0.19609868446426193
+        },
+        "nDCG@10": {
+          "ci95_half_width": 0.00903018803735772,
+          "ci95_high": 0.07868725541735998,
+          "ci95_low": 0.06062687934264453,
+          "n": 3053,
+          "standard_error": 0.004607238794570266,
+          "value": 0.06965706738000225
+        }
+      },
+      "theorem": {
+        "theorem_retrieval_MAP": {
+          "ci95_half_width": 0.029991828203524928,
+          "ci95_high": 0.40409413428423263,
+          "ci95_low": 0.3441104778771828,
+          "n": 1000,
+          "standard_error": 0.015301953165063739,
+          "value": 0.3741023060807077
+        },
+        "theorem_retrieval_MRR": {
+          "ci95_half_width": 0.03075994088155658,
+          "ci95_high": 0.5916134875729786,
+          "ci95_low": 0.5300936058098655,
+          "n": 1000,
+          "standard_error": 0.015693847388549276,
+          "value": 0.5608535466914221
+        },
+        "theorem_retrieval_Recall@1": {
+          "ci95_half_width": 0.025968571952923517,
+          "ci95_high": 0.25310082514414606,
+          "ci95_low": 0.20116368123829903,
+          "n": 1000,
+          "standard_error": 0.013249271404552815,
+          "value": 0.22713225319122254
+        },
+        "theorem_retrieval_Recall@10": {
+          "ci95_half_width": 0.030988112906971406,
+          "ci95_high": 0.5250194127723183,
+          "ci95_low": 0.46304318695837554,
+          "n": 1000,
+          "standard_error": 0.01581026168723031,
+          "value": 0.49403129986534694
+        },
+        "theorem_retrieval_Recall@100": {
+          "ci95_half_width": 0.028694648317874636,
+          "ci95_high": 0.7175509175253451,
+          "ci95_low": 0.6601616208895958,
+          "n": 1000,
+          "standard_error": 0.014640126692793182,
+          "value": 0.6888562692074705
+        },
+        "theorem_retrieval_Recall@5": {
+          "ci95_half_width": 0.03067111058360524,
+          "ci95_high": 0.45909150428717677,
+          "ci95_low": 0.3977492831199663,
+          "n": 1000,
+          "standard_error": 0.015648525807961857,
+          "value": 0.42842039370357154
+        },
+        "theorem_retrieval_Recall@50": {
+          "ci95_half_width": 0.029900749824290293,
+          "ci95_high": 0.6613168427890002,
+          "ci95_low": 0.6015153431404197,
+          "n": 1000,
+          "standard_error": 0.015255484604229742,
+          "value": 0.6314160929647099
+        },
+        "theorem_retrieval_nDCG@10": {
+          "ci95_half_width": 0.03080357866249134,
+          "ci95_high": 0.4759963040067248,
+          "ci95_low": 0.41438914668174215,
+          "n": 1000,
+          "standard_error": 0.015716111562495583,
+          "value": 0.4451927253442335
+        }
+      }
+    },
     "min_index_recall_vs_exact": 0.9580000000000001,
     "pipeline_seconds_per_100k_embedding_rows": 225.724786422147,
     "pipeline_seconds_per_100k_processed_rows": 188.91383326197186,

@@ -186,6 +186,32 @@ Each held-out test theorem is used as a query for proof guidance. Gold premises 
 | `theorem_retrieval_MAP` | 0.3741 |
 | `theorem_retrieval_nDCG@10` | 0.4452 |
 
+## Metric Uncertainty
+
+Confidence level: `0.95`. Method: `bounded_normal_approximation_for_aggregate_retrieval_metrics`.
+
+Intervals are approximate diagnostics for bounded aggregate retrieval metrics, not a replacement for paired bootstrap comparisons.
+
+### Proof-State Metric Intervals
+
+| Metric | Value | n | 95% CI low | 95% CI high | Half-width |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| `Recall@10` | 0.1162 | 3053 | 0.1049 | 0.1276 | 0.0114 |
+| `Recall@100` | 0.2362 | 3053 | 0.2211 | 0.2512 | 0.0151 |
+| `MRR` | 0.0783 | 3053 | 0.0688 | 0.0878 | 0.0095 |
+| `MAP` | 0.0494 | 3053 | 0.0417 | 0.0571 | 0.0077 |
+| `nDCG@10` | 0.0697 | 3053 | 0.0606 | 0.0787 | 0.0090 |
+
+### Theorem Metric Intervals
+
+| Metric | Value | n | 95% CI low | 95% CI high | Half-width |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| `theorem_retrieval_Recall@10` | 0.4940 | 1000 | 0.4630 | 0.5250 | 0.0310 |
+| `theorem_retrieval_Recall@100` | 0.6889 | 1000 | 0.6602 | 0.7176 | 0.0287 |
+| `theorem_retrieval_MRR` | 0.5609 | 1000 | 0.5301 | 0.5916 | 0.0308 |
+| `theorem_retrieval_MAP` | 0.3741 | 1000 | 0.3441 | 0.4041 | 0.0300 |
+| `theorem_retrieval_nDCG@10` | 0.4452 | 1000 | 0.4144 | 0.4760 | 0.0308 |
+
 ## Domain Breakdown
 
 These tables show held-out test metrics grouped by LeanRank-data domain. They help identify where ranking quality is strong or weak instead of relying only on aggregate metrics.

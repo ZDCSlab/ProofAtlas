@@ -151,6 +151,25 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                         }
                     ],
                 },
+                "metric_uncertainty_profile": {
+                    "method": "bounded_normal_approximation_for_aggregate_retrieval_metrics",
+                    "confidence_level": 0.95,
+                    "note": "Intervals are approximate diagnostics.",
+                    "proof_state": {
+                        "Recall@10": {"value": 0.2, "n": 10, "ci95_low": 0.0, "ci95_high": 0.4479, "ci95_half_width": 0.2479},
+                        "Recall@100": {"value": 0.3, "n": 10, "ci95_low": 0.0159, "ci95_high": 0.5841, "ci95_half_width": 0.2841},
+                        "MRR": {"value": 0.4, "n": 10, "ci95_low": 0.0964, "ci95_high": 0.7036, "ci95_half_width": 0.3036},
+                        "MAP": {"value": 0.3, "n": 10, "ci95_low": 0.0159, "ci95_high": 0.5841, "ci95_half_width": 0.2841},
+                        "nDCG@10": {"value": 0.45, "n": 10, "ci95_low": 0.1419, "ci95_high": 0.7581, "ci95_half_width": 0.3081},
+                    },
+                    "theorem": {
+                        "theorem_retrieval_Recall@10": {"value": 0.5, "n": 8, "ci95_low": 0.1535, "ci95_high": 0.8465, "ci95_half_width": 0.3465},
+                        "theorem_retrieval_Recall@100": {"value": 0.7, "n": 8, "ci95_low": 0.3821, "ci95_high": 1.0, "ci95_half_width": 0.3179},
+                        "theorem_retrieval_MRR": {"value": 0.6, "n": 8, "ci95_low": 0.2605, "ci95_high": 0.9395, "ci95_half_width": 0.3395},
+                        "theorem_retrieval_MAP": {"value": 0.5, "n": 8, "ci95_low": 0.1535, "ci95_high": 0.8465, "ci95_half_width": 0.3465},
+                        "theorem_retrieval_nDCG@10": {"value": 0.55, "n": 8, "ci95_low": 0.2050, "ci95_high": 0.8950, "ci95_half_width": 0.3450},
+                    },
+                },
                 "processed_rows_per_second": 1000.0,
                 "pipeline_seconds_per_100k_processed_rows": 100.0,
                 "slowest_stage": "evaluate",
@@ -256,6 +275,10 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "proof_state_query_and_embedding" in text
     assert "proof_state_missing_from_top100" in text
     assert "symbol_overlap" in text
+    assert "Metric Uncertainty" in text
+    assert "Proof-State Metric Intervals" in text
+    assert "Theorem Metric Intervals" in text
+    assert "bounded_normal_approximation_for_aggregate_retrieval_metrics" in text
     assert "Pipeline Timing" in text
     assert "Timing config matches current report config" in text
     assert "Timing config matches current report config: `True`" in text

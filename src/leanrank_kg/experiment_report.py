@@ -190,6 +190,23 @@ def _ranker_feature_group_table(rows: list[dict[str, Any]]) -> str:
     return "\n".join(lines)
 
 
+def _metric_uncertainty_table(profile: dict[str, Any], task: str, metric_keys: list[str]) -> str:
+    rows = profile.get(task, {}) if isinstance(profile, dict) else {}
+    lines = [
+        "| Metric | Value | n | 95% CI low | 95% CI high | Half-width |",
+        "| --- | ---: | ---: | ---: | ---: | ---: |",
+    ]
+    for metric in metric_keys:
+        row = rows.get(metric, {}) if isinstance(rows, dict) else {}
+        lines.append(
+            f"| `{metric}` | {_fmt(row.get('value'))} | {_fmt(row.get('n'))} | "
+            f"{_fmt(row.get('ci95_low'))} | {_fmt(row.get('ci95_high'))} | {_fmt(row.get('ci95_half_width'))} |"
+        )
+    if len(lines) == 2:
+        lines.append("| n/a | n/a | n/a | n/a | n/a | n/a |")
+    return "\n".join(lines)
+
+
 def _evaluation_substage_table(rows: list[dict[str, Any]]) -> str:
     lines = [
         "| Evaluation substage | Seconds | Queries | Backend |",
@@ -266,6 +283,7 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     embedding_bottleneck = throughput.get("embedding_bottleneck_profile", {}) if isinstance(throughput, dict) else {}
     retrieval_bottleneck = throughput.get("retrieval_bottleneck_profile", {}) if isinstance(throughput, dict) else {}
     rapid_convergence = throughput.get("rapid_convergence_profile", {}) if isinstance(throughput, dict) else {}
+    metric_uncertainty = throughput.get("metric_uncertainty_profile", {}) if isinstance(throughput, dict) else {}
     bench_entities = benchmark.get("entities", {}) if isinstance(benchmark, dict) else {}
     actual_backend_info = evaluation_scope.get("actual_backend_info", {}) if isinstance(evaluation_scope, dict) else {}
     actual_proof_backend = actual_backend_info.get("proof_state", {}).get("test", {}).get("actual_backend", "n/a")
@@ -456,6 +474,30 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
         "Each held-out test theorem is used as a query for proof guidance. Gold premises are all positive premises used by that theorem in the held-out split.",
         "",
         _metric_table(theorem_metrics, theorem_keys),
+        "",
+        "## Metric Uncertainty",
+        "",
+        f"Confidence level: `{metric_uncertainty.get('confidence_level', 'n/a')}`. Method: `{metric_uncertainty.get('method', 'n/a')}`.",
+        "",
+        str(metric_uncertainty.get("note", "Approximate confidence intervals for held-out aggregate metrics.")),
+        "",
+        "### Proof-State Metric Intervals",
+        "",
+        _metric_uncertainty_table(metric_uncertainty, "proof_state", ["Recall@10", "Recall@100", "MRR", "MAP", "nDCG@10"]),
+        "",
+        "### Theorem Metric Intervals",
+        "",
+        _metric_uncertainty_table(
+            metric_uncertainty,
+            "theorem",
+            [
+                "theorem_retrieval_Recall@10",
+                "theorem_retrieval_Recall@100",
+                "theorem_retrieval_MRR",
+                "theorem_retrieval_MAP",
+                "theorem_retrieval_nDCG@10",
+            ],
+        ),
         "",
         "## Domain Breakdown",
         "",
