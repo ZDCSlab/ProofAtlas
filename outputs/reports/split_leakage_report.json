@@ -1,0 +1,13 @@
+{
+  "has_leakage": false,
+  "overlaps": {
+    "test_vs_train": [],
+    "test_vs_val": [],
+    "train_vs_val": []
+  },
+  "theorem_counts": {
+    "test": 1000,
+    "train": 8000,
+    "val": 1000
+  }
+}

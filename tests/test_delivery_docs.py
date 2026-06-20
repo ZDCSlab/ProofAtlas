@@ -218,4 +218,38 @@ def test_delivery_artifact_allowlist_includes_pipeline_timings() -> None:
     repo = Path(__file__).resolve().parents[1]
     gitignore = (repo / ".gitignore").read_text(encoding="utf-8")
 
-    assert "!outputs/reports/pipeline_run_timings.json" in gitignore
+    expected = [
+        "!outputs/reports/context_parse_coverage.json",
+        "!outputs/reports/deployment_security_review.json",
+        "!outputs/reports/graph_stats_summary.json",
+        "!outputs/reports/graph_validation_summary.json",
+        "!outputs/reports/homepage_summary.json",
+        "!outputs/reports/pipeline_run_timings.json",
+        "!outputs/reports/refresh_dashboard.json",
+        "!outputs/reports/refresh_history.json",
+        "!outputs/reports/refresh_trend.json",
+        "!outputs/reports/retrieval_examples.json",
+        "!outputs/reports/schema_validation_summary.json",
+        "!outputs/reports/split_leakage_report.json",
+        "!outputs/reports/theorem_query_parse_coverage.json",
+        "!outputs/reports/theorem_retrieval_case_studies.json",
+    ]
+    for pattern in expected:
+        assert pattern in gitignore
+
+
+def test_current_plans_keep_production_scope_on_leanrank_data() -> None:
+    repo = Path(__file__).resolve().parents[1]
+    plan = (repo / "docs/proofatlas_next_steps_plan.md").read_text(encoding="utf-8")
+    summary = (repo / "docs/proofatlas_project_summary_en.md").read_text(encoding="utf-8")
+    current = (repo / "docs/proofatlas_current_status_and_gap_to_theorem_retrieval.md").read_text(encoding="utf-8")
+
+    for text in (plan, summary, current):
+        assert "erbacher/LeanRank-data" in text
+        assert "custom Lean server" in text
+
+    assert "real proof-state extraction" not in plan
+    assert "real proof-state extraction" not in summary
+    assert "full mathlib data refresh" not in summary
+    assert "larger LeanRank-data refreshes" in summary
+    assert "improve LeanRank-data retrieval quality" in plan

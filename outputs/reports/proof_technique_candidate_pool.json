@@ -1,0 +1,103 @@
+[
+  {
+    "label": "simplification",
+    "rules": [
+      "simp",
+      "@[simp]",
+      "_simp"
+    ]
+  },
+  {
+    "label": "rewriting_or_coercion",
+    "rules": [
+      "rw",
+      "rewrite",
+      "Eq",
+      "congr",
+      "coe",
+      "cast"
+    ]
+  },
+  {
+    "label": "typeclass_resolution",
+    "rules": [
+      "inferInstance",
+      "inst",
+      "typeclass"
+    ]
+  },
+  {
+    "label": "definition_unfolding",
+    "rules": [
+      "unfold",
+      "defeq"
+    ]
+  },
+  {
+    "label": "theorem_application",
+    "rules": [
+      "exact",
+      "apply",
+      "refine"
+    ]
+  },
+  {
+    "label": "extensionality",
+    "rules": [
+      "ext",
+      "extensionality"
+    ]
+  },
+  {
+    "label": "case_or_constructor_reasoning",
+    "rules": [
+      "cases",
+      "constructor",
+      "rec"
+    ]
+  },
+  {
+    "label": "logical_reasoning",
+    "rules": [
+      "intro",
+      "and",
+      "or",
+      "iff",
+      "forall",
+      "exists"
+    ]
+  },
+  {
+    "label": "induction",
+    "rules": [
+      "induction",
+      "rec_on",
+      "casesOn"
+    ]
+  },
+  {
+    "label": "contradiction",
+    "rules": [
+      "by_contra",
+      "contradiction",
+      "not_not"
+    ]
+  },
+  {
+    "label": "computation",
+    "rules": [
+      "norm_num",
+      "decide",
+      "ring"
+    ]
+  },
+  {
+    "label": "automation",
+    "rules": [
+      "omega",
+      "linarith",
+      "nlinarith",
+      "aesop"
+    ]
+  }
+]

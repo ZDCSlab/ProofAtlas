@@ -1,0 +1,22 @@
+{
+  "demo": {
+    "coverage": 1.0,
+    "nonempty_goal_text": 900,
+    "proof_states": 900
+  },
+  "test": {
+    "coverage": 1.0,
+    "nonempty_goal_text": 3053,
+    "proof_states": 3053
+  },
+  "train": {
+    "coverage": 1.0,
+    "nonempty_goal_text": 23723,
+    "proof_states": 23723
+  },
+  "val": {
+    "coverage": 1.0,
+    "nonempty_goal_text": 2822,
+    "proof_states": 2822
+  }
+}

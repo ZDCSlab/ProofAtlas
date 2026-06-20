@@ -198,12 +198,12 @@ Next steps:
 
 The next development phase should focus on:
 
-1. Improving Lean-aware theorem parsing and real proof-state extraction.
-2. Adding scalable ANN or vector-store retrieval with benchmark reports.
-3. Training a stronger premise reranker using graph and proof-state features.
+1. Improving LeanRank-data-aware theorem/proof-state parsing and query-time Lean diagnostics, without adding a custom Lean server/source extractor to the production pipeline.
+2. Tuning scalable ANN or vector-store retrieval with benchmark reports and held-out retrieval metrics.
+3. Training a stronger premise reranker using graph, proof-state, hard-negative, and symbol-overlap features from LeanRank-data artifacts.
 4. Turning difficulty estimation into an evaluated prediction task.
 5. Hardening the FastAPI service and homepage demo for external review.
-6. Automating full mathlib data refresh and provenance tracking.
+6. Automating larger LeanRank-data refreshes, metric deltas, and provenance tracking.
 
 ## Final Direction
 

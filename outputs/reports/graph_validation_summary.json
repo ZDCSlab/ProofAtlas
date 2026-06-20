@@ -1,0 +1,30 @@
+{
+  "demo": {
+    "edge_count": 13802,
+    "missing_endpoint_count": 0,
+    "networkx_loadable": true,
+    "node_count": 3952,
+    "split": "demo"
+  },
+  "test": {
+    "edge_count": 159705,
+    "missing_endpoint_count": 0,
+    "networkx_loadable": true,
+    "node_count": 47549,
+    "split": "test"
+  },
+  "train": {
+    "edge_count": 1073855,
+    "missing_endpoint_count": 0,
+    "networkx_loadable": true,
+    "node_count": 187971,
+    "split": "train"
+  },
+  "val": {
+    "edge_count": 151856,
+    "missing_endpoint_count": 0,
+    "networkx_loadable": true,
+    "node_count": 44902,
+    "split": "val"
+  }
+}

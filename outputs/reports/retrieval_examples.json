@@ -1,0 +1,839 @@
+[
+  {
+    "gold_positive_premises": [
+      "premise:AList.lookup",
+      "premise:List.dlookup_dedupKeys",
+      "premise:List.toAList"
+    ],
+    "proof_state": "lookup a s.toAList = dlookup a s",
+    "proof_state_id": "ps:AList.lookup_to_alist:0:308b5669ece7",
+    "split": "test",
+    "top_retrieved_premises": [
+      {
+        "full_name": "AList.lookup_to_alist",
+        "premise_id": "premise:AList.lookup_to_alist",
+        "rank": 1,
+        "score": 1.0
+      },
+      {
+        "full_name": "AList.lookup",
+        "premise_id": "premise:AList.lookup",
+        "rank": 2,
+        "score": 0.5
+      },
+      {
+        "full_name": "List.toAList",
+        "premise_id": "premise:List.toAList",
+        "rank": 3,
+        "score": 0.3333333333333333
+      },
+      {
+        "full_name": "AList.lookup_union_eq_some",
+        "premise_id": "premise:AList.lookup_union_eq_some",
+        "rank": 4,
+        "score": 0.25
+      },
+      {
+        "full_name": "AList.perm_lookup",
+        "premise_id": "premise:AList.perm_lookup",
+        "rank": 5,
+        "score": 0.2
+      }
+    ]
+  },
+  {
+    "gold_positive_premises": [
+      "premise:UniformSpace.Completion.extensionHom_coe",
+      "premise:WithAbs.isUniformInducing_of_comp"
+    ],
+    "proof_state": "(extensionEmbedding_of_comp h) \u2191x = f x",
+    "proof_state_id": "ps:AbsoluteValue.Completion.extensionEmbedding_of_comp_coe:0:7b7f180d15af",
+    "split": "test",
+    "top_retrieved_premises": [
+      {
+        "full_name": "UniformSpace.Completion.extension_comp_coe",
+        "premise_id": "premise:UniformSpace.Completion.extension_comp_coe",
+        "rank": 1,
+        "score": 1.0
+      },
+      {
+        "full_name": "UniformSpace.Completion.extensionHom",
+        "premise_id": "premise:UniformSpace.Completion.extensionHom",
+        "rank": 2,
+        "score": 0.5
+      },
+      {
+        "full_name": "AddMonoidHom.extension",
+        "premise_id": "premise:AddMonoidHom.extension",
+        "rank": 3,
+        "score": 0.3333333333333333
+      },
+      {
+        "full_name": "Valued.extensionValuation",
+        "premise_id": "premise:Valued.extensionValuation",
+        "rank": 4,
+        "score": 0.25
+      },
+      {
+        "full_name": "BoundedContinuousFunction.exists_extension_forall_exists_le_ge_of_isClosedEmbedding",
+        "premise_id": "premise:BoundedContinuousFunction.exists_extension_forall_exists_le_ge_of_isClosedEmbedding",
+        "rank": 5,
+        "score": 0.2
+      }
+    ]
+  },
+  {
+    "gold_positive_premises": [
+      "premise:Action",
+      "premise:Action.res",
+      "premise:Prefunctor",
+      "premise:rfl"
+    ],
+    "proof_state": "X.\u03c1 (f a) \u226b g.hom = g.hom \u226b Y.\u03c1 (f a)",
+    "proof_state_id": "ps:Action.full_res:4:d6f01be8f029",
+    "split": "test",
+    "top_retrieved_premises": [
+      {
+        "full_name": "Rep.\u03c1_hom",
+        "premise_id": "premise:Rep.\u03c1_hom",
+        "rank": 1,
+        "score": 1.0
+      },
+      {
+        "full_name": "Action.Hom.id",
+        "premise_id": "premise:Action.Hom.id",
+        "rank": 2,
+        "score": 0.5
+      },
+      {
+        "full_name": "Action.\u03c1Aut",
+        "premise_id": "premise:Action.\u03c1Aut",
+        "rank": 3,
+        "score": 0.3333333333333333
+      },
+      {
+        "full_name": "Action.full_res",
+        "premise_id": "premise:Action.full_res",
+        "rank": 4,
+        "score": 0.25
+      },
+      {
+        "full_name": "Action.mkIso",
+        "premise_id": "premise:Action.mkIso",
+        "rank": 5,
+        "score": 0.2
+      }
+    ]
+  },
+  {
+    "gold_positive_premises": [
+      "premise:AddChar.mulShift"
+    ],
+    "proof_state": "a = b",
+    "proof_state_id": "ps:AddChar.to_mulShift_inj_of_isPrimitive:1:014ac10cbfd3",
+    "split": "test",
+    "top_retrieved_premises": [
+      {
+        "full_name": "AddChar.to_mulShift_inj_of_isPrimitive",
+        "premise_id": "premise:AddChar.to_mulShift_inj_of_isPrimitive",
+        "rank": 1,
+        "score": 1.0
+      },
+      {
+        "full_name": "AddChar.IsPrimitive",
+        "premise_id": "premise:AddChar.IsPrimitive",
+        "rank": 2,
+        "score": 0.5
+      },
+      {
+        "full_name": "AddChar.not_isPrimitive_mulShift",
+        "premise_id": "premise:AddChar.not_isPrimitive_mulShift",
+        "rank": 3,
+        "score": 0.3333333333333333
+      },
+      {
+        "full_name": "AddChar.mulShift",
+        "premise_id": "premise:AddChar.mulShift",
+        "rank": 4,
+        "score": 0.25
+      },
+      {
+        "full_name": "AddChar.inv_mulShift",
+        "premise_id": "premise:AddChar.inv_mulShift",
+        "rank": 5,
+        "score": 0.2
+      }
+    ]
+  },
+  {
+    "gold_positive_premises": [
+      "premise:AddChar.mulShift_apply",
+      "premise:AddChar.mulShift_mul",
+      "premise:AddChar.mulShift_zero",
+      "premise:mul_inv_cancel"
+    ],
+    "proof_state": "a = b",
+    "proof_state_id": "ps:AddChar.to_mulShift_inj_of_isPrimitive:2:38a6493b46d4",
+    "split": "test",
+    "top_retrieved_premises": [
+      {
+        "full_name": "AddChar.to_mulShift_inj_of_isPrimitive",
+        "premise_id": "premise:AddChar.to_mulShift_inj_of_isPrimitive",
+        "rank": 1,
+        "score": 1.0
+      },
+      {
+        "full_name": "AddChar.IsPrimitive",
+        "premise_id": "premise:AddChar.IsPrimitive",
+        "rank": 2,
+        "score": 0.5
+      },
+      {
+        "full_name": "AddChar.not_isPrimitive_mulShift",
+        "premise_id": "premise:AddChar.not_isPrimitive_mulShift",
+        "rank": 3,
+        "score": 0.3333333333333333
+      },
+      {
+        "full_name": "AddChar.mulShift",
+        "premise_id": "premise:AddChar.mulShift",
+        "rank": 4,
+        "score": 0.25
+      },
+      {
+        "full_name": "AddChar.inv_mulShift",
+        "premise_id": "premise:AddChar.inv_mulShift",
+        "rank": 5,
+        "score": 0.2
+      }
+    ]
+  },
+  {
+    "gold_positive_premises": [
+      "premise:QuotientGroup.induction_on"
+    ],
+    "proof_state": "ContinuousAt (\u21d1(equivIoc p a)) x",
+    "proof_state_id": "ps:AddCircle.continuousAt_equivIoc:0:dffa12740580",
+    "split": "test",
+    "top_retrieved_premises": [
+      {
+        "full_name": "AddCircle.continuousAt_equivIoc",
+        "premise_id": "premise:AddCircle.continuousAt_equivIoc",
+        "rank": 1,
+        "score": 1.0
+      },
+      {
+        "full_name": "AddCircle.continuousAt_equivIco",
+        "premise_id": "premise:AddCircle.continuousAt_equivIco",
+        "rank": 2,
+        "score": 0.5
+      },
+      {
+        "full_name": "AddCircle.continuous_equivIoc_symm",
+        "premise_id": "premise:AddCircle.continuous_equivIoc_symm",
+        "rank": 3,
+        "score": 0.3333333333333333
+      },
+      {
+        "full_name": "AddCircle.continuous_equivIco_symm",
+        "premise_id": "premise:AddCircle.continuous_equivIco_symm",
+        "rank": 4,
+        "score": 0.25
+      },
+      {
+        "full_name": "AddCircle.continuous_mk'",
+        "premise_id": "premise:AddCircle.continuous_mk'",
+        "rank": 5,
+        "score": 0.2
+      }
+    ]
+  },
+  {
+    "gold_positive_premises": [
+      "premise:ContinuousAt",
+      "premise:Filter.Tendsto",
+      "premise:Filter.map_map",
+      "premise:QuotientGroup.nhds_eq"
+    ],
+    "proof_state": "ContinuousAt \u21d1(equivIoc p a) \u2191z\u271d",
+    "proof_state_id": "ps:AddCircle.continuousAt_equivIoc:1:8e4f460e0671",
+    "split": "test",
+    "top_retrieved_premises": [
+      {
+        "full_name": "AddCircle.continuousAt_equivIoc",
+        "premise_id": "premise:AddCircle.continuousAt_equivIoc",
+        "rank": 1,
+        "score": 1.0
+      },
+      {
+        "full_name": "AddCircle.continuousAt_equivIco",
+        "premise_id": "premise:AddCircle.continuousAt_equivIco",
+        "rank": 2,
+        "score": 0.5
+      },
+      {
+        "full_name": "AddCircle.continuous_equivIoc_symm",
+        "premise_id": "premise:AddCircle.continuous_equivIoc_symm",
+        "rank": 3,
+        "score": 0.3333333333333333
+      },
+      {
+        "full_name": "AddCircle.continuous_equivIco_symm",
+        "premise_id": "premise:AddCircle.continuous_equivIco_symm",
+        "rank": 4,
+        "score": 0.25
+      },
+      {
+        "full_name": "AddCircle.continuous_mk'",
+        "premise_id": "premise:AddCircle.continuous_mk'",
+        "rank": 5,
+        "score": 0.2
+      }
+    ]
+  },
+  {
+    "gold_positive_premises": [
+      "premise:continuousAt_toIocMod"
+    ],
+    "proof_state": "Filter.map (\u21d1(equivIoc p a) \u2218 QuotientAddGroup.mk) (\ud835\udcdd z\u271d) \u2264 \ud835\udcdd ((equivIoc p a) \u2191z\u271d)",
+    "proof_state_id": "ps:AddCircle.continuousAt_equivIoc:2:52b95ad6b078",
+    "split": "test",
+    "top_retrieved_premises": [
+      {
+        "full_name": "AddCircle.equivAddCircle",
+        "premise_id": "premise:AddCircle.equivAddCircle",
+        "rank": 1,
+        "score": 1.0
+      },
+      {
+        "full_name": "DHashMap.filterMap_equiv_filter",
+        "premise_id": "premise:DHashMap.filterMap_equiv_filter",
+        "rank": 2,
+        "score": 0.5
+      },
+      {
+        "full_name": "AddCircle.continuous_mk'",
+        "premise_id": "premise:AddCircle.continuous_mk'",
+        "rank": 3,
+        "score": 0.3333333333333333
+      },
+      {
+        "full_name": "AddCircle.continuousAt_equivIoc",
+        "premise_id": "premise:AddCircle.continuousAt_equivIoc",
+        "rank": 4,
+        "score": 0.25
+      },
+      {
+        "full_name": "ContinuousMap.equivFnOfDiscrete",
+        "premise_id": "premise:ContinuousMap.equivFnOfDiscrete",
+        "rank": 5,
+        "score": 0.2
+      }
+    ]
+  },
+  {
+    "gold_positive_premises": [
+      "premise:AddCommGroup.modEq_iff_toIcoMod_add_period_eq_toIocMod",
+      "premise:div_div",
+      "premise:div_right_inj",
+      "premise:eq_div_iff_mul_eq'",
+      "premise:toIcoMod",
+      "premise:toIocMod",
+      "premise:zpow_add_one",
+      "premise:zpow_right_inj"
+    ],
+    "proof_state": "a \u2261 b [PMOD p] \u2194 toIcoDiv hp a b = toIocDiv hp a b + 1",
+    "proof_state_id": "ps:AddCommGroup.modEq_iff_toIcoDiv_eq_toIocDiv_add_one:0:a1c762add1cc",
+    "split": "test",
+    "top_retrieved_premises": [
+      {
+        "full_name": "AddCommGroup.modEq_iff_toIcoMod_add_period_eq_toIocMod",
+        "premise_id": "premise:AddCommGroup.modEq_iff_toIcoMod_add_period_eq_toIocMod",
+        "rank": 1,
+        "score": 1.0
+      },
+      {
+        "full_name": "toIcoDiv_sub_eq_toIcoDiv_add",
+        "premise_id": "premise:toIcoDiv_sub_eq_toIcoDiv_add",
+        "rank": 2,
+        "score": 0.5
+      },
+      {
+        "full_name": "toIcoDiv_sub_eq_toIcoDiv_add'",
+        "premise_id": "premise:toIcoDiv_sub_eq_toIcoDiv_add'",
+        "rank": 3,
+        "score": 0.3333333333333333
+      },
+      {
+        "full_name": "toIcoMod_eq_iff",
+        "premise_id": "premise:toIcoMod_eq_iff",
+        "rank": 4,
+        "score": 0.25
+      },
+      {
+        "full_name": "toIocDiv_sub_eq_toIocDiv_add",
+        "premise_id": "premise:toIocDiv_sub_eq_toIocDiv_add",
+        "rank": 5,
+        "score": 0.2
+      }
+    ]
+  },
+  {
+    "gold_positive_premises": [
+      "premise:AddCommGroup.intCast_modEq_intCast",
+      "premise:AddCommGroup.modEq_iff_int_modEq",
+      "premise:Int.cast_natCast",
+      "premise:Int.natCast_modEq_iff"
+    ],
+    "proof_state": "\u2191a \u2261 \u2191b [PMOD \u2191n] \u2194 a \u2261 b [MOD n]",
+    "proof_state_id": "ps:AddCommGroup.natCast_modEq_natCast:0:5e34d05f7df0",
+    "split": "test",
+    "top_retrieved_premises": [
+      {
+        "full_name": "AddCommGroup.intCast_modEq_intCast'",
+        "premise_id": "premise:AddCommGroup.intCast_modEq_intCast'",
+        "rank": 1,
+        "score": 1.0
+      },
+      {
+        "full_name": "Int.natCast_modEq_iff",
+        "premise_id": "premise:Int.natCast_modEq_iff",
+        "rank": 2,
+        "score": 0.5
+      },
+      {
+        "full_name": "AddCommGroup.ModEq.trans",
+        "premise_id": "premise:AddCommGroup.ModEq.trans",
+        "rank": 3,
+        "score": 0.3333333333333333
+      },
+      {
+        "full_name": "Lean.Grind.natCast_mod",
+        "premise_id": "premise:Lean.Grind.natCast_mod",
+        "rank": 4,
+        "score": 0.25
+      },
+      {
+        "full_name": "AddCommGroup.ModEq.nsmul",
+        "premise_id": "premise:AddCommGroup.ModEq.nsmul",
+        "rank": 5,
+        "score": 0.2
+      }
+    ]
+  },
+  {
+    "gold_positive_premises": [
+      "premise:lt_iff_le_and_ne",
+      "premise:tsub_le_iff_left"
+    ],
+    "proof_state": "a < b + c",
+    "proof_state_id": "ps:AddLECancellable.lt_add_of_tsub_lt_left:0:a8fa4afcd330",
+    "split": "test",
+    "top_retrieved_premises": [
+      {
+        "full_name": "AddLECancellable.lt_add_of_tsub_lt_left",
+        "premise_id": "premise:AddLECancellable.lt_add_of_tsub_lt_left",
+        "rank": 1,
+        "score": 1.0
+      },
+      {
+        "full_name": "AddLECancellable.lt_tsub_of_add_lt_left",
+        "premise_id": "premise:AddLECancellable.lt_tsub_of_add_lt_left",
+        "rank": 2,
+        "score": 0.5
+      },
+      {
+        "full_name": "AddLECancellable.lt_tsub_iff_left",
+        "premise_id": "premise:AddLECancellable.lt_tsub_iff_left",
+        "rank": 3,
+        "score": 0.3333333333333333
+      },
+      {
+        "full_name": "AddLECancellable.tsub_lt_tsub_iff_left_of_le",
+        "premise_id": "premise:AddLECancellable.tsub_lt_tsub_iff_left_of_le",
+        "rank": 4,
+        "score": 0.25
+      },
+      {
+        "full_name": "AddLECancellable.lt_add_of_tsub_lt_right",
+        "premise_id": "premise:AddLECancellable.lt_add_of_tsub_lt_right",
+        "rank": 5,
+        "score": 0.2
+      }
+    ]
+  },
+  {
+    "gold_positive_premises": [
+      "premise:add_tsub_cancel_of_le"
+    ],
+    "proof_state": "c + (a - c) < b",
+    "proof_state_id": "ps:AddLECancellable.tsub_lt_tsub_right_of_le:1:a31cd76473a5",
+    "split": "test",
+    "top_retrieved_premises": [
+      {
+        "full_name": "AddLECancellable.lt_tsub_iff_right_of_le",
+        "premise_id": "premise:AddLECancellable.lt_tsub_iff_right_of_le",
+        "rank": 1,
+        "score": 1.0
+      },
+      {
+        "full_name": "AddLECancellable.tsub_lt_tsub_right_of_le",
+        "premise_id": "premise:AddLECancellable.tsub_lt_tsub_right_of_le",
+        "rank": 2,
+        "score": 0.5
+      },
+      {
+        "full_name": "AddLECancellable.le_tsub_of_add_le_right",
+        "premise_id": "premise:AddLECancellable.le_tsub_of_add_le_right",
+        "rank": 3,
+        "score": 0.3333333333333333
+      },
+      {
+        "full_name": "AddLECancellable.lt_tsub_iff_right",
+        "premise_id": "premise:AddLECancellable.lt_tsub_iff_right",
+        "rank": 4,
+        "score": 0.25
+      },
+      {
+        "full_name": "AddLECancellable.tsub_lt_tsub_iff_right",
+        "premise_id": "premise:AddLECancellable.tsub_lt_tsub_iff_right",
+        "rank": 5,
+        "score": 0.2
+      }
+    ]
+  },
+  {
+    "gold_positive_premises": [
+      "premise:rfl"
+    ],
+    "proof_state": "(affineCombination k univ s.points) w \u2208 s.interior \u2194 \u2200 (i : Fin (n + 1)), w i \u2208 Set.Ioo 0 1",
+    "proof_state_id": "ps:Affine.Simplex.affineCombination_mem_interior_iff:0:0cbac662f5b9",
+    "split": "test",
+    "top_retrieved_premises": [
+      {
+        "full_name": "Affine.Simplex.affineCombination_mem_interior_iff",
+        "premise_id": "premise:Affine.Simplex.affineCombination_mem_interior_iff",
+        "rank": 1,
+        "score": 1.0
+      },
+      {
+        "full_name": "affineCombination_mem_affineSpan_pair",
+        "premise_id": "premise:affineCombination_mem_affineSpan_pair",
+        "rank": 2,
+        "score": 0.5
+      },
+      {
+        "full_name": "AffineIndependent.mem_affineSpan_iff",
+        "premise_id": "premise:AffineIndependent.mem_affineSpan_iff",
+        "rank": 3,
+        "score": 0.3333333333333333
+      },
+      {
+        "full_name": "eq_affineCombination_of_mem_affineSpan_of_fintype",
+        "premise_id": "premise:eq_affineCombination_of_mem_affineSpan_of_fintype",
+        "rank": 4,
+        "score": 0.25
+      },
+      {
+        "full_name": "affineCombination_mem_affineSpan",
+        "premise_id": "premise:affineCombination_mem_affineSpan",
+        "rank": 5,
+        "score": 0.2
+      }
+    ]
+  },
+  {
+    "gold_positive_premises": [
+      "premise:affineIndependent_iff_eq_of_fintype_affineCombination_eq"
+    ],
+    "proof_state": "\u2200 (i : Fin (n + 1)), w i \u2208 Set.Ioo 0 1",
+    "proof_state_id": "ps:Affine.Simplex.affineCombination_mem_interior_iff:1:fe69e554d55b",
+    "split": "test",
+    "top_retrieved_premises": [
+      {
+        "full_name": "Affine.Simplex.affineCombination_mem_interior_iff",
+        "premise_id": "premise:Affine.Simplex.affineCombination_mem_interior_iff",
+        "rank": 1,
+        "score": 1.0
+      },
+      {
+        "full_name": "eq_affineCombination_of_mem_affineSpan_of_fintype",
+        "premise_id": "premise:eq_affineCombination_of_mem_affineSpan_of_fintype",
+        "rank": 2,
+        "score": 0.5
+      },
+      {
+        "full_name": "AffineIndependent.mem_affineSpan_iff",
+        "premise_id": "premise:AffineIndependent.mem_affineSpan_iff",
+        "rank": 3,
+        "score": 0.3333333333333333
+      },
+      {
+        "full_name": "eq_affineCombination_of_mem_affineSpan",
+        "premise_id": "premise:eq_affineCombination_of_mem_affineSpan",
+        "rank": 4,
+        "score": 0.25
+      },
+      {
+        "full_name": "affineCombination_mem_affineSpan",
+        "premise_id": "premise:affineCombination_mem_affineSpan",
+        "rank": 5,
+        "score": 0.2
+      }
+    ]
+  },
+  {
+    "gold_positive_premises": [
+      "premise:Affine.Simplex.altitudeFoot",
+      "premise:Affine.Simplex.orthogonalProjectionSpan",
+      "premise:EuclideanGeometry.orthogonalProjection_eq_self_iff",
+      "premise:eq_comm"
+    ],
+    "proof_state": "False",
+    "proof_state_id": "ps:Affine.Simplex.ne_altitudeFoot:1:2761c2382797",
+    "split": "test",
+    "top_retrieved_premises": [
+      {
+        "full_name": "Affine.Simplex.nonempty",
+        "premise_id": "premise:Affine.Simplex.nonempty",
+        "rank": 1,
+        "score": 1.0
+      },
+      {
+        "full_name": "Affine.Simplex.mkOfPoint",
+        "premise_id": "premise:Affine.Simplex.mkOfPoint",
+        "rank": 2,
+        "score": 0.5
+      },
+      {
+        "full_name": "Lean.Meta.Grind.Arith.Offset.mkPropagateEqFalseProof",
+        "premise_id": "premise:Lean.Meta.Grind.Arith.Offset.mkPropagateEqFalseProof",
+        "rank": 3,
+        "score": 0.3333333333333333
+      },
+      {
+        "full_name": "Lean.Meta.Grind.Arith.CommRing.Null.ProofM",
+        "premise_id": "premise:Lean.Meta.Grind.Arith.CommRing.Null.ProofM",
+        "rank": 4,
+        "score": 0.25
+      },
+      {
+        "full_name": "CategoryTheory.Limits.Multifork.toPiFork",
+        "premise_id": "premise:CategoryTheory.Limits.Multifork.toPiFork",
+        "rank": 5,
+        "score": 0.2
+      }
+    ]
+  },
+  {
+    "gold_positive_premises": [
+      "premise:Finset",
+      "premise:Finset.Finset.filter_false_of_mem",
+      "premise:Finset.Finset.filter_true_of_mem",
+      "premise:Finset.filter_insert",
+      "premise:Finset.prod_ite",
+      "premise:exists_ne"
+    ],
+    "proof_state": "Function.Surjective \u21d1(b.coord i)",
+    "proof_state_id": "ps:AffineBasis.surjective_coord:0:4a0c7c385303",
+    "split": "test",
+    "top_retrieved_premises": [
+      {
+        "full_name": "AffineBasis.surjective_coord",
+        "premise_id": "premise:AffineBasis.surjective_coord",
+        "rank": 1,
+        "score": 1.0
+      },
+      {
+        "full_name": "AffineBasis.coords",
+        "premise_id": "premise:AffineBasis.coords",
+        "rank": 2,
+        "score": 0.5
+      },
+      {
+        "full_name": "AffineBasis.coord",
+        "premise_id": "premise:AffineBasis.coord",
+        "rank": 3,
+        "score": 0.3333333333333333
+      },
+      {
+        "full_name": "Function.Involutive.surjective",
+        "premise_id": "premise:Function.Involutive.surjective",
+        "rank": 4,
+        "score": 0.25
+      },
+      {
+        "full_name": "Grp.SurjectiveOfEpiAuxs.g",
+        "premise_id": "premise:Grp.SurjectiveOfEpiAuxs.g",
+        "rank": 5,
+        "score": 0.2
+      }
+    ]
+  },
+  {
+    "gold_positive_premises": [
+      "premise:Finset.Finset.filter_false_of_mem",
+      "premise:Finset.Finset.filter_true_of_mem",
+      "premise:Finset.filter_insert",
+      "premise:Finset.prod_ite"
+    ],
+    "proof_state": "s.sum w = 1",
+    "proof_state_id": "ps:AffineBasis.surjective_coord:10:9f704bb84c46",
+    "split": "test",
+    "top_retrieved_premises": [
+      {
+        "full_name": "AffineBasis.coord",
+        "premise_id": "premise:AffineBasis.coord",
+        "rank": 1,
+        "score": 1.0
+      },
+      {
+        "full_name": "AffineBasis.coords",
+        "premise_id": "premise:AffineBasis.coords",
+        "rank": 2,
+        "score": 0.5
+      },
+      {
+        "full_name": "AffineBasis.coe_coord_of_subsingleton_eq_one",
+        "premise_id": "premise:AffineBasis.coe_coord_of_subsingleton_eq_one",
+        "rank": 3,
+        "score": 0.3333333333333333
+      },
+      {
+        "full_name": "AffineBasis.surjective_coord",
+        "premise_id": "premise:AffineBasis.surjective_coord",
+        "rank": 4,
+        "score": 0.25
+      },
+      {
+        "full_name": "Equiv.Set.sumCompl",
+        "premise_id": "premise:Equiv.Set.sumCompl",
+        "rank": 5,
+        "score": 0.2
+      }
+    ]
+  },
+  {
+    "gold_positive_premises": [
+      "premise:exists_ne"
+    ],
+    "proof_state": "\u2203 a, (b.coord i) a = x",
+    "proof_state_id": "ps:AffineBasis.surjective_coord:2:dd9a7ca3b19f",
+    "split": "test",
+    "top_retrieved_premises": [
+      {
+        "full_name": "AffineBasis.surjective_coord",
+        "premise_id": "premise:AffineBasis.surjective_coord",
+        "rank": 1,
+        "score": 1.0
+      },
+      {
+        "full_name": "AffineBasis.coords",
+        "premise_id": "premise:AffineBasis.coords",
+        "rank": 2,
+        "score": 0.5
+      },
+      {
+        "full_name": "AffineBasis.coord",
+        "premise_id": "premise:AffineBasis.coord",
+        "rank": 3,
+        "score": 0.3333333333333333
+      },
+      {
+        "full_name": "Grp.SurjectiveOfEpiAuxs.g",
+        "premise_id": "premise:Grp.SurjectiveOfEpiAuxs.g",
+        "rank": 4,
+        "score": 0.25
+      },
+      {
+        "full_name": "AffineBasis.coe_coord_of_subsingleton_eq_one",
+        "premise_id": "premise:AffineBasis.coe_coord_of_subsingleton_eq_one",
+        "rank": 5,
+        "score": 0.2
+      }
+    ]
+  },
+  {
+    "gold_positive_premises": [
+      "premise:Finset"
+    ],
+    "proof_state": "\u2203 a, (b.coord i) a = x",
+    "proof_state_id": "ps:AffineBasis.surjective_coord:3:89c2ce1aa5c1",
+    "split": "test",
+    "top_retrieved_premises": [
+      {
+        "full_name": "AffineBasis.surjective_coord",
+        "premise_id": "premise:AffineBasis.surjective_coord",
+        "rank": 1,
+        "score": 1.0
+      },
+      {
+        "full_name": "AffineBasis.coords",
+        "premise_id": "premise:AffineBasis.coords",
+        "rank": 2,
+        "score": 0.5
+      },
+      {
+        "full_name": "AffineBasis.coord",
+        "premise_id": "premise:AffineBasis.coord",
+        "rank": 3,
+        "score": 0.3333333333333333
+      },
+      {
+        "full_name": "Grp.SurjectiveOfEpiAuxs.g",
+        "premise_id": "premise:Grp.SurjectiveOfEpiAuxs.g",
+        "rank": 4,
+        "score": 0.25
+      },
+      {
+        "full_name": "AffineBasis.coe_coord_of_subsingleton_eq_one",
+        "premise_id": "premise:AffineBasis.coe_coord_of_subsingleton_eq_one",
+        "rank": 5,
+        "score": 0.2
+      }
+    ]
+  },
+  {
+    "gold_positive_premises": [
+      "premise:Finset.Finset.filter_false_of_mem",
+      "premise:Finset.Finset.filter_true_of_mem",
+      "premise:Finset.filter_insert",
+      "premise:Finset.prod_ite"
+    ],
+    "proof_state": "\u2203 a, (b.coord i) a = x",
+    "proof_state_id": "ps:AffineBasis.surjective_coord:6:8c422bb1b7a4",
+    "split": "test",
+    "top_retrieved_premises": [
+      {
+        "full_name": "AffineBasis.surjective_coord",
+        "premise_id": "premise:AffineBasis.surjective_coord",
+        "rank": 1,
+        "score": 1.0
+      },
+      {
+        "full_name": "AffineBasis.coords",
+        "premise_id": "premise:AffineBasis.coords",
+        "rank": 2,
+        "score": 0.5
+      },
+      {
+        "full_name": "AffineBasis.coord",
+        "premise_id": "premise:AffineBasis.coord",
+        "rank": 3,
+        "score": 0.3333333333333333
+      },
+      {
+        "full_name": "Grp.SurjectiveOfEpiAuxs.g",
+        "premise_id": "premise:Grp.SurjectiveOfEpiAuxs.g",
+        "rank": 4,
+        "score": 0.25
+      },
+      {
+        "full_name": "AffineBasis.coe_coord_of_subsingleton_eq_one",
+        "premise_id": "premise:AffineBasis.coe_coord_of_subsingleton_eq_one",
+        "rank": 5,
+        "score": 0.2
+      }
+    ]
+  }
+]

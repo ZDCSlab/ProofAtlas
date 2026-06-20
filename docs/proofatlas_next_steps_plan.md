@@ -318,13 +318,13 @@ Next steps:
 
 The highest-value next tasks are:
 
-1. Add robust Lean-aware theorem parsing and proof-state extraction.
-2. Replace or supplement the local nearest-neighbor index with a scalable ANN backend.
-3. Train a stronger learned reranker using graph, theorem, proof-state, and symbol-overlap features.
-4. Improve difficulty estimation from heuristics into an evaluated prediction task.
+1. Improve LeanRank-data-aware theorem/proof-state parsing and query-time Lean diagnostics, without adding a custom Lean server/source extractor to the production data pipeline.
+2. Tune scalable ANN/vector retrieval backends and candidate-generation settings against held-out LeanRank-data retrieval metrics.
+3. Train a stronger learned reranker using graph, theorem, proof-state, hard-negative, and symbol-overlap features already available in LeanRank-data artifacts.
+4. Improve difficulty estimation from heuristics into an evaluated prediction task using LeanRank-data proof length, premise, tactic, and negative-candidate signals.
 5. Harden the FastAPI and homepage demo for reproducible external review.
-6. Document and automate full mathlib data refreshes.
+6. Automate larger LeanRank-data refreshes, metric deltas, and provenance tracking for the experiment report.
 
 ## One-Sentence Summary
 
-ProofAtlas now has an end-to-end theorem-guidance MVP; the next stage is to make it more Lean-aware, more scalable, better learned, and robust enough for repeatable mathlib-scale proof assistance demos.
+ProofAtlas now has an end-to-end theorem-guidance MVP; the next stage is to improve LeanRank-data retrieval quality, scale the existing pipeline, strengthen learned ranking, and keep the homepage/report evidence reproducible.

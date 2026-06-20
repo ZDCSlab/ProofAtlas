@@ -1,0 +1,127 @@
+{
+  "error_count": 0,
+  "errors": [],
+  "max_rows_per_table": null,
+  "tables": {
+    "demo/file_modules": {
+      "rows": 427,
+      "sampled_rows": 427,
+      "valid_rows": 427,
+      "validated_all_rows": true
+    },
+    "demo/premises": {
+      "rows": 1416,
+      "sampled_rows": 1416,
+      "valid_rows": 1416,
+      "validated_all_rows": true
+    },
+    "demo/proof_states": {
+      "rows": 900,
+      "sampled_rows": 900,
+      "valid_rows": 900,
+      "validated_all_rows": true
+    },
+    "demo/proof_techniques": {
+      "rows": 12,
+      "sampled_rows": 12,
+      "valid_rows": 12,
+      "validated_all_rows": true
+    },
+    "demo/theorems": {
+      "rows": 292,
+      "sampled_rows": 292,
+      "valid_rows": 292,
+      "validated_all_rows": true
+    },
+    "test/file_modules": {
+      "rows": 1510,
+      "sampled_rows": 1510,
+      "valid_rows": 1510,
+      "validated_all_rows": true
+    },
+    "test/premises": {
+      "rows": 38332,
+      "sampled_rows": 38332,
+      "valid_rows": 38332,
+      "validated_all_rows": true
+    },
+    "test/proof_states": {
+      "rows": 3053,
+      "sampled_rows": 3053,
+      "valid_rows": 3053,
+      "validated_all_rows": true
+    },
+    "test/proof_techniques": {
+      "rows": 12,
+      "sampled_rows": 12,
+      "valid_rows": 12,
+      "validated_all_rows": true
+    },
+    "test/theorems": {
+      "rows": 1000,
+      "sampled_rows": 1000,
+      "valid_rows": 1000,
+      "validated_all_rows": true
+    },
+    "train/file_modules": {
+      "rows": 3814,
+      "sampled_rows": 3814,
+      "valid_rows": 3814,
+      "validated_all_rows": true
+    },
+    "train/premises": {
+      "rows": 127561,
+      "sampled_rows": 127561,
+      "valid_rows": 127561,
+      "validated_all_rows": true
+    },
+    "train/proof_states": {
+      "rows": 23723,
+      "sampled_rows": 23723,
+      "valid_rows": 23723,
+      "validated_all_rows": true
+    },
+    "train/proof_techniques": {
+      "rows": 12,
+      "sampled_rows": 12,
+      "valid_rows": 12,
+      "validated_all_rows": true
+    },
+    "train/theorems": {
+      "rows": 8000,
+      "sampled_rows": 8000,
+      "valid_rows": 8000,
+      "validated_all_rows": true
+    },
+    "val/file_modules": {
+      "rows": 1450,
+      "sampled_rows": 1450,
+      "valid_rows": 1450,
+      "validated_all_rows": true
+    },
+    "val/premises": {
+      "rows": 36292,
+      "sampled_rows": 36292,
+      "valid_rows": 36292,
+      "validated_all_rows": true
+    },
+    "val/proof_states": {
+      "rows": 2822,
+      "sampled_rows": 2822,
+      "valid_rows": 2822,
+      "validated_all_rows": true
+    },
+    "val/proof_techniques": {
+      "rows": 12,
+      "sampled_rows": 12,
+      "valid_rows": 12,
+      "validated_all_rows": true
+    },
+    "val/theorems": {
+      "rows": 1000,
+      "sampled_rows": 1000,
+      "valid_rows": 1000,
+      "validated_all_rows": true
+    }
+  }
+}

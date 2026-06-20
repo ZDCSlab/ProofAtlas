@@ -1,0 +1,50 @@
+{
+  "splits": [
+    {
+      "max_theorem_complexity_score": 0.7591672434935482,
+      "mean_num_failed_negative_candidates": 66.301625,
+      "mean_num_proof_states": 2.965375,
+      "mean_num_unique_positive_premises": 5.359375,
+      "mean_theorem_complexity_score": 0.16649370623449108,
+      "split": "train",
+      "target": "theorem_features.theorem_complexity_score",
+      "target_source": "proof_length_tactic_count_premise_count_negative_candidates",
+      "theorems": 8000
+    },
+    {
+      "max_theorem_complexity_score": 0.8574879371039593,
+      "mean_num_failed_negative_candidates": 63.753,
+      "mean_num_proof_states": 2.822,
+      "mean_num_unique_positive_premises": 5.087,
+      "mean_theorem_complexity_score": 0.16791680557603092,
+      "split": "val",
+      "target": "theorem_features.theorem_complexity_score",
+      "target_source": "proof_length_tactic_count_premise_count_negative_candidates",
+      "theorems": 1000
+    },
+    {
+      "max_theorem_complexity_score": 0.7932429278438123,
+      "mean_num_failed_negative_candidates": 68.132,
+      "mean_num_proof_states": 3.053,
+      "mean_num_unique_positive_premises": 5.427,
+      "mean_theorem_complexity_score": 0.17498160213726724,
+      "split": "test",
+      "target": "theorem_features.theorem_complexity_score",
+      "target_source": "proof_length_tactic_count_premise_count_negative_candidates",
+      "theorems": 1000
+    },
+    {
+      "max_theorem_complexity_score": 0.5460640686997043,
+      "mean_num_failed_negative_candidates": 3.0821917808219177,
+      "mean_num_proof_states": 3.0821917808219177,
+      "mean_num_unique_positive_premises": 2.3219178082191783,
+      "mean_theorem_complexity_score": 0.04467986867269544,
+      "split": "demo",
+      "target": "theorem_features.theorem_complexity_score",
+      "target_source": "proof_length_tactic_count_premise_count_negative_candidates",
+      "theorems": 292
+    }
+  ],
+  "target": "theorem_features.theorem_complexity_score",
+  "target_source": "proof_length_tactic_count_premise_count_negative_candidates"
+}
