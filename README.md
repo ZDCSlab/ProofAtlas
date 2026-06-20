@@ -165,6 +165,17 @@ Current `configs/proofatlas.yaml` sampled held-out test results:
 | Theorem-level premise retrieval | MRR | 0.5473 |
 | Learned premise ranker | validation AUC | 0.8254 |
 
+To refresh the production evaluation artifacts after changing retrieval code or config:
+
+```bash
+conda activate leanrank_kg
+leanrank-kg evaluate --config configs/proofatlas.yaml
+leanrank-kg profile-pipeline --config configs/proofatlas.yaml
+leanrank-kg build-experiment-report --config configs/proofatlas.yaml
+leanrank-kg build-homepage --config configs/proofatlas.yaml
+leanrank-kg audit --config configs/proofatlas.yaml
+```
+
 The proof-state-level and theorem-level retrieval metrics separately report held-out gold premise counts that exist in the train premise index and counts missing from the train index, so Recall/MRR/MAP/nDCG are interpreted against the actually retrievable gold set.
 
 Validation reports are written to `outputs/reports/schema_validation_summary.json`, `outputs/reports/split_leakage_report.json`, `outputs/reports/context_parse_coverage.json`, and `outputs/reports/graph_validation_summary.json`.
