@@ -394,6 +394,7 @@ def _recommendations(
     readiness: dict[str, Any],
     scale: dict[str, Any],
     throughput: dict[str, Any],
+    evaluation: dict[str, Any],
 ) -> list[dict[str, str]]:
     recommendations: list[dict[str, str]] = []
     if sample.get("dataset_name") != "erbacher/LeanRank-data":
@@ -455,6 +456,19 @@ def _recommendations(
                 ),
             }
         )
+    evaluation_scope = (evaluation.get("test_set_evaluation") or {}).get("evaluation_scope", {})
+    if evaluation_scope.get("is_sampled") is True:
+        recommendations.append(
+            {
+                "priority": "medium",
+                "area": "evaluation_scope",
+                "recommendation": (
+                    "Current held-out metrics are sampled because evaluation limits are configured. "
+                    f"Proof-state limits: {evaluation_scope.get('proof_state_limits')}; theorem limits: {evaluation_scope.get('theorem_limits')}. "
+                    "For final quantitative claims, rerun evaluation with these limits removed or raised enough to cover the full held-out split."
+                ),
+            }
+        )
     if not recommendations:
         recommendations.append(
             {
@@ -481,7 +495,7 @@ def build_report(config_path: str = "configs/proofatlas.yaml") -> dict[str, Any]
     readiness = _readiness_stage()
     scale = _scale_profile(config, sample, index, readiness)
     throughput = _throughput_profile(sample, embeddings, index, benchmark, timings)
-    recommendations = _recommendations(config, sample, benchmark, readiness, scale, throughput)
+    recommendations = _recommendations(config, sample, benchmark, readiness, scale, throughput, evaluation)
     return {
         "config_path": config_path,
         "config_hash": config_hash,

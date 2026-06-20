@@ -766,7 +766,7 @@
       "path": "outputs/indexes/index_summary.json"
     },
     "validation:pipeline_performance_report": {
-      "detail": "pipeline_performance={'dataset_name': 'erbacher/LeanRank-data', 'scale_profile': {'ann_backend_availability': {'faiss': False, 'hnswlib': True, 'lancedb': False}, 'current_total_split_rows': 292012, 'dataset_name': 'erbacher/LeanRank-data', 'embedding_backend': 'sentence_transformers', 'embedding_device': 'cuda', 'embedding_devices': ['cuda:0', 'cuda:1', 'cuda:2', 'cuda:3', 'cuda:4', 'cuda:5', 'cuda:6'], 'index_backend': 'hnswlib', 'leanrank_premise_supervision_ready': True, 'requested_rows': 60000, 'requested_theorems': 10000, 'scale_bucket': 'large', 'source_rows': 350000, 'target_dataset_confirmed': True}, 'recommendations': [{'area': 'performance_timing', 'priority': 'high', 'recommendation': 'Refresh pipeline timings with a non-cached production run before using throughput numbers for scale-up planning. Run `make refresh-production-report` after a full `leanrank-kg full-pipeline --config configs/proofatlas.yaml --force` timing pass, or keep the current throughput fields marked as cached/partial diagnostics only.'}], 'stage_keys': ['benchmark', 'embeddings', 'evaluation', 'graph', 'indexes', 'processed', 'readiness', 'sample', 'timings']}",
+      "detail": "pipeline_performance={'dataset_name': 'erbacher/LeanRank-data', 'scale_profile': {'ann_backend_availability': {'faiss': False, 'hnswlib': True, 'lancedb': False}, 'current_total_split_rows': 292012, 'dataset_name': 'erbacher/LeanRank-data', 'embedding_backend': 'sentence_transformers', 'embedding_device': 'cuda', 'embedding_devices': ['cuda:0', 'cuda:1', 'cuda:2', 'cuda:3', 'cuda:4', 'cuda:5', 'cuda:6'], 'index_backend': 'hnswlib', 'leanrank_premise_supervision_ready': True, 'requested_rows': 60000, 'requested_theorems': 10000, 'scale_bucket': 'large', 'source_rows': 350000, 'target_dataset_confirmed': True}, 'recommendations': [{'area': 'performance_timing', 'priority': 'high', 'recommendation': 'Refresh pipeline timings with a non-cached production run before using throughput numbers for scale-up planning. Run `make refresh-production-report` after a full `leanrank-kg full-pipeline --config configs/proofatlas.yaml --force` timing pass, or keep the current throughput fields marked as cached/partial diagnostics only.'}, {'area': 'evaluation_scope', 'priority': 'medium', 'recommendation': \"Current held-out metrics are sampled because evaluation limits are configured. Proof-state limits: {'test': 100, 'val': 100}; theorem limits: {'test': 50, 'val': 50}. For final quantitative claims, rerun evaluation with these limits removed or raised enough to cover the full held-out split.\"}], 'stage_keys': ['benchmark', 'embeddings', 'evaluation', 'graph', 'indexes', 'processed', 'readiness', 'sample', 'timings']}",
       "passed": true,
       "path": "outputs/reports/pipeline_performance_report.json"
     },
@@ -791,7 +791,7 @@
       "path": "outputs/reports/refresh_dashboard.json"
     },
     "validation:refresh_history": {
-      "detail": "refresh_history={'entry_count': 15, 'history_limit': 20}",
+      "detail": "refresh_history={'entry_count': 16, 'history_limit': 20}",
       "passed": true,
       "path": "outputs/reports/refresh_history.json"
     },

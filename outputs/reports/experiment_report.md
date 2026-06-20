@@ -313,6 +313,7 @@ The current ranking labels come from normalized LeanRank-data premise supervisio
 ## Recommendations
 
 - `high` `performance_timing`: Refresh pipeline timings with a non-cached production run before using throughput numbers for scale-up planning. Run `make refresh-production-report` after a full `leanrank-kg full-pipeline --config configs/proofatlas.yaml --force` timing pass, or keep the current throughput fields marked as cached/partial diagnostics only.
+- `medium` `evaluation_scope`: Current held-out metrics are sampled because evaluation limits are configured. Proof-state limits: {'test': 100, 'val': 100}; theorem limits: {'test': 50, 'val': 50}. For final quantitative claims, rerun evaluation with these limits removed or raised enough to cover the full held-out split.
 
 ## Interpretation
 

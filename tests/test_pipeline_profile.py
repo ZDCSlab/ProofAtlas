@@ -55,6 +55,16 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
         },
     )
     write_json(
+        "outputs/reports/test_set_evaluation.json",
+        {
+            "evaluation_scope": {
+                "is_sampled": False,
+                "proof_state_limits": {"test": None, "val": None},
+                "theorem_limits": {"test": None, "val": None},
+            }
+        },
+    )
+    write_json(
         "outputs/reports/pipeline_run_timings.json",
         {
             "config_path": "configs/proofatlas.yaml",
@@ -151,9 +161,20 @@ def test_pipeline_profile_recommends_full_timing_for_cached_runs(tmp_path, monke
             ],
         },
     )
+    write_json(
+        "outputs/reports/test_set_evaluation.json",
+        {
+            "evaluation_scope": {
+                "is_sampled": True,
+                "proof_state_limits": {"test": 100, "val": 100},
+                "theorem_limits": {"test": 50, "val": 50},
+            }
+        },
+    )
 
     report = pipeline_profile.run("configs/proofatlas.yaml")
 
     assert report["throughput_profile"]["throughput_basis"] == "cached_or_partial_pipeline_run"
     assert report["throughput_profile"]["scale_estimate_reliable"] is False
     assert any(row["area"] == "performance_timing" and row["priority"] == "high" for row in report["recommendations"])
+    assert any(row["area"] == "evaluation_scope" and row["priority"] == "medium" for row in report["recommendations"])
