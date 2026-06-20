@@ -3408,6 +3408,86 @@
         }
       ]
     },
+    "refresh_reuse_profile": {
+      "artifact_cache": {
+        "difficulty_estimator_bytes": 747330,
+        "difficulty_estimator_exists": true,
+        "embedding_backend": "sentence_transformers",
+        "embedding_model": "BAAI/bge-base-en-v1.5",
+        "embedding_rows": 244391,
+        "index_backend": "hnswlib",
+        "indexed_entity_count": 12,
+        "premise_ranker_bytes": 1455,
+        "premise_ranker_exists": true
+      },
+      "dataset_name": "erbacher/LeanRank-data",
+      "reuse_by_default": true,
+      "scenarios": [
+        {
+          "commands": [
+            "leanrank-kg profile-pipeline",
+            "leanrank-kg build-experiment-report",
+            "leanrank-kg build-homepage",
+            "leanrank-kg audit"
+          ],
+          "reason": "Presentation-only changes can reuse the committed LeanRank-data artifacts and regenerate reports/homepage.",
+          "rerun_embedding": false,
+          "rerun_evaluation": false,
+          "rerun_ranker_training": false,
+          "scenario": "report_or_homepage_refresh"
+        },
+        {
+          "commands": [
+            "leanrank-kg evaluate",
+            "leanrank-kg profile-pipeline",
+            "leanrank-kg build-experiment-report",
+            "leanrank-kg build-homepage"
+          ],
+          "reason": "Ranking logic changes require held-out metrics, but embeddings and indexes remain reusable when query/embedding configuration and data splits are unchanged.",
+          "rerun_embedding": false,
+          "rerun_evaluation": true,
+          "rerun_ranker_training": false,
+          "scenario": "retrieval_or_ranking_code_change"
+        },
+        {
+          "commands": [
+            "leanrank-kg train-ranker",
+            "leanrank-kg evaluate",
+            "leanrank-kg profile-pipeline",
+            "leanrank-kg build-experiment-report"
+          ],
+          "reason": "Feature or supervision changes invalidate the learned ranker; they do not require re-embedding unless the embedding text/model changed.",
+          "rerun_embedding": false,
+          "rerun_evaluation": true,
+          "rerun_ranker_training": true,
+          "scenario": "ranker_feature_or_label_change"
+        },
+        {
+          "commands": [
+            "leanrank-kg embed",
+            "leanrank-kg build-index",
+            "leanrank-kg train-ranker",
+            "leanrank-kg evaluate"
+          ],
+          "reason": "Embedding model, prefix, device-independent representation text, or vector dimensions invalidate embeddings, indexes, and learned scores.",
+          "rerun_embedding": true,
+          "rerun_evaluation": true,
+          "rerun_ranker_training": true,
+          "scenario": "embedding_model_or_text_change"
+        },
+        {
+          "commands": [
+            "leanrank-kg full-pipeline --config configs/proofatlas.yaml --force"
+          ],
+          "reason": "Changing the LeanRank-data sample or theorem-disjoint split changes rows, labels, negatives, graph edges, embeddings, indexes, and test metrics.",
+          "rerun_embedding": true,
+          "rerun_evaluation": true,
+          "rerun_ranker_training": true,
+          "scenario": "data_split_or_sample_change"
+        }
+      ],
+      "training_repeat_policy": "Do not retrain by default. Reuse embeddings, indexes, and trained models for report/homepage refreshes; rerun ranker training only after ranker feature, label, split, or relevant config changes."
+    },
     "requested_source_rows": 350000,
     "retrieval_bottleneck_profile": {
       "proof_state": {

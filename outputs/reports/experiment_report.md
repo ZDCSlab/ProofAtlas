@@ -528,6 +528,27 @@ These timings split the `evaluate` pipeline stage into proof-state retrieval, th
 | `augment_graph` | 50.9153 | 0.0923 |
 | `compute_difficulty` | 48.5632 | 0.0880 |
 
+## Refresh And Retraining Policy
+
+Training is not repeated for every report or homepage refresh. The default workflow reuses LeanRank-data artifacts unless the data split, embedding representation, labels, or ranker features changed.
+
+- Reuse by default: `True`
+- Policy: Do not retrain by default. Reuse embeddings, indexes, and trained models for report/homepage refreshes; rerun ranker training only after ranker feature, label, split, or relevant config changes.
+- Cached embedding rows: `244391`
+- Cached embedding model: `BAAI/bge-base-en-v1.5`
+- Indexed entity manifests: `12`
+- Index backend: `hnswlib`
+- Premise ranker artifact exists: `True`
+- Difficulty estimator artifact exists: `True`
+
+| Scenario | Re-embed | Retrain ranker | Re-evaluate | Commands |
+| --- | ---: | ---: | ---: | --- |
+| `report_or_homepage_refresh` | False | False | False | `leanrank-kg profile-pipeline`<br>`leanrank-kg build-experiment-report`<br>`leanrank-kg build-homepage`<br>`leanrank-kg audit` |
+| `retrieval_or_ranking_code_change` | False | False | True | `leanrank-kg evaluate`<br>`leanrank-kg profile-pipeline`<br>`leanrank-kg build-experiment-report`<br>`leanrank-kg build-homepage` |
+| `ranker_feature_or_label_change` | False | True | True | `leanrank-kg train-ranker`<br>`leanrank-kg evaluate`<br>`leanrank-kg profile-pipeline`<br>`leanrank-kg build-experiment-report` |
+| `embedding_model_or_text_change` | True | True | True | `leanrank-kg embed`<br>`leanrank-kg build-index`<br>`leanrank-kg train-ranker`<br>`leanrank-kg evaluate` |
+| `data_split_or_sample_change` | True | True | True | `leanrank-kg full-pipeline --config configs/proofatlas.yaml --force` |
+
 ## Recommendations
 
 - `medium` `pipeline_bottleneck`: Embedding is the current largest timed bottleneck. Reuse cached embeddings when training/reranking only, and keep multi-GPU sentence-transformer encoding enabled for larger LeanRank-data refreshes.

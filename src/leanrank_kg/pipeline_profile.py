@@ -719,6 +719,91 @@ def _metric_uncertainty_profile(evaluation: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _refresh_reuse_profile(
+    config: dict[str, Any],
+    sample: dict[str, Any],
+    embeddings: dict[str, Any],
+    index: dict[str, Any],
+) -> dict[str, Any]:
+    embedding_rows = 0
+    for split in (embeddings.get("splits") or {}).values():
+        for matrix in ((split or {}).get("matrices") or {}).values():
+            embedding_rows += int(matrix.get("rows") or 0)
+    indexed_entities = []
+    for split, entities in (index.get("manifests") or {}).items():
+        for entity, manifest in (entities or {}).items():
+            if manifest.get("exists") and manifest.get("rows"):
+                indexed_entities.append(f"{split}:{entity}")
+    ranker_artifact = _file_info("outputs/models/premise_ranker.joblib")
+    difficulty_artifact = _file_info("outputs/models/difficulty_estimator.joblib")
+    has_embedding_cache = embedding_rows > 0
+    has_index_cache = bool(indexed_entities)
+    has_ranker = bool(ranker_artifact.get("exists"))
+
+    scenarios = [
+        {
+            "scenario": "report_or_homepage_refresh",
+            "rerun_embedding": False,
+            "rerun_ranker_training": False,
+            "rerun_evaluation": False,
+            "commands": ["leanrank-kg profile-pipeline", "leanrank-kg build-experiment-report", "leanrank-kg build-homepage", "leanrank-kg audit"],
+            "reason": "Presentation-only changes can reuse the committed LeanRank-data artifacts and regenerate reports/homepage.",
+        },
+        {
+            "scenario": "retrieval_or_ranking_code_change",
+            "rerun_embedding": False,
+            "rerun_ranker_training": False,
+            "rerun_evaluation": True,
+            "commands": ["leanrank-kg evaluate", "leanrank-kg profile-pipeline", "leanrank-kg build-experiment-report", "leanrank-kg build-homepage"],
+            "reason": "Ranking logic changes require held-out metrics, but embeddings and indexes remain reusable when query/embedding configuration and data splits are unchanged.",
+        },
+        {
+            "scenario": "ranker_feature_or_label_change",
+            "rerun_embedding": False,
+            "rerun_ranker_training": True,
+            "rerun_evaluation": True,
+            "commands": ["leanrank-kg train-ranker", "leanrank-kg evaluate", "leanrank-kg profile-pipeline", "leanrank-kg build-experiment-report"],
+            "reason": "Feature or supervision changes invalidate the learned ranker; they do not require re-embedding unless the embedding text/model changed.",
+        },
+        {
+            "scenario": "embedding_model_or_text_change",
+            "rerun_embedding": True,
+            "rerun_ranker_training": True,
+            "rerun_evaluation": True,
+            "commands": ["leanrank-kg embed", "leanrank-kg build-index", "leanrank-kg train-ranker", "leanrank-kg evaluate"],
+            "reason": "Embedding model, prefix, device-independent representation text, or vector dimensions invalidate embeddings, indexes, and learned scores.",
+        },
+        {
+            "scenario": "data_split_or_sample_change",
+            "rerun_embedding": True,
+            "rerun_ranker_training": True,
+            "rerun_evaluation": True,
+            "commands": ["leanrank-kg full-pipeline --config configs/proofatlas.yaml --force"],
+            "reason": "Changing the LeanRank-data sample or theorem-disjoint split changes rows, labels, negatives, graph edges, embeddings, indexes, and test metrics.",
+        },
+    ]
+    return {
+        "reuse_by_default": bool(has_embedding_cache and has_index_cache),
+        "dataset_name": sample.get("dataset_name") or config.get("dataset_name"),
+        "artifact_cache": {
+            "embedding_rows": embedding_rows,
+            "embedding_backend": (embeddings.get("config") or {}).get("backend"),
+            "embedding_model": (embeddings.get("config") or {}).get("model_name"),
+            "indexed_entity_count": len(indexed_entities),
+            "index_backend": (index.get("summary") or {}).get("backend") or (config.get("index") or {}).get("backend"),
+            "premise_ranker_exists": has_ranker,
+            "premise_ranker_bytes": ranker_artifact.get("bytes"),
+            "difficulty_estimator_exists": bool(difficulty_artifact.get("exists")),
+            "difficulty_estimator_bytes": difficulty_artifact.get("bytes"),
+        },
+        "training_repeat_policy": (
+            "Do not retrain by default. Reuse embeddings, indexes, and trained models for report/homepage refreshes; "
+            "rerun ranker training only after ranker feature, label, split, or relevant config changes."
+        ),
+        "scenarios": scenarios,
+    }
+
+
 def _recommendations(
     config: dict[str, Any],
     sample: dict[str, Any],
@@ -882,6 +967,7 @@ def build_report(config_path: str = "configs/proofatlas.yaml") -> dict[str, Any]
     throughput["retrieval_bottleneck_profile"] = _retrieval_bottleneck_profile(evaluation)
     throughput["rapid_convergence_profile"] = _rapid_convergence_profile(evaluation, readiness, throughput)
     throughput["metric_uncertainty_profile"] = _metric_uncertainty_profile(evaluation)
+    throughput["refresh_reuse_profile"] = _refresh_reuse_profile(config, sample, embeddings, index)
     recommendations = _recommendations(config, sample, benchmark, readiness, scale, throughput, evaluation)
     return {
         "config_path": config_path,

@@ -172,6 +172,20 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
     assert uncertainty["proof_state"]["Recall@10"]["n"] == 10
     assert uncertainty["proof_state"]["Recall@10"]["ci95_half_width"] > 0
     assert uncertainty["theorem"]["theorem_retrieval_Recall@10"]["n"] == 5
+    refresh_reuse = report["throughput_profile"]["refresh_reuse_profile"]
+    assert refresh_reuse["dataset_name"] == "erbacher/LeanRank-data"
+    assert refresh_reuse["reuse_by_default"] is False
+    assert "Do not retrain by default" in refresh_reuse["training_repeat_policy"]
+    assert refresh_reuse["artifact_cache"]["embedding_rows"] == 0
+    assert {row["scenario"] for row in refresh_reuse["scenarios"]} >= {
+        "report_or_homepage_refresh",
+        "ranker_feature_or_label_change",
+        "embedding_model_or_text_change",
+        "data_split_or_sample_change",
+    }
+    ranker_scenario = next(row for row in refresh_reuse["scenarios"] if row["scenario"] == "ranker_feature_or_label_change")
+    assert ranker_scenario["rerun_embedding"] is False
+    assert ranker_scenario["rerun_ranker_training"] is True
     assert report["stages"]["evaluation"]["evaluation_timing"]["total_seconds"] == 2.5
     assert report["stages"]["evaluation"]["evaluation_timing"]["substage_count"] == 2
     assert report["stages"]["evaluation"]["evaluation_timing"]["slowest_substages"][0]["name"] == "test_theorem_retrieval"

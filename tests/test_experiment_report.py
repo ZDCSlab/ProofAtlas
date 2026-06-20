@@ -151,10 +151,10 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                         }
                     ],
                 },
-                "metric_uncertainty_profile": {
-                    "method": "bounded_normal_approximation_for_aggregate_retrieval_metrics",
-                    "confidence_level": 0.95,
-                    "note": "Intervals are approximate diagnostics.",
+                    "metric_uncertainty_profile": {
+                        "method": "bounded_normal_approximation_for_aggregate_retrieval_metrics",
+                        "confidence_level": 0.95,
+                        "note": "Intervals are approximate diagnostics.",
                     "proof_state": {
                         "Recall@10": {"value": 0.2, "n": 10, "ci95_low": 0.0, "ci95_high": 0.4479, "ci95_half_width": 0.2479},
                         "Recall@100": {"value": 0.3, "n": 10, "ci95_low": 0.0159, "ci95_high": 0.5841, "ci95_half_width": 0.2841},
@@ -167,10 +167,45 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                         "theorem_retrieval_Recall@100": {"value": 0.7, "n": 8, "ci95_low": 0.3821, "ci95_high": 1.0, "ci95_half_width": 0.3179},
                         "theorem_retrieval_MRR": {"value": 0.6, "n": 8, "ci95_low": 0.2605, "ci95_high": 0.9395, "ci95_half_width": 0.3395},
                         "theorem_retrieval_MAP": {"value": 0.5, "n": 8, "ci95_low": 0.1535, "ci95_high": 0.8465, "ci95_half_width": 0.3465},
-                        "theorem_retrieval_nDCG@10": {"value": 0.55, "n": 8, "ci95_low": 0.2050, "ci95_high": 0.8950, "ci95_half_width": 0.3450},
+                            "theorem_retrieval_nDCG@10": {"value": 0.55, "n": 8, "ci95_low": 0.2050, "ci95_high": 0.8950, "ci95_half_width": 0.3450},
+                        },
                     },
-                },
-                "processed_rows_per_second": 1000.0,
+                    "refresh_reuse_profile": {
+                        "reuse_by_default": True,
+                        "training_repeat_policy": "Do not retrain by default. Reuse embeddings, indexes, and trained models for report/homepage refreshes.",
+                        "artifact_cache": {
+                            "embedding_rows": 42,
+                            "embedding_model": "tfidf",
+                            "indexed_entity_count": 3,
+                            "index_backend": "sklearn",
+                            "premise_ranker_exists": True,
+                            "difficulty_estimator_exists": True,
+                        },
+                        "scenarios": [
+                            {
+                                "scenario": "report_or_homepage_refresh",
+                                "rerun_embedding": False,
+                                "rerun_ranker_training": False,
+                                "rerun_evaluation": False,
+                                "commands": ["leanrank-kg profile-pipeline", "leanrank-kg build-homepage"],
+                            },
+                            {
+                                "scenario": "ranker_feature_or_label_change",
+                                "rerun_embedding": False,
+                                "rerun_ranker_training": True,
+                                "rerun_evaluation": True,
+                                "commands": ["leanrank-kg train-ranker", "leanrank-kg evaluate"],
+                            },
+                            {
+                                "scenario": "embedding_model_or_text_change",
+                                "rerun_embedding": True,
+                                "rerun_ranker_training": True,
+                                "rerun_evaluation": True,
+                                "commands": ["leanrank-kg embed", "leanrank-kg build-index"],
+                            },
+                        ],
+                    },
+                    "processed_rows_per_second": 1000.0,
                 "pipeline_seconds_per_100k_processed_rows": 100.0,
                 "slowest_stage": "evaluate",
                 "evaluation_timing_delta": {
@@ -308,3 +343,10 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "Indexed total seconds" in text
     assert "Mean index speedup vs exact" in text
     assert "Estimated seconds at requested source rows" in text
+    assert "Refresh And Retraining Policy" in text
+    assert "Training is not repeated for every report or homepage refresh" in text
+    assert "Do not retrain by default" in text
+    assert "report_or_homepage_refresh" in text
+    assert "ranker_feature_or_label_change" in text
+    assert "embedding_model_or_text_change" in text
+    assert "Premise ranker artifact exists" in text

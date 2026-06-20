@@ -230,6 +230,32 @@ def _evaluation_substage_table(rows: list[dict[str, Any]]) -> str:
     return "\n".join(lines)
 
 
+def _refresh_reuse_table(profile: dict[str, Any]) -> str:
+    rows = profile.get("scenarios", []) if isinstance(profile, dict) else []
+    lines = [
+        "| Scenario | Re-embed | Retrain ranker | Re-evaluate | Commands |",
+        "| --- | ---: | ---: | ---: | --- |",
+    ]
+    for row in rows:
+        commands = "<br>".join(f"`{command}`" for command in row.get("commands", []))
+        lines.append(
+            "| "
+            + " | ".join(
+                [
+                    f"`{row.get('scenario', 'n/a')}`",
+                    _fmt(row.get("rerun_embedding")),
+                    _fmt(row.get("rerun_ranker_training")),
+                    _fmt(row.get("rerun_evaluation")),
+                    commands or "n/a",
+                ]
+            )
+            + " |"
+        )
+    if len(lines) == 2:
+        lines.append("| n/a | n/a | n/a | n/a | n/a |")
+    return "\n".join(lines)
+
+
 def _split_counts(manifest: dict[str, Any]) -> str:
     counts = manifest.get("split_counts", {}) if isinstance(manifest, dict) else {}
     if not counts:
@@ -284,6 +310,8 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     retrieval_bottleneck = throughput.get("retrieval_bottleneck_profile", {}) if isinstance(throughput, dict) else {}
     rapid_convergence = throughput.get("rapid_convergence_profile", {}) if isinstance(throughput, dict) else {}
     metric_uncertainty = throughput.get("metric_uncertainty_profile", {}) if isinstance(throughput, dict) else {}
+    refresh_reuse = throughput.get("refresh_reuse_profile", {}) if isinstance(throughput, dict) else {}
+    refresh_cache = refresh_reuse.get("artifact_cache", {}) if isinstance(refresh_reuse, dict) else {}
     bench_entities = benchmark.get("entities", {}) if isinstance(benchmark, dict) else {}
     actual_backend_info = evaluation_scope.get("actual_backend_info", {}) if isinstance(evaluation_scope, dict) else {}
     actual_proof_backend = actual_backend_info.get("proof_state", {}).get("test", {}).get("actual_backend", "n/a")
@@ -687,6 +715,25 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
         lines.append(f"| `{row.get('name')}` | {_fmt(row.get('seconds'))} | {_fmt(row.get('share_of_total'))} |")
     if not bottleneck_profile.get("top_stages"):
         lines.append("| n/a | n/a | n/a |")
+    lines.extend(
+        [
+            "",
+            "## Refresh And Retraining Policy",
+            "",
+            "Training is not repeated for every report or homepage refresh. The default workflow reuses LeanRank-data artifacts unless the data split, embedding representation, labels, or ranker features changed.",
+            "",
+            f"- Reuse by default: `{refresh_reuse.get('reuse_by_default', 'n/a')}`",
+            f"- Policy: {refresh_reuse.get('training_repeat_policy', 'n/a')}",
+            f"- Cached embedding rows: `{refresh_cache.get('embedding_rows', 'n/a')}`",
+            f"- Cached embedding model: `{refresh_cache.get('embedding_model', 'n/a')}`",
+            f"- Indexed entity manifests: `{refresh_cache.get('indexed_entity_count', 'n/a')}`",
+            f"- Index backend: `{refresh_cache.get('index_backend', 'n/a')}`",
+            f"- Premise ranker artifact exists: `{refresh_cache.get('premise_ranker_exists', 'n/a')}`",
+            f"- Difficulty estimator artifact exists: `{refresh_cache.get('difficulty_estimator_exists', 'n/a')}`",
+            "",
+            _refresh_reuse_table(refresh_reuse),
+        ]
+    )
     lines.extend(
         [
             "",
