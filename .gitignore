@@ -37,6 +37,12 @@ dist/
 *.pt
 *.pth
 *.ckpt
+*.safetensors
+*.onnx
+*.pb
+*.tflite
+*.gguf
+*.ggml
 *.arrow
 *.faiss
 *.feather

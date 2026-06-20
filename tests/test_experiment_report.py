@@ -403,6 +403,34 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                         },
                     ],
                 },
+                "supervision_acceptance_profile": {
+                    "scope": "erbacher/LeanRank-data normalized positive/negative premise supervision",
+                    "label_conflicts_removed": 1,
+                    "summary": {
+                        "required_gates_passed": True,
+                        "advisory_gates_passed": True,
+                        "passed_gate_count": 8,
+                        "total_gate_count": 8,
+                        "required_gate_count": 6,
+                        "advisory_gate_count": 2,
+                    },
+                    "gates": [
+                        {
+                            "name": "positive_edges_present",
+                            "severity": "required",
+                            "passed": True,
+                            "value": 10,
+                            "threshold": ">0 normalized positive premise edges",
+                        },
+                        {
+                            "name": "hard_negative_pair_evidence",
+                            "severity": "advisory",
+                            "passed": True,
+                            "value": {"pair_count": 90},
+                            "threshold": ">0 train negative/positive comparison pairs",
+                        },
+                    ],
+                },
                 "scale_projection_profile": {
                     "method": "linear_projection_from_current_timed_pipeline",
                     "scale_estimate_reliable": True,
@@ -706,6 +734,10 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "Required gates passed" in text
     assert "target_dataset" in text
     assert "ann_speedup" in text
+    assert "Supervision Acceptance Gates" in text
+    assert "positive_edges_present" in text
+    assert "hard_negative_pair_evidence" in text
+    assert "Label conflicts removed: `1`" in text
     assert "Scale Projection" in text
     assert "linear_projection_from_current_timed_pipeline" in text
     assert "current_2x" in text

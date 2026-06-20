@@ -3875,8 +3875,437 @@
           "total_positive_edges": 69461
         },
         "exists": true,
+        "normalization_label_conflicts": {
+          "splits": {
+            "test": {
+              "negative_edges_after_filter": 68132,
+              "negative_edges_before_filter": 68542,
+              "positive_negative_overlap_removed": 410
+            },
+            "train": {
+              "negative_edges_after_filter": 530413,
+              "negative_edges_before_filter": 533675,
+              "positive_negative_overlap_removed": 3262
+            },
+            "val": {
+              "negative_edges_after_filter": 63753,
+              "negative_edges_before_filter": 64169,
+              "positive_negative_overlap_removed": 416
+            }
+          },
+          "total_positive_negative_overlap_removed": 4088
+        },
         "path": "outputs/reports/premise_trace_supervision_report.json",
-        "scope": "erbacher/LeanRank-data normalized positive/negative premise supervision"
+        "scope": "erbacher/LeanRank-data normalized positive/negative premise supervision",
+        "train_split": {
+          "avg_negative_edges_per_proof_state": 22.35859714201408,
+          "avg_positive_edges_per_proof_state": 2.314083378999283,
+          "both_label_coverage": 1.0,
+          "edge_source_values": {
+            "negative": [
+              "negative"
+            ],
+            "positive": [
+              "positive"
+            ]
+          },
+          "example_traces": [
+            {
+              "full_name": "CategoryTheory.Functor.relativelyRepresentable.lift'_snd",
+              "goal_text": "hf'.lift' i h hi \u226b hf'.snd g = h",
+              "hard_negative_candidates": [
+                {
+                  "full_name": "CategoryTheory.Functor.relativelyRepresentable.w",
+                  "premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.w",
+                  "source": "negative"
+                },
+                {
+                  "full_name": "CategoryTheory.Functor.relativelyRepresentable.lift",
+                  "premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.lift",
+                  "source": "negative"
+                },
+                {
+                  "full_name": "CategoryTheory.Functor.relativelyRepresentable.fst",
+                  "premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.fst",
+                  "source": "negative"
+                },
+                {
+                  "full_name": "CategoryTheory.Functor.relativelyRepresentable.isPullback'",
+                  "premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.isPullback'",
+                  "source": "negative"
+                },
+                {
+                  "full_name": "CategoryTheory.Functor.relativelyRepresentable.hom_ext",
+                  "premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.hom_ext",
+                  "source": "negative"
+                }
+              ],
+              "local_hypothesis_count": 17,
+              "negative_candidate_hardness": 0.9788105780287333,
+              "negative_count": 10,
+              "positive_count": 1,
+              "positive_premises": [
+                {
+                  "full_name": "CategoryTheory.Functor.relativelyRepresentable.lift'",
+                  "premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.lift'",
+                  "source": "positive"
+                }
+              ],
+              "proof_state_id": "ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625",
+              "symbol_count": 26,
+              "tactic_idx": 0,
+              "theorem_id": "thm:CategoryTheory.Functor.relativelyRepresentable.lift'_snd"
+            },
+            {
+              "full_name": "CategoryTheory.SmallObject.SuccStruct.ofCocone_map_to_top",
+              "goal_text": "(ofCocone c).map (homOfLE \u22ef) = (ofCoconeObjIso c i hi).hom \u226b c.\u03b9.app \u27e8i, hi\u27e9 \u226b (ofCoconeObjIsoPt c).inv",
+              "hard_negative_candidates": [
+                {
+                  "full_name": "CategoryTheory.SmallObject.SuccStruct.ofCocone.map_comp",
+                  "premise_id": "premise:CategoryTheory.SmallObject.SuccStruct.ofCocone.map_comp",
+                  "source": "negative"
+                },
+                {
+                  "full_name": "CategoryTheory.SmallObject.SuccStruct.ofCocone.obj",
+                  "premise_id": "premise:CategoryTheory.SmallObject.SuccStruct.ofCocone.obj",
+                  "source": "negative"
+                },
+                {
+                  "full_name": "CategoryTheory.SmallObject.SuccStruct.ofCocone_obj_eq",
+                  "premise_id": "premise:CategoryTheory.SmallObject.SuccStruct.ofCocone_obj_eq",
+                  "source": "negative"
+                },
+                {
+                  "full_name": "CategoryTheory.SmallObject.SuccStruct.ofCocone.objIsoPt",
+                  "premise_id": "premise:CategoryTheory.SmallObject.SuccStruct.ofCocone.objIsoPt",
+                  "source": "negative"
+                },
+                {
+                  "full_name": "CategoryTheory.SmallObject.SuccStruct.ofCocone_obj_eq_pt",
+                  "premise_id": "premise:CategoryTheory.SmallObject.SuccStruct.ofCocone_obj_eq_pt",
+                  "source": "negative"
+                }
+              ],
+              "local_hypothesis_count": 9,
+              "negative_candidate_hardness": 0.9786729102938615,
+              "negative_count": 7,
+              "positive_count": 4,
+              "positive_premises": [
+                {
+                  "full_name": "CategoryTheory.SmallObject.SuccStruct.ofCoconeObjIso",
+                  "premise_id": "premise:CategoryTheory.SmallObject.SuccStruct.ofCoconeObjIso",
+                  "source": "positive"
+                },
+                {
+                  "full_name": "CategoryTheory.SmallObject.SuccStruct.ofCoconeObjIsoPt",
+                  "premise_id": "premise:CategoryTheory.SmallObject.SuccStruct.ofCoconeObjIsoPt",
+                  "source": "positive"
+                },
+                {
+                  "full_name": "CategoryTheory.SmallObject.SuccStruct.ofCocone",
+                  "premise_id": "premise:CategoryTheory.SmallObject.SuccStruct.ofCocone",
+                  "source": "positive"
+                },
+                {
+                  "full_name": "CategoryTheory.SmallObject.SuccStruct.ofCocone.map",
+                  "premise_id": "premise:CategoryTheory.SmallObject.SuccStruct.ofCocone.map",
+                  "source": "positive"
+                }
+              ],
+              "proof_state_id": "ps:CategoryTheory.SmallObject.SuccStruct.ofCocone_map_to_top:0:455d08b83e53",
+              "symbol_count": 27,
+              "tactic_idx": 0,
+              "theorem_id": "thm:CategoryTheory.SmallObject.SuccStruct.ofCocone_map_to_top"
+            },
+            {
+              "full_name": "EReal.preimage_coe_Ioi",
+              "goal_text": "WithTop.some \u207b\u00b9' (WithBot.some \u207b\u00b9' Ioi \u2191\u2191x) = Ioi x",
+              "hard_negative_candidates": [
+                {
+                  "full_name": "WithBot.preimage_coe_bot",
+                  "premise_id": "premise:WithBot.preimage_coe_bot",
+                  "source": "negative"
+                },
+                {
+                  "full_name": "WithBot.range_coe",
+                  "premise_id": "premise:WithBot.range_coe",
+                  "source": "negative"
+                },
+                {
+                  "full_name": "WithTop.preimage_coe_Ico",
+                  "premise_id": "premise:WithTop.preimage_coe_Ico",
+                  "source": "negative"
+                },
+                {
+                  "full_name": "WithTop.preimage_coe_Iio_top",
+                  "premise_id": "premise:WithTop.preimage_coe_Iio_top",
+                  "source": "negative"
+                },
+                {
+                  "full_name": "WithTop.image_coe_Ioo",
+                  "premise_id": "premise:WithTop.image_coe_Ioo",
+                  "source": "negative"
+                }
+              ],
+              "local_hypothesis_count": 1,
+              "negative_candidate_hardness": 0.9739564201310029,
+              "negative_count": 19,
+              "positive_count": 2,
+              "positive_premises": [
+                {
+                  "full_name": "WithTop.preimage_coe_Ioi",
+                  "premise_id": "premise:WithTop.preimage_coe_Ioi",
+                  "source": "positive"
+                },
+                {
+                  "full_name": "WithBot.preimage_coe_Ioi",
+                  "premise_id": "premise:WithBot.preimage_coe_Ioi",
+                  "source": "positive"
+                }
+              ],
+              "proof_state_id": "ps:EReal.preimage_coe_Ioi:2:d085ae73086d",
+              "symbol_count": 5,
+              "tactic_idx": 2,
+              "theorem_id": "thm:EReal.preimage_coe_Ioi"
+            }
+          ],
+          "exists": true,
+          "hard_negative_pair_evidence": {
+            "examples": [
+              {
+                "name_token_overlap": 0.6,
+                "negative_full_name": "CategoryTheory.Functor.relativelyRepresentable.w",
+                "negative_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.w",
+                "positive_full_name": "CategoryTheory.Functor.relativelyRepresentable.lift'",
+                "positive_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.lift'",
+                "proof_state_hardness": 0.9788105780287333,
+                "proof_state_id": "ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625",
+                "same_domain": true,
+                "same_namespace": true,
+                "same_subdomain": true
+              },
+              {
+                "name_token_overlap": 0.6,
+                "negative_full_name": "CategoryTheory.Functor.relativelyRepresentable.lift",
+                "negative_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.lift",
+                "positive_full_name": "CategoryTheory.Functor.relativelyRepresentable.lift'",
+                "positive_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.lift'",
+                "proof_state_hardness": 0.9788105780287333,
+                "proof_state_id": "ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625",
+                "same_domain": true,
+                "same_namespace": true,
+                "same_subdomain": true
+              },
+              {
+                "name_token_overlap": 0.6,
+                "negative_full_name": "CategoryTheory.Functor.relativelyRepresentable.fst",
+                "negative_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.fst",
+                "positive_full_name": "CategoryTheory.Functor.relativelyRepresentable.lift'",
+                "positive_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.lift'",
+                "proof_state_hardness": 0.9788105780287333,
+                "proof_state_id": "ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625",
+                "same_domain": true,
+                "same_namespace": true,
+                "same_subdomain": true
+              },
+              {
+                "name_token_overlap": 0.6,
+                "negative_full_name": "CategoryTheory.Functor.relativelyRepresentable.isPullback'",
+                "negative_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.isPullback'",
+                "positive_full_name": "CategoryTheory.Functor.relativelyRepresentable.lift'",
+                "positive_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.lift'",
+                "proof_state_hardness": 0.9788105780287333,
+                "proof_state_id": "ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625",
+                "same_domain": true,
+                "same_namespace": true,
+                "same_subdomain": true
+              },
+              {
+                "name_token_overlap": 0.6,
+                "negative_full_name": "CategoryTheory.Functor.relativelyRepresentable.snd",
+                "negative_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.snd",
+                "positive_full_name": "CategoryTheory.Functor.relativelyRepresentable.lift'",
+                "positive_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.lift'",
+                "proof_state_hardness": 0.9788105780287333,
+                "proof_state_id": "ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625",
+                "same_domain": true,
+                "same_namespace": true,
+                "same_subdomain": true
+              },
+              {
+                "name_token_overlap": 0.6,
+                "negative_full_name": "CategoryTheory.Functor.relativelyRepresentable.isPullback",
+                "negative_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.isPullback",
+                "positive_full_name": "CategoryTheory.Functor.relativelyRepresentable.lift'",
+                "positive_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.lift'",
+                "proof_state_hardness": 0.9788105780287333,
+                "proof_state_id": "ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625",
+                "same_domain": true,
+                "same_namespace": true,
+                "same_subdomain": true
+              },
+              {
+                "name_token_overlap": 0.5,
+                "negative_full_name": "CategoryTheory.Functor.relativelyRepresentable.hom_ext",
+                "negative_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.hom_ext",
+                "positive_full_name": "CategoryTheory.Functor.relativelyRepresentable.lift'",
+                "positive_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.lift'",
+                "proof_state_hardness": 0.9788105780287333,
+                "proof_state_id": "ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625",
+                "same_domain": true,
+                "same_namespace": true,
+                "same_subdomain": true
+              },
+              {
+                "name_token_overlap": 0.5,
+                "negative_full_name": "CategoryTheory.Functor.relativelyRepresentable.lift_fst",
+                "negative_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.lift_fst",
+                "positive_full_name": "CategoryTheory.Functor.relativelyRepresentable.lift'",
+                "positive_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.lift'",
+                "proof_state_hardness": 0.9788105780287333,
+                "proof_state_id": "ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625",
+                "same_domain": true,
+                "same_namespace": true,
+                "same_subdomain": true
+              }
+            ],
+            "mean_max_name_token_overlap": 0.21689385183778534,
+            "mean_proof_state_hardness": 0.6125851575382798,
+            "method": "compare_each_negative_candidate_to_positive_premises_in_the_same_proof_state",
+            "nonzero_name_token_overlap_pair_share": 0.6909879659812259,
+            "pair_count": 530413,
+            "same_domain_pair_share": 0.9811675053213251,
+            "same_namespace_pair_share": 0.4550963117419822,
+            "same_subdomain_pair_share": 0.9767087156611923
+          },
+          "hard_negative_quality_profile": {
+            "bucket_counts": [
+              {
+                "bucket": "none",
+                "mean_hardness": 0.0,
+                "negative_candidate_row_share": 0.0,
+                "negative_candidate_rows": 0,
+                "proof_state_count": 0
+              },
+              {
+                "bucket": "low",
+                "mean_hardness": 0.3730637993708993,
+                "negative_candidate_row_share": 0.27513465921838265,
+                "negative_candidate_rows": 145935,
+                "proof_state_count": 8251
+              },
+              {
+                "bucket": "medium",
+                "mean_hardness": 0.6249258074952655,
+                "negative_candidate_row_share": 0.4819320039290138,
+                "negative_candidate_rows": 255623,
+                "proof_state_count": 8470
+              },
+              {
+                "bucket": "high",
+                "mean_hardness": 0.8474355637374673,
+                "negative_candidate_row_share": 0.24293333685260354,
+                "negative_candidate_rows": 128855,
+                "proof_state_count": 7002
+              }
+            ],
+            "bucket_method": "negative_candidate_hardness",
+            "high_hardness_negative_candidate_rows": 128855,
+            "high_hardness_negative_candidate_share": 0.24293333685260354,
+            "high_hardness_proof_state_count": 7002,
+            "high_hardness_threshold": 0.75
+          },
+          "max_negative_edges_per_proof_state": 421,
+          "max_positive_edges_per_proof_state": 46,
+          "negative_candidate_hardness": {
+            "max": 0.9788105780287333,
+            "mean": 0.6030019312643399,
+            "median": 0.6072202560919486,
+            "min": 0.04572630352674231,
+            "p25": 0.40878281332975974,
+            "p75": 0.7866381054620477
+          },
+          "negative_edge_missing_premise_count": 0,
+          "negative_edge_missing_proof_state_count": 0,
+          "negative_edges": 530413,
+          "negative_proof_state_coverage": 1.0,
+          "negative_to_positive_edge_ratio": 9.66196695629998,
+          "positive_edge_missing_premise_count": 0,
+          "positive_edge_missing_proof_state_count": 0,
+          "positive_edges": 54897,
+          "positive_negative_pair_overlap_count": 0,
+          "positive_proof_state_coverage": 1.0,
+          "premises": 127561,
+          "proof_states": 23723,
+          "proof_states_with_both_positive_and_negative_edges": 23723,
+          "proof_states_with_negative_edges": 23723,
+          "proof_states_with_positive_edges": 23723,
+          "quality_checks": {
+            "all_proof_states_have_negative_candidates": true,
+            "all_proof_states_have_positive_edges": true,
+            "negative_edges_have_valid_endpoints": true,
+            "positive_edges_have_valid_endpoints": true,
+            "positive_negative_pairs_disjoint": true
+          },
+          "split": "train",
+          "top_positive_premises": [
+            {
+              "count": 513,
+              "premise_id": "premise:rfl"
+            },
+            {
+              "count": 488,
+              "premise_id": "premise:mul_comm"
+            },
+            {
+              "count": 341,
+              "premise_id": "premise:mul_assoc"
+            },
+            {
+              "count": 311,
+              "premise_id": "premise:mul_one"
+            },
+            {
+              "count": 293,
+              "premise_id": "premise:one_mul"
+            },
+            {
+              "count": 279,
+              "premise_id": "premise:Eq.symm"
+            },
+            {
+              "count": 228,
+              "premise_id": "premise:Iff"
+            },
+            {
+              "count": 204,
+              "premise_id": "premise:CategoryTheory.Category"
+            },
+            {
+              "count": 198,
+              "premise_id": "premise:MulZeroClass"
+            },
+            {
+              "count": 169,
+              "premise_id": "premise:div_eq_mul_inv"
+            }
+          ],
+          "trace_profile": {
+            "difficulty_target_sources": [
+              "proof_length_tactic_count_premise_count_negative_candidates"
+            ],
+            "hard_negative_trace_source": "LeanRank-data neg_premises normalized to negative_edges",
+            "negative_candidate_hardness_source": "computed from normalized positive and negative premise namespace/domain overlap",
+            "negative_candidate_rows": 530413,
+            "positive_trace_rows": 54897,
+            "positive_trace_source": "LeanRank-data pos_premise and all_pos_premises normalized to positive_edges",
+            "proof_state_rows": 23723,
+            "proof_states_with_complete_positive_negative_trace": 23723
+          },
+          "unique_negative_premises": 123451,
+          "unique_negative_to_positive_premise_ratio": 5.944861793315997,
+          "unique_positive_premises": 20766
+        }
       }
     },
     "sample": {
@@ -4017,7 +4446,7 @@
         "outputs/reports",
         "homepage/assets"
       ],
-      "bytes_per_processed_row": 10453.997363122064,
+      "bytes_per_processed_row": 10454.015119241674,
       "directories": {
         "data/processed": {
           "bytes": 46533700,
@@ -4026,7 +4455,7 @@
           "path": "data/processed"
         },
         "homepage/assets": {
-          "bytes": 2053656,
+          "bytes": 2054962,
           "exists": true,
           "file_count": 11,
           "path": "homepage/assets"
@@ -4044,7 +4473,7 @@
           "path": "outputs/indexes"
         },
         "outputs/reports": {
-          "bytes": 19263083,
+          "bytes": 19266962,
           "exists": true,
           "file_count": 39,
           "path": "outputs/reports"
@@ -4100,36 +4529,36 @@
       ],
       "projections": [
         {
-          "estimated_artifact_bytes": 3052692678.0,
-          "estimated_artifact_gib": 2.84304160438478,
+          "estimated_artifact_bytes": 3052697863.0,
+          "estimated_artifact_gib": 2.8430464332923293,
           "label": "current_1x",
           "scale_factor_vs_current": 1.0,
           "target_processed_rows": 292012
         },
         {
-          "estimated_artifact_bytes": 6105385356.0,
-          "estimated_artifact_gib": 5.68608320876956,
+          "estimated_artifact_bytes": 6105395726.0,
+          "estimated_artifact_gib": 5.686092866584659,
           "label": "current_2x",
           "scale_factor_vs_current": 2.0,
           "target_processed_rows": 584024
         },
         {
-          "estimated_artifact_bytes": 15263463390.0,
-          "estimated_artifact_gib": 14.2152080219239,
+          "estimated_artifact_bytes": 15263489315.0,
+          "estimated_artifact_gib": 14.215232166461647,
           "label": "current_5x",
           "scale_factor_vs_current": 5.0,
           "target_processed_rows": 1460060
         },
         {
-          "estimated_artifact_bytes": 3658899077.092722,
-          "estimated_artifact_gib": 3.407615308736192,
+          "estimated_artifact_bytes": 3658905291.7345862,
+          "estimated_artifact_gib": 3.4076210965724534,
           "label": "configured_source_rows",
           "scale_factor_vs_current": 1.1985808802377984,
           "target_processed_rows": 350000
         }
       ],
-      "total_artifact_bytes": 3052692678,
-      "total_artifact_gib": 2.84304160438478,
+      "total_artifact_bytes": 3052697863,
+      "total_artifact_gib": 2.8430464332923293,
       "unreferenced_index_artifact_bytes": 1502501178,
       "unreferenced_index_artifact_count": 12,
       "unreferenced_index_artifact_gib": 1.3993132654577494,
@@ -4970,6 +5399,95 @@
       "scale_estimate_reliable": true
     },
     "slowest_stage": "embed",
+    "supervision_acceptance_profile": {
+      "gates": [
+        {
+          "evidence": "Premise ranking needs proof-state-to-premise positives from LeanRank-data.",
+          "name": "positive_edges_present",
+          "passed": true,
+          "severity": "required",
+          "threshold": ">0 normalized positive premise edges",
+          "value": 69461
+        },
+        {
+          "evidence": "Ranker and difficulty experiments need negative candidates, not only positives.",
+          "name": "negative_candidates_present",
+          "passed": true,
+          "severity": "required",
+          "threshold": ">0 normalized hard-negative candidate edges",
+          "value": 663198
+        },
+        {
+          "evidence": "The same proof-state/premise pair must not be both a positive and negative label.",
+          "name": "positive_negative_pairs_disjoint",
+          "passed": true,
+          "severity": "required",
+          "threshold": "true after normalization conflict removal",
+          "value": true
+        },
+        {
+          "evidence": "KG supervision edges must resolve to existing proof-state and premise nodes.",
+          "name": "edge_endpoints_valid",
+          "passed": true,
+          "severity": "required",
+          "threshold": "positive and negative edge endpoints valid",
+          "value": {
+            "negative": true,
+            "positive": true
+          }
+        },
+        {
+          "evidence": "Training split should cover nearly all proof states with positive premise supervision.",
+          "name": "train_positive_coverage",
+          "passed": true,
+          "severity": "required",
+          "threshold": ">=0.95 train proof-state positive coverage",
+          "value": 1.0
+        },
+        {
+          "evidence": "Training split should cover nearly all proof states with hard-negative candidates.",
+          "name": "train_negative_coverage",
+          "passed": true,
+          "severity": "required",
+          "threshold": ">=0.95 train proof-state negative candidate coverage",
+          "value": 1.0
+        },
+        {
+          "evidence": "Hard-negative diagnostics should compare negatives to positives from the same proof state.",
+          "name": "hard_negative_pair_evidence",
+          "passed": true,
+          "severity": "advisory",
+          "threshold": ">0 train negative/positive comparison pairs",
+          "value": {
+            "nonzero_name_token_overlap_pair_share": 0.6909879659812259,
+            "pair_count": 530413,
+            "same_domain_pair_share": 0.9811675053213251
+          }
+        },
+        {
+          "evidence": "Difficulty and hard-negative reports need a usable negative-candidate hardness signal.",
+          "name": "hardness_feature_present",
+          "passed": true,
+          "severity": "advisory",
+          "threshold": "negative_candidate_hardness exists",
+          "value": {
+            "has_negative_candidate_hardness": true,
+            "high_hardness_negative_candidate_rows": 128855,
+            "train_hardness_mean": 0.6030019312643399
+          }
+        }
+      ],
+      "label_conflicts_removed": 4088,
+      "scope": "erbacher/LeanRank-data normalized positive/negative premise supervision",
+      "summary": {
+        "advisory_gate_count": 2,
+        "advisory_gates_passed": true,
+        "passed_gate_count": 8,
+        "required_gate_count": 6,
+        "required_gates_passed": true,
+        "total_gate_count": 8
+      }
+    },
     "throughput_basis": "executed_pipeline_run",
     "timed_stage_seconds": {
       "audit": 0.27479269402101636,

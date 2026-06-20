@@ -332,6 +332,8 @@ def _readiness_stage() -> dict[str, Any]:
             "path": "outputs/reports/premise_trace_supervision_report.json",
             "exists": Path("outputs/reports/premise_trace_supervision_report.json").exists(),
             "current_artifact_supervision": premise_trace.get("current_artifact_supervision", {}),
+            "normalization_label_conflicts": premise_trace.get("normalization_label_conflicts", {}),
+            "train_split": (premise_trace.get("splits", {}) or {}).get("train", {}),
             "scope": premise_trace.get("scope"),
         },
     }
@@ -1276,6 +1278,109 @@ def _performance_acceptance_profile(
     }
 
 
+def _supervision_acceptance_profile(readiness: dict[str, Any]) -> dict[str, Any]:
+    premise_trace = readiness.get("premise_trace_supervision", {}) if isinstance(readiness, dict) else {}
+    current = premise_trace.get("current_artifact_supervision", {}) if isinstance(premise_trace, dict) else {}
+    train = premise_trace.get("train_split", {}) if isinstance(premise_trace, dict) else {}
+    quality_checks = current.get("quality_checks", {}) if isinstance(current, dict) else {}
+    hard_negative_quality = train.get("hard_negative_quality_profile", {}) if isinstance(train, dict) else {}
+    pair_evidence = train.get("hard_negative_pair_evidence", {}) if isinstance(train, dict) else {}
+    label_conflicts = premise_trace.get("normalization_label_conflicts", {}) if isinstance(premise_trace, dict) else {}
+    gates = [
+        {
+            "name": "positive_edges_present",
+            "severity": "required",
+            "passed": bool(current.get("has_positive_edges")) and int(current.get("total_positive_edges") or 0) > 0,
+            "value": current.get("total_positive_edges"),
+            "threshold": ">0 normalized positive premise edges",
+            "evidence": "Premise ranking needs proof-state-to-premise positives from LeanRank-data.",
+        },
+        {
+            "name": "negative_candidates_present",
+            "severity": "required",
+            "passed": bool(current.get("has_negative_candidates")) and int(current.get("total_negative_edges") or 0) > 0,
+            "value": current.get("total_negative_edges"),
+            "threshold": ">0 normalized hard-negative candidate edges",
+            "evidence": "Ranker and difficulty experiments need negative candidates, not only positives.",
+        },
+        {
+            "name": "positive_negative_pairs_disjoint",
+            "severity": "required",
+            "passed": quality_checks.get("all_positive_negative_pairs_disjoint") is True,
+            "value": quality_checks.get("all_positive_negative_pairs_disjoint"),
+            "threshold": "true after normalization conflict removal",
+            "evidence": "The same proof-state/premise pair must not be both a positive and negative label.",
+        },
+        {
+            "name": "edge_endpoints_valid",
+            "severity": "required",
+            "passed": quality_checks.get("all_positive_edges_have_valid_endpoints") is True
+            and quality_checks.get("all_negative_edges_have_valid_endpoints") is True,
+            "value": {
+                "positive": quality_checks.get("all_positive_edges_have_valid_endpoints"),
+                "negative": quality_checks.get("all_negative_edges_have_valid_endpoints"),
+            },
+            "threshold": "positive and negative edge endpoints valid",
+            "evidence": "KG supervision edges must resolve to existing proof-state and premise nodes.",
+        },
+        {
+            "name": "train_positive_coverage",
+            "severity": "required",
+            "passed": float(train.get("positive_proof_state_coverage") or 0.0) >= 0.95,
+            "value": train.get("positive_proof_state_coverage"),
+            "threshold": ">=0.95 train proof-state positive coverage",
+            "evidence": "Training split should cover nearly all proof states with positive premise supervision.",
+        },
+        {
+            "name": "train_negative_coverage",
+            "severity": "required",
+            "passed": float(train.get("negative_proof_state_coverage") or 0.0) >= 0.95,
+            "value": train.get("negative_proof_state_coverage"),
+            "threshold": ">=0.95 train proof-state negative candidate coverage",
+            "evidence": "Training split should cover nearly all proof states with hard-negative candidates.",
+        },
+        {
+            "name": "hard_negative_pair_evidence",
+            "severity": "advisory",
+            "passed": int(pair_evidence.get("pair_count") or 0) > 0,
+            "value": {
+                "pair_count": pair_evidence.get("pair_count"),
+                "same_domain_pair_share": pair_evidence.get("same_domain_pair_share"),
+                "nonzero_name_token_overlap_pair_share": pair_evidence.get("nonzero_name_token_overlap_pair_share"),
+            },
+            "threshold": ">0 train negative/positive comparison pairs",
+            "evidence": "Hard-negative diagnostics should compare negatives to positives from the same proof state.",
+        },
+        {
+            "name": "hardness_feature_present",
+            "severity": "advisory",
+            "passed": bool(current.get("has_negative_candidate_hardness")),
+            "value": {
+                "has_negative_candidate_hardness": current.get("has_negative_candidate_hardness"),
+                "train_hardness_mean": (train.get("negative_candidate_hardness") or {}).get("mean") if isinstance(train, dict) else None,
+                "high_hardness_negative_candidate_rows": hard_negative_quality.get("high_hardness_negative_candidate_rows"),
+            },
+            "threshold": "negative_candidate_hardness exists",
+            "evidence": "Difficulty and hard-negative reports need a usable negative-candidate hardness signal.",
+        },
+    ]
+    required = [gate for gate in gates if gate["severity"] == "required"]
+    advisory = [gate for gate in gates if gate["severity"] == "advisory"]
+    return {
+        "scope": premise_trace.get("scope"),
+        "label_conflicts_removed": (label_conflicts.get("total_positive_negative_overlap_removed") if isinstance(label_conflicts, dict) else None),
+        "summary": {
+            "required_gates_passed": all(gate["passed"] for gate in required),
+            "advisory_gates_passed": all(gate["passed"] for gate in advisory),
+            "passed_gate_count": sum(1 for gate in gates if gate["passed"]),
+            "total_gate_count": len(gates),
+            "required_gate_count": len(required),
+            "advisory_gate_count": len(advisory),
+        },
+        "gates": gates,
+    }
+
+
 def _scale_projection_profile(scale: dict[str, Any], throughput: dict[str, Any]) -> dict[str, Any]:
     current_rows = int(scale.get("current_total_split_rows") or 0)
     requested_source_rows = int(scale.get("source_rows") or throughput.get("requested_source_rows") or current_rows or 0)
@@ -1592,6 +1697,7 @@ def build_report(config_path: str = "configs/proofatlas.yaml") -> dict[str, Any]
     throughput["execution_mode_summary"] = _execution_mode_summary(throughput)
     throughput["cpu_io_efficiency_profile"] = _cpu_io_efficiency_profile(scale, throughput)
     throughput["performance_acceptance_profile"] = _performance_acceptance_profile(scale, throughput, evaluation)
+    throughput["supervision_acceptance_profile"] = _supervision_acceptance_profile(readiness)
     throughput["scale_projection_profile"] = _scale_projection_profile(scale, throughput)
     throughput["artifact_storage_profile"] = _artifact_storage_profile(scale, throughput)
     recommendations = _recommendations(config, sample, benchmark, readiness, scale, throughput, evaluation)

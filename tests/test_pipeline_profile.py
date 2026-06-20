@@ -159,7 +159,29 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
             "current_artifact_supervision": {
                 "has_positive_edges": True,
                 "has_negative_candidates": True,
+                "has_negative_candidate_hardness": True,
+                "total_positive_edges": 10,
+                "total_negative_edges": 90,
                 "negative_to_positive_edge_ratio": 9.0,
+                "quality_checks": {
+                    "all_positive_edges_have_valid_endpoints": True,
+                    "all_negative_edges_have_valid_endpoints": True,
+                    "all_positive_negative_pairs_disjoint": True,
+                },
+            },
+            "normalization_label_conflicts": {"total_positive_negative_overlap_removed": 1},
+            "splits": {
+                "train": {
+                    "positive_proof_state_coverage": 1.0,
+                    "negative_proof_state_coverage": 1.0,
+                    "negative_candidate_hardness": {"mean": 0.6},
+                    "hard_negative_quality_profile": {"high_hardness_negative_candidate_rows": 7},
+                    "hard_negative_pair_evidence": {
+                        "pair_count": 90,
+                        "same_domain_pair_share": 0.4,
+                        "nonzero_name_token_overlap_pair_share": 0.2,
+                    },
+                }
             }
         },
     )
@@ -222,6 +244,11 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
     assert rerank_cost["sampled_rerank_queries"] == 0
     assert rerank_cost["full_proof_state_queries"] == 10
     assert rerank_cost["policy"].startswith("keep reranked proof-state evaluation sampled")
+    supervision_acceptance = report["throughput_profile"]["supervision_acceptance_profile"]
+    assert supervision_acceptance["summary"]["required_gates_passed"] is True
+    assert supervision_acceptance["summary"]["advisory_gates_passed"] is True
+    assert supervision_acceptance["label_conflicts_removed"] == 1
+    assert next(row for row in supervision_acceptance["gates"] if row["name"] == "hard_negative_pair_evidence")["passed"] is True
     uncertainty = report["throughput_profile"]["metric_uncertainty_profile"]
     assert uncertainty["confidence_level"] == 0.95
     assert uncertainty["proof_state"]["Recall@10"]["n"] == 10

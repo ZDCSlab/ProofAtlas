@@ -545,6 +545,26 @@ The current ranking labels come from normalized LeanRank-data premise supervisio
 - Supervision quality checks: `{'all_negative_edges_have_valid_endpoints': True, 'all_positive_edges_have_valid_endpoints': True, 'all_positive_negative_pairs_disjoint': True}`
 - Supervision scope: `erbacher/LeanRank-data normalized positive/negative premise supervision`
 
+### Supervision Acceptance Gates
+
+These gates summarize whether the normalized LeanRank-data positive premise and hard-negative candidate labels are usable for the retrieval/ranking experiment.
+
+- Required gates passed: `True`
+- Advisory gates passed: `True`
+- Passed gates: `8` / `8`
+- Label conflicts removed: `4088`
+
+| Gate | Severity | Passed | Value | Threshold |
+| --- | --- | ---: | --- | --- |
+| `positive_edges_present` | required | True | 69461 | >0 normalized positive premise edges |
+| `negative_candidates_present` | required | True | 663198 | >0 normalized hard-negative candidate edges |
+| `positive_negative_pairs_disjoint` | required | True | True | true after normalization conflict removal |
+| `edge_endpoints_valid` | required | True | {'negative': True, 'positive': True} | positive and negative edge endpoints valid |
+| `train_positive_coverage` | required | True | 1.0000 | >=0.95 train proof-state positive coverage |
+| `train_negative_coverage` | required | True | 1.0000 | >=0.95 train proof-state negative candidate coverage |
+| `hard_negative_pair_evidence` | advisory | True | {'nonzero_name_token_overlap_pair_share': 0.6909879659812259, 'pair_count': 530413, 'same_domain_pair_share': 0.9811675053213251} | >0 train negative/positive comparison pairs |
+| `hardness_feature_present` | advisory | True | {'has_negative_candidate_hardness': True, 'high_hardness_negative_candidate_rows': 128855, 'train_hardness_mean': 0.6030019312643399} | negative_candidate_hardness exists |
+
 ### Hard-Negative Quality Profile
 
 Hardness buckets are derived from the normalized positive/negative premise features. This table shows whether the train split contains enough non-trivial negative candidates for ranking and difficulty experiments.
@@ -798,9 +818,9 @@ These linear projections use the current timed pipeline as a capacity-planning b
 This profile records the local footprint of generated LeanRank-data artifacts. It is a practical scale-up signal because embeddings and ANN indexes can dominate disk usage before model training becomes the bottleneck.
 
 - Method: `filesystem_artifact_footprint_with_linear_scale_projection`
-- Total artifact bytes: `3052692678`
-- Total artifact GiB: `2.84304160438478`
-- Bytes per processed row: `10453.997363122064`
+- Total artifact bytes: `3052697863`
+- Total artifact GiB: `2.8430464332923293`
+- Bytes per processed row: `10454.015119241674`
 - Unreferenced index artifact bytes: `1502501178`
 - Unreferenced index artifact count: `12`
 

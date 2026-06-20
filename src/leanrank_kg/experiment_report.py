@@ -605,6 +605,8 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     cpu_io_efficiency = throughput.get("cpu_io_efficiency_profile", {}) if isinstance(throughput, dict) else {}
     performance_acceptance = throughput.get("performance_acceptance_profile", {}) if isinstance(throughput, dict) else {}
     performance_acceptance_summary = performance_acceptance.get("summary", {}) if isinstance(performance_acceptance, dict) else {}
+    supervision_acceptance = throughput.get("supervision_acceptance_profile", {}) if isinstance(throughput, dict) else {}
+    supervision_acceptance_summary = supervision_acceptance.get("summary", {}) if isinstance(supervision_acceptance, dict) else {}
     scale_projection = throughput.get("scale_projection_profile", {}) if isinstance(throughput, dict) else {}
     artifact_storage = throughput.get("artifact_storage_profile", {}) if isinstance(throughput, dict) else {}
     embedding_parallel = resource_parallelism.get("embedding_parallelism", {}) if isinstance(resource_parallelism, dict) else {}
@@ -1014,6 +1016,17 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
             f"- Train high-hardness negative row share: `{hard_negative_quality.get('high_hardness_negative_candidate_share', 'n/a')}`",
             f"- Supervision quality checks: `{current_trace.get('quality_checks', {})}`",
             f"- Supervision scope: `{premise_trace.get('scope', 'erbacher/LeanRank-data normalized positive/negative premise supervision')}`",
+            "",
+            "### Supervision Acceptance Gates",
+            "",
+            "These gates summarize whether the normalized LeanRank-data positive premise and hard-negative candidate labels are usable for the retrieval/ranking experiment.",
+            "",
+            f"- Required gates passed: `{supervision_acceptance_summary.get('required_gates_passed', 'n/a')}`",
+            f"- Advisory gates passed: `{supervision_acceptance_summary.get('advisory_gates_passed', 'n/a')}`",
+            f"- Passed gates: `{supervision_acceptance_summary.get('passed_gate_count', 'n/a')}` / `{supervision_acceptance_summary.get('total_gate_count', 'n/a')}`",
+            f"- Label conflicts removed: `{supervision_acceptance.get('label_conflicts_removed', 'n/a')}`",
+            "",
+            _performance_gate_table(supervision_acceptance),
             "",
             "### Hard-Negative Quality Profile",
             "",

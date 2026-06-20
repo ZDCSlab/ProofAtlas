@@ -157,7 +157,7 @@ Pipeline scale profile:
 - Embedding devices: `cuda:0` to `cuda:6`
 - Index backend: `hnswlib`
 - LeanRank premise supervision ready: true
-- Artifact storage: 2.8430 GiB total, 10,453.9974 bytes per processed row
+- Artifact storage: 2.8430 GiB total, 10,454.0151 bytes per processed row
 - Largest storage component: `outputs/indexes`, 2,295,002,043 bytes
 - Unreferenced index artifacts: 1,502,501,178 bytes (1.3993 GiB) not pointed to by current manifests
 - Projected storage at current_5x: 14.2152 GiB
