@@ -322,6 +322,7 @@ def test_text_query_retrieval_and_theorem_guidance_are_json_serializable(tmp_pat
     assert graph_asset["nodes"]
     assert graph_asset["edges"]
     html = (tmp_path / "homepage/index.html").read_text(encoding="utf-8")
+    assert all(line.rstrip() == line for line in html.splitlines())
     assert "LeanRank Proof Knowledge Graph" in html
     assert "Interactive Proof Guidance Workbench" in html
     assert "Get Proof Guidance" in html

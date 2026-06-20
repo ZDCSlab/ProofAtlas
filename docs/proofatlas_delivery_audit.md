@@ -87,8 +87,8 @@ make refresh-production-report
 make verify-delivery
 ```
 
-`make refresh-production-report` is the standard production artifact refresh entrypoint. It runs evaluation, pipeline profiling, experiment-report generation, homepage generation, and audit with `configs/proofatlas.yaml`.
-`make verify-delivery` runs the unit tests, production audit, and `git diff --check`. By default it executes Python commands through `conda run -n leanrank_kg`; override `VERIFY_RUN` if the environment is already activated.
+`make refresh-production-report` is the standard production artifact refresh entrypoint. It runs evaluation, pipeline profiling, experiment-report generation, homepage generation, and audit with `configs/proofatlas.yaml`. By default it executes Python commands through `conda run -n leanrank_kg`; override `PIPELINE_RUN` if the environment is already activated.
+`make verify-delivery` runs the unit tests, production audit, and `git diff --check`. By default `VERIFY_RUN` inherits `PIPELINE_RUN`; override either variable if the environment is already activated.
 
 Recent passing result:
 

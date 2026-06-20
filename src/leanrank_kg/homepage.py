@@ -684,6 +684,10 @@ renderCaseStudy(0);
 </html>"""
 
 
+def _strip_trailing_whitespace(text: str) -> str:
+    return "\n".join(line.rstrip() for line in text.splitlines()) + "\n"
+
+
 def run(config_path: str) -> None:
     Path("homepage/assets").mkdir(parents=True, exist_ok=True)
     summary = build_summary(config_path)
@@ -701,5 +705,5 @@ def run(config_path: str) -> None:
         ("homepage_summary", summary),
     ]:
         write_json(f"homepage/assets/{name}.json", data)
-    html = Template(HTML).render(**summary)
+    html = _strip_trailing_whitespace(Template(HTML).render(**summary))
     Path("homepage/index.html").write_text(html, encoding="utf-8")

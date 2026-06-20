@@ -791,7 +791,7 @@
       "path": "outputs/reports/refresh_dashboard.json"
     },
     "validation:refresh_history": {
-      "detail": "refresh_history={'entry_count': 8, 'history_limit': 20}",
+      "detail": "refresh_history={'entry_count': 10, 'history_limit': 20}",
       "passed": true,
       "path": "outputs/reports/refresh_history.json"
     },

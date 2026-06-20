@@ -28,3 +28,13 @@ def test_readme_results_snapshot_matches_committed_metrics() -> None:
 
     for (task, metric), value in expected.items():
         assert _readme_metric(readme, task, metric) == f"{float(value):.4f}"
+
+
+def test_production_refresh_uses_configurable_pipeline_runner() -> None:
+    repo = Path(__file__).resolve().parents[1]
+    makefile = (repo / "Makefile").read_text(encoding="utf-8")
+
+    assert "PIPELINE_RUN ?= conda run -n leanrank_kg" in makefile
+    assert "VERIFY_RUN ?= $(PIPELINE_RUN)" in makefile
+    assert "$(PIPELINE_RUN) leanrank-kg evaluate --config $(PRODUCTION_CONFIG)" in makefile
+    assert "$(PIPELINE_RUN) leanrank-kg audit --config $(PRODUCTION_CONFIG)" in makefile

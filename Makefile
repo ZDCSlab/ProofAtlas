@@ -3,7 +3,8 @@
 CONFIG ?= configs/sample.yaml
 PRODUCTION_CONFIG ?= configs/proofatlas.yaml
 SECURITY_REVIEW_HOST ?= 127.0.0.1
-VERIFY_RUN ?= conda run -n leanrank_kg
+PIPELINE_RUN ?= conda run -n leanrank_kg
+VERIFY_RUN ?= $(PIPELINE_RUN)
 
 help:
 	@echo "Main commands:"
@@ -92,11 +93,11 @@ audit:
 	leanrank-kg audit --config $(CONFIG)
 
 refresh-production-report:
-	leanrank-kg evaluate --config $(PRODUCTION_CONFIG)
-	leanrank-kg profile-pipeline --config $(PRODUCTION_CONFIG)
-	leanrank-kg build-experiment-report --config $(PRODUCTION_CONFIG)
-	leanrank-kg build-homepage --config $(PRODUCTION_CONFIG)
-	leanrank-kg audit --config $(PRODUCTION_CONFIG)
+	$(PIPELINE_RUN) leanrank-kg evaluate --config $(PRODUCTION_CONFIG)
+	$(PIPELINE_RUN) leanrank-kg profile-pipeline --config $(PRODUCTION_CONFIG)
+	$(PIPELINE_RUN) leanrank-kg build-experiment-report --config $(PRODUCTION_CONFIG)
+	$(PIPELINE_RUN) leanrank-kg build-homepage --config $(PRODUCTION_CONFIG)
+	$(PIPELINE_RUN) leanrank-kg audit --config $(PRODUCTION_CONFIG)
 
 verify-delivery:
 	$(VERIFY_RUN) pytest -q

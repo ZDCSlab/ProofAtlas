@@ -175,6 +175,7 @@ make refresh-production-report
 ```
 
 This runs `evaluate`, `profile-pipeline`, `build-experiment-report`, `build-homepage`, and `audit` with `configs/proofatlas.yaml`. Override the production config with `make refresh-production-report PRODUCTION_CONFIG=<path>`.
+By default it executes Python commands through `conda run -n leanrank_kg`; override that with `make refresh-production-report PIPELINE_RUN=` if your environment is already activated.
 
 To verify the delivery after refreshing artifacts:
 
@@ -183,7 +184,7 @@ make verify-delivery
 ```
 
 This runs unit tests, the production audit, and `git diff --check`.
-By default it executes Python commands through `conda run -n leanrank_kg`; override that with `make verify-delivery VERIFY_RUN=` if your environment is already activated.
+By default it executes Python commands through `conda run -n leanrank_kg`; override that with `make verify-delivery VERIFY_RUN=` if your environment is already activated. `VERIFY_RUN` defaults to `PIPELINE_RUN`, so `make verify-delivery PIPELINE_RUN=` is also valid.
 
 The proof-state-level and theorem-level retrieval metrics separately report held-out gold premise counts that exist in the train premise index and counts missing from the train index, so Recall/MRR/MAP/nDCG are interpreted against the actually retrievable gold set.
 
