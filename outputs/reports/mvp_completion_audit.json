@@ -785,6 +785,11 @@
       "passed": true,
       "path": "outputs/reports/ranker_validation_metrics.json"
     },
+    "validation:readme_delivery_evidence": {
+      "detail": "missing=[]",
+      "passed": true,
+      "path": "README.md"
+    },
     "validation:refresh_dashboard": {
       "detail": "refresh_dashboard={'ready': True, 'gates': {'artifact_compatible': True, 'graph_valid': True, 'index_benchmark_present': True, 'parsing_coverage_present': True, 'schema_clean': True, 'split_clean': True, 'theorem_eval_present': True, 'theorem_query_parse_present': True}}",
       "passed": true,
@@ -838,5 +843,5 @@
   },
   "failed_checks": [],
   "passed": true,
-  "total_checks": 167
+  "total_checks": 168
 }

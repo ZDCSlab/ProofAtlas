@@ -66,6 +66,17 @@ def build_audit() -> dict[str, Any]:
     required_root = ["README.md", "pyproject.toml", "Makefile", "configs/sample.yaml", "homepage/index.html"]
     for path in required_root:
         checks[f"file:{path}"] = _exists(path)
+    checks["validation:readme_delivery_evidence"] = _file_contains(
+        "README.md",
+        [
+            "erbacher/LeanRank-data",
+            "Current retrieval failure diagnosis",
+            "candidate_pool_miss_top_100",
+            "Current resource and parallelism profile",
+            "hnswlib parameters",
+            "make verify-delivery",
+        ],
+    )
     for module in ["api", "benchmark_index", "build_index", "deployment_security", "experiment_report", "lean_check", "pipeline_profile", "pipeline_timing", "premise_trace_supervision", "query"]:
         checks[f"source:{module}"] = _exists(f"src/leanrank_kg/{module}.py")
     for schema in ["theorem", "proof_state", "premise", "file_module", "proof_technique"]:

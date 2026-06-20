@@ -24,7 +24,7 @@ def test_audit_covers_refined_theorem_guidance_artifacts(tmp_path, monkeypatch):
         (tmp_path / "schemas" / schema.name).write_text(schema.read_text(encoding="utf-8"), encoding="utf-8")
     deployment_guide = repo / "docs/proofatlas_deployment_guide.md"
     (tmp_path / "docs/proofatlas_deployment_guide.md").write_text(deployment_guide.read_text(encoding="utf-8"), encoding="utf-8")
-    (tmp_path / "README.md").write_text("ProofAtlas\n", encoding="utf-8")
+    (tmp_path / "README.md").write_text((repo / "README.md").read_text(encoding="utf-8"), encoding="utf-8")
     (tmp_path / "pyproject.toml").write_text("[project]\nname='proofatlas-test'\n", encoding="utf-8")
     (tmp_path / "Makefile").write_text("demo:\n\ttrue\n", encoding="utf-8")
     (tmp_path / "notebooks").mkdir()
@@ -35,6 +35,7 @@ def test_audit_covers_refined_theorem_guidance_artifacts(tmp_path, monkeypatch):
     )
     full_pipeline(config="configs/sample.yaml", debug_rows=120)
     result = audit.build_audit()
+    assert result["checks"]["validation:readme_delivery_evidence"]["passed"] is True
     assert result["checks"]["validation:corpus_manifest"]["passed"] is True
     assert result["checks"]["validation:artifact_compatibility"]["passed"] is True
     assert result["checks"]["validation:difficulty_estimator"]["passed"] is True
