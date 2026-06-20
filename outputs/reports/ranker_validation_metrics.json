@@ -132,11 +132,11 @@
     "random_seed": 42
   },
   "timing_profile": {
-    "feature_ablation_seconds": 0.4294309290125966,
-    "model_fit_seconds": 0.03789477702230215,
-    "total_seconds": 16.952010803157464,
-    "train_feature_seconds": 12.72693373518996,
-    "validation_feature_seconds": 3.6618118570186198
+    "feature_ablation_seconds": 0.44068691600114107,
+    "model_fit_seconds": 0.03800319111905992,
+    "total_seconds": 17.046396038029343,
+    "train_feature_seconds": 12.822568715084344,
+    "validation_feature_seconds": 3.6532230398152024
   },
   "train_pairs": 20000,
   "training_pair_utilization": {

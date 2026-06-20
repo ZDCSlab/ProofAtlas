@@ -15,13 +15,19 @@ coverage.xml
 htmlcov/
 .ipynb_checkpoints/
 .cache/
+.jupyter/
+.python-version
 build/
 dist/
 *.egg-info/
 *.log
 *.prof
+*.profraw
+*.profdata
 *.tmp
 *.temp
+*.bak
+*.orig
 *.jsonl
 *.sqlite
 *.sqlite3
@@ -49,6 +55,7 @@ node_modules/
 .next/
 site/
 tmp/
+logs/
 
 # The homepage is the demo deliverable, so keep generated static assets tracked.
 !homepage/

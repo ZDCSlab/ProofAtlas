@@ -1,5 +1,6 @@
 import pandas as pd
 import json
+from difflib import SequenceMatcher
 
 from leanrank_kg import build_graph, compute_difficulty, download_or_sample, embed, normalize, train_difficulty, train_ranker, weak_label_proof_technique
 
@@ -30,6 +31,42 @@ def test_difficulty_features_are_table_driven(tmp_path, monkeypatch):
     assert {"proof_length_score", "tactic_count_score", "premise_count_score", "negative_candidate_count_score"} <= set(thm_features.columns)
     target_report = json.loads((tmp_path / "outputs/reports/difficulty_target_report.json").read_text(encoding="utf-8"))
     assert target_report["target"] == "theorem_features.theorem_complexity_score"
+
+
+def test_negative_hardness_pruning_matches_exhaustive_formula():
+    pos = pd.DataFrame(
+        [
+            {"proof_state_id": "ps1", "full_name": "Mathlib.Algebra.Group.mul_assoc", "domain_tag": "Algebra"},
+            {"proof_state_id": "ps1", "full_name": "Mathlib.Topology.Basic.isClosed_univ", "domain_tag": "Topology"},
+            {"proof_state_id": "ps2", "full_name": "Mathlib.Data.Nat.succ_eq_add_one", "domain_tag": "Data"},
+        ]
+    )
+    neg = pd.DataFrame(
+        [
+            {"proof_state_id": "ps1", "full_name": "Mathlib.Algebra.Group.mul_left_cancel", "domain_tag": "Algebra"},
+            {"proof_state_id": "ps1", "full_name": "Mathlib.MeasureTheory.Integral.norm", "domain_tag": "MeasureTheory"},
+            {"proof_state_id": "ps2", "full_name": "Mathlib.Data.Nat.add_comm", "domain_tag": "Data"},
+        ]
+    )
+
+    expected = {}
+    for proof_state_id, neg_group in neg.groupby("proof_state_id"):
+        pos_group = pos[pos["proof_state_id"] == proof_state_id]
+        scores = []
+        for neg_row in neg_group.to_dict(orient="records"):
+            best = 0.0
+            neg_namespace = compute_difficulty.namespace(neg_row["full_name"])
+            for pos_row in pos_group.to_dict(orient="records"):
+                namespace_match = float(neg_namespace == compute_difficulty.namespace(pos_row["full_name"]))
+                domain_match = float(neg_row["domain_tag"] == pos_row["domain_tag"])
+                name_sim = SequenceMatcher(None, neg_row["full_name"], pos_row["full_name"]).ratio()
+                best = max(best, 0.45 * namespace_match + 0.25 * domain_match + 0.30 * name_sim)
+            scores.append(best)
+        expected[proof_state_id] = sum(scores) / len(scores)
+
+    actual = compute_difficulty._negative_hardness(pos, neg)
+
+    assert actual.to_dict() == expected
 
 
 def test_ranker_features_use_processed_feature_tables(tmp_path, monkeypatch):

@@ -80,14 +80,14 @@
         "actual_backend": "torch_cuda",
         "evaluated_queries": 2822,
         "name": "val_proof_state_retrieval",
-        "seconds": 6.893178759841248,
+        "seconds": 6.857373162871227,
         "split": "val"
       },
       {
         "actual_backend": "torch_cuda",
         "evaluated_queries": 3053,
         "name": "test_proof_state_retrieval",
-        "seconds": 0.9470530149992555,
+        "seconds": 0.9589565170463175,
         "split": "test"
       },
       {
@@ -95,7 +95,7 @@
         "case_study_limit": 0,
         "evaluated_queries": 1000,
         "name": "val_theorem_retrieval",
-        "seconds": 0.3113241489045322,
+        "seconds": 0.3221506639383733,
         "split": "val"
       },
       {
@@ -103,7 +103,7 @@
         "case_study_limit": 0,
         "evaluated_queries": 1000,
         "name": "test_theorem_retrieval",
-        "seconds": 0.43524800101295114,
+        "seconds": 0.43081551417708397,
         "split": "test"
       },
       {
@@ -111,21 +111,21 @@
         "candidate_k": 50,
         "evaluated_queries": 20,
         "name": "test_reranked_proof_state_retrieval",
-        "seconds": 14.024460348067805,
+        "seconds": 14.401975160930306,
         "split": "test"
       },
       {
         "best_variant_by_recall": "full_name_goal",
         "evaluated_queries": 50,
         "name": "val_proof_state_query_representation_diagnostic",
-        "seconds": 0.830734641989693,
+        "seconds": 0.8328703090082854,
         "split": "val"
       },
       {
         "best_variant_by_recall": "full_name_goal",
         "evaluated_queries": 50,
         "name": "test_proof_state_query_representation_diagnostic",
-        "seconds": 0.6904856029432267,
+        "seconds": 0.6676025029737502,
         "split": "test"
       }
     ],
@@ -133,7 +133,7 @@
       "test": null,
       "val": null
     },
-    "total_seconds": 24.55601521511562,
+    "total_seconds": 24.94140063994564,
     "use_gpu": true
   },
   "label_policy": "held-out test positive_edges are used only for evaluation",

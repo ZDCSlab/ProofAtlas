@@ -147,13 +147,13 @@ Current production timing evidence:
 
 | Signal | Value |
 | --- | ---: |
-| Total timed pipeline run | 531.3367 seconds |
+| Total timed pipeline run | 499.3380 seconds |
 | Executed stages | 20 |
 | Skipped stages | 0 |
 | Throughput basis | executed_pipeline_run |
 | Scale estimate reliable | True |
-| Embedding rows/sec during embed stage | 1638.4 |
-| Processed rows/sec | 529.3 |
+| Embedding rows/sec during embed stage | 1643.6 |
+| Processed rows/sec | 584.8 |
 | Slowest stage | embed |
 | Evaluation backend | torch_cuda |
 | Embedding device count | 7 |

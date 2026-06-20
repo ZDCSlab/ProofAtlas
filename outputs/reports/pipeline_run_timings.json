@@ -2,50 +2,50 @@
   "config_hash": "37ec7d5d3cf4d7b9",
   "config_path": "configs/proofatlas.yaml",
   "executed_stage_count": 20,
-  "generated_at": "2026-06-20T22:28:40.821390+00:00",
+  "generated_at": "2026-06-20T22:46:12.435080+00:00",
   "has_skipped_stages": false,
   "passed": true,
   "skipped_stage_count": 0,
   "slowest_stages": [
     {
       "name": "embed",
-      "seconds": 165.1951570729725
+      "seconds": 148.68840552284382
     },
     {
       "name": "sample",
-      "seconds": 82.04912218917161
+      "seconds": 80.56720186397433
     },
     {
       "name": "augment_graph",
-      "seconds": 51.26403219019994
-    },
-    {
-      "name": "compute_difficulty",
-      "seconds": 49.86782530415803
+      "seconds": 50.88269817898981
     },
     {
       "name": "normalize",
-      "seconds": 43.894371641101316
+      "seconds": 43.72302240296267
     },
     {
       "name": "validate",
-      "seconds": 38.20335593610071
+      "seconds": 38.67154646711424
+    },
+    {
+      "name": "compute_difficulty",
+      "seconds": 36.422933663008735
     },
     {
       "name": "evaluate",
-      "seconds": 19.271771902916953
+      "seconds": 19.468068956863135
     },
     {
       "name": "build_graph",
-      "seconds": 17.50257074693218
+      "seconds": 17.305921696824953
     },
     {
       "name": "train_ranker",
-      "seconds": 16.95613070204854
+      "seconds": 17.05100686312653
     },
     {
       "name": "benchmark_index",
-      "seconds": 11.378119841916487
+      "seconds": 11.37408624496311
     }
   ],
   "stage_count": 20,
@@ -54,142 +54,142 @@
       "error": null,
       "name": "sample",
       "order": 1,
-      "seconds": 82.04912218917161,
+      "seconds": 80.56720186397433,
       "status": "passed"
     },
     {
       "error": null,
       "name": "normalize",
       "order": 2,
-      "seconds": 43.894371641101316,
+      "seconds": 43.72302240296267,
       "status": "passed"
     },
     {
       "error": null,
       "name": "build_graph",
       "order": 3,
-      "seconds": 17.50257074693218,
+      "seconds": 17.305921696824953,
       "status": "passed"
     },
     {
       "error": null,
       "name": "label_techniques",
       "order": 4,
-      "seconds": 4.958994898013771,
+      "seconds": 4.888584636151791,
       "status": "passed"
     },
     {
       "error": null,
       "name": "compute_difficulty",
       "order": 5,
-      "seconds": 49.86782530415803,
+      "seconds": 36.422933663008735,
       "status": "passed"
     },
     {
       "error": null,
       "name": "premise_trace_supervision",
       "order": 6,
-      "seconds": 2.7600397041533142,
+      "seconds": 2.7587428011465818,
       "status": "passed"
     },
     {
       "error": null,
       "name": "lean_diagnostic_extraction",
       "order": 7,
-      "seconds": 0.0005776549223810434,
+      "seconds": 0.0005854768678545952,
       "status": "passed"
     },
     {
       "error": null,
       "name": "train_difficulty",
       "order": 8,
-      "seconds": 2.4860537629574537,
+      "seconds": 2.49751212913543,
       "status": "passed"
     },
     {
       "error": null,
       "name": "embed",
       "order": 9,
-      "seconds": 165.1951570729725,
+      "seconds": 148.68840552284382,
       "status": "passed"
     },
     {
       "error": null,
       "name": "build_index",
       "order": 10,
-      "seconds": 9.96201573102735,
+      "seconds": 9.862189017934725,
       "status": "passed"
     },
     {
       "error": null,
       "name": "benchmark_index",
       "order": 11,
-      "seconds": 11.378119841916487,
+      "seconds": 11.37408624496311,
       "status": "passed"
     },
     {
       "error": null,
       "name": "augment_graph",
       "order": 12,
-      "seconds": 51.26403219019994,
+      "seconds": 50.88269817898981,
       "status": "passed"
     },
     {
       "error": null,
       "name": "train_ranker",
       "order": 13,
-      "seconds": 16.95613070204854,
+      "seconds": 17.05100686312653,
       "status": "passed"
     },
     {
       "error": null,
       "name": "evaluate",
       "order": 14,
-      "seconds": 19.271771902916953,
+      "seconds": 19.468068956863135,
       "status": "passed"
     },
     {
       "error": null,
       "name": "validate",
       "order": 15,
-      "seconds": 38.20335593610071,
+      "seconds": 38.67154646711424,
       "status": "passed"
     },
     {
       "error": null,
       "name": "homepage",
       "order": 16,
-      "seconds": 5.599593785824254,
+      "seconds": 5.433471518103033,
       "status": "passed"
     },
     {
       "error": null,
       "name": "deployment_security",
       "order": 17,
-      "seconds": 0.0006498231086879969,
+      "seconds": 0.0006362120620906353,
       "status": "passed"
     },
     {
       "error": null,
       "name": "pipeline_profile",
       "order": 18,
-      "seconds": 9.66741334903054,
+      "seconds": 9.452940028859302,
       "status": "passed"
     },
     {
       "error": null,
       "name": "experiment_report",
       "order": 19,
-      "seconds": 0.008500199066475034,
+      "seconds": 0.008639909094199538,
       "status": "passed"
     },
     {
       "error": null,
       "name": "audit",
       "order": 20,
-      "seconds": 0.30546658812090755,
+      "seconds": 0.27479269402101636,
       "status": "passed"
     }
   ],
-  "total_seconds": 531.3366821501404
+  "total_seconds": 499.3380202429835
 }

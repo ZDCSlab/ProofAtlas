@@ -11,6 +11,15 @@ def _name_similarity(left: str, right: str) -> float:
     return SequenceMatcher(None, str(left), str(right)).ratio()
 
 
+def _name_similarity_if_can_improve(left: str, right: str, minimum_required: float) -> float | None:
+    matcher = SequenceMatcher(None, str(left), str(right))
+    if matcher.real_quick_ratio() < minimum_required:
+        return None
+    if matcher.quick_ratio() < minimum_required:
+        return None
+    return matcher.ratio()
+
+
 def _premise_records_by_proof_state(rows: pd.DataFrame) -> dict[str, list[tuple[str, str, str]]]:
     if rows.empty:
         return {}
@@ -40,12 +49,18 @@ def _negative_hardness(pos_rows: pd.DataFrame, neg_rows: pd.DataFrame) -> pd.Ser
             for pos_name, pos_namespace, pos_domain in positives:
                 namespace_match = float(neg_namespace == pos_namespace)
                 domain_match = float(neg_domain == pos_domain)
+                base_score = 0.45 * namespace_match + 0.25 * domain_match
+                if base_score + 0.30 <= best:
+                    continue
                 cache_key = (neg_name, pos_name)
                 name_sim = similarity_cache.get(cache_key)
                 if name_sim is None:
-                    name_sim = _name_similarity(neg_name, pos_name)
+                    required_name_similarity = max((best - base_score) / 0.30, 0.0)
+                    name_sim = _name_similarity_if_can_improve(neg_name, pos_name, required_name_similarity)
+                    if name_sim is None:
+                        continue
                     similarity_cache[cache_key] = name_sim
-                best = max(best, 0.45 * namespace_match + 0.25 * domain_match + 0.30 * name_sim)
+                best = max(best, base_score + 0.30 * name_sim)
                 if best >= 1.0:
                     break
             neg_scores.append(best)

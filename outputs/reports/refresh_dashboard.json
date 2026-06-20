@@ -236,24 +236,24 @@
   "index_benchmark": {
     "premise": {
       "backend": "hnswlib",
-      "exact_ms_per_query": 69.56563513958827,
+      "exact_ms_per_query": 69.19121138984337,
       "indexed_available": true,
-      "indexed_ms_per_query": 3.6666504805907607,
-      "recall_vs_exact": 0.9880000000000001
+      "indexed_ms_per_query": 3.682160989847034,
+      "recall_vs_exact": 0.993
     },
     "proof_state": {
       "backend": "hnswlib",
-      "exact_ms_per_query": 12.738042881246656,
+      "exact_ms_per_query": 12.8202082705684,
       "indexed_available": true,
-      "indexed_ms_per_query": 0.8144616312347353,
-      "recall_vs_exact": 0.9510000000000002
+      "indexed_ms_per_query": 0.8266799803823233,
+      "recall_vs_exact": 0.9500000000000002
     },
     "theorem": {
       "backend": "hnswlib",
-      "exact_ms_per_query": 4.1005922900512815,
+      "exact_ms_per_query": 4.0994407795369625,
       "indexed_available": true,
-      "indexed_ms_per_query": 0.23558327928185463,
-      "recall_vs_exact": 0.9910000000000001
+      "indexed_ms_per_query": 0.24234733078628778,
+      "recall_vs_exact": 0.996
     }
   },
   "parsing": {
