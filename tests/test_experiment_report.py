@@ -118,6 +118,26 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
         },
     )
     write_json(
+        "outputs/reports/index_benchmark.json",
+        {
+            "entities": {
+                "premise": {
+                    "backend": "hnswlib",
+                    "rows": 1000,
+                    "exact_ms_per_query": 12.0,
+                    "indexed_ms_per_query": 1.0,
+                    "speedup_vs_exact": 12.0,
+                    "recall_at_1_vs_exact": 0.9,
+                    "recall_at_5_vs_exact": 0.95,
+                    "recall_at_10_vs_exact": 0.98,
+                    "top1_match_at_10_vs_exact": 0.9,
+                    "index_build_seconds": 2.0,
+                    "indexed_total_seconds": 0.1,
+                }
+            }
+        },
+    )
+    write_json(
         "outputs/reports/pipeline_run_timings.json",
         {
             "config_hash": config_hash,
@@ -163,5 +183,9 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "Scale estimate reliable" in text
     assert "LeanRank premise supervision ready" in text
     assert "Total embedding rows" in text
+    assert "ANN Index Benchmark" in text
+    assert "Recall@1 vs exact" in text
+    assert "Top1 match@10" in text
+    assert "Indexed total seconds" in text
     assert "Mean index speedup vs exact" in text
     assert "Estimated seconds at requested source rows" in text

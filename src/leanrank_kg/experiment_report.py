@@ -105,6 +105,37 @@ def _zero_recall_domain_table(profile: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def _index_benchmark_table(bench_entities: dict[str, Any]) -> str:
+    lines = [
+        "| Entity | Backend | Rows | Exact ms/query | Indexed ms/query | Speedup | Recall@1 vs exact | Recall@5 vs exact | Recall@10 vs exact | Top1 match@10 | Build seconds | Indexed total seconds |",
+        "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+    ]
+    for entity, row in sorted(bench_entities.items()):
+        lines.append(
+            "| "
+            + " | ".join(
+                [
+                    str(entity),
+                    _fmt(row.get("backend")),
+                    _fmt(row.get("rows")),
+                    _fmt(row.get("exact_ms_per_query")),
+                    _fmt(row.get("indexed_ms_per_query")),
+                    _fmt(row.get("speedup_vs_exact")),
+                    _fmt(row.get("recall_at_1_vs_exact")),
+                    _fmt(row.get("recall_at_5_vs_exact")),
+                    _fmt(row.get("recall_at_10_vs_exact") or row.get("recall_vs_exact")),
+                    _fmt(row.get("top1_match_at_10_vs_exact")),
+                    _fmt(row.get("index_build_seconds")),
+                    _fmt(row.get("indexed_total_seconds")),
+                ]
+            )
+            + " |"
+        )
+    if len(lines) == 2:
+        lines.append("| n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |")
+    return "\n".join(lines)
+
+
 def _split_counts(manifest: dict[str, Any]) -> str:
     counts = manifest.get("split_counts", {}) if isinstance(manifest, dict) else {}
     if not counts:
@@ -387,31 +418,12 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
         "",
         _metric_table(validation_theorem_metrics, theorem_keys),
         "",
-        "## Index Benchmark",
+        "## ANN Index Benchmark",
         "",
-        "| Entity | Backend | Rows | Exact ms/query | Indexed ms/query | Speedup | Recall vs exact |",
-        "| --- | --- | ---: | ---: | ---: | ---: | ---: |",
+        "This benchmark compares the saved nearest-neighbor index against exact cosine search on sampled train queries. It measures whether the ANN backend is fast enough for interactive retrieval while preserving the exact top-k neighborhood used by the embedding candidate generator.",
+        "",
+        _index_benchmark_table(bench_entities),
     ]
-    for entity, row in sorted(bench_entities.items()):
-        top_k = row.get("top_k")
-        recall_key = f"recall_at_{top_k}_vs_exact" if top_k else ""
-        lines.append(
-            "| "
-            + " | ".join(
-                [
-                    str(entity),
-                    _fmt(row.get("backend")),
-                    _fmt(row.get("rows")),
-                    _fmt(row.get("exact_ms_per_query")),
-                    _fmt(row.get("indexed_ms_per_query")),
-                    _fmt(row.get("speedup_vs_exact")),
-                    _fmt(row.get(recall_key)),
-                ]
-            )
-            + " |"
-        )
-    if not bench_entities:
-        lines.append("| n/a | n/a | n/a | n/a | n/a | n/a | n/a |")
 
     current_trace = premise_trace.get("current_artifact_supervision", {}) if isinstance(premise_trace, dict) else {}
     train_trace = premise_trace.get("splits", {}).get("train", {}) if isinstance(premise_trace, dict) else {}

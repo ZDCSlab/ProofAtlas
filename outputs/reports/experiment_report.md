@@ -349,13 +349,15 @@ Validation metrics are reported for model selection and sanity checking; final c
 | `theorem_retrieval_MAP` | 0.3949 |
 | `theorem_retrieval_nDCG@10` | 0.4626 |
 
-## Index Benchmark
+## ANN Index Benchmark
 
-| Entity | Backend | Rows | Exact ms/query | Indexed ms/query | Speedup | Recall vs exact |
-| --- | --- | ---: | ---: | ---: | ---: | ---: |
-| premise | hnswlib | 127561 | 69.2717 | 3.4585 | 20.0292 | 0.9930 |
-| proof_state | hnswlib | 23723 | 12.7351 | 0.8292 | 15.3578 | 0.9640 |
-| theorem | hnswlib | 8000 | 4.2275 | 0.2369 | 17.8457 | 0.9930 |
+This benchmark compares the saved nearest-neighbor index against exact cosine search on sampled train queries. It measures whether the ANN backend is fast enough for interactive retrieval while preserving the exact top-k neighborhood used by the embedding candidate generator.
+
+| Entity | Backend | Rows | Exact ms/query | Indexed ms/query | Speedup | Recall@1 vs exact | Recall@5 vs exact | Recall@10 vs exact | Top1 match@10 | Build seconds | Indexed total seconds |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| premise | hnswlib | 127561 | 69.2717 | 3.4585 | 20.0292 | 0.9900 | 0.9960 | 0.9930 | 0.9900 | 3.7882 | 0.3459 |
+| proof_state | hnswlib | 23723 | 12.7351 | 0.8292 | 15.3578 | 0.7900 | 0.9600 | 0.9640 | 0.7900 | 0.4042 | 0.0829 |
+| theorem | hnswlib | 8000 | 4.2275 | 0.2369 | 17.8457 | 0.9900 | 0.9900 | 0.9930 | 0.9900 | 0.1338 | 0.0237 |
 
 ## Premise Trace Supervision
 
