@@ -303,6 +303,11 @@ def _production_evidence(
     proof_failure = test_eval.get("proof_state_retrieval", {}).get("failure_profile", {})
     theorem_failure = test_eval.get("theorem_retrieval", {}).get("failure_profile", {})
     reranked_failure = test_eval.get("proof_state_reranked_retrieval", {}).get("failure_profile", {})
+    failure_diagnosis = {
+        "proof_state": _failure_diagnosis(proof_failure),
+        "theorem": _failure_diagnosis(theorem_failure),
+        "reranked_proof_state": _failure_diagnosis(reranked_failure),
+    }
     return {
         "heldout": {
             "proof_state_evaluated_queries": metrics.get("test_proof_state_evaluated_queries"),
@@ -342,8 +347,63 @@ def _production_evidence(
             "theorem": theorem_failure,
             "reranked_proof_state": reranked_failure,
         },
+        "failure_diagnosis": failure_diagnosis,
         "rapid_convergence": rapid_convergence,
         "refresh_reuse": refresh_reuse,
+    }
+
+
+def _failure_diagnosis(profile: dict[str, Any]) -> dict[str, Any]:
+    if not isinstance(profile, dict):
+        return {}
+    rank_buckets = profile.get("rank_buckets", {}) if isinstance(profile.get("rank_buckets", {}), dict) else {}
+    evaluated = profile.get("evaluated_queries", 0) or 0
+    retrievable = profile.get("retrievable_queries", 0) or 0
+    max_k = profile.get("max_k", 100) or 100
+    top10_hit = sum(int(rank_buckets.get(key, 0) or 0) for key in ["rank_1", "rank_2_to_5", "rank_6_to_10"])
+    after_top10 = sum(int(rank_buckets.get(key, 0) or 0) for key in ["rank_11_to_50", "rank_51_to_100"])
+    no_train_gold = int(rank_buckets.get("no_train_gold", 0) or profile.get("queries_without_train_gold", 0) or 0)
+    candidate_miss = int(rank_buckets.get(f"miss_top_{max_k}", 0) or profile.get("zero_recall_at_max_k", 0) or 0)
+    partial_train_gold_coverage = max(0, int(profile.get("queries_with_missing_gold", 0) or 0) - no_train_gold)
+
+    def share(count: int, total: Any) -> float | None:
+        try:
+            denominator = float(total)
+        except (TypeError, ValueError):
+            return None
+        if denominator <= 0:
+            return None
+        return float(count) / denominator
+
+    return {
+        "max_k": max_k,
+        "evaluated_queries": evaluated,
+        "retrievable_queries": retrievable,
+        "no_train_gold": {
+            "queries": no_train_gold,
+            "share_of_evaluated": share(no_train_gold, evaluated),
+            "share_of_retrievable": share(no_train_gold, retrievable),
+        },
+        "partial_train_gold_coverage": {
+            "queries": partial_train_gold_coverage,
+            "share_of_evaluated": share(partial_train_gold_coverage, evaluated),
+            "share_of_retrievable": share(partial_train_gold_coverage, retrievable),
+        },
+        f"candidate_pool_miss_top_{max_k}": {
+            "queries": candidate_miss,
+            "share_of_evaluated": share(candidate_miss, evaluated),
+            "share_of_retrievable": share(candidate_miss, retrievable),
+        },
+        "reranking_headroom_after_top10": {
+            "queries": after_top10,
+            "share_of_evaluated": share(after_top10, evaluated),
+            "share_of_retrievable": share(after_top10, retrievable),
+        },
+        "top10_hit": {
+            "queries": top10_hit,
+            "share_of_evaluated": share(top10_hit, evaluated),
+            "share_of_retrievable": share(top10_hit, retrievable),
+        },
     }
 
 

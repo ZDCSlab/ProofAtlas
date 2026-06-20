@@ -300,12 +300,23 @@ HTML = """<!doctype html>
     {% set proof_failure = failure_profile.proof_state|default({}) %}
     {% set theorem_failure = failure_profile.theorem|default({}) %}
     {% set reranked_failure = failure_profile.reranked_proof_state|default({}) %}
+    {% set failure_diagnosis = production_evidence.failure_diagnosis|default({}) %}
+    {% set proof_diagnosis = failure_diagnosis.proof_state|default({}) %}
+    {% set theorem_diagnosis = failure_diagnosis.theorem|default({}) %}
+    {% set proof_candidate_miss = proof_diagnosis.get("candidate_pool_miss_top_" ~ (proof_diagnosis.max_k|default(100)|string), {}) %}
+    {% set theorem_candidate_miss = theorem_diagnosis.get("candidate_pool_miss_top_" ~ (theorem_diagnosis.max_k|default(100)|string), {}) %}
+    {% set proof_rerank_headroom = proof_diagnosis.reranking_headroom_after_top10|default({}) %}
+    {% set theorem_rerank_headroom = theorem_diagnosis.reranking_headroom_after_top10|default({}) %}
     <h3 style="margin-top:16px">Retrieval Failure Profile</h3>
     <div class="status-row">
       <div class="status warn"><div class="label">Proof-state miss top {{ proof_failure.max_k|default(100) }}</div><div class="value">{{ "{:,}".format(proof_failure.zero_recall_at_max_k|default(0) or 0) }}</div><div class="note">{{ "{:,}".format(proof_failure.retrievable_queries|default(0) or 0) }} retrievable proof-state queries</div></div>
       <div class="status"><div class="label">Proof-state no train gold</div><div class="value">{{ "{:,}".format(proof_failure.queries_without_train_gold|default(0) or 0) }}</div><div class="note">held-out queries with no train-side gold premise</div></div>
       <div class="status ok"><div class="label">Theorem miss top {{ theorem_failure.max_k|default(100) }}</div><div class="value">{{ "{:,}".format(theorem_failure.zero_recall_at_max_k|default(0) or 0) }}</div><div class="note">{{ "{:,}".format(theorem_failure.retrievable_queries|default(0) or 0) }} retrievable theorem queries</div></div>
       <div class="status"><div class="label">Rerank miss top {{ reranked_failure.max_k|default(10) }}</div><div class="value">{{ "{:,}".format(reranked_failure.zero_recall_at_max_k|default(0) or 0) }}</div><div class="note">homepage/API-style diagnostic queries</div></div>
+      <div class="status warn"><div class="label">Proof-state candidate miss</div><div class="value">{{ "{:,}".format(proof_candidate_miss.queries|default(0) or 0) }}</div><div class="note">{{ "%.1f"|format((proof_candidate_miss.share_of_retrievable|default(0) or 0) * 100) }}% of retrievable queries miss top {{ proof_diagnosis.max_k|default(100) }}</div></div>
+      <div class="status"><div class="label">Proof-state rerank headroom</div><div class="value">{{ "{:,}".format(proof_rerank_headroom.queries|default(0) or 0) }}</div><div class="note">gold premise appears after rank 10</div></div>
+      <div class="status ok"><div class="label">Theorem candidate miss</div><div class="value">{{ "{:,}".format(theorem_candidate_miss.queries|default(0) or 0) }}</div><div class="note">{{ "%.1f"|format((theorem_candidate_miss.share_of_retrievable|default(0) or 0) * 100) }}% of retrievable theorem queries</div></div>
+      <div class="status"><div class="label">Theorem rerank headroom</div><div class="value">{{ "{:,}".format(theorem_rerank_headroom.queries|default(0) or 0) }}</div><div class="note">ordering headroom inside candidate pool</div></div>
     </div>
     {% set zero_domains = proof_failure.zero_recall_domains|default([]) %}
     {% if zero_domains %}

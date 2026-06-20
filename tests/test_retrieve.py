@@ -374,6 +374,9 @@ def test_text_query_retrieval_and_theorem_guidance_are_json_serializable(tmp_pat
     assert "evaluation_timing_delta" in homepage_summary["production_evidence"]["timing"]
     assert homepage_summary["production_evidence"]["failure_profile"]["proof_state"]["rank_buckets"]
     assert homepage_summary["production_evidence"]["failure_profile"]["theorem"]["gold_coverage_buckets"]
+    assert "failure_diagnosis" in homepage_summary["production_evidence"]
+    assert "candidate_pool_miss_top_100" in homepage_summary["production_evidence"]["failure_diagnosis"]["proof_state"]
+    assert "reranking_headroom_after_top10" in homepage_summary["production_evidence"]["failure_diagnosis"]["theorem"]
     assert corpus_manifest["data_supervision"]["kind"] == "synthetic_demo_rows"
     assert "trend" in refresh_dashboard
     assert "deltas" in refresh_trend
@@ -441,6 +444,10 @@ def test_text_query_retrieval_and_theorem_guidance_are_json_serializable(tmp_pat
     assert "Rapid Convergence Priorities" in html
     assert "proof_state_query_and_embedding" in html
     assert "Proof-state top-100 miss" in html
+    assert "Proof-state candidate miss" in html
+    assert "Proof-state rerank headroom" in html
+    assert "Theorem candidate miss" in html
+    assert "Theorem rerank headroom" in html
     if homepage_summary["production_evidence"]["timing"]["evaluation_timing"].get("slowest_substages"):
         assert "Evaluation bottleneck" in html
     assert "Top-3 timed stages" in html

@@ -343,12 +343,23 @@
 
 
 
+
+
+
+
+
+
+
     <h3 style="margin-top:16px">Retrieval Failure Profile</h3>
     <div class="status-row">
       <div class="status warn"><div class="label">Proof-state miss top 100</div><div class="value">1,823</div><div class="note">2,832 retrievable proof-state queries</div></div>
       <div class="status"><div class="label">Proof-state no train gold</div><div class="value">221</div><div class="note">held-out queries with no train-side gold premise</div></div>
       <div class="status ok"><div class="label">Theorem miss top 100</div><div class="value">55</div><div class="note">955 retrievable theorem queries</div></div>
       <div class="status"><div class="label">Rerank miss top 10</div><div class="value">13</div><div class="note">homepage/API-style diagnostic queries</div></div>
+      <div class="status warn"><div class="label">Proof-state candidate miss</div><div class="value">1,823</div><div class="note">64.4% of retrievable queries miss top 100</div></div>
+      <div class="status"><div class="label">Proof-state rerank headroom</div><div class="value">458</div><div class="note">gold premise appears after rank 10</div></div>
+      <div class="status ok"><div class="label">Theorem candidate miss</div><div class="value">55</div><div class="note">5.8% of retrievable theorem queries</div></div>
+      <div class="status"><div class="label">Theorem rerank headroom</div><div class="value">133</div><div class="note">ordering headroom inside candidate pool</div></div>
     </div>
 
 
