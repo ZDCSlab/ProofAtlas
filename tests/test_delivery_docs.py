@@ -343,8 +343,12 @@ def test_readme_premise_supervision_snapshot_matches_committed_artifacts() -> No
     repo = Path(__file__).resolve().parents[1]
     readme = (repo / "README.md").read_text(encoding="utf-8")
     supervision = json.loads((repo / "outputs/reports/premise_trace_supervision_report.json").read_text(encoding="utf-8"))
+    ranker = json.loads((repo / "outputs/reports/ranker_validation_metrics.json").read_text(encoding="utf-8"))
     current = supervision["current_artifact_supervision"]
     train = supervision["splits"]["train"]
+    utilization = ranker["training_pair_utilization"]
+    training_sample = utilization["training_sample_counts"]
+    hardness_feature = utilization["hardness_feature"]
 
     assert _readme_artifact_field(readme, "Premise supervision", "total positive edges") == str(current["total_positive_edges"])
     assert _readme_artifact_field(readme, "Premise supervision", "total negative candidates") == str(current["total_negative_edges"])
@@ -355,12 +359,17 @@ def test_readme_premise_supervision_snapshot_matches_committed_artifacts() -> No
     quality = train["hard_negative_quality_profile"]
     assert _readme_artifact_field(readme, "Train hard negatives", "high-hardness rows") == str(quality["high_hardness_negative_candidate_rows"])
     assert _readme_artifact_field(readme, "Train hard negatives", "high-hardness row share") == f"{float(quality['high_hardness_negative_candidate_share']):.4f}"
+    assert _readme_artifact_field(readme, "Ranker training sample", "positive pairs") == str(training_sample["positive"])
+    assert _readme_artifact_field(readme, "Ranker training sample", "hard negative pairs") == str(training_sample["hard_negative"])
+    assert _readme_artifact_field(readme, "Ranker training sample", "hard-negative/positive ratio") == f"{float(training_sample['hard_negative_to_positive_ratio']):.4f}"
+    assert _readme_artifact_field(readme, "Ranker hardness feature", "hard-negative nonzero share") == f"{float(hardness_feature['negative_pair_nonzero_share']):.4f}"
 
 
 def test_delivery_audit_premise_supervision_snapshot_matches_committed_artifacts() -> None:
     repo = Path(__file__).resolve().parents[1]
     audit = (repo / "docs/proofatlas_delivery_audit.md").read_text(encoding="utf-8")
     supervision = json.loads((repo / "outputs/reports/premise_trace_supervision_report.json").read_text(encoding="utf-8"))
+    ranker = json.loads((repo / "outputs/reports/ranker_validation_metrics.json").read_text(encoding="utf-8"))
     current = supervision["current_artifact_supervision"]
     conflicts = supervision["normalization_label_conflicts"]
     cells = _readme_table_row(audit, "Premise positive/negative supervision")
@@ -370,6 +379,11 @@ def test_delivery_audit_premise_supervision_snapshot_matches_committed_artifacts
     assert f"positive/negative overlap removed: {int(conflicts['total_positive_negative_overlap_removed']):,}" in cells[1]
     quality = supervision["splits"]["train"]["hard_negative_quality_profile"]
     assert f"{int(quality['high_hardness_negative_candidate_rows']):,} high-hardness rows" in cells[1]
+    training_sample = ranker["training_pair_utilization"]["training_sample_counts"]
+    hardness_feature = ranker["training_pair_utilization"]["hardness_feature"]
+    assert f"ranker training sample uses {int(training_sample['positive']):,} positive pairs" in cells[1]
+    assert f"{int(training_sample['hard_negative']):,} hard-negative pairs" in cells[1]
+    assert f"{float(hardness_feature['negative_pair_nonzero_share']):.1%} nonzero hard-negative hardness coverage" in cells[1]
     assert cells[2] == "Delivered"
 
 

@@ -582,6 +582,9 @@ def build_audit() -> dict[str, Any]:
         lambda data: (
             bool(data.get("feature_columns"))
             and bool(data.get("feature_groups"))
+            and data.get("training_pair_utilization", {}).get("training_sample_counts", {}).get("positive", 0) > 0
+            and data.get("training_pair_utilization", {}).get("training_sample_counts", {}).get("hard_negative", 0) > 0
+            and data.get("training_pair_utilization", {}).get("hardness_feature", {}).get("negative_pair_nonzero_share", 0.0) >= 0.0
             and (
                 "feature_ablation" not in data
                 or {"embedding_similarity", "namespace_domain", "proof_technique", "difficulty", "frequency", "symbol_overlap", "graph", "theorem_neighborhood"}
@@ -591,6 +594,7 @@ def build_audit() -> dict[str, Any]:
                 "validation_auc": data.get("validation_auc"),
                 "groups": sorted(data.get("feature_groups", {}).keys()),
                 "has_ablation": "feature_ablation" in data,
+                "training_pair_utilization": data.get("training_pair_utilization"),
             },
         ),
         "ranker_ablation={detail}",

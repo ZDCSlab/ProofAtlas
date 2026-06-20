@@ -485,6 +485,22 @@ Hardness buckets are derived from the normalized positive/negative premise featu
 | `medium` | 8470 | 255623 | 0.4819 | 0.6249 |
 | `high` | 7002 | 128855 | 0.2429 | 0.8474 |
 
+### Ranker Training Pair Utilization
+
+This profile verifies that the learned premise ranker uses normalized LeanRank-data positive premise edges and hard-negative candidate edges directly, rather than relying only on theorem text similarity.
+
+- Positive label source: `data/processed/train/positive_edges.parquet label=1`
+- Hard-negative label source: `data/processed/train/negative_edges.parquet label=0`
+- Raw train positive pairs: `54897`
+- Raw train hard-negative pairs: `530413`
+- Training sample positive pairs: `1000`
+- Training sample hard-negative pairs: `1000`
+- Training hard-negative/positive ratio: `1.0`
+- Hardness feature column: `negative_candidate_hardness`
+- Hard-negative pairs with nonzero hardness: `1000`
+- Hard-negative nonzero hardness share: `1.0`
+- Hard-negative mean hardness in ranker sample: `0.5864086124738412`
+
 ## Pipeline Timing
 
 - Total seconds: `551.6510627849493`

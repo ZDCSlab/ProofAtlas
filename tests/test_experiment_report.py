@@ -382,6 +382,30 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
         },
     )
     write_json(
+        "outputs/reports/ranker_validation_metrics.json",
+        {
+            "training_pair_utilization": {
+                "label_source": {
+                    "positive_pairs": "data/processed/train/positive_edges.parquet label=1",
+                    "hard_negative_pairs": "data/processed/train/negative_edges.parquet label=0",
+                },
+                "raw_pair_counts": {"positive": 100, "hard_negative": 900, "total": 1000},
+                "training_sample_counts": {
+                    "positive": 100,
+                    "hard_negative": 900,
+                    "total": 1000,
+                    "hard_negative_to_positive_ratio": 9.0,
+                },
+                "hardness_feature": {
+                    "column": "negative_candidate_hardness",
+                    "negative_pair_nonzero_count": 850,
+                    "negative_pair_nonzero_share": 0.9444,
+                    "negative_pair_mean_hardness": 0.62,
+                },
+            }
+        },
+    )
+    write_json(
         "outputs/reports/index_benchmark.json",
         {
             "entities": {
@@ -507,5 +531,9 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "linear_projection_from_current_timed_pipeline" in text
     assert "current_2x" in text
     assert "Hard-Negative Quality Profile" in text
+    assert "Ranker Training Pair Utilization" in text
+    assert "data/processed/train/negative_edges.parquet label=0" in text
+    assert "Training hard-negative/positive ratio: `9.0`" in text
+    assert "Hard-negative pairs with nonzero hardness: `850`" in text
     assert "Train high-hardness negative rows" in text
     assert "high" in text

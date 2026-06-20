@@ -154,10 +154,60 @@ def _ablation_report(train: pd.DataFrame, validation: pd.DataFrame) -> dict:
     }
 
 
+def _pair_utilization_profile(raw_pairs: pd.DataFrame, train_features: pd.DataFrame) -> dict:
+    raw_label_counts = raw_pairs["label"].value_counts().to_dict() if "label" in raw_pairs else {}
+    train_label_counts = train_features["label"].value_counts().to_dict() if "label" in train_features else {}
+    positive_pairs = int(train_label_counts.get(1, 0))
+    negative_pairs = int(train_label_counts.get(0, 0))
+    hardness = (
+        train_features.get("negative_candidate_hardness", pd.Series(dtype=float))
+        .fillna(0.0)
+        .astype(float)
+        .clip(0.0, 1.0)
+        if not train_features.empty
+        else pd.Series(dtype=float)
+    )
+    negative_mask = train_features["label"].eq(0) if "label" in train_features else pd.Series(dtype=bool)
+    negative_hardness = hardness[negative_mask] if len(hardness) else pd.Series(dtype=float)
+    feature_columns = [col for col in train_features.columns if col != "label"]
+    nonzero_rates = {
+        col: float((train_features[col].fillna(0.0).astype(float) != 0.0).mean())
+        for col in feature_columns
+        if col in train_features
+    }
+    return {
+        "label_source": {
+            "positive_pairs": "data/processed/train/positive_edges.parquet label=1",
+            "hard_negative_pairs": "data/processed/train/negative_edges.parquet label=0",
+        },
+        "raw_pair_counts": {
+            "positive": int(raw_label_counts.get(1, 0)),
+            "hard_negative": int(raw_label_counts.get(0, 0)),
+            "total": int(len(raw_pairs)),
+        },
+        "training_sample_counts": {
+            "positive": positive_pairs,
+            "hard_negative": negative_pairs,
+            "total": int(len(train_features)),
+            "hard_negative_to_positive_ratio": float(negative_pairs / max(1, positive_pairs)),
+        },
+        "hardness_feature": {
+            "column": "negative_candidate_hardness",
+            "all_pair_nonzero_count": int((hardness > 0.0).sum()) if len(hardness) else 0,
+            "all_pair_nonzero_share": float((hardness > 0.0).mean()) if len(hardness) else 0.0,
+            "negative_pair_nonzero_count": int((negative_hardness > 0.0).sum()) if len(negative_hardness) else 0,
+            "negative_pair_nonzero_share": float((negative_hardness > 0.0).mean()) if len(negative_hardness) else 0.0,
+            "negative_pair_mean_hardness": float(negative_hardness.mean()) if len(negative_hardness) else 0.0,
+        },
+        "feature_nonzero_rates": nonzero_rates,
+    }
+
+
 def run(config_path: str) -> None:
     Path("outputs/models").mkdir(parents=True, exist_ok=True)
     Path("outputs/reports").mkdir(parents=True, exist_ok=True)
-    train = _features(_pairs("train"), "train")
+    raw_train_pairs = _pairs("train")
+    train = _features(raw_train_pairs, "train")
     X = train.drop(columns=["label"])
     y = train["label"]
     model = LogisticRegression(max_iter=500).fit(X, y)
@@ -166,6 +216,7 @@ def run(config_path: str) -> None:
         "train_pairs": int(len(train)),
         "feature_columns": X.columns.tolist(),
         "feature_groups": FEATURE_GROUPS,
+        "training_pair_utilization": _pair_utilization_profile(raw_train_pairs, train),
     }
     try:
         val = _features(_pairs("val"), "val")

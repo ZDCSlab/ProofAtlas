@@ -811,7 +811,7 @@
       "path": "docs/proofatlas_project_summary_en.md"
     },
     "validation:ranker_ablation": {
-      "detail": "ranker_ablation={'validation_auc': 0.825379, 'groups': ['difficulty', 'embedding_similarity', 'frequency', 'graph', 'namespace_domain', 'proof_technique', 'symbol_overlap', 'theorem_neighborhood'], 'has_ablation': True}",
+      "detail": "ranker_ablation={'validation_auc': 0.825379, 'groups': ['difficulty', 'embedding_similarity', 'frequency', 'graph', 'namespace_domain', 'proof_technique', 'symbol_overlap', 'theorem_neighborhood'], 'has_ablation': True, 'training_pair_utilization': {'feature_nonzero_rates': {'cosine_similarity': 1.0, 'graph_premise_degree': 0.376, 'negative_candidate_hardness': 1.0, 'premise_frequency': 0.472, 'proof_state_difficulty': 1.0, 'proof_technique_overlap': 0.4605, 'same_domain': 0.3925, 'same_namespace': 0.179, 'symbol_context_overlap': 0.6075, 'symbol_name_overlap': 0.502, 'theorem_neighborhood_premise_score': 0.2295}, 'hardness_feature': {'all_pair_nonzero_count': 2000, 'all_pair_nonzero_share': 1.0, 'column': 'negative_candidate_hardness', 'negative_pair_mean_hardness': 0.5864086124738412, 'negative_pair_nonzero_count': 1000, 'negative_pair_nonzero_share': 1.0}, 'label_source': {'hard_negative_pairs': 'data/processed/train/negative_edges.parquet label=0', 'positive_pairs': 'data/processed/train/positive_edges.parquet label=1'}, 'raw_pair_counts': {'hard_negative': 530413, 'positive': 54897, 'total': 585310}, 'training_sample_counts': {'hard_negative': 1000, 'hard_negative_to_positive_ratio': 1.0, 'positive': 1000, 'total': 2000}}}",
       "passed": true,
       "path": "outputs/reports/ranker_validation_metrics.json"
     },

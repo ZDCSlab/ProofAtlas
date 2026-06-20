@@ -422,6 +422,7 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     pipeline = read_json("outputs/reports/pipeline_performance_report.json", {}) or {}
     benchmark = read_json("outputs/reports/index_benchmark.json", {}) or {}
     premise_trace = read_json("outputs/reports/premise_trace_supervision_report.json", {}) or {}
+    ranker_metrics = read_json("outputs/reports/ranker_validation_metrics.json", {}) or {}
     timings = read_json("outputs/reports/pipeline_run_timings.json", {}) or {}
     data_supervision = manifest.get("data_supervision", {}) if isinstance(manifest, dict) else {}
 
@@ -785,6 +786,11 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     train_trace = premise_trace.get("splits", {}).get("train", {}) if isinstance(premise_trace, dict) else {}
     hard_negative_quality = train_trace.get("hard_negative_quality_profile", {}) if isinstance(train_trace, dict) else {}
     label_conflicts = premise_trace.get("normalization_label_conflicts", {}) if isinstance(premise_trace, dict) else {}
+    ranker_utilization = ranker_metrics.get("training_pair_utilization", {}) if isinstance(ranker_metrics, dict) else {}
+    raw_pair_counts = ranker_utilization.get("raw_pair_counts", {}) if isinstance(ranker_utilization, dict) else {}
+    training_sample_counts = ranker_utilization.get("training_sample_counts", {}) if isinstance(ranker_utilization, dict) else {}
+    hardness_feature = ranker_utilization.get("hardness_feature", {}) if isinstance(ranker_utilization, dict) else {}
+    label_source = ranker_utilization.get("label_source", {}) if isinstance(ranker_utilization, dict) else {}
     lines.extend(
         [
             "",
@@ -812,6 +818,22 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
             "Hardness buckets are derived from the normalized positive/negative premise features. This table shows whether the train split contains enough non-trivial negative candidates for ranking and difficulty experiments.",
             "",
             _hard_negative_quality_table(hard_negative_quality),
+            "",
+            "### Ranker Training Pair Utilization",
+            "",
+            "This profile verifies that the learned premise ranker uses normalized LeanRank-data positive premise edges and hard-negative candidate edges directly, rather than relying only on theorem text similarity.",
+            "",
+            f"- Positive label source: `{label_source.get('positive_pairs', 'n/a')}`",
+            f"- Hard-negative label source: `{label_source.get('hard_negative_pairs', 'n/a')}`",
+            f"- Raw train positive pairs: `{raw_pair_counts.get('positive', 'n/a')}`",
+            f"- Raw train hard-negative pairs: `{raw_pair_counts.get('hard_negative', 'n/a')}`",
+            f"- Training sample positive pairs: `{training_sample_counts.get('positive', 'n/a')}`",
+            f"- Training sample hard-negative pairs: `{training_sample_counts.get('hard_negative', 'n/a')}`",
+            f"- Training hard-negative/positive ratio: `{training_sample_counts.get('hard_negative_to_positive_ratio', 'n/a')}`",
+            f"- Hardness feature column: `{hardness_feature.get('column', 'n/a')}`",
+            f"- Hard-negative pairs with nonzero hardness: `{hardness_feature.get('negative_pair_nonzero_count', 'n/a')}`",
+            f"- Hard-negative nonzero hardness share: `{hardness_feature.get('negative_pair_nonzero_share', 'n/a')}`",
+            f"- Hard-negative mean hardness in ranker sample: `{hardness_feature.get('negative_pair_mean_hardness', 'n/a')}`",
             "",
             "## Pipeline Timing",
             "",

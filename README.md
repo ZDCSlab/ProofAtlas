@@ -293,6 +293,10 @@ Current LeanRank-data premise supervision snapshot:
 | Train hard negatives | hardness mean | 0.6030 |
 | Train hard negatives | high-hardness rows | 128855 |
 | Train hard negatives | high-hardness row share | 0.2429 |
+| Ranker training sample | positive pairs | 1000 |
+| Ranker training sample | hard negative pairs | 1000 |
+| Ranker training sample | hard-negative/positive ratio | 1.0000 |
+| Ranker hardness feature | hard-negative nonzero share | 1.0000 |
 
 To refresh the production evaluation artifacts after changing retrieval code or config:
 

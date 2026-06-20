@@ -75,6 +75,16 @@ def test_ranker_writes_feature_ablation_report(tmp_path, monkeypatch):
     metrics = json.loads((tmp_path / "outputs/reports/ranker_validation_metrics.json").read_text(encoding="utf-8"))
     assert metrics["feature_columns"]
     assert "feature_groups" in metrics
+    utilization = metrics["training_pair_utilization"]
+    assert utilization["label_source"]["positive_pairs"].endswith("positive_edges.parquet label=1")
+    assert utilization["label_source"]["hard_negative_pairs"].endswith("negative_edges.parquet label=0")
+    assert utilization["raw_pair_counts"]["positive"] > 0
+    assert utilization["raw_pair_counts"]["hard_negative"] > 0
+    assert utilization["training_sample_counts"]["positive"] > 0
+    assert utilization["training_sample_counts"]["hard_negative"] > 0
+    assert utilization["training_sample_counts"]["hard_negative_to_positive_ratio"] > 0
+    assert utilization["hardness_feature"]["column"] == "negative_candidate_hardness"
+    assert "negative_candidate_hardness" in utilization["feature_nonzero_rates"]
     if "feature_ablation" in metrics:
         ablation = metrics["feature_ablation"]
         assert "full_auc" in ablation
