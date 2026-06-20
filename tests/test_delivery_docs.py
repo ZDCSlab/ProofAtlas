@@ -33,11 +33,16 @@ def test_readme_results_snapshot_matches_committed_metrics() -> None:
 def test_production_refresh_uses_configurable_pipeline_runner() -> None:
     repo = Path(__file__).resolve().parents[1]
     makefile = (repo / "Makefile").read_text(encoding="utf-8")
+    readme = (repo / "README.md").read_text(encoding="utf-8")
 
     assert "PIPELINE_RUN ?= conda run -n leanrank_kg" in makefile
     assert "VERIFY_RUN ?= $(PIPELINE_RUN)" in makefile
     assert "$(PIPELINE_RUN) leanrank-kg evaluate --config $(PRODUCTION_CONFIG)" in makefile
     assert "$(PIPELINE_RUN) leanrank-kg audit --config $(PRODUCTION_CONFIG)" in makefile
+    assert "refresh-production-timing:" in makefile
+    assert "$(PIPELINE_RUN) leanrank-kg full-pipeline --config $(PRODUCTION_CONFIG) --force" in makefile
+    assert '$(MAKE) refresh-production-report PRODUCTION_CONFIG=$(PRODUCTION_CONFIG) PIPELINE_RUN="$(PIPELINE_RUN)"' in makefile
+    assert "make refresh-production-timing" in readme
 
 
 def test_delivery_artifact_allowlist_includes_pipeline_timings() -> None:

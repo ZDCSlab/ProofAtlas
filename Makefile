@@ -1,4 +1,4 @@
-.PHONY: help install sample process build-graph label difficulty premise-trace-supervision train-difficulty embed build-index benchmark-index profile-pipeline security-review augment-graph train-ranker evaluate validate report experiment-report homepage audit refresh-production-report verify-delivery demo test smoke clean
+.PHONY: help install sample process build-graph label difficulty premise-trace-supervision train-difficulty embed build-index benchmark-index profile-pipeline security-review augment-graph train-ranker evaluate validate report experiment-report homepage audit refresh-production-report refresh-production-timing verify-delivery demo test smoke clean
 
 CONFIG ?= configs/sample.yaml
 PRODUCTION_CONFIG ?= configs/proofatlas.yaml
@@ -24,6 +24,7 @@ help:
 	@echo "  make homepage       Generate static homepage"
 	@echo "  make audit          Run MVP completion audit"
 	@echo "  make refresh-production-report Refresh proofatlas evaluation/report/homepage/audit"
+	@echo "  make refresh-production-timing Run forced production pipeline timing, then refresh reports"
 	@echo "  make verify-delivery Run tests, production audit, and diff whitespace check"
 	@echo "  make demo           Run full demo pipeline"
 	@echo "  make test           Run unit tests"
@@ -98,6 +99,10 @@ refresh-production-report:
 	$(PIPELINE_RUN) leanrank-kg build-experiment-report --config $(PRODUCTION_CONFIG)
 	$(PIPELINE_RUN) leanrank-kg build-homepage --config $(PRODUCTION_CONFIG)
 	$(PIPELINE_RUN) leanrank-kg audit --config $(PRODUCTION_CONFIG)
+
+refresh-production-timing:
+	$(PIPELINE_RUN) leanrank-kg full-pipeline --config $(PRODUCTION_CONFIG) --force
+	$(MAKE) refresh-production-report PRODUCTION_CONFIG=$(PRODUCTION_CONFIG) PIPELINE_RUN="$(PIPELINE_RUN)"
 
 verify-delivery:
 	$(VERIFY_RUN) pytest -q

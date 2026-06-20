@@ -177,6 +177,14 @@ make refresh-production-report
 This runs `evaluate`, `profile-pipeline`, `build-experiment-report`, `build-homepage`, and `audit` with `configs/proofatlas.yaml`. Override the production config with `make refresh-production-report PRODUCTION_CONFIG=<path>`.
 By default it executes Python commands through `conda run -n leanrank_kg`; override that with `make refresh-production-report PIPELINE_RUN=` if your environment is already activated.
 
+To refresh a reliable end-to-end production timing baseline for scale-up planning:
+
+```bash
+make refresh-production-timing
+```
+
+This runs `leanrank-kg full-pipeline --config configs/proofatlas.yaml --force`, then refreshes the evaluation report, homepage, and audit against the newly written timing artifact.
+
 To verify the delivery after refreshing artifacts:
 
 ```bash

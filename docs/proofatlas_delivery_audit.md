@@ -84,10 +84,12 @@ Most recent verified checks:
 
 ```bash
 make refresh-production-report
+make refresh-production-timing
 make verify-delivery
 ```
 
 `make refresh-production-report` is the standard production artifact refresh entrypoint. It runs evaluation, pipeline profiling, experiment-report generation, homepage generation, and audit with `configs/proofatlas.yaml`. By default it executes Python commands through `conda run -n leanrank_kg`; override `PIPELINE_RUN` if the environment is already activated.
+`make refresh-production-timing` runs a forced production `full-pipeline` first, then refreshes the reports from that timing artifact. Use it when the scale-up report needs reliable end-to-end timing instead of cached/partial timing diagnostics.
 `make verify-delivery` runs the unit tests, production audit, and `git diff --check`. By default `VERIFY_RUN` inherits `PIPELINE_RUN`; override either variable if the environment is already activated.
 
 Recent passing result:
