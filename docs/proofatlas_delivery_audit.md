@@ -82,18 +82,18 @@ From `outputs/reports/index_benchmark.json` and `outputs/reports/pipeline_perfor
 
 | Entity | Backend | Rows | Exact ms/query | Indexed ms/query | Speedup | Recall@10 vs exact |
 | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| Premise | hnswlib | 127,561 | 69.2519 | 3.5655 | 19.4229 | 0.9920 |
-| ProofState | hnswlib | 23,723 | 12.7368 | 0.7929 | 16.0639 | 0.9580 |
-| Theorem | hnswlib | 8,000 | 4.1551 | 0.2326 | 17.8604 | 0.9950 |
+| Premise | hnswlib | 127,561 | 69.5656 | 3.6667 | 18.9725 | 0.9880 |
+| ProofState | hnswlib | 23,723 | 12.7380 | 0.8145 | 15.6398 | 0.9510 |
+| Theorem | hnswlib | 8,000 | 4.1006 | 0.2356 | 17.4061 | 0.9910 |
 
 Pipeline bottleneck profile:
 
 | Stage group | Field | Value |
 | --- | --- | ---: |
 | Primary bottleneck | stage | embed |
-| Primary bottleneck | seconds | 147.9819 |
-| Primary bottleneck | share of total | 0.2645 |
-| Top-3 timed stages | share of total | 0.5239 |
+| Primary bottleneck | seconds | 165.1952 |
+| Primary bottleneck | share of total | 0.3109 |
+| Top-3 timed stages | share of total | 0.5618 |
 
 Performance acceptance gates:
 
@@ -107,10 +107,10 @@ Scale projection:
 
 | Projection | Target rows | Total seconds | Embed seconds | Index build seconds |
 | --- | ---: | ---: | ---: | ---: |
-| current_1x | 292012 | 559.3799 | 147.9819 | 6.3288 |
-| current_2x | 584024 | 1118.7599 | 295.9638 | 12.6575 |
-| current_5x | 1460060 | 2796.8997 | 739.9096 | 31.6438 |
-| configured_source_rows | 350000 | 670.4621 | 177.3683 | 7.5855 |
+| current_1x | 292012 | 531.3367 | 165.1952 | 6.4437 |
+| current_2x | 584024 | 1062.6734 | 330.3903 | 12.8874 |
+| current_5x | 1460060 | 2656.6834 | 825.9758 | 32.2186 |
+| configured_source_rows | 350000 | 636.8500 | 197.9998 | 7.7233 |
 
 Execution mode summary:
 
@@ -142,10 +142,10 @@ Do not retrain by default. Reuse embeddings, indexes, and trained models for rep
 
 Pipeline timing:
 
-- Total seconds: 559.3799
-- Saved full-pipeline evaluate stage: 19.4384 seconds
-- Current standalone full-heldout evaluation: 25.0483 seconds
-- Reranked proof-state diagnostic: 20 / 3053 sampled queries; projected full rerank 2218.7567 seconds; 2285.8903x batched seconds/query
+- Total seconds: 531.3367
+- Saved full-pipeline evaluate stage: 19.2718 seconds
+- Current standalone full-heldout evaluation: 24.5560 seconds
+- Reranked proof-state diagnostic: 20 / 3053 sampled queries; projected full rerank 2140.8339 seconds; 2260.5217x batched seconds/query
 - Timing freshness: current; full-pipeline evaluate timing and standalone evaluation timing are aligned.
 
 Pipeline scale profile:
@@ -157,8 +157,8 @@ Pipeline scale profile:
 - Embedding devices: `cuda:0` to `cuda:6`
 - Index backend: `hnswlib`
 - LeanRank premise supervision ready: true
-- Artifact storage: 2.8429 GiB total, 10,453.5996 bytes per processed row
-- Largest storage component: `outputs/indexes`, 2,295,002,116 bytes
+- Artifact storage: 2.8429 GiB total, 10,453.6054 bytes per processed row
+- Largest storage component: `outputs/indexes`, 2,295,002,858 bytes
 - Unreferenced index artifacts: 1,502,501,178 bytes (1.3993 GiB) not pointed to by current manifests
 - Projected storage at current_5x: 14.2147 GiB
 

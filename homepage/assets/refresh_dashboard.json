@@ -236,24 +236,24 @@
   "index_benchmark": {
     "premise": {
       "backend": "hnswlib",
-      "exact_ms_per_query": 69.25192232010886,
+      "exact_ms_per_query": 69.56563513958827,
       "indexed_available": true,
-      "indexed_ms_per_query": 3.5654752096161246,
-      "recall_vs_exact": 0.992
+      "indexed_ms_per_query": 3.6666504805907607,
+      "recall_vs_exact": 0.9880000000000001
     },
     "proof_state": {
       "backend": "hnswlib",
-      "exact_ms_per_query": 12.736848390195519,
+      "exact_ms_per_query": 12.738042881246656,
       "indexed_available": true,
-      "indexed_ms_per_query": 0.7928880886174738,
-      "recall_vs_exact": 0.9580000000000001
+      "indexed_ms_per_query": 0.8144616312347353,
+      "recall_vs_exact": 0.9510000000000002
     },
     "theorem": {
       "backend": "hnswlib",
-      "exact_ms_per_query": 4.155110749416053,
+      "exact_ms_per_query": 4.1005922900512815,
       "indexed_available": true,
-      "indexed_ms_per_query": 0.2326433709822595,
-      "recall_vs_exact": 0.995
+      "indexed_ms_per_query": 0.23558327928185463,
+      "recall_vs_exact": 0.9910000000000001
     }
   },
   "parsing": {
@@ -361,7 +361,7 @@
     "gold_premises_missing_from_train_index": 546,
     "premise_mrr": 0.07831169467619567,
     "premise_recall_at_10": 0.11624918291584951,
-    "ranker_auc": 0.82143108,
+    "ranker_auc": 0.8214308,
     "theorem_mrr": 0.5608535466914221,
     "theorem_ndcg_at_10": 0.4451927253442335,
     "theorem_recall_at_10": 0.49403129986534694

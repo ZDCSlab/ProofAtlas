@@ -147,7 +147,7 @@ Current production timing evidence:
 
 | Signal | Value |
 | --- | ---: |
-| Total timed pipeline run | 559.3799 seconds |
+| Total timed pipeline run | 531.3367 seconds |
 | Executed stages | 20 |
 | Skipped stages | 0 |
 | Throughput basis | executed_pipeline_run |

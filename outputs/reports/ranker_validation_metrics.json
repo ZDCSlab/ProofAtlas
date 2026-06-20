@@ -13,74 +13,74 @@
       "graph_premise_degree",
       "theorem_neighborhood_premise_score"
     ],
-    "full_auc": 0.82143108,
+    "full_auc": 0.8214308,
     "groups": {
       "difficulty": {
         "auc_group_only": 0.49623204,
-        "auc_without_group": 0.82171884,
+        "auc_without_group": 0.8217188,
         "columns": [
           "proof_state_difficulty",
           "negative_candidate_hardness"
         ],
-        "delta_without_group": -0.00028775999999997026
+        "delta_without_group": -0.00028799999999995496
       },
       "embedding_similarity": {
-        "auc_group_only": 0.5994637199999999,
+        "auc_group_only": 0.59946376,
         "auc_without_group": 0.8190852200000001,
         "columns": [
           "cosine_similarity"
         ],
-        "delta_without_group": 0.002345859999999922
+        "delta_without_group": 0.0023455799999999583
       },
       "frequency": {
         "auc_group_only": 0.78416494,
-        "auc_without_group": 0.78305392,
+        "auc_without_group": 0.78310064,
         "columns": [
           "premise_frequency"
         ],
-        "delta_without_group": 0.03837716000000002
+        "delta_without_group": 0.03833016
       },
       "graph": {
         "auc_group_only": 0.67965306,
-        "auc_without_group": 0.82545872,
+        "auc_without_group": 0.82545724,
         "columns": [
           "graph_premise_degree"
         ],
-        "delta_without_group": -0.004027639999999999
+        "delta_without_group": -0.0040264399999999645
       },
       "namespace_domain": {
         "auc_group_only": 0.51632808,
-        "auc_without_group": 0.81929388,
+        "auc_without_group": 0.8192940000000001,
         "columns": [
           "same_namespace",
           "same_domain"
         ],
-        "delta_without_group": 0.0021371999999999503
+        "delta_without_group": 0.0021367999999999387
       },
       "proof_technique": {
         "auc_group_only": 0.4953000000000001,
-        "auc_without_group": 0.82154812,
+        "auc_without_group": 0.8215481200000001,
         "columns": [
           "proof_technique_overlap"
         ],
-        "delta_without_group": -0.00011704000000001269
+        "delta_without_group": -0.00011732000000008735
       },
       "symbol_overlap": {
         "auc_group_only": 0.59927374,
-        "auc_without_group": 0.80776604,
+        "auc_without_group": 0.8077663599999998,
         "columns": [
           "symbol_name_overlap",
           "symbol_context_overlap"
         ],
-        "delta_without_group": 0.013665040000000017
+        "delta_without_group": 0.013664440000000222
       },
       "theorem_neighborhood": {
         "auc_group_only": 0.580964,
-        "auc_without_group": 0.81966988,
+        "auc_without_group": 0.81966984,
         "columns": [
           "theorem_neighborhood_premise_score"
         ],
-        "delta_without_group": 0.0017612000000000183
+        "delta_without_group": 0.0017609600000000336
       }
     }
   },
@@ -131,6 +131,13 @@
     "max_validation_pairs_per_label": 5000,
     "random_seed": 42
   },
+  "timing_profile": {
+    "feature_ablation_seconds": 0.4294309290125966,
+    "model_fit_seconds": 0.03789477702230215,
+    "total_seconds": 16.952010803157464,
+    "train_feature_seconds": 12.72693373518996,
+    "validation_feature_seconds": 3.6618118570186198
+  },
   "train_pairs": 20000,
   "training_pair_utilization": {
     "feature_nonzero_rates": {
@@ -170,6 +177,6 @@
       "total": 20000
     }
   },
-  "validation_auc": 0.82143108,
+  "validation_auc": 0.8214308,
   "validation_pairs": 10000
 }

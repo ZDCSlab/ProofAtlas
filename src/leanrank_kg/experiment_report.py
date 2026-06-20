@@ -874,6 +874,7 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     training_sample_counts = ranker_utilization.get("training_sample_counts", {}) if isinstance(ranker_utilization, dict) else {}
     hardness_feature = ranker_utilization.get("hardness_feature", {}) if isinstance(ranker_utilization, dict) else {}
     label_source = ranker_utilization.get("label_source", {}) if isinstance(ranker_utilization, dict) else {}
+    ranker_timing = ranker_metrics.get("timing_profile", {}) if isinstance(ranker_metrics, dict) else {}
     lines.extend(
         [
             "",
@@ -917,6 +918,11 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
             f"- Hard-negative pairs with nonzero hardness: `{hardness_feature.get('negative_pair_nonzero_count', 'n/a')}`",
             f"- Hard-negative nonzero hardness share: `{hardness_feature.get('negative_pair_nonzero_share', 'n/a')}`",
             f"- Hard-negative mean hardness in ranker sample: `{hardness_feature.get('negative_pair_mean_hardness', 'n/a')}`",
+            f"- Train feature construction seconds: `{ranker_timing.get('train_feature_seconds', 'n/a')}`",
+            f"- Validation feature construction seconds: `{ranker_timing.get('validation_feature_seconds', 'n/a')}`",
+            f"- Model fit seconds: `{ranker_timing.get('model_fit_seconds', 'n/a')}`",
+            f"- Feature ablation seconds: `{ranker_timing.get('feature_ablation_seconds', 'n/a')}`",
+            f"- Total ranker training seconds: `{ranker_timing.get('total_seconds', 'n/a')}`",
             "",
             "## Pipeline Timing",
             "",
