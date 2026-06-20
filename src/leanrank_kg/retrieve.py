@@ -1118,6 +1118,9 @@ def _lean_extraction_metadata(lean_diagnostics: dict[str, Any]) -> dict[str, Any
         "extracted_count": int(extraction.get("extracted_count", len(states)) or 0),
         "failure_reason": extraction.get("failure_reason"),
         "rejected_block_count": len(extraction.get("rejected_blocks") or []),
+        "source_variant": lean_diagnostics.get("source_variant"),
+        "fallback_attempted": lean_diagnostics.get("fallback_attempted", False),
+        "fallback_reason": lean_diagnostics.get("fallback_reason"),
     }
 
 
@@ -1156,6 +1159,9 @@ def retrieve_knowledge_for_theorem(
                 "rejected_blocks": [],
             },
             "summary": {"has_unsolved_goals": False},
+            "source_variant": "not_checked",
+            "fallback_attempted": False,
+            "fallback_reason": None,
         }
     )
     diagnostic_query_text = _diagnostic_proof_state_text(lean_diagnostics)

@@ -442,7 +442,7 @@
       <div class="kpi"><div class="label">Difficulty MAE</div><div class="value">0.039</div><div class="note">train estimator calibration</div></div>
       <div class="kpi"><div class="label">Trend baseline</div><div class="value">yes</div><div class="note">previous refresh snapshot</div></div>
       <div class="kpi"><div class="label">Theorem delta</div><div class="value">0</div><div class="note">change from previous dashboard</div></div>
-      <div class="kpi"><div class="label">Recall delta</div><div class="value">0.071</div><div class="note">theorem Recall@10 change</div></div>
+      <div class="kpi"><div class="label">Recall delta</div><div class="value">0.000</div><div class="note">theorem Recall@10 change</div></div>
       <div class="kpi"><div class="label">Gate changes</div><div class="value">0</div><div class="note">quality gates changed</div></div>
       <div class="kpi"><div class="label">History entries</div><div class="value">20</div><div class="note">bounded refresh trend history</div></div>
     </div>
@@ -1198,12 +1198,15 @@ function renderGuidance(data){
   const leanSummary = lean.summary || {};
   const source = query.retrieval_query_source || 'parsed_theorem_text';
   const extracted = query.lean_extracted_proof_state_count || 0;
+  const leanExtraction = query.lean_proof_state_extraction || {};
+  const leanVariant = leanExtraction.source_variant ? `; Lean source: <b>${escapeHtml(leanExtraction.source_variant)}</b>` : '';
+  const leanFallback = leanExtraction.fallback_reason ? `; fallback: <b>${escapeHtml(leanExtraction.fallback_reason)}</b>` : '';
   const diffSignals = difficulty.signals || {};
   const service = data.service || {};
   const serviceLine = service.request_id ? `<p class="muted">Request: <code>${escapeHtml(service.request_id)}</code>; duration: <b>${Number(service.duration_ms || 0).toFixed(1)} ms</b></p>` : '';
   const difficultyScore = typeof difficulty.difficulty_score === 'number' ? Number(difficulty.difficulty_score) : 0;
   const explanations = renderExplanationPaths(data);
-  output.innerHTML = `<div class="guidance-grid"><div class="guidance-block"><h3>Relevant Lemmas / Premises</h3><div class="ranked">${premises || '<span class="muted">No premises returned.</span>'}</div></div><div class="guidance-block"><h3>Similar Theorems</h3><div class="ranked">${theorems || '<span class="muted">No similar theorems returned.</span>'}</div></div><div class="guidance-block"><h3>Likely Proof Techniques</h3><div class="chips">${techniques || '<span class="muted">No labels returned.</span>'}</div><h3 style="margin-top:14px">Difficulty Profile</h3><div class="rank"><code>${escapeHtml(difficulty.difficulty_bucket || 'unknown')}</code>${scoreBar(difficultyScore,'amber')}<b>${difficultyScore.toFixed(3)}</b></div><p class="muted">${escapeHtml(diffSignals.calibrated_by || 'query_heuristic')}</p></div><div class="guidance-block"><h3>Related Proof States / Patterns</h3><div class="ranked">${proofStates || '<span class="muted">No proof states returned.</span>'}</div></div></div><h3>Premise Ranking And Explanation</h3><p class="muted">Query source: <b>${escapeHtml(source)}</b>; Lean proof states: <b>${Number(extracted)}</b>${lean.checked ? `; unsolved goals: <b>${leanSummary.has_unsolved_goals ? 'yes' : 'no'}</b>` : ''}</p>${explanations}${serviceLine}`;
+  output.innerHTML = `<div class="guidance-grid"><div class="guidance-block"><h3>Relevant Lemmas / Premises</h3><div class="ranked">${premises || '<span class="muted">No premises returned.</span>'}</div></div><div class="guidance-block"><h3>Similar Theorems</h3><div class="ranked">${theorems || '<span class="muted">No similar theorems returned.</span>'}</div></div><div class="guidance-block"><h3>Likely Proof Techniques</h3><div class="chips">${techniques || '<span class="muted">No labels returned.</span>'}</div><h3 style="margin-top:14px">Difficulty Profile</h3><div class="rank"><code>${escapeHtml(difficulty.difficulty_bucket || 'unknown')}</code>${scoreBar(difficultyScore,'amber')}<b>${difficultyScore.toFixed(3)}</b></div><p class="muted">${escapeHtml(diffSignals.calibrated_by || 'query_heuristic')}</p></div><div class="guidance-block"><h3>Related Proof States / Patterns</h3><div class="ranked">${proofStates || '<span class="muted">No proof states returned.</span>'}</div></div></div><h3>Premise Ranking And Explanation</h3><p class="muted">Query source: <b>${escapeHtml(source)}</b>; Lean proof states: <b>${Number(extracted)}</b>${lean.checked ? `; unsolved goals: <b>${leanSummary.has_unsolved_goals ? 'yes' : 'no'}</b>${leanVariant}${leanFallback}` : ''}</p>${explanations}${serviceLine}`;
 }
 function renderCaseStudy(index){
   const item = caseStudies[index];

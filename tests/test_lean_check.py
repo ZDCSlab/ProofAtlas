@@ -60,6 +60,66 @@ x : Nat
     assert result["proof_states"][0]["goal_text"] == "x = x"
 
 
+def test_check_lean_syntax_falls_back_to_initial_goal_skeleton(monkeypatch):
+    calls = []
+
+    def fake_which(name):
+        return f"/usr/bin/{name}" if name == "lean" else None
+
+    def fake_run(command, **kwargs):
+        source_path = command[-1]
+        with open(source_path, encoding="utf-8") as fh:
+            source = fh.read()
+        calls.append(source)
+        if source.rstrip().endswith(":= by"):
+            return subprocess.CompletedProcess(
+                command,
+                1,
+                stdout="",
+                stderr="""
+error: unsolved goals
+x : Nat
+⊢ x = x
+""",
+            )
+        return subprocess.CompletedProcess(command, 1, stdout="", stderr="error: declaration uses 'sorry'")
+
+    monkeypatch.setattr(lean_check.shutil, "which", fake_which)
+    monkeypatch.setattr(lean_check.subprocess, "run", fake_run)
+
+    result = lean_check.check_lean_syntax("theorem t (x : Nat) : x = x")
+
+    assert len(calls) == 2
+    assert calls[1].rstrip().endswith(":= by")
+    assert result["source_variant"] == "initial_goal_skeleton"
+    assert result["fallback_attempted"] is True
+    assert result["fallback_reason"] == "original_no_proof_states"
+    assert result["original_summary"]["proof_state_extracted_count"] == 0
+    assert result["proof_states"][0]["goal_text"] == "x = x"
+
+
+def test_check_lean_syntax_does_not_skeleton_completed_declaration(monkeypatch):
+    calls = []
+
+    def fake_which(name):
+        return f"/usr/bin/{name}" if name == "lean" else None
+
+    def fake_run(command, **kwargs):
+        source_path = command[-1]
+        with open(source_path, encoding="utf-8") as fh:
+            calls.append(fh.read())
+        return subprocess.CompletedProcess(command, 0, stdout="", stderr="")
+
+    monkeypatch.setattr(lean_check.shutil, "which", fake_which)
+    monkeypatch.setattr(lean_check.subprocess, "run", fake_run)
+
+    result = lean_check.check_lean_syntax("theorem t : True := by trivial")
+
+    assert len(calls) == 1
+    assert result["source_variant"] == "original"
+    assert result["fallback_attempted"] is False
+
+
 def test_extract_proof_states_from_unsolved_goals_diagnostics():
     stderr = """
 error: unsolved goals

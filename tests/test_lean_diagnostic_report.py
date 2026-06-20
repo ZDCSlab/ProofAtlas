@@ -14,6 +14,7 @@ def test_lean_diagnostic_report_covers_success_dedup_and_failure_cases(tmp_path,
     assert report["quality_checks"]["has_failure_explanation_case"] is True
     assert report["quality_checks"]["has_timeout_stderr_extraction_case"] is True
     assert report["quality_checks"]["has_adjacent_goal_split_case"] is True
+    assert report["quality_checks"]["has_initial_goal_skeleton_case"] is True
     assert report["total_extracted_proof_states"] > 0
     duplicate_case = next(case for case in report["cases"] if case["name"] == "duplicate_goal_context")
     assert duplicate_case["rejected_count"] == 1
@@ -25,5 +26,9 @@ def test_lean_diagnostic_report_covers_success_dedup_and_failure_cases(tmp_path,
     timeout_case = next(case for case in report["cases"] if case["name"] == "timeout_stderr_unsolved_goal")
     assert timeout_case["extracted_count"] == 1
     assert timeout_case["checks"]["timeout_diagnostic_preserved"] is True
+    skeleton_case = next(case for case in report["cases"] if case["name"] == "theorem_statement_initial_goal_skeleton")
+    assert skeleton_case["extracted_count"] == 1
+    assert skeleton_case["checks"]["skeleton_source_created"] is True
+    assert skeleton_case["skeleton_source"].rstrip().endswith(":= by")
     assert (tmp_path / "outputs/reports/lean_diagnostic_extraction_report.json").exists()
     json.dumps(report, allow_nan=False)

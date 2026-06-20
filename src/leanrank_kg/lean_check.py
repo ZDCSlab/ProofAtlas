@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 import shutil
 import subprocess
 import tempfile
@@ -7,6 +8,9 @@ from pathlib import Path
 
 from .parse_context import parse_context
 from .utils import stable_hash
+
+
+DECL_RE = re.compile(r"\b(?:theorem|lemma|example)\b")
 
 
 def _lean_command() -> list[str] | None:
@@ -91,6 +95,19 @@ def _output_text(value) -> str:
     return str(value)
 
 
+def _initial_goal_skeleton_source(source: str) -> str | None:
+    matches = list(DECL_RE.finditer(source))
+    if not matches:
+        return None
+    tail = source[matches[-1].start() :]
+    if ":=" in tail:
+        return None
+    stripped = source.rstrip()
+    if not stripped:
+        return None
+    return f"{stripped} := by\n"
+
+
 def _proof_state_retrieval_text(parsed: dict) -> str:
     hypotheses = "\n".join(parsed.get("local_hypotheses") or [])
     goal = parsed.get("goal_text") or ""
@@ -169,6 +186,36 @@ def _diagnostic_summary(stdout: str = "", stderr: str = "") -> dict:
     }
 
 
+def _result_from_completed_process(
+    proc: subprocess.CompletedProcess,
+    command: list[str],
+    *,
+    source_variant: str,
+    fallback_attempted: bool = False,
+    fallback_reason: str | None = None,
+    original_summary: dict | None = None,
+) -> dict:
+    stdout = _output_text(proc.stdout)[-4000:]
+    stderr = _output_text(proc.stderr)[-4000:]
+    extraction = extract_proof_state_report(stdout, stderr)
+    return {
+        "checked": True,
+        "available": True,
+        "ok": proc.returncode == 0,
+        "command": command,
+        "returncode": proc.returncode,
+        "stdout": stdout,
+        "stderr": stderr,
+        "proof_states": extraction["proof_states"],
+        "proof_state_extraction": extraction,
+        "summary": _diagnostic_summary(stdout, stderr),
+        "source_variant": source_variant,
+        "fallback_attempted": fallback_attempted,
+        "fallback_reason": fallback_reason,
+        "original_summary": original_summary,
+    }
+
+
 def check_lean_syntax(source: str, timeout_seconds: int = 10) -> dict:
     command = _lean_command()
     if command is None:
@@ -192,6 +239,10 @@ def check_lean_syntax(source: str, timeout_seconds: int = 10) -> dict:
                 "rejected_blocks": [],
             },
             "summary": {"has_unsolved_goals": False, "error_count": 0, "warning_count": 0},
+            "source_variant": "original",
+            "fallback_attempted": False,
+            "fallback_reason": None,
+            "original_summary": None,
         }
     with tempfile.TemporaryDirectory() as tmpdir:
         path = Path(tmpdir) / "ProofAtlasQuery.lean"
@@ -227,19 +278,67 @@ def check_lean_syntax(source: str, timeout_seconds: int = 10) -> dict:
                 "proof_states": extraction["proof_states"],
                 "proof_state_extraction": extraction,
                 "summary": _diagnostic_summary(stdout, timed_out_stderr),
+                "source_variant": "original",
+                "fallback_attempted": False,
+                "fallback_reason": None,
+                "original_summary": None,
             }
-    stdout = proc.stdout[-4000:]
-    stderr = proc.stderr[-4000:]
-    extraction = extract_proof_state_report(stdout, stderr)
-    return {
-        "checked": True,
-        "available": True,
-        "ok": proc.returncode == 0,
-        "command": command,
-        "returncode": proc.returncode,
-        "stdout": stdout,
-        "stderr": stderr,
-        "proof_states": extraction["proof_states"],
-        "proof_state_extraction": extraction,
-        "summary": _diagnostic_summary(stdout, stderr),
-    }
+        original_result = _result_from_completed_process(proc, command, source_variant="original")
+        if original_result["proof_states"]:
+            return original_result
+
+        skeleton_source = _initial_goal_skeleton_source(source)
+        if skeleton_source is None:
+            return original_result
+
+        original_summary = original_result["summary"]
+        path.write_text(skeleton_source, encoding="utf-8")
+        try:
+            skeleton_proc = subprocess.run(
+                [*command, str(path)],
+                text=True,
+                capture_output=True,
+                timeout=timeout_seconds,
+                check=False,
+            )
+        except subprocess.TimeoutExpired as exc:
+            stdout = _output_text(exc.stdout)
+            timed_out_stderr = _output_text(exc.stderr)
+            extraction = extract_proof_state_report(stdout, timed_out_stderr)
+            stderr = "\n".join(
+                part
+                for part in [
+                    timed_out_stderr,
+                    f"Lean initial-goal skeleton check timed out after {timeout_seconds} seconds.",
+                ]
+                if part
+            )
+            return {
+                "checked": True,
+                "available": True,
+                "ok": False,
+                "command": command,
+                "returncode": None,
+                "stdout": stdout,
+                "stderr": stderr,
+                "proof_states": extraction["proof_states"],
+                "proof_state_extraction": extraction,
+                "summary": _diagnostic_summary(stdout, timed_out_stderr),
+                "source_variant": "initial_goal_skeleton",
+                "fallback_attempted": True,
+                "fallback_reason": "original_no_proof_states",
+                "original_summary": original_summary,
+            }
+        skeleton_result = _result_from_completed_process(
+            skeleton_proc,
+            command,
+            source_variant="initial_goal_skeleton",
+            fallback_attempted=True,
+            fallback_reason="original_no_proof_states",
+            original_summary=original_summary,
+        )
+        if skeleton_result["proof_states"]:
+            return skeleton_result
+        original_result["fallback_attempted"] = True
+        original_result["fallback_reason"] = "initial_goal_skeleton_no_proof_states"
+        return original_result

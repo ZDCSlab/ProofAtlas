@@ -85,7 +85,7 @@ Completed components include:
 - Theorem query parse coverage report included in refresh dashboard parsing diagnostics.
 - Unified theorem guidance retrieval that returns premises, similar theorems, similar proof states, proof techniques, proof patterns, graph evidence, difficulty signals, and ranking explanations.
 - Optional Lean syntax diagnostics through `lake env lean` or `lean`.
-- Initial proof-state extraction from Lean unsolved-goal diagnostics.
+- Initial proof-state extraction from Lean unsolved-goal diagnostics, including temporary `:= by` skeleton checks for theorem statements that do not include a proof body.
 - Learned premise-ranker integration when a trained ranker artifact is available.
 - Learned-ranker feature ablation reports for embedding, namespace/domain, proof-technique, difficulty, frequency, symbol-overlap, graph, and theorem-neighborhood signals.
 - Theorem-level evaluation with Recall@k, MRR, MAP, nDCG, coverage counts, and case studies.

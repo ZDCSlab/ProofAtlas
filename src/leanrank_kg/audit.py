@@ -357,6 +357,7 @@ def build_audit() -> dict[str, Any]:
             and data.get("quality_checks", {}).get("has_failure_explanation_case") is True
             and data.get("quality_checks", {}).get("has_timeout_stderr_extraction_case") is True
             and data.get("quality_checks", {}).get("has_adjacent_goal_split_case") is True
+            and data.get("quality_checks", {}).get("has_initial_goal_skeleton_case") is True
             and data.get("total_extracted_proof_states", 0) > 0
             and "not a corpus extractor" in data.get("production_pipeline_role", ""),
             {

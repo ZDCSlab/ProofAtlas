@@ -35,7 +35,7 @@ Out of current production scope:
 | GPU BGE embeddings | `outputs/embeddings/embedding_config.json`: `BAAI/bge-base-en-v1.5`, devices `cuda:0` to `cuda:6`, proof-state template `full_name + goal_text` | Delivered |
 | ANN performance | `outputs/reports/index_benchmark.json`: hnswlib premise retrieval 19.0x faster than exact cosine at Recall@10 vs exact 0.994 | Delivered |
 | API readiness/security review | `outputs/reports/deployment_security_review.json`, `docs/proofatlas_deployment_guide.md` | MVP delivered |
-| Real Lean proof-state extraction for new queries | `src/leanrank_kg/lean_check.py` extracts proof states from Lean unsolved-goal diagnostics when validation is requested; `outputs/reports/lean_diagnostic_extraction_report.json` audits success, adjacent-goal splitting, deduplication, timeout-stderr extraction, and failure-explanation fixtures | Partial |
+| Real Lean proof-state extraction for new queries | `src/leanrank_kg/lean_check.py` extracts proof states from Lean unsolved-goal diagnostics when validation is requested; theorem/lemma/example statements without proof bodies can be checked as temporary `:= by` initial-goal skeletons; `outputs/reports/lean_diagnostic_extraction_report.json` audits success, adjacent-goal splitting, initial-goal skeleton fallback, deduplication, timeout-stderr extraction, and failure-explanation fixtures | Partial |
 | Full Lean server/session extraction | Explicitly out of current LeanRank-data production scope | Out of scope |
 
 ## Current Retrieval Results

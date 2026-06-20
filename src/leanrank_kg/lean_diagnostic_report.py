@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from .lean_check import extract_proof_state_report
+from .lean_check import _initial_goal_skeleton_source, extract_proof_state_report
 from .utils import write_json
 
 
@@ -86,6 +86,19 @@ y : Nat
         "expected_extracted_count": 1,
         "expected_timeout_preserved": True,
     },
+    {
+        "name": "theorem_statement_initial_goal_skeleton",
+        "description": "A theorem statement without a proof body can be checked as a temporary `:= by` skeleton to get the initial goal.",
+        "source": "theorem t (x : Nat) : x = x",
+        "expected_skeleton_suffix": ":= by",
+        "stderr": """
+error: unsolved goals
+x : Nat
+⊢ x = x
+""",
+        "expected_extracted_count": 1,
+        "expected_skeleton_source": True,
+    },
 ]
 
 
@@ -105,6 +118,13 @@ def _case_result(case: dict[str, Any]) -> dict[str, Any]:
         checks["failure_reason_matches"] = report["failure_reason"] == expected_failure
     if case.get("expected_timeout_preserved") is not None:
         checks["timeout_diagnostic_preserved"] = bool(case.get("expected_timeout_preserved")) and report["extracted_count"] > 0
+    skeleton_source = None
+    if case.get("expected_skeleton_source") is not None:
+        skeleton_source = _initial_goal_skeleton_source(str(case.get("source", "")))
+        checks["skeleton_source_created"] = bool(skeleton_source) is bool(case.get("expected_skeleton_source"))
+        suffix = str(case.get("expected_skeleton_suffix", ""))
+        if suffix:
+            checks["skeleton_source_suffix_matches"] = bool(skeleton_source and skeleton_source.rstrip().endswith(suffix))
     return {
         "name": case["name"],
         "description": case["description"],
@@ -115,6 +135,7 @@ def _case_result(case: dict[str, Any]) -> dict[str, Any]:
         "failure_reason": report["failure_reason"],
         "checks": checks,
         "passed": all(checks.values()),
+        "skeleton_source": skeleton_source,
         "proof_states": report["proof_states"],
         "rejected_blocks": report["rejected_blocks"],
     }
@@ -140,6 +161,12 @@ def build_report() -> dict[str, Any]:
             ),
             "has_adjacent_goal_split_case": any(
                 case["name"] == "adjacent_goals_without_blank_lines" and case["extracted_count"] == 2
+                for case in cases
+            ),
+            "has_initial_goal_skeleton_case": any(
+                case["name"] == "theorem_statement_initial_goal_skeleton"
+                and case["checks"].get("skeleton_source_created")
+                and case["extracted_count"] > 0
                 for case in cases
             ),
             "all_extracted_states_have_retrieval_text": all(

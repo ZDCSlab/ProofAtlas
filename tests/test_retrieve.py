@@ -270,12 +270,18 @@ def test_text_query_retrieval_and_theorem_guidance_are_json_serializable(tmp_pat
                 "rejected_blocks": [],
             },
             "summary": {"has_unsolved_goals": True, "error_count": 1, "warning_count": 0},
+            "source_variant": "initial_goal_skeleton",
+            "fallback_attempted": True,
+            "fallback_reason": "original_no_proof_states",
         },
     )
     lean_guidance = retrieve_knowledge_for_theorem("theorem t (x : Nat) : x = x := by sorry", k_premises=3, k_theorems=2, validate_lean=True)
     assert lean_guidance["query"]["retrieval_query_source"] == "lean_diagnostics_proof_states"
     assert lean_guidance["query"]["lean_extracted_proof_state_count"] == 1
     assert lean_guidance["query"]["lean_proof_state_extraction"]["raw_block_count"] == 1
+    assert lean_guidance["query"]["lean_proof_state_extraction"]["source_variant"] == "initial_goal_skeleton"
+    assert lean_guidance["query"]["lean_proof_state_extraction"]["fallback_attempted"] is True
+    assert lean_guidance["query"]["lean_proof_state_extraction"]["fallback_reason"] == "original_no_proof_states"
     assert lean_guidance["lean_diagnostics"]["summary"]["has_unsolved_goals"] is True
     json.dumps(guidance, allow_nan=False)
     evaluate.run(cfg)
