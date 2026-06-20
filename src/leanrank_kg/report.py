@@ -289,6 +289,7 @@ def _production_evidence(
     train_supervision = premise_supervision.get("splits", {}).get("train", {})
     throughput = pipeline_performance.get("throughput_profile", {})
     bottleneck_profile = throughput.get("bottleneck_profile", {}) if isinstance(throughput, dict) else {}
+    evaluation_timing_delta = throughput.get("evaluation_timing_delta", {}) if isinstance(throughput, dict) else {}
     evaluation_timing = (
         pipeline_performance.get("stages", {}).get("evaluation", {}).get("evaluation_timing", {})
         if isinstance(pipeline_performance, dict)
@@ -332,6 +333,7 @@ def _production_evidence(
             "slowest_stage": throughput.get("slowest_stage"),
             "bottleneck_profile": bottleneck_profile,
             "evaluation_timing": evaluation_timing,
+            "evaluation_timing_delta": evaluation_timing_delta,
         },
         "failure_profile": {
             "proof_state": proof_failure,

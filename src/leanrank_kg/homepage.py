@@ -256,7 +256,8 @@ HTML = """<!doctype html>
 
   <section>
     <h2>Production Evidence</h2>
-    <p class="section-lead">The demo is backed by committed LeanRank-data reports, including full held-out retrieval metrics, premise supervision counts, and a reliable timed production run.</p>
+    {% set timing_delta = production_evidence.timing.evaluation_timing_delta|default({}) %}
+    <p class="section-lead">The demo is backed by committed LeanRank-data reports, including full held-out retrieval metrics, premise supervision counts, and explicit timing freshness checks.</p>
     <div class="kpi-grid">
       <div class="kpi"><div class="label">Proof-state test coverage</div><div class="value">{{ "{:,}".format(production_evidence.heldout.proof_state_evaluated_queries|default(0) or 0) }}</div><div class="note">full held-out proof-state queries</div></div>
       <div class="kpi"><div class="label">Theorem test coverage</div><div class="value">{{ "{:,}".format(production_evidence.heldout.theorem_evaluated_queries|default(0) or 0) }}</div><div class="note">full held-out theorem queries</div></div>
@@ -266,12 +267,19 @@ HTML = """<!doctype html>
       <div class="kpi"><div class="label">Negative candidates</div><div class="value">{{ "{:,}".format(production_evidence.supervision.total_negative_edges|default(0) or 0) }}</div><div class="note">hard-negative ranking pool</div></div>
       <div class="kpi"><div class="label">Pipeline timing</div><div class="value">{{ "%.1f"|format(production_evidence.timing.total_seconds or 0) }}s</div><div class="note">{{ production_evidence.timing.executed_stage_count|default(0) }} executed / {{ production_evidence.timing.skipped_stage_count|default(0) }} skipped stages</div></div>
       <div class="kpi"><div class="label">Scale estimate reliable</div><div class="value">{{ production_evidence.timing.scale_estimate_reliable }}</div><div class="note">{{ production_evidence.timing.throughput_basis|default("unknown") }} on {{ production_evidence.timing.embedding_device|default("unknown") }}</div></div>
+      <div class="kpi"><div class="label">Current eval timing</div><div class="value">{{ "%.1f"|format(timing_delta.current_evaluation_seconds|default(0) or 0) }}s</div><div class="note">standalone held-out evaluation</div></div>
+      <div class="kpi"><div class="label">Pipeline eval timing</div><div class="value">{{ "%.1f"|format(timing_delta.timed_pipeline_evaluate_seconds|default(0) or 0) }}s</div><div class="note">saved full-pipeline evaluate stage</div></div>
     </div>
     <div class="status-row" style="margin-top:12px">
       <div class="status ok"><div class="label">Train positive coverage</div><div class="value">{{ "%.3f"|format(production_evidence.supervision.train_positive_proof_state_coverage or 0) }}</div><div class="note">proof states with positive premise edges</div></div>
       <div class="status ok"><div class="label">Train negative coverage</div><div class="value">{{ "%.3f"|format(production_evidence.supervision.train_negative_proof_state_coverage or 0) }}</div><div class="note">proof states with negative candidates</div></div>
       <div class="status"><div class="label">Hardness mean</div><div class="value">{{ "%.3f"|format(production_evidence.supervision.train_negative_hardness_mean or 0) }}</div><div class="note">train negative candidate hardness</div></div>
       <div class="status"><div class="label">Embedding throughput</div><div class="value">{{ "%.1f"|format(production_evidence.timing.embedding_rows_per_second or 0) }}</div><div class="note">embedding rows per second</div></div>
+      {% if timing_delta.current_faster_than_pipeline_timing %}
+      <div class="status warn"><div class="label">Timing freshness</div><div class="value">{{ "%.1f"|format(timing_delta.timed_to_current_ratio|default(0) or 0) }}x</div><div class="note">rerun production timing before final bottleneck claims</div></div>
+      {% else %}
+      <div class="status ok"><div class="label">Timing freshness</div><div class="value">current</div><div class="note">pipeline and standalone evaluation timings align</div></div>
+      {% endif %}
     </div>
     {% set bottleneck = production_evidence.timing.bottleneck_profile|default({}) %}
     {% set bottleneck_stages = bottleneck.top_stages|default([]) %}

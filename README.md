@@ -177,6 +177,9 @@ Current production run coverage and timing:
 | Pipeline timing | executed/skipped stages | 19 / 0 |
 | Pipeline timing | throughput basis | executed_pipeline_run |
 | Pipeline timing | scale estimate reliable | True |
+| Pipeline timing | saved evaluate seconds | 211.3259 |
+| Pipeline timing | current standalone evaluation seconds | 24.2234 |
+| Pipeline timing | timed/current evaluation ratio | 8.7241 |
 
 Current production performance snapshot:
 

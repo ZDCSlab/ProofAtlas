@@ -70,6 +70,16 @@ def test_readme_production_snapshot_matches_committed_artifacts() -> None:
     )
     assert _readme_artifact_field(readme, "Pipeline timing", "throughput basis") == throughput["throughput_basis"]
     assert _readme_artifact_field(readme, "Pipeline timing", "scale estimate reliable") == str(throughput["scale_estimate_reliable"])
+    evaluation_delta = throughput["evaluation_timing_delta"]
+    assert _readme_artifact_field(readme, "Pipeline timing", "saved evaluate seconds") == (
+        f"{float(evaluation_delta['timed_pipeline_evaluate_seconds']):.4f}"
+    )
+    assert _readme_artifact_field(readme, "Pipeline timing", "current standalone evaluation seconds") == (
+        f"{float(evaluation_delta['current_evaluation_seconds']):.4f}"
+    )
+    assert _readme_artifact_field(readme, "Pipeline timing", "timed/current evaluation ratio") == (
+        f"{float(evaluation_delta['timed_to_current_ratio']):.4f}"
+    )
 
 
 def test_readme_performance_snapshot_matches_committed_artifacts() -> None:

@@ -323,6 +323,7 @@ def test_text_query_retrieval_and_theorem_guidance_are_json_serializable(tmp_pat
     assert "timing" in homepage_summary["production_evidence"]
     assert "bottleneck_profile" in homepage_summary["production_evidence"]["timing"]
     assert "evaluation_timing" in homepage_summary["production_evidence"]["timing"]
+    assert "evaluation_timing_delta" in homepage_summary["production_evidence"]["timing"]
     assert homepage_summary["production_evidence"]["failure_profile"]["proof_state"]["rank_buckets"]
     assert homepage_summary["production_evidence"]["failure_profile"]["theorem"]["gold_coverage_buckets"]
     assert corpus_manifest["data_supervision"]["kind"] == "synthetic_demo_rows"
@@ -379,6 +380,9 @@ def test_text_query_retrieval_and_theorem_guidance_are_json_serializable(tmp_pat
     assert "Negative candidates" in html
     assert "Scale estimate reliable" in html
     assert "Embedding throughput" in html
+    assert "Current eval timing" in html
+    assert "Pipeline eval timing" in html
+    assert "Timing freshness" in html
     assert "Pipeline bottleneck" in html
     if homepage_summary["production_evidence"]["timing"]["evaluation_timing"].get("slowest_substages"):
         assert "Evaluation bottleneck" in html
