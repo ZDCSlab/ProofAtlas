@@ -36,21 +36,21 @@ Out of current production scope:
 | ANN performance | `outputs/reports/index_benchmark.json`: hnswlib premise retrieval 18.3x faster than exact cosine at Recall@10 vs exact 0.989 | Delivered |
 | API readiness/security review | `outputs/reports/deployment_security_review.json`, `docs/proofatlas_deployment_guide.md` | MVP delivered |
 | Real Lean proof-state extraction for new queries | `src/leanrank_kg/lean_check.py` extracts proof states from Lean unsolved-goal diagnostics when validation is requested | Partial |
-| Full Lean server/session extraction | No server/session stream artifact in current scope | Not delivered |
+| Full Lean server/session extraction | Explicitly out of current LeanRank-data production scope | Out of scope |
 
 ## Current Retrieval Results
 
-Sampled held-out test metrics from `configs/proofatlas.yaml`:
+Full held-out test metrics from `configs/proofatlas.yaml`:
 
 | Task | Metric | Value |
 | --- | --- | ---: |
-| Proof-state premise retrieval | Recall@10 | 0.1279 |
-| Proof-state premise retrieval | Recall@100 | 0.3090 |
-| Reranked proof-state diagnostic | Recall@10 | 0.1513 |
-| Theorem-level premise retrieval | Recall@10 | 0.4233 |
-| Theorem-level premise retrieval | Recall@100 | 0.6642 |
-| Theorem-level premise retrieval | MRR | 0.5473 |
-| Learned premise ranker | validation AUC | 0.8254 |
+| Proof-state premise retrieval | Recall@10 | 0.1162 |
+| Proof-state premise retrieval | Recall@100 | 0.2362 |
+| Reranked proof-state retrieval | Recall@10 | 0.1513 |
+| Theorem premise retrieval | Recall@10 | 0.4940 |
+| Theorem premise retrieval | Recall@100 | 0.6889 |
+| Theorem premise retrieval | MRR | 0.5609 |
+| Premise ranker validation | AUC | 0.8254 |
 
 Interpretation:
 
@@ -97,17 +97,17 @@ make verify-delivery
 Recent passing result:
 
 ```text
-pytest: 62 passed, 4 skipped
-audit: passed
+pytest: 70 passed, 4 skipped
+audit: 167/167 checks passed
 git diff --check: passed
 ```
 
 ## Remaining Gaps
 
-The current deliverable is suitable as a LeanRank-data retrieval demo and experiment report. The remaining gaps for the broader long-term ProofAtlas vision are:
+The current deliverable is suitable as a LeanRank-data retrieval demo and experiment report. The remaining gaps for the current ML retrieval deliverable are:
 
-1. Replace Lean diagnostic parsing with a full Lean server/session tactic-state stream if the project returns to custom extraction.
-2. Train stronger rerankers beyond the current feature-based logistic/fixed reranker.
-3. Expand the sampled held-out evaluation to larger query counts once runtime is acceptable.
-4. Validate retrieval quality across repeated LeanRank-data refreshes and track metric trends.
-5. Harden public API deployment with real auth, rate limiting, TLS, persistent monitoring, and operational logs.
+1. Train stronger rerankers beyond the current feature-based logistic/fixed reranker.
+2. Expand the held-out evaluation and case-study set when runtime permits.
+3. Validate retrieval quality across repeated LeanRank-data refreshes and track metric trends.
+4. Harden public API deployment with real auth, rate limiting, TLS, persistent monitoring, and operational logs.
+5. Keep full Lean server/session corpus extraction out of the default pipeline unless the project scope explicitly changes away from `erbacher/LeanRank-data`.

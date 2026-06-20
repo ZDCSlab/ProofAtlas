@@ -235,27 +235,26 @@ Implemented changes:
 
 The project now has the main theorem-guidance loop, but several important gaps remain before it becomes a robust proof-assistance system.
 
-### 1. Richer Lean-Aware Parsing
+### 1. Richer LeanRank-Data-Aware Parsing
 
 Current query parsing handles common declaration structure, including explicit, implicit, and typeclass binders, parsed conclusion symbols, operator symbols, sort/typeclass symbols, and alpha-normalized goal text. It also writes theorem query parse coverage diagnostics. It is still lightweight and should be upgraded with deeper Lean-aware extraction.
 
 Next steps:
 
-- Integrate a robust Lean parser, Lean server workflow, or tree-sitter-style syntax extraction.
-- Extract namespaces, constants, binders, hypotheses, typeclass constraints, and conclusion structure more reliably through a real Lean parser/session.
+- Keep the production pipeline based directly on `erbacher/LeanRank-data`; do not add a custom Lean server/source extractor to the default workflow.
+- Improve lightweight parsing over theorem text and LeanRank proof-state rows, including namespaces, constants, binders, hypotheses, typeclass constraints, and conclusion structure.
 - Normalize theorem statements more completely so alpha-renaming, notation expansion, coercions, and local binder names do not dominate retrieval.
 - Expand parsed query features in ranking and explanations beyond the current binder/conclusion-symbol signals.
 
-### 2. Real Proof-State Extraction
+### 2. LeanRank Proof-State Utilization
 
-Current proof-pattern retrieval now uses both direct historical proof-state retrieval and proof states from similar theorems. The system can also extract structured proof states from Lean `unsolved goals` diagnostics and report extraction provenance/failure reasons, but it does not yet use a full Lean server session or interactive tactic-state stream.
+Current proof-pattern retrieval uses both direct historical proof-state retrieval and proof states from similar theorems. The production data source is `erbacher/LeanRank-data`, which already provides proof-state rows, positive premises, negative candidates, and hardness features. The optional Lean `unsolved goals` diagnostic parser is only for user-query diagnostics and is not a corpus extractor.
 
 Next steps:
 
-- Replace diagnostic-text extraction with a full Lean server/session tactic-state stream when available.
-- Map new proof states into the same representation used by historical proof states.
-- Retrieve proof patterns from both theorem-level text and actual goal/context structure.
-- Add diagnostics when proof-state extraction fails.
+- Scale evaluation over larger LeanRank-data slices and keep train/val/test retrieval strictly split-aware.
+- Improve proof-pattern retrieval from theorem-level text, LeanRank proof-state goal/context structure, and similar-theorem neighborhoods.
+- Keep diagnostics explicit when optional Lean syntax checking is unavailable or cannot extract an unsolved-goal block.
 
 ### 3. Scalable ANN Retrieval
 

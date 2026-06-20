@@ -118,27 +118,26 @@ Given a new theorem statement or proof goal
 
 The current system is a strong MVP, but several gaps remain before it becomes a robust mathlib-scale proof assistance system.
 
-### 1. Lean-Aware Parsing
+### 1. LeanRank-Data-Aware Parsing
 
 The current parser handles common theorem and binder structure, parsed conclusion symbols, operator symbols, sort/typeclass symbols, and alpha-normalized goals, and it writes theorem query parse coverage diagnostics. It is still lightweight.
 
 Next steps:
 
-- Integrate a robust Lean parser, Lean server workflow, or tree-sitter-style syntax extractor.
-- Extract namespaces, constants, binders, hypotheses, typeclass constraints, and conclusion structure more reliably through a real Lean parser/session.
+- Keep the production workflow based directly on `erbacher/LeanRank-data`; do not add a custom Lean server/source extractor to the default pipeline.
+- Improve lightweight parsing over theorem text and LeanRank proof-state rows, including namespaces, constants, binders, hypotheses, typeclass constraints, and conclusion structure.
 - Normalize statements more completely so alpha-renaming, notation expansion, coercions, and local binder names do not dominate retrieval.
 - Expand parsed query features in ranking and explanations beyond the current binder/conclusion-symbol signals.
 
-### 2. Real Proof-State Extraction
+### 2. LeanRank Proof-State Utilization
 
-Current proof-state extraction uses structured Lean `unsolved goals` diagnostic reports and processed LeanRank proof states, but it still lacks a full Lean server/session tactic-state stream.
+Production proof-state retrieval uses processed LeanRank proof states from `erbacher/LeanRank-data`. Optional Lean `unsolved goals` diagnostics can turn an interactive user query into a retrieval proof state, but this is not a corpus extractor and is not required for the ML evaluation pipeline.
 
 Next steps:
 
-- Replace diagnostic-text extraction with a full Lean server/session tactic-state stream when available.
-- Map new proof states into the same representation used by historical proof states.
-- Retrieve proof patterns from both theorem-level text and actual goal/context structure.
-- Validate extraction diagnostics against real Lean server/session traces.
+- Scale held-out evaluation over larger LeanRank-data slices.
+- Retrieve proof patterns from both theorem-level text and LeanRank goal/context structure.
+- Keep optional Lean diagnostics clearly reported as query-time validation, separate from the dataset pipeline.
 
 ### 3. Scalable Retrieval
 

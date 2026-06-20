@@ -3,7 +3,7 @@ import json
 from leanrank_kg import build_graph, compute_difficulty, download_or_sample, normalize, premise_trace_supervision
 
 
-def test_premise_trace_supervision_report_distinguishes_leanrank_labels_from_true_extractor(tmp_path, monkeypatch):
+def test_premise_trace_supervision_report_uses_leanrank_labels_without_custom_extractor(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     (tmp_path / "configs").mkdir()
     (tmp_path / "configs/sample.yaml").write_text(
