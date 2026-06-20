@@ -524,6 +524,23 @@ def build_audit() -> dict[str, Any]:
         ),
         "performance_acceptance_profile={detail}",
     )
+    checks["validation:reproducibility_profile"] = _json_condition(
+        "outputs/reports/pipeline_performance_report.json",
+        lambda data: (
+            data.get("throughput_profile", {}).get("reproducibility_profile", {}).get("method")
+            == "experiment_reproducibility_and_artifact_consistency_gates"
+            and any(
+                row.get("name") == "theorem_disjoint_split" and row.get("passed") is True
+                for row in data.get("throughput_profile", {}).get("reproducibility_profile", {}).get("gates", [])
+            )
+            and any(
+                row.get("name") == "held_out_label_policy" and row.get("passed") is True
+                for row in data.get("throughput_profile", {}).get("reproducibility_profile", {}).get("gates", [])
+            ),
+            {"profile": data.get("throughput_profile", {}).get("reproducibility_profile", {})},
+        ),
+        "reproducibility_profile={detail}",
+    )
     checks["validation:retrieval_quality_profile"] = _json_condition(
         "outputs/reports/pipeline_performance_report.json",
         lambda data: (

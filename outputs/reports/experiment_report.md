@@ -72,6 +72,23 @@ ProofAtlas is evaluated as a supervised ranking/retrieval system over a theorem-
 
 The current default experiment uses `erbacher/LeanRank-data` only. Local Lean/mathlib source extraction is out of scope for this experiment.
 
+## Reproducibility Profile
+
+These gates collect the experiment provenance and held-out evaluation assumptions needed to rerun or audit the current LeanRank-data retrieval report.
+
+- Method: `n/a`
+- Config path/hash: `n/a` / `n/a`
+- Dataset/source: `n/a` / `n/a`
+- Random seed: `n/a`
+- Sample plan: `{}`
+- Required gates passed: `n/a`
+- Advisory gates passed: `n/a`
+- Passed gates: `n/a` / `n/a`
+
+| Gate | Severity | Passed | Value | Threshold |
+| --- | --- | ---: | --- | --- |
+| n/a | n/a | n/a | n/a | n/a |
+
 ## Candidate Pool Diagnostic
 
 These metrics test whether the embedding/index candidate pool contains the gold premise before reranking. If Recall@100 is low, the next accuracy bottleneck is candidate generation or embeddings; if Recall@100 is high but Recall@10 is low, the bottleneck is reranking.
@@ -87,19 +104,19 @@ These metrics test whether the embedding/index candidate pool contains the gold 
 
 This profile summarizes held-out test retrieval quality, candidate-pool ceiling, and the next accuracy focus without treating low proof-state Recall@100 as solved.
 
-- Method: `n/a`
-- Headline: `n/a`
-- Held-out coverage: `{}`
-- Next accuracy focus: `n/a`
+- Method: `held_out_test_retrieval_quality_and_candidate_ceiling_summary`
+- Headline: `theorem_guidance_stronger_than_proof_state_candidate_retrieval`
+- Held-out coverage: `{'proof_state_coverage_fraction': 1.0, 'theorem_coverage_fraction': 1.0}`
+- Next accuracy focus: `improve_proof_state_query_embeddings_and_candidate_generation`
 
 | Task | Recall@10 | Recall@100 | MRR | Gold coverage | Ceiling gap | Limitation |
 | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| Proof-state | n/a | n/a | n/a | n/a | n/a | `n/a` |
-| Theorem | n/a | n/a | n/a | n/a | n/a | `n/a` |
+| Proof-state | 0.1162 | 0.2362 | 0.0783 | 0.9076 | 0.7638 | `candidate_generation_or_embedding_ceiling` |
+| Theorem | 0.4940 | 0.6889 | 0.5609 | 0.8994 | 0.3111 | `candidate_ordering_or_reranking` |
 
-- Rerank sampled queries: `n/a`
-- Rerank Recall@10 delta: `n/a`
-- Query representation stability: `n/a`
+- Rerank sampled queries: `20`
+- Rerank Recall@10 delta: `0.0526104662069575`
+- Query representation stability: `do_not_switch_default_yet_best_variant_unstable`
 
 ### Proof-State Candidate Pool
 
@@ -855,16 +872,16 @@ These linear projections use the current timed pipeline as a capacity-planning b
 This profile records the local footprint of generated LeanRank-data artifacts. It is a practical scale-up signal because embeddings and ANN indexes can dominate disk usage before model training becomes the bottleneck.
 
 - Method: `filesystem_artifact_footprint_with_linear_scale_projection`
-- Total artifact bytes: `3052725590`
-- Total artifact GiB: `2.8430722560733557`
-- Bytes per processed row: `10454.110070819008`
+- Total artifact bytes: `3052735937`
+- Total artifact GiB: `2.843081892468035`
+- Bytes per processed row: `10454.145504294343`
 - Unreferenced index artifact bytes: `1502501178`
 - Unreferenced index artifact count: `12`
 
 | Projection | Target rows | Scale factor | Artifact GiB |
 | --- | ---: | ---: | ---: |
 | `current_1x` | 292012 | 1.0000 | 2.8431 |
-| `current_2x` | 584024 | 2.0000 | 5.6861 |
+| `current_2x` | 584024 | 2.0000 | 5.6862 |
 | `current_5x` | 1460060 | 5.0000 | 14.2154 |
 | `configured_source_rows` | 350000 | 1.1986 | 3.4077 |
 

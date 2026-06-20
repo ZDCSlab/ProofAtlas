@@ -33,10 +33,30 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
     write_json(
         "outputs/reports/corpus_manifest.json",
         {
+            "config_hash": config_hash,
+            "config_path": "configs/proofatlas.yaml",
             "dataset_name": "erbacher/LeanRank-data",
             "source_kind": "huggingface",
+            "random_seed": 42,
             "sample_plan": {"total_theorems": 10000, "total_rows": 60000},
             "split_counts": {"train": 80, "val": 10, "test": 10},
+            "corpus": {"corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data"},
+        },
+    )
+    write_json(
+        "outputs/reports/artifact_compatibility_report.json",
+        {
+            "passed": True,
+            "failures": [],
+            "data_supervision": {"has_true_positive_premises": True},
+        },
+    )
+    write_json(
+        "outputs/reports/split_leakage_report.json",
+        {
+            "has_leakage": False,
+            "theorem_counts": {"train": 8, "val": 1, "test": 1},
+            "overlaps": {"train_vs_val": [], "test_vs_train": [], "test_vs_val": []},
         },
     )
     write_json(
@@ -59,8 +79,11 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
     write_json(
         "outputs/reports/test_set_evaluation.json",
         {
+            "candidate_pool": "train premise index",
+            "label_policy": "held-out test positive_edges are used only for evaluation",
             "evaluation_scope": {
                 "is_sampled": False,
+                "full_heldout_override": True,
                 "proof_state_limits": {"test": None, "val": None},
                 "theorem_limits": {"test": None, "val": None},
                 "total_seconds": 2.5,
@@ -236,6 +259,12 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
     assert report["throughput_profile"]["timing_config_matches_current"] is True
     assert report["throughput_profile"]["throughput_basis"] == "executed_pipeline_run"
     assert report["throughput_profile"]["scale_estimate_reliable"] is True
+    reproducibility = report["throughput_profile"]["reproducibility_profile"]
+    assert reproducibility["summary"]["required_gates_passed"] is True
+    assert reproducibility["summary"]["advisory_gates_passed"] is True
+    assert reproducibility["random_seed"] == 42
+    assert next(row for row in reproducibility["gates"] if row["name"] == "theorem_disjoint_split")["passed"] is True
+    assert next(row for row in reproducibility["gates"] if row["name"] == "held_out_label_policy")["passed"] is True
     assert report["throughput_profile"]["bottleneck_profile"]["primary_stage"] == "evaluate"
     assert report["throughput_profile"]["bottleneck_profile"]["primary_stage_share_of_total"] == 0.3
     assert report["throughput_profile"]["bottleneck_profile"]["top3_stage_share_of_total"] == 0.5

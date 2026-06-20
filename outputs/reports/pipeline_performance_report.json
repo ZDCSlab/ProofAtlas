@@ -4542,7 +4542,7 @@
         "outputs/reports",
         "homepage/assets"
       ],
-      "bytes_per_processed_row": 10454.145504294343,
+      "bytes_per_processed_row": 10454.162616604797,
       "directories": {
         "data/processed": {
           "bytes": 46533700,
@@ -4551,7 +4551,7 @@
           "path": "data/processed"
         },
         "homepage/assets": {
-          "bytes": 2054910,
+          "bytes": 2054884,
           "exists": true,
           "file_count": 11,
           "path": "homepage/assets"
@@ -4569,7 +4569,7 @@
           "path": "outputs/indexes"
         },
         "outputs/reports": {
-          "bytes": 19305088,
+          "bytes": 19310111,
           "exists": true,
           "file_count": 39,
           "path": "outputs/reports"
@@ -4625,36 +4625,36 @@
       ],
       "projections": [
         {
-          "estimated_artifact_bytes": 3052735937.0,
-          "estimated_artifact_gib": 2.843081892468035,
+          "estimated_artifact_bytes": 3052740934.0,
+          "estimated_artifact_gib": 2.8430865462869406,
           "label": "current_1x",
           "scale_factor_vs_current": 1.0,
           "target_processed_rows": 292012
         },
         {
-          "estimated_artifact_bytes": 6105471874.0,
-          "estimated_artifact_gib": 5.68616378493607,
+          "estimated_artifact_bytes": 6105481868.0,
+          "estimated_artifact_gib": 5.686173092573881,
           "label": "current_2x",
           "scale_factor_vs_current": 2.0,
           "target_processed_rows": 584024
         },
         {
-          "estimated_artifact_bytes": 15263679685.0,
-          "estimated_artifact_gib": 14.215409462340176,
+          "estimated_artifact_bytes": 15263704670.0,
+          "estimated_artifact_gib": 14.215432731434703,
           "label": "current_5x",
           "scale_factor_vs_current": 5.0,
           "target_processed_rows": 1460060
         },
         {
-          "estimated_artifact_bytes": 3658950926.5030203,
-          "estimated_artifact_gib": 3.4076635972624834,
+          "estimated_artifact_bytes": 3658956915.811679,
+          "estimated_artifact_gib": 3.4076691752408435,
           "label": "configured_source_rows",
           "scale_factor_vs_current": 1.1985808802377984,
           "target_processed_rows": 350000
         }
       ],
-      "total_artifact_bytes": 3052735937,
-      "total_artifact_gib": 2.843081892468035,
+      "total_artifact_bytes": 3052740934,
+      "total_artifact_gib": 2.8430865462869406,
       "unreferenced_index_artifact_bytes": 1502501178,
       "unreferenced_index_artifact_count": 12,
       "unreferenced_index_artifact_gib": 1.3993132654577494,
@@ -5402,6 +5402,125 @@
         }
       ],
       "training_repeat_policy": "Do not retrain by default. Reuse embeddings, indexes, and trained models for report/homepage refreshes; rerun ranker training only after ranker feature, label, split, or relevant config changes."
+    },
+    "reproducibility_profile": {
+      "config_hash": "37ec7d5d3cf4d7b9",
+      "config_path": "configs/proofatlas.yaml",
+      "corpus": {
+        "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
+        "extraction_config_hash": "3e8f863899afdf6c",
+        "extraction_pipeline": "LeanRank Hugging Face dataset",
+        "lean_version": "unknown",
+        "mathlib_commit": "unknown",
+        "mathlib_path": "",
+        "provenance_resolution": {
+          "lean_version": "config/env/lean",
+          "mathlib_commit": "config/env/git",
+          "source_revision": "config/env/git"
+        },
+        "source_path": "",
+        "source_revision": "erbacher/LeanRank-data"
+      },
+      "dataset_name": "erbacher/LeanRank-data",
+      "gates": [
+        {
+          "name": "target_dataset_source",
+          "passed": true,
+          "severity": "required",
+          "threshold": "dataset_name=erbacher/LeanRank-data and source_kind recorded",
+          "value": {
+            "dataset_name": "erbacher/LeanRank-data",
+            "source_kind": "huggingface"
+          }
+        },
+        {
+          "name": "config_hash_consistent",
+          "passed": true,
+          "severity": "required",
+          "threshold": "manifest hash matches current config and artifact compatibility passes",
+          "value": {
+            "artifact_compatibility_passed": true,
+            "current_config_hash": "37ec7d5d3cf4d7b9",
+            "manifest_config_hash": "37ec7d5d3cf4d7b9"
+          }
+        },
+        {
+          "name": "theorem_disjoint_split",
+          "passed": true,
+          "severity": "required",
+          "threshold": "no theorem overlap across train/val/test",
+          "value": {
+            "has_leakage": false,
+            "theorem_counts": {
+              "test": 1000,
+              "train": 8000,
+              "val": 1000
+            }
+          }
+        },
+        {
+          "name": "held_out_label_policy",
+          "passed": true,
+          "severity": "required",
+          "threshold": "test positives are labels only; train premise index is the candidate pool",
+          "value": {
+            "candidate_pool": "train premise index",
+            "label_policy": "held-out test positive_edges are used only for evaluation"
+          }
+        },
+        {
+          "name": "full_heldout_core_eval",
+          "passed": true,
+          "severity": "required",
+          "threshold": "core proof-state/theorem evaluation covers the held-out split",
+          "value": {
+            "full_heldout_override": true,
+            "is_sampled": false,
+            "proof_state_limits": {
+              "test": null,
+              "val": null
+            },
+            "theorem_limits": {
+              "test": null,
+              "val": null
+            }
+          }
+        },
+        {
+          "name": "timing_config_current",
+          "passed": true,
+          "severity": "advisory",
+          "threshold": "timing artifact hash matches current config and has no skipped stages",
+          "value": {
+            "config_matches_current": true,
+            "generated_at": "2026-06-20T22:46:12.435080+00:00",
+            "has_skipped_stages": false
+          }
+        },
+        {
+          "name": "random_seed_recorded",
+          "passed": true,
+          "severity": "advisory",
+          "threshold": "manifest records random_seed",
+          "value": 42
+        }
+      ],
+      "method": "experiment_reproducibility_and_artifact_consistency_gates",
+      "random_seed": 42,
+      "sample_plan": {
+        "source_rows": 350000,
+        "target_theorems": 10000,
+        "unit": "theorem"
+      },
+      "source_kind": "huggingface",
+      "summary": {
+        "advisory_gate_count": 2,
+        "advisory_gates_passed": true,
+        "passed_gate_count": 7,
+        "required_gate_count": 5,
+        "required_gates_passed": true,
+        "total_gate_count": 7
+      }
     },
     "requested_source_rows": 350000,
     "rerank_evaluation_cost_profile": {

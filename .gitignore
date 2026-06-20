@@ -87,6 +87,7 @@ data/raw/
 outputs/embeddings/
 outputs/graph/
 outputs/indexes/
+outputs/models/
 outputs/*
 !outputs/.gitkeep
 !outputs/reports/

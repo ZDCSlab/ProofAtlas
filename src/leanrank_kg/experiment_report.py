@@ -604,6 +604,8 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     evaluation_substages = evaluation_timing.get("slowest_substages", []) if isinstance(evaluation_timing, dict) else []
     recommendations = pipeline.get("recommendations", [])
     throughput = pipeline.get("throughput_profile", {}) if isinstance(pipeline, dict) else {}
+    reproducibility = throughput.get("reproducibility_profile", {}) if isinstance(throughput, dict) else {}
+    reproducibility_summary = reproducibility.get("summary", {}) if isinstance(reproducibility, dict) else {}
     evaluation_timing_delta = throughput.get("evaluation_timing_delta", {}) if isinstance(throughput, dict) else {}
     bottleneck_profile = throughput.get("bottleneck_profile", {}) if isinstance(throughput, dict) else {}
     embedding_bottleneck = throughput.get("embedding_bottleneck_profile", {}) if isinstance(throughput, dict) else {}
@@ -762,6 +764,21 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
         "- When evaluation limits are configured, metrics are computed on a deterministic prefix sample of the held-out split and reported as sampled held-out metrics.",
         "",
         "The current default experiment uses `erbacher/LeanRank-data` only. Local Lean/mathlib source extraction is out of scope for this experiment.",
+        "",
+        "## Reproducibility Profile",
+        "",
+        "These gates collect the experiment provenance and held-out evaluation assumptions needed to rerun or audit the current LeanRank-data retrieval report.",
+        "",
+        f"- Method: `{reproducibility.get('method', 'n/a')}`",
+        f"- Config path/hash: `{reproducibility.get('config_path', 'n/a')}` / `{reproducibility.get('config_hash', 'n/a')}`",
+        f"- Dataset/source: `{reproducibility.get('dataset_name', 'n/a')}` / `{reproducibility.get('source_kind', 'n/a')}`",
+        f"- Random seed: `{reproducibility.get('random_seed', 'n/a')}`",
+        f"- Sample plan: `{reproducibility.get('sample_plan', {})}`",
+        f"- Required gates passed: `{reproducibility_summary.get('required_gates_passed', 'n/a')}`",
+        f"- Advisory gates passed: `{reproducibility_summary.get('advisory_gates_passed', 'n/a')}`",
+        f"- Passed gates: `{reproducibility_summary.get('passed_gate_count', 'n/a')}` / `{reproducibility_summary.get('total_gate_count', 'n/a')}`",
+        "",
+        _performance_gate_table(reproducibility),
         "",
         "## Candidate Pool Diagnostic",
         "",

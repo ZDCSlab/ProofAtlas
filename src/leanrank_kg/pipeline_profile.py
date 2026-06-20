@@ -418,6 +418,112 @@ def _sum_matrix_rows(embeddings: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _reproducibility_profile(
+    config: dict[str, Any],
+    config_hash: str,
+    manifest: dict[str, Any],
+    timings: dict[str, Any],
+    evaluation: dict[str, Any],
+    readiness: dict[str, Any],
+) -> dict[str, Any]:
+    compatibility = readiness.get("artifact_compatibility", {}) if isinstance(readiness, dict) else {}
+    split_leakage = read_json("outputs/reports/split_leakage_report.json", {}) or {}
+    test_eval = evaluation.get("test_set_evaluation", {}) if isinstance(evaluation, dict) else {}
+    evaluation_scope = (test_eval.get("evaluation_scope") or {}) if isinstance(test_eval, dict) else {}
+    gates = [
+        {
+            "name": "target_dataset_source",
+            "severity": "required",
+            "passed": manifest.get("dataset_name") == "erbacher/LeanRank-data" and bool(manifest.get("source_kind")),
+            "value": {"dataset_name": manifest.get("dataset_name"), "source_kind": manifest.get("source_kind")},
+            "threshold": "dataset_name=erbacher/LeanRank-data and source_kind recorded",
+        },
+        {
+            "name": "config_hash_consistent",
+            "severity": "required",
+            "passed": manifest.get("config_hash") == config_hash
+            and compatibility.get("passed") is True
+            and compatibility.get("failures") == []
+            and compatibility.get("data_supervision", {}).get("has_true_positive_premises") is True,
+            "value": {
+                "current_config_hash": config_hash,
+                "manifest_config_hash": manifest.get("config_hash"),
+                "artifact_compatibility_passed": compatibility.get("passed"),
+            },
+            "threshold": "manifest hash matches current config and artifact compatibility passes",
+        },
+        {
+            "name": "theorem_disjoint_split",
+            "severity": "required",
+            "passed": split_leakage.get("has_leakage") is False,
+            "value": {"has_leakage": split_leakage.get("has_leakage"), "theorem_counts": split_leakage.get("theorem_counts")},
+            "threshold": "no theorem overlap across train/val/test",
+        },
+        {
+            "name": "held_out_label_policy",
+            "severity": "required",
+            "passed": test_eval.get("label_policy") == "held-out test positive_edges are used only for evaluation"
+            and test_eval.get("candidate_pool") == "train premise index",
+            "value": {"candidate_pool": test_eval.get("candidate_pool"), "label_policy": test_eval.get("label_policy")},
+            "threshold": "test positives are labels only; train premise index is the candidate pool",
+        },
+        {
+            "name": "full_heldout_core_eval",
+            "severity": "required",
+            "passed": evaluation_scope.get("full_heldout_override") is True
+            and evaluation_scope.get("is_sampled") is False
+            and (evaluation_scope.get("proof_state_limits") or {}).get("test") is None
+            and (evaluation_scope.get("theorem_limits") or {}).get("test") is None,
+            "value": {
+                "full_heldout_override": evaluation_scope.get("full_heldout_override"),
+                "is_sampled": evaluation_scope.get("is_sampled"),
+                "proof_state_limits": evaluation_scope.get("proof_state_limits"),
+                "theorem_limits": evaluation_scope.get("theorem_limits"),
+            },
+            "threshold": "core proof-state/theorem evaluation covers the held-out split",
+        },
+        {
+            "name": "timing_config_current",
+            "severity": "advisory",
+            "passed": timings.get("config_matches_current") is True and timings.get("has_skipped_stages") is False,
+            "value": {
+                "config_matches_current": timings.get("config_matches_current"),
+                "has_skipped_stages": timings.get("has_skipped_stages"),
+                "generated_at": timings.get("generated_at"),
+            },
+            "threshold": "timing artifact hash matches current config and has no skipped stages",
+        },
+        {
+            "name": "random_seed_recorded",
+            "severity": "advisory",
+            "passed": manifest.get("random_seed") is not None,
+            "value": manifest.get("random_seed"),
+            "threshold": "manifest records random_seed",
+        },
+    ]
+    required = [gate for gate in gates if gate["severity"] == "required"]
+    advisory = [gate for gate in gates if gate["severity"] == "advisory"]
+    return {
+        "method": "experiment_reproducibility_and_artifact_consistency_gates",
+        "config_path": manifest.get("config_path") or "configs/proofatlas.yaml",
+        "config_hash": config_hash,
+        "dataset_name": manifest.get("dataset_name") or config.get("dataset_name"),
+        "source_kind": manifest.get("source_kind"),
+        "random_seed": manifest.get("random_seed"),
+        "sample_plan": manifest.get("sample_plan", {}),
+        "corpus": manifest.get("corpus", {}),
+        "summary": {
+            "required_gates_passed": all(gate["passed"] for gate in required),
+            "advisory_gates_passed": all(gate["passed"] for gate in advisory),
+            "passed_gate_count": sum(1 for gate in gates if gate["passed"]),
+            "total_gate_count": len(gates),
+            "required_gate_count": len(required),
+            "advisory_gate_count": len(advisory),
+        },
+        "gates": gates,
+    }
+
+
 def _throughput_profile(
     sample: dict[str, Any],
     embeddings: dict[str, Any],
@@ -1888,6 +1994,7 @@ def build_report(config_path: str = "configs/proofatlas.yaml") -> dict[str, Any]
     readiness = _readiness_stage()
     scale = _scale_profile(config, sample, index, readiness)
     throughput = _throughput_profile(sample, embeddings, index, benchmark, timings, evaluation)
+    throughput["reproducibility_profile"] = _reproducibility_profile(config, config_hash, manifest, timings, evaluation, readiness)
     throughput["retrieval_bottleneck_profile"] = _retrieval_bottleneck_profile(evaluation)
     throughput["rapid_convergence_profile"] = _rapid_convergence_profile(evaluation, readiness, throughput)
     throughput["metric_uncertainty_profile"] = _metric_uncertainty_profile(evaluation)

@@ -120,6 +120,37 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                 "throughput_basis": "executed_pipeline_run",
                 "scale_estimate_reliable": True,
                 "embedding_rows_by_entity": {"proof_state": 10, "premise": 20, "theorem": 12},
+                "reproducibility_profile": {
+                    "method": "experiment_reproducibility_and_artifact_consistency_gates",
+                    "config_path": "configs/proofatlas.yaml",
+                    "config_hash": config_hash,
+                    "dataset_name": "erbacher/LeanRank-data",
+                    "source_kind": "huggingface",
+                    "random_seed": 42,
+                    "sample_plan": {"target_theorems": 10000},
+                    "summary": {
+                        "required_gates_passed": True,
+                        "advisory_gates_passed": True,
+                        "passed_gate_count": 7,
+                        "total_gate_count": 7,
+                    },
+                    "gates": [
+                        {
+                            "name": "theorem_disjoint_split",
+                            "severity": "required",
+                            "passed": True,
+                            "value": {"has_leakage": False},
+                            "threshold": "no theorem overlap across train/val/test",
+                        },
+                        {
+                            "name": "held_out_label_policy",
+                            "severity": "required",
+                            "passed": True,
+                            "value": {"candidate_pool": "train premise index"},
+                            "threshold": "test positives are labels only; train premise index is the candidate pool",
+                        },
+                    ],
+                },
                 "embedding_bottleneck_profile": {
                     "embed_stage_seconds": 2.0,
                     "embed_stage_share_of_total": 0.2,
@@ -705,6 +736,10 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "Data supervision" in text
     assert "Proof-state query representation: `full_name_goal`" in text
     assert "Local Lean/mathlib source extraction is out of scope" in text
+    assert "Reproducibility Profile" in text
+    assert "experiment_reproducibility_and_artifact_consistency_gates" in text
+    assert "theorem_disjoint_split" in text
+    assert "held_out_label_policy" in text
     assert "Retrieval Bottleneck Profile" in text
     assert "candidate_generation_or_embeddings" in text
     assert "top10_reranking_or_candidate_ordering" in text
