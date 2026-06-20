@@ -60,6 +60,21 @@ def test_readme_production_snapshot_matches_committed_artifacts() -> None:
     assert _readme_artifact_field(readme, "Pipeline timing", "scale estimate reliable") == str(throughput["scale_estimate_reliable"])
 
 
+def test_readme_premise_supervision_snapshot_matches_committed_artifacts() -> None:
+    repo = Path(__file__).resolve().parents[1]
+    readme = (repo / "README.md").read_text(encoding="utf-8")
+    supervision = json.loads((repo / "outputs/reports/premise_trace_supervision_report.json").read_text(encoding="utf-8"))
+    current = supervision["current_artifact_supervision"]
+    train = supervision["splits"]["train"]
+
+    assert _readme_artifact_field(readme, "Premise supervision", "total positive edges") == str(current["total_positive_edges"])
+    assert _readme_artifact_field(readme, "Premise supervision", "total negative candidates") == str(current["total_negative_edges"])
+    assert _readme_artifact_field(readme, "Premise supervision", "negative/positive ratio") == f"{float(current['negative_to_positive_edge_ratio']):.4f}"
+    assert _readme_artifact_field(readme, "Train proof-state supervision", "positive coverage") == f"{float(train['positive_proof_state_coverage']):.4f}"
+    assert _readme_artifact_field(readme, "Train proof-state supervision", "negative coverage") == f"{float(train['negative_proof_state_coverage']):.4f}"
+    assert _readme_artifact_field(readme, "Train hard negatives", "hardness mean") == f"{float(train['negative_candidate_hardness']['mean']):.4f}"
+
+
 def test_production_refresh_uses_configurable_pipeline_runner() -> None:
     repo = Path(__file__).resolve().parents[1]
     makefile = (repo / "Makefile").read_text(encoding="utf-8")

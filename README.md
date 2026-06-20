@@ -178,6 +178,17 @@ Current production run coverage and timing:
 | Pipeline timing | throughput basis | executed_pipeline_run |
 | Pipeline timing | scale estimate reliable | True |
 
+Current LeanRank-data premise supervision snapshot:
+
+| Artifact | Field | Value |
+| --- | --- | ---: |
+| Premise supervision | total positive edges | 69461 |
+| Premise supervision | total negative candidates | 663198 |
+| Premise supervision | negative/positive ratio | 9.5478 |
+| Train proof-state supervision | positive coverage | 1.0000 |
+| Train proof-state supervision | negative coverage | 1.0000 |
+| Train hard negatives | hardness mean | 0.6030 |
+
 To refresh the production evaluation artifacts after changing retrieval code or config:
 
 ```bash
