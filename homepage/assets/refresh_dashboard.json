@@ -356,15 +356,15 @@
   },
   "ready_for_refresh_comparison": true,
   "retrieval_quality": {
-    "evaluated_theorems": 50,
-    "gold_premises_in_train_index": 230,
-    "gold_premises_missing_from_train_index": 35,
-    "premise_mrr": 0.07540784240556661,
-    "premise_recall_at_10": 0.12792553191489361,
+    "evaluated_theorems": 1000,
+    "gold_premises_in_train_index": 4881,
+    "gold_premises_missing_from_train_index": 546,
+    "premise_mrr": 0.07831169467619567,
+    "premise_recall_at_10": 0.11624918291584951,
     "ranker_auc": 0.825379,
-    "theorem_mrr": 0.547312376522293,
-    "theorem_ndcg_at_10": 0.413929397649813,
-    "theorem_recall_at_10": 0.42328861316509003
+    "theorem_mrr": 0.5608535466914221,
+    "theorem_ndcg_at_10": 0.4451927253442335,
+    "theorem_recall_at_10": 0.49403129986534694
   },
   "scale": {
     "splits": [
@@ -440,8 +440,8 @@
         "relative": 0.0
       },
       "premise_recall_at_10": {
-        "absolute": 0.0,
-        "relative": 0.0
+        "absolute": -0.0116763489990441,
+        "relative": -0.09127457845406615
       },
       "premises": {
         "absolute": 0.0,
@@ -456,12 +456,12 @@
         "relative": 0.0
       },
       "theorem_mrr": {
-        "absolute": 0.0,
-        "relative": 0.0
+        "absolute": 0.013541170169129035,
+        "relative": 0.024741209499357045
       },
       "theorem_recall_at_10": {
-        "absolute": 0.0,
-        "relative": 0.0
+        "absolute": 0.07074268670025691,
+        "relative": 0.16712636366777486
       },
       "theorems": {
         "absolute": 0.0,
@@ -469,7 +469,7 @@
       }
     },
     "has_previous": true,
-    "history_entry_count": 18,
+    "history_entry_count": 19,
     "quality_gate_changes": {}
   }
 }

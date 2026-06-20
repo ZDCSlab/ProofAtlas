@@ -7,11 +7,11 @@
 - Split counts: test: 28910, train: 234520, val: 28582
 - Candidate pool: `train premise index`
 - Label policy: held-out test positive_edges are used only for evaluation
-- Evaluation scope: `sampled held-out splits`
-- Proof-state evaluation limits: `{'test': 100, 'val': 100}`
-- Theorem evaluation limits: `{'test': 50, 'val': 50}`
-- Proof-state test coverage: `100` / `3053` (`0.03275466754012447`)
-- Theorem test coverage: `50` / `1000` (`0.05`)
+- Evaluation scope: `full held-out splits`
+- Proof-state evaluation limits: `{'test': None, 'val': None}`
+- Theorem evaluation limits: `{'test': None, 'val': None}`
+- Proof-state test coverage: `3053` / `3053` (`1.0`)
+- Theorem test coverage: `1000` / `1000` (`1.0`)
 - Ranking backend: `batched_embedding_topk`
 - Evaluation GPU: `use_gpu=True`, device `cuda:0`, batch size `256`
 - Actual test ranking backend: proof-state `torch_cuda`, theorem `torch_cuda`
@@ -48,19 +48,19 @@ These metrics test whether the embedding/index candidate pool contains the gold 
 
 | Metric | Value |
 | --- | ---: |
-| `Recall@50` | 0.2795 |
-| `Recall@100` | 0.3090 |
-| `nDCG@50` | 0.1059 |
-| `nDCG@100` | 0.1123 |
+| `Recall@50` | 0.1961 |
+| `Recall@100` | 0.2362 |
+| `nDCG@50` | 0.0908 |
+| `nDCG@100` | 0.0987 |
 
 ### Theorem Candidate Pool
 
 | Metric | Value |
 | --- | ---: |
-| `theorem_retrieval_Recall@50` | 0.5942 |
-| `theorem_retrieval_Recall@100` | 0.6642 |
-| `theorem_retrieval_nDCG@50` | 0.4693 |
-| `theorem_retrieval_nDCG@100` | 0.4879 |
+| `theorem_retrieval_Recall@50` | 0.6314 |
+| `theorem_retrieval_Recall@100` | 0.6889 |
+| `theorem_retrieval_nDCG@50` | 0.4907 |
+| `theorem_retrieval_nDCG@100` | 0.5060 |
 
 ### Proof-State Query Representation Diagnostic
 
@@ -83,15 +83,15 @@ Each held-out test proof state is used as a query. Gold positive premises from t
 
 | Metric | Value |
 | --- | ---: |
-| `evaluated_queries` | 100 |
-| `evaluated_retrievable_queries` | 94 |
-| `gold_premise_coverage` | 0.8634 |
-| `Recall@1` | 0.0013 |
-| `Recall@5` | 0.0962 |
-| `Recall@10` | 0.1279 |
-| `MRR` | 0.0754 |
-| `MAP` | 0.0460 |
-| `nDCG@10` | 0.0680 |
+| `evaluated_queries` | 3053 |
+| `evaluated_retrievable_queries` | 2832 |
+| `gold_premise_coverage` | 0.9076 |
+| `Recall@1` | 0.0148 |
+| `Recall@5` | 0.0798 |
+| `Recall@10` | 0.1162 |
+| `MRR` | 0.0783 |
+| `MAP` | 0.0494 |
+| `nDCG@10` | 0.0697 |
 
 ### Proof-State-Level Reranked Retrieval
 
@@ -128,15 +128,15 @@ Each held-out test theorem is used as a query for proof guidance. Gold premises 
 
 | Metric | Value |
 | --- | ---: |
-| `theorem_retrieval_evaluated_theorems` | 50 |
-| `theorem_retrieval_evaluated_theorems_with_train_gold` | 49 |
-| `theorem_retrieval_gold_premise_coverage` | 0.8679 |
-| `theorem_retrieval_Recall@1` | 0.2434 |
-| `theorem_retrieval_Recall@5` | 0.3850 |
-| `theorem_retrieval_Recall@10` | 0.4233 |
-| `theorem_retrieval_MRR` | 0.5473 |
-| `theorem_retrieval_MAP` | 0.3560 |
-| `theorem_retrieval_nDCG@10` | 0.4139 |
+| `theorem_retrieval_evaluated_theorems` | 1000 |
+| `theorem_retrieval_evaluated_theorems_with_train_gold` | 955 |
+| `theorem_retrieval_gold_premise_coverage` | 0.8994 |
+| `theorem_retrieval_Recall@1` | 0.2271 |
+| `theorem_retrieval_Recall@5` | 0.4284 |
+| `theorem_retrieval_Recall@10` | 0.4940 |
+| `theorem_retrieval_MRR` | 0.5609 |
+| `theorem_retrieval_MAP` | 0.3741 |
+| `theorem_retrieval_nDCG@10` | 0.4452 |
 
 ## Domain Breakdown
 
@@ -146,35 +146,35 @@ These tables show held-out test metrics grouped by LeanRank-data domain. They he
 
 | Domain | Queries | `Recall@10` | `MRR` | `MAP` | `nDCG@10` | `gold_premise_coverage` |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| AlgebraicGeometry | 37 | 0.1071 | 0.0658 | 0.0394 | 0.0586 | 0.8272 |
-| RingTheory | 24 | 0.0978 | 0.0368 | 0.0297 | 0.0435 | 0.8913 |
-| LinearAlgebra | 9 | 0.0000 | 0.0127 | 0.0137 | 0.0000 | 1.0000 |
-| NumberTheory | 9 | 0.3000 | 0.1262 | 0.0814 | 0.1336 | 0.8148 |
-| Analysis | 5 | 0.2500 | 0.0357 | 0.0357 | 0.0833 | 0.7143 |
-| Algebra | 4 | 0.1562 | 0.3750 | 0.0989 | 0.1599 | 0.8667 |
-| FieldTheory | 4 | 0.2500 | 0.1385 | 0.1317 | 0.1577 | 0.8750 |
-| Topology | 3 | 0.0000 | 0.0000 | 0.0000 | 0.0000 | 0.8333 |
-| CategoryTheory | 1 | 0.2500 | 0.1250 | 0.0312 | 0.1232 | 1.0000 |
-| Computability | 1 | 0.0000 | 0.0000 | 0.0000 | 0.0000 | 1.0000 |
-| Data | 1 | 0.6667 | 0.5000 | 0.3889 | 0.5307 | 1.0000 |
-| Geometry | 1 | 0.0000 | 0.0000 | 0.0000 | 0.0000 | 0.7500 |
+| Analysis | 391 | 0.0927 | 0.0594 | 0.0349 | 0.0521 | 0.9054 |
+| Data | 346 | 0.1741 | 0.1205 | 0.0802 | 0.1087 | 0.9161 |
+| MeasureTheory | 323 | 0.0890 | 0.0411 | 0.0309 | 0.0458 | 0.9508 |
+| Algebra | 307 | 0.1325 | 0.0851 | 0.0481 | 0.0747 | 0.9187 |
+| Topology | 293 | 0.0671 | 0.0473 | 0.0334 | 0.0430 | 0.9392 |
+| RingTheory | 271 | 0.0913 | 0.0757 | 0.0435 | 0.0603 | 0.9259 |
+| CategoryTheory | 168 | 0.0997 | 0.0935 | 0.0493 | 0.0683 | 0.8224 |
+| LinearAlgebra | 141 | 0.0913 | 0.1009 | 0.0456 | 0.0636 | 0.9434 |
+| NumberTheory | 133 | 0.1394 | 0.0817 | 0.0578 | 0.0837 | 0.9012 |
+| Probability | 116 | 0.0602 | 0.0326 | 0.0279 | 0.0311 | 0.9041 |
+| GroupTheory | 80 | 0.2006 | 0.1189 | 0.0795 | 0.1209 | 0.8894 |
+| Order | 79 | 0.1406 | 0.0829 | 0.0579 | 0.0804 | 0.8802 |
 
 ### Test Theorem-Level Domains
 
 | Domain | Queries | `theorem_retrieval_Recall@10` | `theorem_retrieval_MRR` | `theorem_retrieval_MAP` | `theorem_retrieval_nDCG@10` | `theorem_retrieval_gold_premise_coverage` |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| AlgebraicGeometry | 9 | 0.3988 | 0.5362 | 0.3404 | 0.4040 | 0.8056 |
-| Analysis | 7 | 0.2778 | 0.4017 | 0.2619 | 0.2750 | 0.8500 |
-| RingTheory | 7 | 0.2500 | 0.2319 | 0.1230 | 0.1919 | 0.9091 |
-| LinearAlgebra | 6 | 0.5611 | 0.7244 | 0.4506 | 0.5347 | 1.0000 |
-| .lake | 5 | 0.6286 | 0.6500 | 0.6193 | 0.6237 | 0.7059 |
-| Algebra | 4 | 0.5312 | 0.7857 | 0.5264 | 0.5777 | 0.8667 |
-| NumberTheory | 4 | 0.3352 | 0.5625 | 0.2959 | 0.3654 | 0.8889 |
-| CategoryTheory | 1 | 0.5000 | 1.0000 | 0.3750 | 0.5585 | 1.0000 |
-| Computability | 1 | 0.0000 | 0.0769 | 0.0562 | 0.0000 | 1.0000 |
-| Data | 1 | 1.0000 | 1.0000 | 0.7556 | 0.8855 | 1.0000 |
-| FieldTheory | 1 | 0.1429 | 0.1429 | 0.0243 | 0.0916 | 0.8750 |
-| Geometry | 1 | 0.6667 | 1.0000 | 0.4444 | 0.6364 | 0.7500 |
+| Algebra | 149 | 0.5369 | 0.5949 | 0.4113 | 0.4843 | 0.9048 |
+| Data | 146 | 0.6199 | 0.6702 | 0.4696 | 0.5555 | 0.9150 |
+| Analysis | 116 | 0.3724 | 0.4733 | 0.2810 | 0.3387 | 0.9051 |
+| Topology | 78 | 0.4723 | 0.4962 | 0.3615 | 0.4184 | 0.9168 |
+| RingTheory | 70 | 0.4352 | 0.5314 | 0.3293 | 0.4004 | 0.9223 |
+| MeasureTheory | 66 | 0.4028 | 0.4788 | 0.3101 | 0.3668 | 0.9324 |
+| CategoryTheory | 54 | 0.4712 | 0.5981 | 0.3771 | 0.4489 | 0.7963 |
+| LinearAlgebra | 50 | 0.4775 | 0.6330 | 0.3518 | 0.4401 | 0.9412 |
+| Order | 46 | 0.5710 | 0.6238 | 0.4549 | 0.5196 | 0.8874 |
+| NumberTheory | 35 | 0.4287 | 0.5241 | 0.2986 | 0.3829 | 0.8824 |
+| GroupTheory | 27 | 0.4982 | 0.5080 | 0.3388 | 0.4165 | 0.8630 |
+| Probability | 26 | 0.5799 | 0.5168 | 0.4213 | 0.4869 | 0.9167 |
 
 ## Error Analysis
 
@@ -184,31 +184,31 @@ Worst-case rows are held-out test queries with train-index gold premises but low
 
 | Item | Domain | Gold in train | Missing gold | Recall@10 | MRR contribution | MAP contribution |
 | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| ps:Algebra.trace_trace_of_basis:6:41dd1d089d19 | RingTheory | 7 | 0 | n/a | 0.0000 | 0.0000 |
-| ps:AffineBasis.surjective_coord:0:4a0c7c385303 | LinearAlgebra | 6 | 0 | n/a | 0.0000 | 0.0000 |
-| ps:Algebra.Etale.iff_exists_algEquiv_prod:4:7f4836d51cf7 | RingTheory | 5 | 0 | n/a | 0.0000 | 0.0000 |
-| ps:AffineBasis.surjective_coord:10:9f704bb84c46 | LinearAlgebra | 4 | 0 | n/a | 0.0000 | 0.0000 |
-| ps:AffineBasis.surjective_coord:6:8c422bb1b7a4 | LinearAlgebra | 4 | 0 | n/a | 0.0000 | 0.0000 |
-| ps:AkraBazziRecurrence.growsPolynomially_id:4:7c914e3bc2e5 | Computability | 4 | 0 | n/a | 0.0000 | 0.0000 |
-| ps:AddCircle.continuousAt_equivIoc:1:8e4f460e0671 | Topology | 3 | 1 | n/a | 0.0000 | 0.0000 |
-| ps:Affine.Simplex.ne_altitudeFoot:1:2761c2382797 | Geometry | 3 | 1 | n/a | 0.0000 | 0.0000 |
-| ps:AddLECancellable.lt_add_of_tsub_lt_left:0:a8fa4afcd330 | Algebra | 2 | 0 | n/a | 0.0000 | 0.0000 |
-| ps:AffineSubspace.isClosed_direction_iff:1:4fe62edbe790 | Analysis | 2 | 0 | n/a | 0.0000 | 0.0000 |
+| ps:exists_nat_nat_continuous_surjective_of_completeSpace:8:a5e4a0a389a2 | Topology | 24 | 0 | n/a | 0.0000 | 0.0000 |
+| ps:IsAdicComplete.le_jacobson_bot:5:535863f3cc8e | RingTheory | 16 | 0 | n/a | 0.0000 | 0.0000 |
+| ps:Profinite.epi_iff_surjective:10:229ef3f110bd | Topology | 15 | 1 | n/a | 0.0000 | 0.0000 |
+| ps:MeasureTheory.LevyProkhorov.continuous_equiv_symm_probabilityMeasure:7:9f2d803eb2a1 | MeasureTheory | 14 | 0 | n/a | 0.0000 | 0.0000 |
+| ps:exists_nat_nat_continuous_surjective_of_completeSpace:7:fd09f2736ab9 | Topology | 14 | 0 | n/a | 0.0000 | 0.0000 |
+| ps:MeasureTheory.LevyProkhorov.continuous_equiv_symm_probabilityMeasure:35:a4f0a1dbd5a7 | MeasureTheory | 13 | 0 | n/a | 0.0000 | 0.0000 |
+| ps:iteratedDerivWithin_vcomp_three:2:f2f332f59da8 | Analysis | 12 | 2 | n/a | 0.0000 | 0.0000 |
+| ps:iteratedDerivWithin_vcomp_three:5:f2f332f59da8 | Analysis | 12 | 2 | n/a | 0.0000 | 0.0000 |
+| ps:Complex.two_pi_I_inv_smul_circleIntegral_sub_inv_smul_of_differentiable_on_off_countable:6:6b2e175ca8ee | Analysis | 11 | 0 | n/a | 0.0000 | 0.0000 |
+| ps:MulChar.IsQuadratic.gaussSum_frob_iter:0:427502f78e8d | NumberTheory | 11 | 0 | n/a | 0.0000 | 0.0000 |
 
 ### Worst Theorem Queries
 
 | Item | Domain | Gold in train | Missing gold | Recall@10 | MRR contribution | MAP contribution |
 | --- | --- | ---: | ---: | ---: | ---: | ---: |
+| ProbabilityTheory.strong_law_aux1 | Probability | 69 | 4 | n/a | 0.0000 | 0.0000 |
+| exists_nat_nat_continuous_surjective_of_completeSpace | Topology | 58 | 0 | n/a | 0.0000 | 0.0000 |
+| IsAdicComplete.le_jacobson_bot | RingTheory | 34 | 1 | n/a | 0.0000 | 0.0000 |
+| MeasureTheory.StronglyMeasurable.finStronglyMeasurable_of_set_sigmaFinite | MeasureTheory | 34 | 0 | n/a | 0.0000 | 0.0000 |
+| MvPowerSeries.X_pow_dvd_iff | RingTheory | 21 | 2 | n/a | 0.0000 | 0.0000 |
+| SimpleGraph.even_card_odd_degree_vertices | Combinatorics | 20 | 0 | n/a | 0.0000 | 0.0000 |
+| LSeries_eventually_eq_zero_iff' | NumberTheory | 19 | 2 | n/a | 0.0000 | 0.0000 |
+| MeasureTheory.llr_tilted_left | MeasureTheory | 18 | 0 | n/a | 0.0000 | 0.0000 |
+| TopCat.isTopologicalBasis_cofiltered_limit | Topology | 16 | 2 | n/a | 0.0000 | 0.0000 |
 | ArithmeticFunction.vonMangoldt.abscissaOfAbsConv_residueClass_le_one | NumberTheory | 15 | 0 | n/a | 0.0000 | 0.0000 |
-| Algebra.Etale.iff_exists_algEquiv_prod | RingTheory | 7 | 2 | n/a | 0.0000 | 0.0000 |
-| Array.pairwise_extract | .lake | 1 | 3 | n/a | 0.0000 | 0.0000 |
-| AlgebraicGeometry.isFinite_iff_locallyOfFiniteType_of_jacobsonSpace | AlgebraicGeometry | 19 | 7 | n/a | 0.2000 | 0.0506 |
-| Algebra.trace_trace_of_basis | RingTheory | 15 | 0 | n/a | 0.1667 | 0.0322 |
-| Besicovitch.SatelliteConfig.inter' | MeasureTheory | 4 | 0 | n/a | 0.2500 | 0.0625 |
-| AlgEquiv.restrictNormalHom_id | FieldTheory | 7 | 1 | n/a | 0.1429 | 0.0243 |
-| AffineBasis.surjective_coord | LinearAlgebra | 6 | 0 | n/a | 0.0133 | 0.0058 |
-| Asymptotics.IsBigOWith.add | Analysis | 3 | 0 | n/a | 0.0500 | 0.0167 |
-| AlgebraicGeometry.HasRingHomProperty.stalkwise | AlgebraicGeometry | 3 | 4 | n/a | 0.0588 | 0.0196 |
 
 ## Validation Metrics
 
@@ -218,29 +218,29 @@ Validation metrics are reported for model selection and sanity checking; final c
 
 | Metric | Value |
 | --- | ---: |
-| `evaluated_queries` | 100 |
-| `evaluated_retrievable_queries` | 89 |
-| `gold_premise_coverage` | 0.8549 |
-| `Recall@1` | 0.0232 |
-| `Recall@5` | 0.0640 |
-| `Recall@10` | 0.1146 |
-| `MRR` | 0.0782 |
-| `MAP` | 0.0526 |
-| `nDCG@10` | 0.0706 |
+| `evaluated_queries` | 2822 |
+| `evaluated_retrievable_queries` | 2643 |
+| `gold_premise_coverage` | 0.9098 |
+| `Recall@1` | 0.0163 |
+| `Recall@5` | 0.0828 |
+| `Recall@10` | 0.1142 |
+| `MRR` | 0.0801 |
+| `MAP` | 0.0511 |
+| `nDCG@10` | 0.0698 |
 
 ### Validation Theorem-Level Premise Ranking
 
 | Metric | Value |
 | --- | ---: |
-| `theorem_retrieval_evaluated_theorems` | 50 |
-| `theorem_retrieval_evaluated_theorems_with_train_gold` | 44 |
-| `theorem_retrieval_gold_premise_coverage` | 0.8781 |
-| `theorem_retrieval_Recall@1` | 0.1255 |
-| `theorem_retrieval_Recall@5` | 0.3323 |
-| `theorem_retrieval_Recall@10` | 0.3712 |
-| `theorem_retrieval_MRR` | 0.4833 |
-| `theorem_retrieval_MAP` | 0.2506 |
-| `theorem_retrieval_nDCG@10` | 0.3299 |
+| `theorem_retrieval_evaluated_theorems` | 1000 |
+| `theorem_retrieval_evaluated_theorems_with_train_gold` | 961 |
+| `theorem_retrieval_gold_premise_coverage` | 0.8982 |
+| `theorem_retrieval_Recall@1` | 0.2556 |
+| `theorem_retrieval_Recall@5` | 0.4532 |
+| `theorem_retrieval_Recall@10` | 0.5100 |
+| `theorem_retrieval_MRR` | 0.5744 |
+| `theorem_retrieval_MAP` | 0.3949 |
+| `theorem_retrieval_nDCG@10` | 0.4626 |
 
 ## Index Benchmark
 
@@ -315,7 +315,6 @@ The current ranking labels come from normalized LeanRank-data premise supervisio
 ## Recommendations
 
 - `high` `performance_timing`: Refresh pipeline timings with a non-cached production run before using throughput numbers for scale-up planning. Run `make refresh-production-report` after a full `leanrank-kg full-pipeline --config configs/proofatlas.yaml --force` timing pass, or keep the current throughput fields marked as cached/partial diagnostics only.
-- `medium` `evaluation_scope`: Current held-out metrics are sampled because evaluation limits are configured. Proof-state limits: {'test': 100, 'val': 100}; theorem limits: {'test': 50, 'val': 50}. For final quantitative claims, run `make refresh-production-full-eval` or rerun evaluation with these limits removed or raised enough to cover the full held-out split.
 
 ## Interpretation
 

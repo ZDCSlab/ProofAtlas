@@ -155,16 +155,16 @@ Sampling writes `outputs/reports/corpus_manifest.json` with dataset source, sour
 
 After `make demo` or `make smoke`, metrics are written to `outputs/reports/metrics.json`, held-out test-set metrics to `outputs/reports/test_set_evaluation.json`, the experiment report to `outputs/reports/experiment_report.md`, premise supervision statistics to `outputs/reports/premise_trace_supervision_report.json`, retrieval examples to `outputs/reports/retrieval_examples.json`, index benchmarks to `outputs/reports/index_benchmark.json`, pipeline performance profile data to `outputs/reports/pipeline_performance_report.json`, refresh dashboard data to `outputs/reports/refresh_dashboard.json`, refresh trend/history data to `outputs/reports/refresh_trend.json` and `outputs/reports/refresh_history.json`, and graph summaries to `outputs/reports/graph_stats_summary.json`.
 
-Current `configs/proofatlas.yaml` sampled held-out test results:
+Current `configs/proofatlas.yaml` full held-out test results:
 
 | Task | Metric | Value |
 | --- | --- | ---: |
-| Proof-state premise retrieval | Recall@10 | 0.1279 |
-| Proof-state premise retrieval | Recall@100 | 0.3090 |
+| Proof-state premise retrieval | Recall@10 | 0.1162 |
+| Proof-state premise retrieval | Recall@100 | 0.2362 |
 | Reranked proof-state diagnostic | Recall@10 | 0.1513 |
-| Theorem-level premise retrieval | Recall@10 | 0.4233 |
-| Theorem-level premise retrieval | Recall@100 | 0.6642 |
-| Theorem-level premise retrieval | MRR | 0.5473 |
+| Theorem-level premise retrieval | Recall@10 | 0.4940 |
+| Theorem-level premise retrieval | Recall@100 | 0.6889 |
+| Theorem-level premise retrieval | MRR | 0.5609 |
 | Learned premise ranker | validation AUC | 0.8254 |
 
 To refresh the production evaluation artifacts after changing retrieval code or config:

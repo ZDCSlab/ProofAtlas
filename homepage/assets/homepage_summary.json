@@ -1285,13 +1285,13 @@
   },
   "metrics": {
     "AUC": 0.825379,
-    "MAP": 0.04599873631316425,
-    "MRR": 0.07540784240556661,
-    "Recall@1": 0.0013297872340425532,
-    "Recall@10": 0.12792553191489361,
-    "Recall@100": 0.30895390070921985,
-    "Recall@5": 0.09618794326241133,
-    "Recall@50": 0.27952127659574466,
+    "MAP": 0.04940290267379889,
+    "MRR": 0.07831169467619567,
+    "Recall@1": 0.014799239719790566,
+    "Recall@10": 0.11624918291584951,
+    "Recall@100": 0.23617207100657536,
+    "Recall@5": 0.07977248968597841,
+    "Recall@50": 0.19609868446426193,
     "difficulty_bucket_distribution": [
       {
         "bucket": "easy",
@@ -1336,12 +1336,12 @@
     ],
     "difficulty_estimator_train_mae": 0.03893516332772901,
     "difficulty_estimator_val_mae": 0.06381645932653449,
-    "gold_premise_coverage": 0.8634361233480177,
-    "nDCG@1": 0.010638297872340425,
-    "nDCG@10": 0.0680313806460776,
-    "nDCG@100": 0.11228497381341818,
-    "nDCG@5": 0.056143712293221945,
-    "nDCG@50": 0.10587642044776965,
+    "gold_premise_coverage": 0.9075701729515169,
+    "nDCG@1": 0.02401129943502825,
+    "nDCG@10": 0.06965706738000225,
+    "nDCG@100": 0.09865340927291225,
+    "nDCG@5": 0.056421291554973385,
+    "nDCG@50": 0.09075943438226491,
     "proof_technique_label_coverage": 0.8545577771851754,
     "reranked_proof_state_MAP": 0.07660818713450292,
     "reranked_proof_state_MRR": 0.1456140350877193,
@@ -1357,26 +1357,26 @@
     "reranked_proof_state_nDCG@1": 0.05263157894736842,
     "reranked_proof_state_nDCG@10": 0.11480395621121713,
     "reranked_proof_state_nDCG@5": 0.10233570120794566,
-    "test_proof_state_evaluated_queries": 100,
-    "test_proof_state_evaluated_retrievable_queries": 94,
-    "theorem_retrieval_MAP": 0.35601788179788446,
-    "theorem_retrieval_MRR": 0.547312376522293,
-    "theorem_retrieval_Recall@1": 0.2434065934065934,
-    "theorem_retrieval_Recall@10": 0.42328861316509003,
-    "theorem_retrieval_Recall@100": 0.664224887774834,
-    "theorem_retrieval_Recall@5": 0.3849657324415649,
-    "theorem_retrieval_Recall@50": 0.5941816656907956,
-    "theorem_retrieval_evaluated_theorems": 50,
-    "theorem_retrieval_evaluated_theorems_with_train_gold": 49,
-    "theorem_retrieval_gold_premise_coverage": 0.8679245283018868,
-    "theorem_retrieval_gold_premises_in_train_index": 230,
-    "theorem_retrieval_gold_premises_missing_from_train_index": 35,
-    "theorem_retrieval_gold_premises_total": 265,
-    "theorem_retrieval_nDCG@1": 0.4489795918367347,
-    "theorem_retrieval_nDCG@10": 0.413929397649813,
-    "theorem_retrieval_nDCG@100": 0.48791441763346055,
-    "theorem_retrieval_nDCG@5": 0.395975865777386,
-    "theorem_retrieval_nDCG@50": 0.46930715432145537
+    "test_proof_state_evaluated_queries": 3053,
+    "test_proof_state_evaluated_retrievable_queries": 2832,
+    "theorem_retrieval_MAP": 0.3741023060807077,
+    "theorem_retrieval_MRR": 0.5608535466914221,
+    "theorem_retrieval_Recall@1": 0.22713225319122254,
+    "theorem_retrieval_Recall@10": 0.49403129986534694,
+    "theorem_retrieval_Recall@100": 0.6888562692074705,
+    "theorem_retrieval_Recall@5": 0.42842039370357154,
+    "theorem_retrieval_Recall@50": 0.6314160929647099,
+    "theorem_retrieval_evaluated_theorems": 1000,
+    "theorem_retrieval_evaluated_theorems_with_train_gold": 955,
+    "theorem_retrieval_gold_premise_coverage": 0.8993919292426755,
+    "theorem_retrieval_gold_premises_in_train_index": 4881,
+    "theorem_retrieval_gold_premises_missing_from_train_index": 546,
+    "theorem_retrieval_gold_premises_total": 5427,
+    "theorem_retrieval_nDCG@1": 0.42198952879581153,
+    "theorem_retrieval_nDCG@10": 0.4451927253442335,
+    "theorem_retrieval_nDCG@100": 0.5060344823698298,
+    "theorem_retrieval_nDCG@5": 0.42434492513714506,
+    "theorem_retrieval_nDCG@50": 0.4907450705779267
   },
   "overview": {
     "max_difficulty_count": 23591,
@@ -1950,15 +1950,15 @@
     },
     "ready_for_refresh_comparison": true,
     "retrieval_quality": {
-      "evaluated_theorems": 50,
-      "gold_premises_in_train_index": 230,
-      "gold_premises_missing_from_train_index": 35,
-      "premise_mrr": 0.07540784240556661,
-      "premise_recall_at_10": 0.12792553191489361,
+      "evaluated_theorems": 1000,
+      "gold_premises_in_train_index": 4881,
+      "gold_premises_missing_from_train_index": 546,
+      "premise_mrr": 0.07831169467619567,
+      "premise_recall_at_10": 0.11624918291584951,
       "ranker_auc": 0.825379,
-      "theorem_mrr": 0.547312376522293,
-      "theorem_ndcg_at_10": 0.413929397649813,
-      "theorem_recall_at_10": 0.42328861316509003
+      "theorem_mrr": 0.5608535466914221,
+      "theorem_ndcg_at_10": 0.4451927253442335,
+      "theorem_recall_at_10": 0.49403129986534694
     },
     "scale": {
       "splits": [
@@ -2034,8 +2034,8 @@
           "relative": 0.0
         },
         "premise_recall_at_10": {
-          "absolute": 0.0,
-          "relative": 0.0
+          "absolute": -0.0116763489990441,
+          "relative": -0.09127457845406615
         },
         "premises": {
           "absolute": 0.0,
@@ -2050,12 +2050,12 @@
           "relative": 0.0
         },
         "theorem_mrr": {
-          "absolute": 0.0,
-          "relative": 0.0
+          "absolute": 0.013541170169129035,
+          "relative": 0.024741209499357045
         },
         "theorem_recall_at_10": {
-          "absolute": 0.0,
-          "relative": 0.0
+          "absolute": 0.07074268670025691,
+          "relative": 0.16712636366777486
         },
         "theorems": {
           "absolute": 0.0,
@@ -2063,7 +2063,7 @@
         }
       },
       "has_previous": true,
-      "history_entry_count": 18,
+      "history_entry_count": 19,
       "quality_gate_changes": {}
     }
   },
@@ -4095,9 +4095,119 @@
           "theorem_query_parse_present": true
         },
         "ready_for_refresh_comparison": true
+      },
+      {
+        "corpus": {
+          "config_hash": "30f1b8ab4273d20c",
+          "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
+          "data_supervision": {
+            "has_negative_candidates": true,
+            "has_real_mathlib_source": true,
+            "has_tactic_states": true,
+            "has_true_positive_premises": true,
+            "kind": "leanrank_proof_state_rows",
+            "limitations": [],
+            "premise_label_semantics": "leanrank_positive_and_negative_candidates",
+            "proof_trace_level": "proof_state_rows",
+            "suitable_for": {
+              "kg_visualization": true,
+              "premise_ranking_training": true,
+              "proof_state_pattern_training": true,
+              "theorem_text_retrieval_demo": true
+            }
+          },
+          "dataset_name": "erbacher/LeanRank-data",
+          "lean_version": "unknown",
+          "mathlib_commit": "unknown",
+          "sampled_rows": 292012,
+          "sampled_theorems": 10000,
+          "source_kind": "huggingface"
+        },
+        "deltas_from_previous": {
+          "artifact_compatible": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "difficulty_train_mae": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "edges": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "minimum_context_coverage": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "nodes": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "premise_index_recall_vs_exact": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "premise_recall_at_10": {
+            "absolute": -0.0116763489990441,
+            "relative": -0.09127457845406615
+          },
+          "premises": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "proof_states": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "ready_for_refresh_comparison": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "theorem_mrr": {
+            "absolute": 0.013541170169129035,
+            "relative": 0.024741209499357045
+          },
+          "theorem_recall_at_10": {
+            "absolute": 0.07074268670025691,
+            "relative": 0.16712636366777486
+          },
+          "theorems": {
+            "absolute": 0.0,
+            "relative": 0.0
+          }
+        },
+        "generated_at": "2026-06-20T17:06:43.024913+00:00",
+        "metrics": {
+          "artifact_compatible": true,
+          "difficulty_train_mae": 0.03893516332772901,
+          "edges": 1385416,
+          "minimum_context_coverage": 1.0,
+          "nodes": 280422,
+          "premise_index_recall_vs_exact": 0.9890000000000001,
+          "premise_recall_at_10": 0.11624918291584951,
+          "premises": 202185,
+          "proof_states": 29598,
+          "ready_for_refresh_comparison": true,
+          "theorem_mrr": 0.5608535466914221,
+          "theorem_recall_at_10": 0.49403129986534694,
+          "theorems": 10000
+        },
+        "quality_gate_changes": {},
+        "quality_gates": {
+          "artifact_compatible": true,
+          "graph_valid": true,
+          "index_benchmark_present": true,
+          "parsing_coverage_present": true,
+          "schema_clean": true,
+          "split_clean": true,
+          "theorem_eval_present": true,
+          "theorem_query_parse_present": true
+        },
+        "ready_for_refresh_comparison": true
       }
     ],
-    "entry_count": 18,
+    "entry_count": 19,
     "history_limit": 20,
     "latest": {
       "corpus": {
@@ -4152,8 +4262,8 @@
           "relative": 0.0
         },
         "premise_recall_at_10": {
-          "absolute": 0.0,
-          "relative": 0.0
+          "absolute": -0.0116763489990441,
+          "relative": -0.09127457845406615
         },
         "premises": {
           "absolute": 0.0,
@@ -4168,19 +4278,19 @@
           "relative": 0.0
         },
         "theorem_mrr": {
-          "absolute": 0.0,
-          "relative": 0.0
+          "absolute": 0.013541170169129035,
+          "relative": 0.024741209499357045
         },
         "theorem_recall_at_10": {
-          "absolute": 0.0,
-          "relative": 0.0
+          "absolute": 0.07074268670025691,
+          "relative": 0.16712636366777486
         },
         "theorems": {
           "absolute": 0.0,
           "relative": 0.0
         }
       },
-      "generated_at": "2026-06-20T17:01:09.202938+00:00",
+      "generated_at": "2026-06-20T17:06:43.024913+00:00",
       "metrics": {
         "artifact_compatible": true,
         "difficulty_train_mae": 0.03893516332772901,
@@ -4188,12 +4298,12 @@
         "minimum_context_coverage": 1.0,
         "nodes": 280422,
         "premise_index_recall_vs_exact": 0.9890000000000001,
-        "premise_recall_at_10": 0.12792553191489361,
+        "premise_recall_at_10": 0.11624918291584951,
         "premises": 202185,
         "proof_states": 29598,
         "ready_for_refresh_comparison": true,
-        "theorem_mrr": 0.547312376522293,
-        "theorem_recall_at_10": 0.42328861316509003,
+        "theorem_mrr": 0.5608535466914221,
+        "theorem_recall_at_10": 0.49403129986534694,
         "theorems": 10000
       },
       "quality_gate_changes": {},
@@ -4218,12 +4328,12 @@
       "minimum_context_coverage": 1.0,
       "nodes": 280422,
       "premise_index_recall_vs_exact": 0.9890000000000001,
-      "premise_recall_at_10": 0.12792553191489361,
+      "premise_recall_at_10": 0.11624918291584951,
       "premises": 202185,
       "proof_states": 29598,
       "ready_for_refresh_comparison": true,
-      "theorem_mrr": 0.547312376522293,
-      "theorem_recall_at_10": 0.42328861316509003,
+      "theorem_mrr": 0.5608535466914221,
+      "theorem_recall_at_10": 0.49403129986534694,
       "theorems": 10000
     },
     "current_corpus": {
@@ -4278,8 +4388,8 @@
         "relative": 0.0
       },
       "premise_recall_at_10": {
-        "absolute": 0.0,
-        "relative": 0.0
+        "absolute": -0.0116763489990441,
+        "relative": -0.09127457845406615
       },
       "premises": {
         "absolute": 0.0,
@@ -4294,12 +4404,12 @@
         "relative": 0.0
       },
       "theorem_mrr": {
-        "absolute": 0.0,
-        "relative": 0.0
+        "absolute": 0.013541170169129035,
+        "relative": 0.024741209499357045
       },
       "theorem_recall_at_10": {
-        "absolute": 0.0,
-        "relative": 0.0
+        "absolute": 0.07074268670025691,
+        "relative": 0.16712636366777486
       },
       "theorems": {
         "absolute": 0.0,
