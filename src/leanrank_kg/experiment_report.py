@@ -600,6 +600,7 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
         f"- Proof-state test coverage: `{held_out_test_coverage.get('proof_state_evaluated_queries', 'n/a')}` / `{held_out_test_coverage.get('proof_state_total', 'n/a')}` (`{held_out_test_coverage.get('proof_state_coverage_fraction', 'n/a')}`)",
         f"- Theorem test coverage: `{held_out_test_coverage.get('theorem_evaluated_queries', 'n/a')}` / `{held_out_test_coverage.get('theorem_total', 'n/a')}` (`{held_out_test_coverage.get('theorem_coverage_fraction', 'n/a')}`)",
         f"- Ranking backend: `{evaluation_scope.get('ranking_backend', 'n/a')}`",
+        f"- Proof-state query representation: `{evaluation_scope.get('proof_state_query_representation', 'stored_embedding')}`",
         f"- Evaluation GPU: `use_gpu={evaluation_scope.get('use_gpu', 'n/a')}`, device `{evaluation_scope.get('gpu_device', 'n/a')}`, batch size `{evaluation_scope.get('batch_size', 'n/a')}`",
         f"- Actual test ranking backend: proof-state `{actual_proof_backend}`, theorem `{actual_theorem_backend}`",
         f"- Case-study regeneration during evaluation: `{evaluation_scope.get('case_study_limit', 'n/a')}` theorem guidance cases",

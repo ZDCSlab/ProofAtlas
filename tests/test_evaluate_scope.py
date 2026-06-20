@@ -23,6 +23,7 @@ def test_full_heldout_override_removes_core_evaluation_limits(tmp_path, monkeypa
                 "  max_test_proof_states: 11",
                 "  max_test_theorems: 3",
                 "  rerank_max_test_proof_states: 0",
+                "  proof_state_query_representation: stored_embedding",
                 "  query_representation_diagnostic_examples: 0",
             ]
         ),
@@ -32,10 +33,12 @@ def test_full_heldout_override_removes_core_evaluation_limits(tmp_path, monkeypa
     write_json("outputs/reports/ranker_validation_metrics.json", {})
 
     proof_state_limits = {}
+    proof_state_query_representations = {}
     theorem_limits = {}
 
     def fake_proof_state(split, top_ks, train_premises, max_examples=None, **kwargs):
         proof_state_limits[split] = max_examples
+        proof_state_query_representations[split] = kwargs.get("query_representation")
         return {
             "metrics": {"evaluated_queries": 1, "evaluated_retrievable_queries": 1, "Recall@1": 1.0},
             "examples": [{"split": split, "proof_state_id": f"ps{i}"} for i in range(20)],
@@ -65,6 +68,7 @@ def test_full_heldout_override_removes_core_evaluation_limits(tmp_path, monkeypa
 
     data = json.loads((tmp_path / "outputs/reports/test_set_evaluation.json").read_text(encoding="utf-8"))
     assert proof_state_limits == {"val": None, "test": None}
+    assert proof_state_query_representations == {"val": "stored_embedding", "test": "stored_embedding"}
     assert theorem_limits == {"val": None, "test": None}
     assert data["evaluation_scope"]["full_heldout_override"] is True
     assert data["evaluation_scope"]["is_sampled"] is False
@@ -79,6 +83,7 @@ def test_full_heldout_override_removes_core_evaluation_limits(tmp_path, monkeypa
         "test_proof_state_query_representation_diagnostic",
     ]
     assert data["evaluation_scope"]["query_representation_diagnostic_splits"] == ["test", "val"]
+    assert data["evaluation_scope"]["proof_state_query_representation"] == "stored_embedding"
 
 
 def test_theorem_evaluation_skips_case_study_query_text_when_disabled(tmp_path, monkeypatch):

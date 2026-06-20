@@ -975,6 +975,7 @@ def _resource_parallelism_profile(
         },
         "evaluation_parallelism": {
             "ranking_backend": evaluation_scope.get("ranking_backend"),
+            "proof_state_query_representation": evaluation_scope.get("proof_state_query_representation"),
             "requested_use_gpu": evaluation_scope.get("use_gpu"),
             "requested_gpu_device": evaluation_scope.get("gpu_device"),
             "batch_size": evaluation_scope.get("batch_size"),

@@ -13,6 +13,7 @@
 - Proof-state test coverage: `3053` / `3053` (`1.0`)
 - Theorem test coverage: `1000` / `1000` (`1.0`)
 - Ranking backend: `batched_embedding_topk`
+- Proof-state query representation: `stored_embedding`
 - Evaluation GPU: `use_gpu=True`, device `cuda:0`, batch size `256`
 - Actual test ranking backend: proof-state `torch_cuda`, theorem `torch_cuda`
 - Case-study regeneration during evaluation: `0` theorem guidance cases
@@ -476,9 +477,9 @@ This benchmark compares the saved nearest-neighbor index against exact cosine se
 
 | Entity | Backend | Rows | Exact ms/query | Indexed ms/query | Speedup | Recall@1 vs exact | Recall@5 vs exact | Recall@10 vs exact | Top1 match@10 | Build seconds | Indexed total seconds |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| premise | hnswlib | 127561 | 69.0399 | 3.6328 | 19.0044 | 1.0000 | 0.9960 | 0.9940 | 1.0000 | 4.0248 | 0.3633 |
-| proof_state | hnswlib | 23723 | 12.7668 | 0.8265 | 15.4460 | 0.7900 | 0.9500 | 0.9580 | 0.7900 | 0.4202 | 0.0827 |
-| theorem | hnswlib | 8000 | 4.0973 | 0.2318 | 17.6785 | 0.9900 | 0.9900 | 0.9910 | 0.9900 | 0.1330 | 0.0232 |
+| premise | hnswlib | 127561 | 69.5725 | 3.3599 | 20.7065 | 0.9900 | 0.9880 | 0.9890 | 0.9900 | 3.8707 | 0.3360 |
+| proof_state | hnswlib | 23723 | 12.7818 | 0.7867 | 16.2478 | 0.7900 | 0.9520 | 0.9550 | 0.7900 | 0.4254 | 0.0787 |
+| theorem | hnswlib | 8000 | 4.2451 | 0.2220 | 19.1213 | 0.9900 | 0.9920 | 0.9930 | 0.9900 | 0.1163 | 0.0222 |
 
 ## Premise Trace Supervision
 
@@ -528,27 +529,27 @@ This profile verifies that the learned premise ranker uses normalized LeanRank-d
 
 ## Pipeline Timing
 
-- Total seconds: `551.6510627849493`
-- Stage count: `19`
-- Executed/skipped stages: `19` / `0`
+- Total seconds: `552.6826786538586`
+- Stage count: `20`
+- Executed/skipped stages: `20` / `0`
 - Timing config matches current report config: `True`
-- Timing generated at: `2026-06-20T18:53:38.545222+00:00`
+- Timing generated at: `2026-06-20T21:49:35.977678+00:00`
 - Timing report: `outputs/reports/pipeline_run_timings.json`
-- Evaluation internal total seconds: `25.76996100996621`
+- Evaluation internal total seconds: `24.335743549047038`
 - Evaluation timed substages: `7`
 
 | Stage | Seconds |
 | --- | ---: |
-| `embed` | 149.1632 |
-| `sample` | 82.1005 |
-| `train_ranker` | 55.3123 |
-| `augment_graph` | 50.9153 |
-| `compute_difficulty` | 48.5632 |
-| `normalize` | 43.3906 |
-| `validate` | 38.5018 |
-| `evaluate` | 19.1237 |
-| `build_graph` | 17.5704 |
-| `benchmark_index` | 11.3469 |
+| `embed` | 148.6116 |
+| `sample` | 81.2648 |
+| `train_ranker` | 56.1266 |
+| `augment_graph` | 52.4642 |
+| `compute_difficulty` | 48.7286 |
+| `normalize` | 43.4002 |
+| `validate` | 38.0377 |
+| `evaluate` | 19.6906 |
+| `build_graph` | 17.3746 |
+| `benchmark_index` | 11.3578 |
 
 ### Evaluation Substage Timing
 
@@ -556,13 +557,13 @@ These timings split the `evaluate` pipeline stage into proof-state retrieval, th
 
 | Evaluation substage | Seconds | Queries | Backend |
 | --- | ---: | ---: | --- |
-| `test_reranked_proof_state_retrieval` | 14.8292 | 20 | batched_torch_cuda_then_rerank |
-| `val_proof_state_retrieval` | 6.9826 | 2822 | torch_cuda |
-| `test_proof_state_retrieval` | 1.0775 | 3053 | torch_cuda |
-| `val_proof_state_query_representation_diagnostic` | 0.8492 | 50 | n/a |
-| `test_proof_state_query_representation_diagnostic` | 0.6853 | 50 | n/a |
-| `test_theorem_retrieval` | 0.5263 | 1000 | torch_cuda |
-| `val_theorem_retrieval` | 0.3390 | 1000 | torch_cuda |
+| `test_reranked_proof_state_retrieval` | 13.8611 | 20 | batched_torch_cuda_then_rerank |
+| `val_proof_state_retrieval` | 6.8805 | 2822 | torch_cuda |
+| `test_proof_state_retrieval` | 0.9218 | 3053 | torch_cuda |
+| `val_proof_state_query_representation_diagnostic` | 0.8309 | 50 | n/a |
+| `test_proof_state_query_representation_diagnostic` | 0.6702 | 50 | n/a |
+| `test_theorem_retrieval` | 0.4209 | 1000 | torch_cuda |
+| `val_theorem_retrieval` | 0.3152 | 1000 | torch_cuda |
 
 ### Rerank Evaluation Cost Profile
 
@@ -574,11 +575,11 @@ The reranked proof-state diagnostic follows the slower homepage/API-style path. 
 - Sampled rerank queries: `20`
 - Full proof-state queries: `3053`
 - Sampled fraction of full proof-state eval: `0.006550933508024894`
-- Rerank seconds/query: `0.7414592113462277`
-- Batched embedding seconds/query: `0.00035294785000788964`
-- Rerank/batched seconds per query: `2100.761376870984`
-- Projected full rerank seconds: `2263.674972240033`
-- Projected full rerank minutes: `37.72791620400055`
+- Rerank seconds/query: `0.6930531042045913`
+- Batched embedding seconds/query: `0.0003019470566364485`
+- Rerank/batched seconds per query: `2295.2802121169334`
+- Projected full rerank seconds: `2115.8911271366173`
+- Projected full rerank minutes: `35.26485211894362`
 - Sampled rerank Recall@10 delta: `0.035066606557834695`
 - Policy: keep reranked proof-state evaluation sampled for development and use full batched embedding evaluation for final held-out coverage
 
@@ -608,7 +609,7 @@ This profile records the resource choices used by the committed LeanRank-data ru
 - Multi-process encoding: `True`
 - Batch size: `512`
 - Total embedding rows: `244391`
-- Embedding rows/sec during embed stage: `1638.4137466782227`
+- Embedding rows/sec during embed stage: `1644.494339206438`
 
 ### Evaluation
 
@@ -626,17 +627,17 @@ This profile records the resource choices used by the committed LeanRank-data ru
 - Metric: `cosine`
 - hnswlib parameters: `M=16`, `ef_construction=200`, `ef_search=100`
 - Indexed entities: `['premise', 'proof_state', 'theorem']`
-- Mean speedup vs exact: `17.376305276865946`
-- Minimum recall vs exact: `0.9580000000000001`
+- Mean speedup vs exact: `18.69189312894754`
+- Minimum recall vs exact: `0.9550000000000003`
 
 ### CPU/IO-Heavy Stages
 
 | Stage | Seconds | Share of total |
 | --- | ---: | ---: |
-| `sample` | 82.1005 | 0.1488 |
-| `train_ranker` | 55.3123 | 0.1003 |
-| `augment_graph` | 50.9153 | 0.0923 |
-| `compute_difficulty` | 48.5632 | 0.0880 |
+| `sample` | 81.2648 | 0.1470 |
+| `train_ranker` | 56.1266 | 0.1016 |
+| `augment_graph` | 52.4642 | 0.0949 |
+| `compute_difficulty` | 48.7286 | 0.0882 |
 
 ### Performance Acceptance Gates
 
@@ -652,12 +653,12 @@ These gates summarize whether the committed performance evidence is strong enoug
 | `large_scale_slice` | required | True | 292012 | >=60000 processed split rows and scale_bucket=large |
 | `full_heldout_evaluation` | required | True | {'proof_state_coverage_fraction': 1.0, 'theorem_coverage_fraction': 1.0} | both coverage fractions == 1.0 |
 | `fresh_pipeline_timing` | required | True | {'scale_estimate_reliable': True, 'throughput_basis': 'executed_pipeline_run'} | scale_estimate_reliable=true and throughput_basis=executed_pipeline_run |
-| `ann_speedup` | required | True | 17.3763 | >=5x mean indexed speedup vs exact cosine |
-| `ann_recall` | required | True | 0.9580 | >=0.95 minimum Recall@10 vs exact cosine across indexed entities |
+| `ann_speedup` | required | True | 18.6919 | >=5x mean indexed speedup vs exact cosine |
+| `ann_recall` | required | True | 0.9550 | >=0.95 minimum Recall@10 vs exact cosine across indexed entities |
 | `gpu_embedding_parallelism` | advisory | True | {'device_count': 7, 'multi_process': True, 'requested_device': 'cuda'} | cuda requested with at least one device |
 | `gpu_evaluation_backend` | advisory | True | ['torch_cuda'] | actual_backends includes torch_cuda |
 | `artifact_reuse_ready` | advisory | True | True | reuse_by_default=true |
-| `embedding_throughput_recorded` | advisory | True | 1638.4137 | >0 embedding rows/sec |
+| `embedding_throughput_recorded` | advisory | True | 1644.4943 | >0 embedding rows/sec |
 
 ## Pipeline Performance And Scale-Up Notes
 
@@ -677,28 +678,28 @@ These gates summarize whether the committed performance evidence is strong enoug
 - Embedding rows by entity: `{'premise': 203601, 'proof_state': 30498, 'theorem': 10292}`
 - Embedding rows by split: `{'demo': 2608, 'test': 42385, 'train': 159284, 'val': 40114}`
 - Embedding matrix bytes: `684695627`
-- Embed stage seconds: `149.16317718615755`
-- Embed stage share of total: `0.2703940719938502`
-- Embedding rows/sec during embed stage: `1638.4137466782227`
-- Processed rows/sec: `529.3418606425042`
-- Pipeline seconds per 100k processed rows: `188.91383326197186`
+- Embed stage seconds: `148.61163956206292`
+- Embed stage share of total: `0.2688914368078783`
+- Embedding rows/sec during embed stage: `1644.494339206438`
+- Processed rows/sec: `528.3538118314816`
+- Pipeline seconds per 100k processed rows: `189.2671118494646`
 - Slowest timed stage: `embed`
-- Saved pipeline evaluate seconds: `19.123737015994266`
-- Current standalone evaluation seconds: `25.76996100996621`
-- Timed/current evaluation ratio: `0.7420941385436478`
-- Primary bottleneck share: `0.2703940719938502`
-- Top-3 timed-stage share: `0.5194877576097815`
-- Mean index speedup vs exact: `17.376305276865946`
-- Minimum index recall vs exact: `0.9580000000000001`
-- Estimated seconds at requested source rows: `661.1984164169015`
+- Saved pipeline evaluate seconds: `19.690645271912217`
+- Current standalone evaluation seconds: `24.335743549047038`
+- Timed/current evaluation ratio: `0.8091244564698449`
+- Primary bottleneck share: `0.2688914368078783`
+- Top-3 timed-stage share: `0.5174815722394067`
+- Mean index speedup vs exact: `18.69189312894754`
+- Minimum index recall vs exact: `0.9550000000000003`
+- Estimated seconds at requested source rows: `662.4348914731261`
 
 | Bottleneck stage | Seconds | Share of total |
 | --- | ---: | ---: |
-| `embed` | 149.1632 | 0.2704 |
-| `sample` | 82.1005 | 0.1488 |
-| `train_ranker` | 55.3123 | 0.1003 |
-| `augment_graph` | 50.9153 | 0.0923 |
-| `compute_difficulty` | 48.5632 | 0.0880 |
+| `embed` | 148.6116 | 0.2689 |
+| `sample` | 81.2648 | 0.1470 |
+| `train_ranker` | 56.1266 | 0.1016 |
+| `augment_graph` | 52.4642 | 0.0949 |
+| `compute_difficulty` | 48.7286 | 0.0882 |
 
 ### Scale Projection
 
@@ -711,19 +712,19 @@ These linear projections use the current timed pipeline as a capacity-planning b
 
 | Projection | Target rows | Scale factor | Total seconds | Embed seconds | Index build seconds |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| `current_1x` | 292012 | 1.0000 | 551.6511 | 149.1632 | 6.7194 |
-| `current_2x` | 584024 | 2.0000 | 1103.3021 | 298.3264 | 13.4389 |
-| `current_5x` | 1460060 | 5.0000 | 2758.2553 | 745.8159 | 33.5972 |
-| `configured_source_rows` | 350000 | 1.1986 | 661.1984 | 178.7841 | 8.0538 |
+| `current_1x` | 292012 | 1.0000 | 552.6827 | 148.6116 | 6.5847 |
+| `current_2x` | 584024 | 2.0000 | 1105.3654 | 297.2233 | 13.1695 |
+| `current_5x` | 1460060 | 5.0000 | 2763.4134 | 743.0582 | 32.9236 |
+| `configured_source_rows` | 350000 | 1.1986 | 662.4349 | 178.1231 | 7.8923 |
 
 ### Artifact Storage Footprint
 
 This profile records the local footprint of generated LeanRank-data artifacts. It is a practical scale-up signal because embeddings and ANN indexes can dominate disk usage before model training becomes the bottleneck.
 
 - Method: `filesystem_artifact_footprint_with_linear_scale_projection`
-- Total artifact bytes: `3052583953`
-- Total artifact GiB: `2.842940346337855`
-- Bytes per processed row: `10453.62503253291`
+- Total artifact bytes: `3052573685`
+- Total artifact GiB: `2.8429307835176587`
+- Bytes per processed row: `10453.5898695944`
 - Unreferenced index artifact bytes: `1502501178`
 - Unreferenced index artifact count: `12`
 
@@ -739,13 +740,13 @@ Largest generated artifact files:
 | File | Bytes |
 | --- | ---: |
 | `outputs/indexes/train_premise_neighbors.joblib` | 784245864 |
-| `outputs/indexes/train_premise_neighbors.bin` | 410816652 |
+| `outputs/indexes/train_premise_neighbors.bin` | 410815768 |
 | `outputs/embeddings/train_premise_embeddings.npz` | 366556307 |
 | `outputs/indexes/test_premise_neighbors.joblib` | 235665958 |
 | `outputs/indexes/val_premise_neighbors.joblib` | 223124038 |
 | `outputs/indexes/train_proof_state_neighbors.joblib` | 145849830 |
-| `outputs/indexes/test_premise_neighbors.bin` | 123456212 |
-| `outputs/indexes/val_premise_neighbors.bin` | 116887072 |
+| `outputs/indexes/test_premise_neighbors.bin` | 123456756 |
+| `outputs/indexes/val_premise_neighbors.bin` | 116886664 |
 
 Unreferenced index artifacts not pointed to by current manifests:
 

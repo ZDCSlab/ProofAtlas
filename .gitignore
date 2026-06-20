@@ -31,6 +31,14 @@ dist/
 *.pt
 *.pth
 *.ckpt
+*.arrow
+*.faiss
+*.feather
+*.hnsw
+*.index
+*.joblib
+*.parquet
+*.pkl
 .DS_Store
 *.swp
 *.swo

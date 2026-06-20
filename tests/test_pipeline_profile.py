@@ -64,6 +64,7 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
                 "proof_state_limits": {"test": None, "val": None},
                 "theorem_limits": {"test": None, "val": None},
                 "total_seconds": 2.5,
+                "proof_state_query_representation": "full_name_goal",
                 "substage_timings": [
                     {"name": "test_theorem_retrieval", "seconds": 1.5, "evaluated_queries": 5, "actual_backend": "torch_cuda"},
                     {"name": "test_proof_state_retrieval", "seconds": 1.0, "evaluated_queries": 10, "actual_backend": "torch_cuda"},
@@ -233,6 +234,7 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
     assert resources["embedding_parallelism"]["device_count"] == 1
     assert resources["embedding_parallelism"]["batch_size"] == 512
     assert resources["evaluation_parallelism"]["actual_backends"] == ["torch_cuda"]
+    assert resources["evaluation_parallelism"]["proof_state_query_representation"] == "full_name_goal"
     assert resources["evaluation_parallelism"]["test_proof_state_backend"] == "torch_cuda"
     assert resources["index_parallelism"]["backend"] == "sklearn"
     assert resources["index_parallelism"]["indexed_entities"] == ["premise"]

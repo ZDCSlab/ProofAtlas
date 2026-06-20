@@ -366,6 +366,15 @@ def _ranking_rows_from_embeddings(
     return rows, retrieved_by_query, backend_info
 
 
+def _fuse_neighbor_rows(neighbor_lists: list[list[int]], train_premise_ids: list[str], k: int) -> list[str]:
+    scores: dict[str, float] = {}
+    for neighbors in neighbor_lists:
+        for rank, idx in enumerate(neighbors, start=1):
+            premise_id = train_premise_ids[idx]
+            scores[premise_id] = scores.get(premise_id, 0.0) + 1.0 / rank
+    return [premise_id for premise_id, _ in sorted(scores.items(), key=lambda item: item[1], reverse=True)[:k]]
+
+
 def _evaluate_proof_state_retrieval_split(
     split: str,
     top_ks: list[int],
@@ -375,6 +384,7 @@ def _evaluate_proof_state_retrieval_split(
     batch_size: int = 256,
     use_gpu: bool = False,
     gpu_device: str = "cuda:0",
+    query_representation: str = "stored_embedding",
 ) -> dict:
     try:
         positive_edges = pd.read_parquet(f"data/processed/{split}/positive_edges.parquet")
@@ -394,7 +404,12 @@ def _evaluate_proof_state_retrieval_split(
     grouped_items = list(positive_edges.groupby("proof_state_id"))
     if max_examples is not None:
         grouped_items = grouped_items[:max_examples]
-    query_ids = [str(proof_state_id) for proof_state_id, _ in grouped_items if str(proof_state_id) in proof_state_row]
+    if query_representation == "stored_embedding":
+        query_ids = [str(proof_state_id) for proof_state_id, _ in grouped_items if str(proof_state_id) in proof_state_row]
+    elif query_representation.startswith("stored_plus_"):
+        query_ids = [str(proof_state_id) for proof_state_id, _ in grouped_items if str(proof_state_id) in proof_state_row and str(proof_state_id) in proof_states.index]
+    else:
+        query_ids = [str(proof_state_id) for proof_state_id, _ in grouped_items if str(proof_state_id) in proof_states.index]
     gold_by_query = {str(proof_state_id): set(group["premise_id"]) for proof_state_id, group in grouped_items}
     query_info = {
         proof_state_id: {
@@ -405,8 +420,106 @@ def _evaluate_proof_state_retrieval_split(
         }
         for proof_state_id in query_ids
     }
-    query_matrix_all = _load_embedding(split, "proof_state")
-    query_matrix = query_matrix_all[[proof_state_row[query_id] for query_id in query_ids]] if query_ids else query_matrix_all[:0]
+    if query_representation == "stored_embedding":
+        query_matrix_all = _load_embedding(split, "proof_state")
+        query_matrix = query_matrix_all[[proof_state_row[query_id] for query_id in query_ids]] if query_ids else query_matrix_all[:0]
+    elif query_representation.startswith("stored_plus_"):
+        variant_name = query_representation.removeprefix("stored_plus_")
+        stored_matrix_all = _load_embedding(split, "proof_state")
+        stored_query_matrix = stored_matrix_all[[proof_state_row[query_id] for query_id in query_ids]] if query_ids else stored_matrix_all[:0]
+        query_texts = []
+        missing_variant_count = 0
+        filtered_query_ids = []
+        filtered_stored_rows = []
+        for query_id in query_ids:
+            variants = _proof_state_query_variants(proof_states.loc[query_id])
+            text = variants.get(variant_name)
+            if text is None:
+                missing_variant_count += 1
+                continue
+            filtered_query_ids.append(query_id)
+            filtered_stored_rows.append(proof_state_row[query_id])
+            query_texts.append(text)
+        query_ids = filtered_query_ids
+        stored_query_matrix = stored_matrix_all[filtered_stored_rows] if filtered_stored_rows else stored_matrix_all[:0]
+        variant_query_matrix = _encode_diagnostic_queries(query_texts) if query_texts else np.zeros((0, _load_embedding("train", "premise").shape[1]), dtype=np.float32)
+        train_premise_matrix = _load_embedding("train", "premise")
+        stored_neighbors, stored_backend = _batched_topk(
+            stored_query_matrix,
+            train_premise_matrix,
+            max(top_ks),
+            batch_size=batch_size,
+            use_gpu=use_gpu,
+            gpu_device=gpu_device,
+        )
+        variant_neighbors, variant_backend = _batched_topk(
+            variant_query_matrix,
+            train_premise_matrix,
+            max(top_ks),
+            batch_size=batch_size,
+            use_gpu=use_gpu,
+            gpu_device=gpu_device,
+        )
+        rows = []
+        retrieved_by_query = {}
+        for query_id, stored_neighbor_idx, variant_neighbor_idx in zip(query_ids, stored_neighbors, variant_neighbors, strict=True):
+            retrieved_ids = _fuse_neighbor_rows([stored_neighbor_idx, variant_neighbor_idx], train_premise_ids, max(top_ks))
+            retrieved_by_query[query_id] = retrieved_ids
+            rows.append(
+                {
+                    **query_info.get(query_id, {}),
+                    **_ranking_row(retrieved_ids, gold_by_query.get(query_id, set()), train_premises, top_ks),
+                }
+            )
+        backend_info = {
+            **variant_backend,
+            "actual_backend": f"fused_{stored_backend.get('actual_backend', 'stored')}_{variant_backend.get('actual_backend', 'query')}",
+            "query_representation": query_representation,
+            "fused_representations": ["stored_embedding", variant_name],
+            "encoded_query_count": len(query_ids),
+            "missing_query_representation_count": missing_variant_count,
+            "stored_backend": stored_backend,
+            "variant_backend": variant_backend,
+        }
+        examples = []
+        for proof_state_id, group in grouped_items:
+            if len(examples) >= 20:
+                break
+            if len(examples) < 20 and proof_state_id in proof_states.index:
+                pstate = proof_states.loc[proof_state_id]
+                retrieved_ids = retrieved_by_query.get(str(proof_state_id), [])[:5]
+                examples.append(
+                    {
+                        "split": split,
+                        "proof_state_id": proof_state_id,
+                        "proof_state": str(pstate["goal_text"])[:300],
+                        "gold_positive_premises": sorted(set(group["premise_id"]))[:20],
+                        "top_retrieved_premises": [
+                            {
+                                "premise_id": premise_id,
+                                "full_name": premise_full_name.get(premise_id, premise_id),
+                                "rank": idx + 1,
+                                "score": 1.0 / (idx + 1),
+                            }
+                            for idx, premise_id in enumerate(retrieved_ids)
+                        ],
+                    }
+                )
+        return {"split": split, "metrics": _metric_summary(rows, top_ks), "examples": examples, "per_query": rows, "backend_info": backend_info}
+    else:
+        query_texts = []
+        missing_variant_count = 0
+        filtered_query_ids = []
+        for query_id in query_ids:
+            variants = _proof_state_query_variants(proof_states.loc[query_id])
+            text = variants.get(query_representation)
+            if text is None:
+                missing_variant_count += 1
+                continue
+            filtered_query_ids.append(query_id)
+            query_texts.append(text)
+        query_ids = filtered_query_ids
+        query_matrix = _encode_diagnostic_queries(query_texts) if query_texts else np.zeros((0, _load_embedding("train", "premise").shape[1]), dtype=np.float32)
     rows, retrieved_by_query, backend_info = _ranking_rows_from_embeddings(
         query_ids=query_ids,
         query_matrix=query_matrix,
@@ -419,6 +532,10 @@ def _evaluate_proof_state_retrieval_split(
         use_gpu=use_gpu,
         gpu_device=gpu_device,
     )
+    backend_info["query_representation"] = query_representation
+    if query_representation != "stored_embedding":
+        backend_info["encoded_query_count"] = len(query_ids)
+        backend_info["missing_query_representation_count"] = missing_variant_count
     examples = []
     for proof_state_id, group in grouped_items:
         if len(examples) >= 20:
@@ -704,6 +821,7 @@ def run(config_path: str, full_heldout: bool = False) -> None:
         if int(value) > 0
     ]
     query_representation_diagnostic_examples = int(eval_config.get("query_representation_diagnostic_examples", 0) or 0)
+    proof_state_query_representation = str(eval_config.get("proof_state_query_representation", "stored_embedding"))
     proof_state_limits = {
         "val": int(max_val_proof_states) if max_val_proof_states is not None else None,
         "test": int(max_test_proof_states) if max_test_proof_states is not None else None,
@@ -723,6 +841,7 @@ def run(config_path: str, full_heldout: bool = False) -> None:
             batch_size=batch_size,
             use_gpu=use_gpu,
             gpu_device=gpu_device,
+            query_representation=proof_state_query_representation,
         )
         _record_substage(
             f"{split}_proof_state_retrieval",
@@ -874,6 +993,7 @@ def run(config_path: str, full_heldout: bool = False) -> None:
             "rerank_candidate_k_values": rerank_candidate_k_values,
             "query_representation_diagnostic_examples": query_representation_diagnostic_examples,
             "query_representation_diagnostic_splits": sorted(query_representation_diagnostics),
+            "proof_state_query_representation": proof_state_query_representation,
             "total_seconds": time.perf_counter() - evaluation_started,
             "substage_timings": substage_timings,
         },

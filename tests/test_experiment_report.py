@@ -47,6 +47,13 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
         {
             "candidate_pool": "train premise index",
             "label_policy": "held-out test positive_edges are used only for evaluation",
+            "evaluation_scope": {
+                "ranking_backend": "batched_embedding_topk",
+                "proof_state_query_representation": "full_name_goal",
+                "use_gpu": True,
+                "gpu_device": "cuda:0",
+                "batch_size": 256,
+            },
             "test": {
                 "proof_state_retrieval": {
                     "metrics": {"evaluated_queries": 3, "Recall@10": 0.5, "MRR": 0.4, "MAP": 0.3, "nDCG@10": 0.45},
@@ -522,6 +529,7 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "ps_bad" in text
     assert "Mathlib.Bad" in text
     assert "Data supervision" in text
+    assert "Proof-state query representation: `full_name_goal`" in text
     assert "Local Lean/mathlib source extraction is out of scope" in text
     assert "Retrieval Bottleneck Profile" in text
     assert "candidate_generation_or_embeddings" in text
