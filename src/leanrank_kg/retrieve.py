@@ -395,6 +395,59 @@ def _premise_frequency_cached(cwd: str, index_split: str, signature: tuple[str, 
     return counts / counts.max()
 
 
+def _graph_edges_path(index_split: str) -> Path:
+    enriched = Path(f"outputs/graph/{index_split}/edges_enriched.parquet")
+    if enriched.exists():
+        return enriched
+    return Path(f"outputs/graph/{index_split}/edges.parquet")
+
+
+def _premise_labels(index_split: str) -> dict[str, set[str]]:
+    path = Path(f"data/processed/{index_split}/premise_techniques.parquet")
+    return _premise_labels_cached(_cwd(), index_split, _file_signature(path))
+
+
+@lru_cache(maxsize=8)
+def _premise_labels_cached(cwd: str, index_split: str, signature: tuple[str, bool, int, int]) -> dict[str, set[str]]:
+    del cwd, signature
+    try:
+        prem_tech = pd.read_parquet(f"data/processed/{index_split}/premise_techniques.parquet")
+    except FileNotFoundError:
+        return {}
+    return {key: set(group["label"]) for key, group in prem_tech.groupby("premise_id")} if not prem_tech.empty else {}
+
+
+def _invokes_premise_edges(index_split: str) -> pd.DataFrame:
+    path = _graph_edges_path(index_split)
+    return _invokes_premise_edges_cached(_cwd(), index_split, _file_signature(path))
+
+
+@lru_cache(maxsize=8)
+def _invokes_premise_edges_cached(cwd: str, index_split: str, signature: tuple[str, bool, int, int]) -> pd.DataFrame:
+    del cwd, signature
+    path = _graph_edges_path(index_split)
+    try:
+        edges = pd.read_parquet(path)
+    except FileNotFoundError:
+        return pd.DataFrame()
+    return edges[edges["edge_type"] == "invokes_premise"] if not edges.empty else pd.DataFrame()
+
+
+def _premise_degree(index_split: str) -> pd.Series:
+    path = _graph_edges_path(index_split)
+    return _premise_degree_cached(_cwd(), index_split, _file_signature(path))
+
+
+@lru_cache(maxsize=8)
+def _premise_degree_cached(cwd: str, index_split: str, signature: tuple[str, bool, int, int]) -> pd.Series:
+    del cwd, signature
+    all_invokes = _invokes_premise_edges(index_split)
+    premise_degree = all_invokes.groupby("target").size().astype(float) if not all_invokes.empty else pd.Series(dtype=float)
+    if not premise_degree.empty and float(premise_degree.max()) > 0:
+        premise_degree = premise_degree / float(premise_degree.max())
+    return premise_degree
+
+
 def _token_set(*parts: object) -> set[str]:
     text = " ".join(str(part or "") for part in parts).replace(".", " ").replace("_", " ")
     return {token.lower() for token in text.split() if len(token) >= 3}
@@ -416,21 +469,17 @@ def _rerank_premise_candidates(
     if candidates.empty:
         return candidates
     query_labels = {row["label"] for row in labels_for_text(query_text)}
-    prem_tech = index_data["prem_tech"]
-    premise_labels = {key: set(group["label"]) for key, group in prem_tech.groupby("premise_id")} if not prem_tech.empty else {}
+    premise_labels = _premise_labels(index_split)
     frequency = _premise_frequency(index_split)
-    edges = index_data["edges"]
     theorem_ids = set(similar_theorem_ids or [])
     graph_premises = set()
     theorem_neighbor_counts: dict[str, int] = {}
-    if theorem_ids and not edges.empty:
-        neighbor_edges = edges[(edges["edge_type"] == "invokes_premise") & (edges["source"].isin(theorem_ids))]
+    all_invokes = _invokes_premise_edges(index_split)
+    if theorem_ids and not all_invokes.empty:
+        neighbor_edges = all_invokes[all_invokes["source"].isin(theorem_ids)]
         graph_premises = set(neighbor_edges["target"])
         theorem_neighbor_counts = neighbor_edges.groupby("target").size().astype(int).to_dict()
-    all_invokes = edges[edges["edge_type"] == "invokes_premise"] if not edges.empty else pd.DataFrame()
-    premise_degree = all_invokes.groupby("target").size().astype(float) if not all_invokes.empty else pd.Series(dtype=float)
-    if not premise_degree.empty and float(premise_degree.max()) > 0:
-        premise_degree = premise_degree / float(premise_degree.max())
+    premise_degree = _premise_degree(index_split)
     query_l = query_text.lower()
     query_context = query_context or {}
     query_namespace = namespace(query_context.get("full_name", ""))
@@ -551,6 +600,9 @@ def clear_retrieval_caches() -> None:
     _load_hnswlib_index_cached.cache_clear()
     _load_faiss_index_cached.cache_clear()
     _premise_frequency_cached.cache_clear()
+    _premise_labels_cached.cache_clear()
+    _invokes_premise_edges_cached.cache_clear()
+    _premise_degree_cached.cache_clear()
     _load_index_metadata_cached.cache_clear()
     _load_index_manifest_cached.cache_clear()
 

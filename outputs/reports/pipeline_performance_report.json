@@ -386,28 +386,28 @@
             "candidate_k": 50,
             "evaluated_queries": 20,
             "name": "test_reranked_proof_state_retrieval",
-            "seconds": 205.7923765280284,
+            "seconds": 14.591356419026852,
             "split": "test"
           },
           {
             "actual_backend": "torch_cuda",
             "evaluated_queries": 2822,
             "name": "val_proof_state_retrieval",
-            "seconds": 6.8559439338278025,
+            "seconds": 6.91309367492795,
             "split": "val"
           },
           {
             "actual_backend": "torch_cuda",
             "evaluated_queries": 3053,
             "name": "test_proof_state_retrieval",
-            "seconds": 0.9748802660033107,
+            "seconds": 0.9482294640038162,
             "split": "test"
           },
           {
             "best_variant_by_recall": "full_name_goal",
             "evaluated_queries": 50,
             "name": "test_proof_state_query_representation_diagnostic",
-            "seconds": 0.5522066890262067,
+            "seconds": 0.5439353899564594,
             "split": "test"
           },
           {
@@ -415,7 +415,7 @@
             "case_study_limit": 0,
             "evaluated_queries": 1000,
             "name": "test_theorem_retrieval",
-            "seconds": 0.4314452628605068,
+            "seconds": 0.4424276161007583,
             "split": "test"
           },
           {
@@ -423,13 +423,13 @@
             "case_study_limit": 0,
             "evaluated_queries": 1000,
             "name": "val_theorem_retrieval",
-            "seconds": 0.326199535978958,
+            "seconds": 0.3380729982163757,
             "split": "val"
           }
         ],
         "substage_count": 6,
-        "substage_seconds_total": 214.93305221572518,
-        "total_seconds": 215.39269813196734
+        "substage_seconds_total": 23.77711556223221,
+        "total_seconds": 24.223363942001015
       },
       "held_out_test_coverage": {
         "proof_state_configured_limit": null,
@@ -678,14 +678,14 @@
               "actual_backend": "torch_cuda",
               "evaluated_queries": 2822,
               "name": "val_proof_state_retrieval",
-              "seconds": 6.8559439338278025,
+              "seconds": 6.91309367492795,
               "split": "val"
             },
             {
               "actual_backend": "torch_cuda",
               "evaluated_queries": 3053,
               "name": "test_proof_state_retrieval",
-              "seconds": 0.9748802660033107,
+              "seconds": 0.9482294640038162,
               "split": "test"
             },
             {
@@ -693,7 +693,7 @@
               "case_study_limit": 0,
               "evaluated_queries": 1000,
               "name": "val_theorem_retrieval",
-              "seconds": 0.326199535978958,
+              "seconds": 0.3380729982163757,
               "split": "val"
             },
             {
@@ -701,7 +701,7 @@
               "case_study_limit": 0,
               "evaluated_queries": 1000,
               "name": "test_theorem_retrieval",
-              "seconds": 0.4314452628605068,
+              "seconds": 0.4424276161007583,
               "split": "test"
             },
             {
@@ -709,14 +709,14 @@
               "candidate_k": 50,
               "evaluated_queries": 20,
               "name": "test_reranked_proof_state_retrieval",
-              "seconds": 205.7923765280284,
+              "seconds": 14.591356419026852,
               "split": "test"
             },
             {
               "best_variant_by_recall": "full_name_goal",
               "evaluated_queries": 50,
               "name": "test_proof_state_query_representation_diagnostic",
-              "seconds": 0.5522066890262067,
+              "seconds": 0.5439353899564594,
               "split": "test"
             }
           ],
@@ -724,7 +724,7 @@
             "test": null,
             "val": null
           },
-          "total_seconds": 215.39269813196734,
+          "total_seconds": 24.223363942001015,
           "use_gpu": true
         },
         "label_policy": "held-out test positive_edges are used only for evaluation",

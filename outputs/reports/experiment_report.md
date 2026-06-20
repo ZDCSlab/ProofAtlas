@@ -384,7 +384,7 @@ The current ranking labels come from normalized LeanRank-data premise supervisio
 - Timing config matches current report config: `True`
 - Timing generated at: `2026-06-20T17:20:52.729952+00:00`
 - Timing report: `outputs/reports/pipeline_run_timings.json`
-- Evaluation internal total seconds: `215.39269813196734`
+- Evaluation internal total seconds: `24.223363942001015`
 - Evaluation timed substages: `6`
 
 | Stage | Seconds |
@@ -406,12 +406,12 @@ These timings split the `evaluate` pipeline stage into proof-state retrieval, th
 
 | Evaluation substage | Seconds | Queries | Backend |
 | --- | ---: | ---: | --- |
-| `test_reranked_proof_state_retrieval` | 205.7924 | 20 | batched_torch_cuda_then_rerank |
-| `val_proof_state_retrieval` | 6.8559 | 2822 | torch_cuda |
-| `test_proof_state_retrieval` | 0.9749 | 3053 | torch_cuda |
-| `test_proof_state_query_representation_diagnostic` | 0.5522 | 50 | n/a |
-| `test_theorem_retrieval` | 0.4314 | 1000 | torch_cuda |
-| `val_theorem_retrieval` | 0.3262 | 1000 | torch_cuda |
+| `test_reranked_proof_state_retrieval` | 14.5914 | 20 | batched_torch_cuda_then_rerank |
+| `val_proof_state_retrieval` | 6.9131 | 2822 | torch_cuda |
+| `test_proof_state_retrieval` | 0.9482 | 3053 | torch_cuda |
+| `test_proof_state_query_representation_diagnostic` | 0.5439 | 50 | n/a |
+| `test_theorem_retrieval` | 0.4424 | 1000 | torch_cuda |
+| `val_theorem_retrieval` | 0.3381 | 1000 | torch_cuda |
 
 ## Pipeline Performance And Scale-Up Notes
 
