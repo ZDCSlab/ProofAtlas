@@ -277,6 +277,52 @@ def _refresh_dashboard(
     }
 
 
+def _production_evidence(
+    *,
+    metrics: dict[str, Any],
+    premise_supervision: dict[str, Any],
+    pipeline_run_timings: dict[str, Any],
+    pipeline_performance: dict[str, Any],
+) -> dict[str, Any]:
+    current_supervision = premise_supervision.get("current_artifact_supervision", {})
+    train_supervision = premise_supervision.get("splits", {}).get("train", {})
+    throughput = pipeline_performance.get("throughput_profile", {})
+    scale = pipeline_performance.get("scale_profile", {})
+    timing_summary = pipeline_performance.get("stages", {}).get("pipeline_run_timings", {})
+    return {
+        "heldout": {
+            "proof_state_evaluated_queries": metrics.get("test_proof_state_evaluated_queries"),
+            "proof_state_evaluated_retrievable_queries": metrics.get("test_proof_state_evaluated_retrievable_queries"),
+            "proof_state_recall_at_10": metrics.get("Recall@10"),
+            "proof_state_recall_at_100": metrics.get("Recall@100"),
+            "theorem_evaluated_queries": metrics.get("theorem_retrieval_evaluated_theorems"),
+            "theorem_evaluated_queries_with_train_gold": metrics.get("theorem_retrieval_evaluated_theorems_with_train_gold"),
+            "theorem_recall_at_10": metrics.get("theorem_retrieval_Recall@10"),
+            "theorem_recall_at_100": metrics.get("theorem_retrieval_Recall@100"),
+        },
+        "supervision": {
+            "total_positive_edges": current_supervision.get("total_positive_edges"),
+            "total_negative_edges": current_supervision.get("total_negative_edges"),
+            "negative_to_positive_edge_ratio": current_supervision.get("negative_to_positive_edge_ratio"),
+            "train_positive_proof_state_coverage": train_supervision.get("positive_proof_state_coverage"),
+            "train_negative_proof_state_coverage": train_supervision.get("negative_proof_state_coverage"),
+            "train_negative_hardness_mean": train_supervision.get("negative_candidate_hardness", {}).get("mean"),
+        },
+        "timing": {
+            "total_seconds": pipeline_run_timings.get("total_seconds") or timing_summary.get("total_seconds"),
+            "executed_stage_count": pipeline_run_timings.get("executed_stage_count"),
+            "skipped_stage_count": pipeline_run_timings.get("skipped_stage_count"),
+            "throughput_basis": throughput.get("throughput_basis"),
+            "scale_estimate_reliable": throughput.get("scale_estimate_reliable"),
+            "embedding_rows_per_second": throughput.get("embedding_rows_per_second"),
+            "processed_rows_per_second": throughput.get("processed_rows_per_second"),
+            "embedding_device": scale.get("embedding_device"),
+            "embedding_devices": scale.get("embedding_devices", []),
+            "slowest_stage": throughput.get("slowest_stage"),
+        },
+    }
+
+
 def _short_label(row: pd.Series) -> str:
     for col in ["full_name", "label", "file_path", "id"]:
         value = str(row.get(col, "") or "")
@@ -347,6 +393,9 @@ def build_summary(config_path: str | None = None) -> dict[str, Any]:
     corpus_manifest = read_json("outputs/reports/corpus_manifest.json", {})
     artifact_compatibility = read_json("outputs/reports/artifact_compatibility_report.json", {})
     index_benchmark = read_json("outputs/reports/index_benchmark.json", {})
+    premise_supervision = read_json("outputs/reports/premise_trace_supervision_report.json", {})
+    pipeline_run_timings = read_json("outputs/reports/pipeline_run_timings.json", {})
+    pipeline_performance = read_json("outputs/reports/pipeline_performance_report.json", {})
     validation = {
         "schema": read_json("outputs/reports/schema_validation_summary.json", {}),
         "split_leakage": read_json("outputs/reports/split_leakage_report.json", {}),
@@ -411,6 +460,12 @@ def build_summary(config_path: str | None = None) -> dict[str, Any]:
         "proof_techniques": _csv_records("outputs/reports/proof_technique_distribution.csv"),
         "difficulty_distribution": _csv_records("outputs/reports/difficulty_distribution.csv"),
         "metrics": metrics,
+        "production_evidence": _production_evidence(
+            metrics=metrics,
+            premise_supervision=premise_supervision,
+            pipeline_run_timings=pipeline_run_timings,
+            pipeline_performance=pipeline_performance,
+        ),
         "difficulty_estimator_metrics": difficulty_estimator_metrics,
         "refresh_dashboard": refresh_dashboard,
         "refresh_trend": refresh_trend,

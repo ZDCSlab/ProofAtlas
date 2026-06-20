@@ -255,6 +255,27 @@ HTML = """<!doctype html>
   </section>
 
   <section>
+    <h2>Production Evidence</h2>
+    <p class="section-lead">The demo is backed by committed LeanRank-data reports, including full held-out retrieval metrics, premise supervision counts, and a reliable timed production run.</p>
+    <div class="kpi-grid">
+      <div class="kpi"><div class="label">Proof-state test coverage</div><div class="value">{{ "{:,}".format(production_evidence.heldout.proof_state_evaluated_queries|default(0) or 0) }}</div><div class="note">full held-out proof-state queries</div></div>
+      <div class="kpi"><div class="label">Theorem test coverage</div><div class="value">{{ "{:,}".format(production_evidence.heldout.theorem_evaluated_queries|default(0) or 0) }}</div><div class="note">full held-out theorem queries</div></div>
+      <div class="kpi"><div class="label">Theorem Recall@100</div><div class="value">{{ "%.3f"|format(production_evidence.heldout.theorem_recall_at_100 or 0) }}</div><div class="note">premise retrieval for theorem guidance</div></div>
+      <div class="kpi"><div class="label">Proof-state Recall@100</div><div class="value">{{ "%.3f"|format(production_evidence.heldout.proof_state_recall_at_100 or 0) }}</div><div class="note">premise retrieval from proof states</div></div>
+      <div class="kpi"><div class="label">Positive premise edges</div><div class="value">{{ "{:,}".format(production_evidence.supervision.total_positive_edges|default(0) or 0) }}</div><div class="note">LeanRank positive supervision</div></div>
+      <div class="kpi"><div class="label">Negative candidates</div><div class="value">{{ "{:,}".format(production_evidence.supervision.total_negative_edges|default(0) or 0) }}</div><div class="note">hard-negative ranking pool</div></div>
+      <div class="kpi"><div class="label">Pipeline timing</div><div class="value">{{ "%.1f"|format(production_evidence.timing.total_seconds or 0) }}s</div><div class="note">{{ production_evidence.timing.executed_stage_count|default(0) }} executed / {{ production_evidence.timing.skipped_stage_count|default(0) }} skipped stages</div></div>
+      <div class="kpi"><div class="label">Scale estimate reliable</div><div class="value">{{ production_evidence.timing.scale_estimate_reliable }}</div><div class="note">{{ production_evidence.timing.throughput_basis|default("unknown") }} on {{ production_evidence.timing.embedding_device|default("unknown") }}</div></div>
+    </div>
+    <div class="status-row" style="margin-top:12px">
+      <div class="status ok"><div class="label">Train positive coverage</div><div class="value">{{ "%.3f"|format(production_evidence.supervision.train_positive_proof_state_coverage or 0) }}</div><div class="note">proof states with positive premise edges</div></div>
+      <div class="status ok"><div class="label">Train negative coverage</div><div class="value">{{ "%.3f"|format(production_evidence.supervision.train_negative_proof_state_coverage or 0) }}</div><div class="note">proof states with negative candidates</div></div>
+      <div class="status"><div class="label">Hardness mean</div><div class="value">{{ "%.3f"|format(production_evidence.supervision.train_negative_hardness_mean or 0) }}</div><div class="note">train negative candidate hardness</div></div>
+      <div class="status"><div class="label">Embedding throughput</div><div class="value">{{ "%.1f"|format(production_evidence.timing.embedding_rows_per_second or 0) }}</div><div class="note">embedding rows per second</div></div>
+    </div>
+  </section>
+
+  <section>
     <h2>Refresh Dashboard</h2>
     <p class="section-lead">A compact post-refresh health view combining artifact compatibility, KG scale, parsing coverage, retrieval quality, index benchmark, and difficulty calibration signals.</p>
     <div class="status-row">

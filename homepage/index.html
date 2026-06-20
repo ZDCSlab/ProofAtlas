@@ -298,6 +298,27 @@
   </section>
 
   <section>
+    <h2>Production Evidence</h2>
+    <p class="section-lead">The demo is backed by committed LeanRank-data reports, including full held-out retrieval metrics, premise supervision counts, and a reliable timed production run.</p>
+    <div class="kpi-grid">
+      <div class="kpi"><div class="label">Proof-state test coverage</div><div class="value">3,053</div><div class="note">full held-out proof-state queries</div></div>
+      <div class="kpi"><div class="label">Theorem test coverage</div><div class="value">1,000</div><div class="note">full held-out theorem queries</div></div>
+      <div class="kpi"><div class="label">Theorem Recall@100</div><div class="value">0.689</div><div class="note">premise retrieval for theorem guidance</div></div>
+      <div class="kpi"><div class="label">Proof-state Recall@100</div><div class="value">0.236</div><div class="note">premise retrieval from proof states</div></div>
+      <div class="kpi"><div class="label">Positive premise edges</div><div class="value">69,461</div><div class="note">LeanRank positive supervision</div></div>
+      <div class="kpi"><div class="label">Negative candidates</div><div class="value">663,198</div><div class="note">hard-negative ranking pool</div></div>
+      <div class="kpi"><div class="label">Pipeline timing</div><div class="value">740.1s</div><div class="note">19 executed / 0 skipped stages</div></div>
+      <div class="kpi"><div class="label">Scale estimate reliable</div><div class="value">True</div><div class="note">executed_pipeline_run on cuda</div></div>
+    </div>
+    <div class="status-row" style="margin-top:12px">
+      <div class="status ok"><div class="label">Train positive coverage</div><div class="value">1.000</div><div class="note">proof states with positive premise edges</div></div>
+      <div class="status ok"><div class="label">Train negative coverage</div><div class="value">1.000</div><div class="note">proof states with negative candidates</div></div>
+      <div class="status"><div class="label">Hardness mean</div><div class="value">0.603</div><div class="note">train negative candidate hardness</div></div>
+      <div class="status"><div class="label">Embedding throughput</div><div class="value">330.2</div><div class="note">embedding rows per second</div></div>
+    </div>
+  </section>
+
+  <section>
     <h2>Refresh Dashboard</h2>
     <p class="section-lead">A compact post-refresh health view combining artifact compatibility, KG scale, parsing coverage, retrieval quality, index benchmark, and difficulty calibration signals.</p>
     <div class="status-row">
@@ -327,7 +348,7 @@
       <div class="kpi"><div class="label">Difficulty MAE</div><div class="value">0.039</div><div class="note">train estimator calibration</div></div>
       <div class="kpi"><div class="label">Trend baseline</div><div class="value">yes</div><div class="note">previous refresh snapshot</div></div>
       <div class="kpi"><div class="label">Theorem delta</div><div class="value">0</div><div class="note">change from previous dashboard</div></div>
-      <div class="kpi"><div class="label">Recall delta</div><div class="value">0.071</div><div class="note">theorem Recall@10 change</div></div>
+      <div class="kpi"><div class="label">Recall delta</div><div class="value">0.000</div><div class="note">theorem Recall@10 change</div></div>
       <div class="kpi"><div class="label">Gate changes</div><div class="value">0</div><div class="note">quality gates changed</div></div>
       <div class="kpi"><div class="label">History entries</div><div class="value">20</div><div class="note">bounded refresh trend history</div></div>
     </div>

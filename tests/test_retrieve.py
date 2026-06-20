@@ -303,6 +303,7 @@ def test_text_query_retrieval_and_theorem_guidance_are_json_serializable(tmp_pat
     assert (tmp_path / "homepage/assets/refresh_dashboard.json").exists()
     assert (tmp_path / "homepage/assets/refresh_trend.json").exists()
     assert (tmp_path / "homepage/assets/refresh_history.json").exists()
+    homepage_summary = json.loads((tmp_path / "homepage/assets/homepage_summary.json").read_text(encoding="utf-8"))
     refresh_dashboard = json.loads((tmp_path / "outputs/reports/refresh_dashboard.json").read_text(encoding="utf-8"))
     corpus_manifest = json.loads((tmp_path / "homepage/assets/corpus_manifest.json").read_text(encoding="utf-8"))
     refresh_trend = json.loads((tmp_path / "outputs/reports/refresh_trend.json").read_text(encoding="utf-8"))
@@ -313,6 +314,10 @@ def test_text_query_retrieval_and_theorem_guidance_are_json_serializable(tmp_pat
     assert "theorem_query_parse_coverage" in refresh_dashboard["parsing"]
     assert "minimum_theorem_query_parse_coverage" in refresh_dashboard["parsing"]
     assert "data_supervision" in refresh_dashboard["corpus"]
+    assert "production_evidence" in homepage_summary
+    assert "heldout" in homepage_summary["production_evidence"]
+    assert "supervision" in homepage_summary["production_evidence"]
+    assert "timing" in homepage_summary["production_evidence"]
     assert corpus_manifest["data_supervision"]["kind"] == "synthetic_demo_rows"
     assert "trend" in refresh_dashboard
     assert "deltas" in refresh_trend
@@ -355,6 +360,13 @@ def test_text_query_retrieval_and_theorem_guidance_are_json_serializable(tmp_pat
     assert "historical premise frequency" in html
     assert "Pipeline Summary" in html
     assert "Refresh Dashboard" in html
+    assert "Production Evidence" in html
+    assert "Proof-state test coverage" in html
+    assert "Theorem test coverage" in html
+    assert "Positive premise edges" in html
+    assert "Negative candidates" in html
+    assert "Scale estimate reliable" in html
+    assert "Embedding throughput" in html
     assert "Trend baseline" in html
     assert "History entries" in html
     assert "kg-svg" in html
