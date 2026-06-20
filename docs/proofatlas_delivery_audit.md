@@ -52,6 +52,15 @@ Full held-out test metrics from `configs/proofatlas.yaml`:
 | Theorem premise retrieval | MRR | 0.5609 |
 | Premise ranker validation | AUC | 0.8254 |
 
+Failure diagnosis from `outputs/reports/experiment_report.md`:
+
+| Task | Diagnosis | Queries | Share of evaluated | Share of retrievable |
+| --- | --- | ---: | ---: | ---: |
+| Proof-state premise retrieval | candidate_pool_miss_top_100 | 1,823 | 59.7% | 64.4% |
+| Proof-state premise retrieval | reranking_headroom_after_top10 | 458 | 15.0% | 16.2% |
+| Theorem premise retrieval | candidate_pool_miss_top_100 | 55 | 5.5% | 5.8% |
+| Theorem premise retrieval | reranking_headroom_after_top10 | 133 | 13.3% | 13.9% |
+
 Held-out metric uncertainty:
 
 | Task | Metric | n | 95% CI low | 95% CI high | Half-width |
@@ -134,7 +143,7 @@ make verify-delivery
 Recent passing result:
 
 ```text
-pytest: 74 passed, 4 skipped
+pytest: 79 passed, 4 skipped
 audit: 167/167 checks passed
 git diff --check: passed
 ```
