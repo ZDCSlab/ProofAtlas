@@ -56,6 +56,14 @@ def _diagnostic_text(stdout: str = "", stderr: str = "") -> str:
     return "\n".join(part for part in [stderr, stdout] if part)
 
 
+def _output_text(value) -> str:
+    if value is None:
+        return ""
+    if isinstance(value, bytes):
+        return value.decode("utf-8", errors="replace")
+    return str(value)
+
+
 def _proof_state_retrieval_text(parsed: dict) -> str:
     hypotheses = "\n".join(parsed.get("local_hypotheses") or [])
     goal = parsed.get("goal_text") or ""
@@ -170,18 +178,28 @@ def check_lean_syntax(source: str, timeout_seconds: int = 10) -> dict:
                 check=False,
             )
         except subprocess.TimeoutExpired as exc:
-            extraction = extract_proof_state_report(exc.stdout or "", "")
+            stdout = _output_text(exc.stdout)
+            timed_out_stderr = _output_text(exc.stderr)
+            extraction = extract_proof_state_report(stdout, timed_out_stderr)
+            stderr = "\n".join(
+                part
+                for part in [
+                    timed_out_stderr,
+                    f"Lean syntax check timed out after {timeout_seconds} seconds.",
+                ]
+                if part
+            )
             return {
                 "checked": True,
                 "available": True,
                 "ok": False,
                 "command": command,
                 "returncode": None,
-                "stdout": exc.stdout or "",
-                "stderr": f"Lean syntax check timed out after {timeout_seconds} seconds.",
+                "stdout": stdout,
+                "stderr": stderr,
                 "proof_states": extraction["proof_states"],
                 "proof_state_extraction": extraction,
-                "summary": _diagnostic_summary(exc.stdout or "", ""),
+                "summary": _diagnostic_summary(stdout, timed_out_stderr),
             }
     stdout = proc.stdout[-4000:]
     stderr = proc.stderr[-4000:]

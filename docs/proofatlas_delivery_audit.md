@@ -160,7 +160,7 @@ make verify-delivery
 Recent passing result:
 
 ```text
-pytest: 88 passed, 4 skipped
+pytest: 89 passed, 4 skipped
 audit: 176/176 checks passed
 git diff --check: passed
 ```

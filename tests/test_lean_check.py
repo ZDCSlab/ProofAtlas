@@ -30,6 +30,36 @@ def test_check_lean_syntax_uses_lake_when_available(monkeypatch, tmp_path):
     assert calls["command"][:3] == ["lake", "env", "lean"]
 
 
+def test_check_lean_syntax_extracts_timeout_stderr_goals(monkeypatch):
+    def fake_which(name):
+        return f"/usr/bin/{name}" if name == "lean" else None
+
+    def fake_run(command, **kwargs):
+        raise subprocess.TimeoutExpired(
+            command,
+            timeout=1,
+            output="",
+            stderr="""
+error: unsolved goals
+case h
+x : Nat
+⊢ x = x
+""",
+        )
+
+    monkeypatch.setattr(lean_check.shutil, "which", fake_which)
+    monkeypatch.setattr(lean_check.subprocess, "run", fake_run)
+
+    result = lean_check.check_lean_syntax("theorem t (x : Nat) : x = x := by", timeout_seconds=1)
+
+    assert result["checked"] is True
+    assert result["ok"] is False
+    assert "timed out" in result["stderr"]
+    assert result["summary"]["has_unsolved_goals"] is True
+    assert result["summary"]["proof_state_extracted_count"] == 1
+    assert result["proof_states"][0]["goal_text"] == "x = x"
+
+
 def test_extract_proof_states_from_unsolved_goals_diagnostics():
     stderr = """
 error: unsolved goals
