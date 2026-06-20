@@ -1,0 +1,21 @@
+dataset_name: erbacher/LeanRank-data
+random_seed: 42
+use_huggingface: false
+sample:
+  total_rows: 60000
+  small_debug_rows: 1000
+  committed_demo_rows: 3000
+split:
+  train_ratio: 0.8
+  val_ratio: 0.1
+  test_ratio: 0.1
+retrieval:
+  top_k: [1, 5, 10]
+similarity:
+  theorem_top_k: 10
+proof_techniques:
+  max_labels_per_state: 5
+  minimum_support: 1
+embedding:
+  backend: tfidf
+  model_name: sentence-transformers/all-MiniLM-L6-v2

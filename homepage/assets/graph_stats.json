@@ -1,0 +1,102 @@
+{
+  "demo": {
+    "edge_count": 13005,
+    "edge_counts_by_type": {
+      "appears_in_file": 285,
+      "at_tactic_step": 900,
+      "co_occurs_with": 2444,
+      "defined_in_file": 1439,
+      "has_proof_state": 900,
+      "invokes_premise": 900,
+      "negative_candidate": 900,
+      "positive_uses": 900,
+      "similar_to_theorem": 2850,
+      "uses_proof_technique": 1487
+    },
+    "node_count": 3204,
+    "node_counts_by_type": {
+      "FileModule": 502,
+      "Premise": 1439,
+      "ProofState": 900,
+      "ProofTechnique": 12,
+      "TacticStep": 66,
+      "Theorem": 285
+    },
+    "split": "demo"
+  },
+  "test": {
+    "edge_count": 42196,
+    "edge_counts_by_type": {
+      "appears_in_file": 209,
+      "at_tactic_step": 696,
+      "co_occurs_with": 4990,
+      "defined_in_file": 12443,
+      "has_proof_state": 696,
+      "invokes_premise": 1690,
+      "negative_candidate": 16460,
+      "positive_uses": 1690,
+      "similar_to_theorem": 2090,
+      "uses_proof_technique": 1232
+    },
+    "node_count": 14218,
+    "node_counts_by_type": {
+      "FileModule": 795,
+      "Premise": 12443,
+      "ProofState": 696,
+      "ProofTechnique": 12,
+      "TacticStep": 63,
+      "Theorem": 209
+    },
+    "split": "test"
+  },
+  "train": {
+    "edge_count": 245514,
+    "edge_counts_by_type": {
+      "appears_in_file": 1667,
+      "at_tactic_step": 4722,
+      "co_occurs_with": 28244,
+      "defined_in_file": 53668,
+      "has_proof_state": 4722,
+      "invokes_premise": 10850,
+      "negative_candidate": 105297,
+      "positive_uses": 10850,
+      "similar_to_theorem": 16670,
+      "uses_proof_technique": 8824
+    },
+    "node_count": 62808,
+    "node_counts_by_type": {
+      "FileModule": 2663,
+      "Premise": 53668,
+      "ProofState": 4722,
+      "ProofTechnique": 12,
+      "TacticStep": 76,
+      "Theorem": 1667
+    },
+    "split": "train"
+  },
+  "val": {
+    "edge_count": 35223,
+    "edge_counts_by_type": {
+      "appears_in_file": 208,
+      "at_tactic_step": 583,
+      "co_occurs_with": 3776,
+      "defined_in_file": 10824,
+      "has_proof_state": 583,
+      "invokes_premise": 1371,
+      "negative_candidate": 13381,
+      "positive_uses": 1371,
+      "similar_to_theorem": 2080,
+      "uses_proof_technique": 1046
+    },
+    "node_count": 12410,
+    "node_counts_by_type": {
+      "FileModule": 753,
+      "Premise": 10824,
+      "ProofState": 583,
+      "ProofTechnique": 12,
+      "TacticStep": 30,
+      "Theorem": 208
+    },
+    "split": "val"
+  }
+}

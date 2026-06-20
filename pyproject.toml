@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "leanrank-kg"
+version = "0.1.0"
+description = "Non-GNN LeanRank math proof knowledge graph MVP"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "datasets",
+  "joblib",
+  "jinja2",
+  "jsonschema",
+  "networkx",
+  "numpy",
+  "pandas",
+  "pyarrow",
+  "pyyaml",
+  "rich",
+  "scipy",
+  "scikit-learn",
+  "typer",
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+hf = ["sentence-transformers"]
+
+[project.scripts]
+leanrank-kg = "leanrank_kg.cli:app"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

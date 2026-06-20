@@ -1,0 +1,51 @@
+{
+  "AUC": 0.662139,
+  "MRR": 0.036231884057971016,
+  "Recall@1": 0.028985507246376812,
+  "Recall@10": 0.043478260869565216,
+  "Recall@5": 0.043478260869565216,
+  "difficulty_bucket_distribution": [
+    {
+      "bucket": "easy",
+      "count": 4423,
+      "split": "train"
+    },
+    {
+      "bucket": "medium",
+      "count": 299,
+      "split": "train"
+    },
+    {
+      "bucket": "easy",
+      "count": 446,
+      "split": "val"
+    },
+    {
+      "bucket": "medium",
+      "count": 137,
+      "split": "val"
+    },
+    {
+      "bucket": "easy",
+      "count": 545,
+      "split": "test"
+    },
+    {
+      "bucket": "medium",
+      "count": 151,
+      "split": "test"
+    },
+    {
+      "bucket": "easy",
+      "count": 876,
+      "split": "demo"
+    },
+    {
+      "bucket": "medium",
+      "count": 24,
+      "split": "demo"
+    }
+  ],
+  "gold_premise_coverage": 0.69,
+  "proof_technique_label_coverage": 0.8280274834597932
+}

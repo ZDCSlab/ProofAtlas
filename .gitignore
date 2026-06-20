@@ -1,0 +1,26 @@
+.venv/
+.env
+.env.*
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+build/
+dist/
+*.egg-info/
+.DS_Store
+
+# Local planning/reference documents are kept out of the public repo.
+docs/
+
+# Generated LeanRank/ProofAtlas data and model artifacts.
+# These are reproducible from configs/proofatlas.yaml and are too large for git.
+data/processed/
+data/sample/
+data/raw/
+outputs/embeddings/
+outputs/models/
+outputs/graph/
+outputs/reports/
+!outputs/.gitkeep

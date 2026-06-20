@@ -1,0 +1,658 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ProofAtlas</title>
+  <style>
+    :root{color-scheme:light;--ink:#202124;--muted:#5f6368;--line:#d9dde3;--bg:#f7f8fa;--panel:#fff;--accent:#1a73e8}
+    body{font-family:Inter,Arial,sans-serif;margin:0;color:var(--ink);background:var(--bg);line-height:1.45}
+    header{background:#233142;color:white;padding:44px 8vw 38px}
+    header p{max-width:820px;color:#d7dde6}
+    main{max-width:1160px;margin:auto;padding:24px}
+    section{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:20px;margin:16px 0}
+    h1,h2,h3{margin:0 0 10px}
+    h2{font-size:20px}
+    h3{font-size:16px;color:#2b3645}
+    table{border-collapse:collapse;width:100%;font-size:14px}
+    td,th{border-bottom:1px solid #e5e7eb;padding:8px;text-align:left;vertical-align:top}
+    th{color:#3c4043;background:#fafafa}
+    code{background:#eef1f4;padding:2px 4px;border-radius:4px}
+    pre{white-space:pre-wrap;background:#f5f7f9;border:1px solid #e2e6ea;border-radius:6px;padding:10px;overflow:auto}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+    .stat{font-size:28px;font-weight:700;overflow-wrap:anywhere;line-height:1.2}
+    .muted{color:var(--muted)}
+    .chips{display:flex;flex-wrap:wrap;gap:8px}
+    .chip{border:1px solid var(--line);border-radius:999px;padding:4px 9px;background:#fafafa}
+  </style>
+</head>
+<body>
+<header>
+  <h1>ProofAtlas</h1>
+  <p>A retrieval-ready atlas of LeanRank proof states, theorems, premises, proof techniques, and difficulty signals built from real Lean/mathlib data with GPU-backed semantic embeddings.</p>
+</header>
+<main>
+  <section>
+    <h2>Dataset</h2>
+    <div class="grid">
+      <div><div class="muted">Source</div><div class="stat">erbacher/LeanRank-data</div></div>
+      <div><div class="muted">Real rows loaded</div><div class="stat">60000</div></div>
+      <div><div class="muted">Original plan</div><div class="stat">60000</div></div>
+      <div><div class="muted">Hugging Face data</div><div class="stat">True</div></div>
+      <div><div class="muted">Demo processed files</div><div class="stat">11</div></div>
+      <div><div class="muted">Premise object shape</div><code>{'keys': ['code', 'full_name', 'path', 'pid'], 'kind': 'dict'}</code></div>
+    </div>
+    <table>
+      <tr><th>Split</th><th>Theorems</th><th>Proof states</th><th>Premises</th><th>Techniques</th><th>Nodes</th><th>Edges</th></tr>
+      
+      <tr><td>demo</td><td>285</td><td>900</td><td>1439</td><td>12</td><td>3204</td><td>13005</td></tr>
+      
+      <tr><td>test</td><td>209</td><td>696</td><td>12443</td><td>12</td><td>14218</td><td>42196</td></tr>
+      
+      <tr><td>train</td><td>1667</td><td>4722</td><td>53668</td><td>12</td><td>62808</td><td>245514</td></tr>
+      
+      <tr><td>val</td><td>208</td><td>583</td><td>10824</td><td>12</td><td>12410</td><td>35223</td></tr>
+      
+    </table>
+  </section>
+
+  <section>
+    <h2>Embedding Model</h2>
+    <div class="grid">
+      <div><div class="muted">Backend</div><div class="stat">sentence_transformers</div></div>
+      <div><div class="muted">Model</div><div class="stat">BAAI/bge-base-en-v1.5</div></div>
+      <div><div class="muted">Device</div><div class="stat">cuda</div></div>
+      <div><div class="muted">Batch size</div><div class="stat">512</div></div>
+    </div>
+    <p class="muted">Proof states are encoded as queries; Lean theorems and premises are encoded as retrieval passages.</p>
+  </section>
+
+  <section>
+    <h2>KG Overview</h2>
+    
+      <h3>demo</h3>
+      <div class="grid">
+        <div><div class="muted">Nodes</div><div class="stat">3204</div></div>
+        <div><div class="muted">Edges</div><div class="stat">13005</div></div>
+      </div>
+      <table>
+        <tr><th>Node type</th><th>Count</th><th>Edge type</th><th>Count</th></tr>
+        
+        
+        
+        <tr>
+          <td>FileModule</td>
+          <td>502</td>
+          <td>appears_in_file</td>
+          <td>285</td>
+        </tr>
+        
+        <tr>
+          <td>Premise</td>
+          <td>1439</td>
+          <td>at_tactic_step</td>
+          <td>900</td>
+        </tr>
+        
+        <tr>
+          <td>ProofState</td>
+          <td>900</td>
+          <td>co_occurs_with</td>
+          <td>2444</td>
+        </tr>
+        
+        <tr>
+          <td>ProofTechnique</td>
+          <td>12</td>
+          <td>defined_in_file</td>
+          <td>1439</td>
+        </tr>
+        
+        <tr>
+          <td>TacticStep</td>
+          <td>66</td>
+          <td>has_proof_state</td>
+          <td>900</td>
+        </tr>
+        
+        <tr>
+          <td>Theorem</td>
+          <td>285</td>
+          <td>invokes_premise</td>
+          <td>900</td>
+        </tr>
+        
+        <tr>
+          <td></td>
+          <td></td>
+          <td>negative_candidate</td>
+          <td>900</td>
+        </tr>
+        
+        <tr>
+          <td></td>
+          <td></td>
+          <td>positive_uses</td>
+          <td>900</td>
+        </tr>
+        
+        <tr>
+          <td></td>
+          <td></td>
+          <td>similar_to_theorem</td>
+          <td>2850</td>
+        </tr>
+        
+        <tr>
+          <td></td>
+          <td></td>
+          <td>uses_proof_technique</td>
+          <td>1487</td>
+        </tr>
+        
+      </table>
+    
+      <h3>test</h3>
+      <div class="grid">
+        <div><div class="muted">Nodes</div><div class="stat">14218</div></div>
+        <div><div class="muted">Edges</div><div class="stat">42196</div></div>
+      </div>
+      <table>
+        <tr><th>Node type</th><th>Count</th><th>Edge type</th><th>Count</th></tr>
+        
+        
+        
+        <tr>
+          <td>FileModule</td>
+          <td>795</td>
+          <td>appears_in_file</td>
+          <td>209</td>
+        </tr>
+        
+        <tr>
+          <td>Premise</td>
+          <td>12443</td>
+          <td>at_tactic_step</td>
+          <td>696</td>
+        </tr>
+        
+        <tr>
+          <td>ProofState</td>
+          <td>696</td>
+          <td>co_occurs_with</td>
+          <td>4990</td>
+        </tr>
+        
+        <tr>
+          <td>ProofTechnique</td>
+          <td>12</td>
+          <td>defined_in_file</td>
+          <td>12443</td>
+        </tr>
+        
+        <tr>
+          <td>TacticStep</td>
+          <td>63</td>
+          <td>has_proof_state</td>
+          <td>696</td>
+        </tr>
+        
+        <tr>
+          <td>Theorem</td>
+          <td>209</td>
+          <td>invokes_premise</td>
+          <td>1690</td>
+        </tr>
+        
+        <tr>
+          <td></td>
+          <td></td>
+          <td>negative_candidate</td>
+          <td>16460</td>
+        </tr>
+        
+        <tr>
+          <td></td>
+          <td></td>
+          <td>positive_uses</td>
+          <td>1690</td>
+        </tr>
+        
+        <tr>
+          <td></td>
+          <td></td>
+          <td>similar_to_theorem</td>
+          <td>2090</td>
+        </tr>
+        
+        <tr>
+          <td></td>
+          <td></td>
+          <td>uses_proof_technique</td>
+          <td>1232</td>
+        </tr>
+        
+      </table>
+    
+      <h3>train</h3>
+      <div class="grid">
+        <div><div class="muted">Nodes</div><div class="stat">62808</div></div>
+        <div><div class="muted">Edges</div><div class="stat">245514</div></div>
+      </div>
+      <table>
+        <tr><th>Node type</th><th>Count</th><th>Edge type</th><th>Count</th></tr>
+        
+        
+        
+        <tr>
+          <td>FileModule</td>
+          <td>2663</td>
+          <td>appears_in_file</td>
+          <td>1667</td>
+        </tr>
+        
+        <tr>
+          <td>Premise</td>
+          <td>53668</td>
+          <td>at_tactic_step</td>
+          <td>4722</td>
+        </tr>
+        
+        <tr>
+          <td>ProofState</td>
+          <td>4722</td>
+          <td>co_occurs_with</td>
+          <td>28244</td>
+        </tr>
+        
+        <tr>
+          <td>ProofTechnique</td>
+          <td>12</td>
+          <td>defined_in_file</td>
+          <td>53668</td>
+        </tr>
+        
+        <tr>
+          <td>TacticStep</td>
+          <td>76</td>
+          <td>has_proof_state</td>
+          <td>4722</td>
+        </tr>
+        
+        <tr>
+          <td>Theorem</td>
+          <td>1667</td>
+          <td>invokes_premise</td>
+          <td>10850</td>
+        </tr>
+        
+        <tr>
+          <td></td>
+          <td></td>
+          <td>negative_candidate</td>
+          <td>105297</td>
+        </tr>
+        
+        <tr>
+          <td></td>
+          <td></td>
+          <td>positive_uses</td>
+          <td>10850</td>
+        </tr>
+        
+        <tr>
+          <td></td>
+          <td></td>
+          <td>similar_to_theorem</td>
+          <td>16670</td>
+        </tr>
+        
+        <tr>
+          <td></td>
+          <td></td>
+          <td>uses_proof_technique</td>
+          <td>8824</td>
+        </tr>
+        
+      </table>
+    
+      <h3>val</h3>
+      <div class="grid">
+        <div><div class="muted">Nodes</div><div class="stat">12410</div></div>
+        <div><div class="muted">Edges</div><div class="stat">35223</div></div>
+      </div>
+      <table>
+        <tr><th>Node type</th><th>Count</th><th>Edge type</th><th>Count</th></tr>
+        
+        
+        
+        <tr>
+          <td>FileModule</td>
+          <td>753</td>
+          <td>appears_in_file</td>
+          <td>208</td>
+        </tr>
+        
+        <tr>
+          <td>Premise</td>
+          <td>10824</td>
+          <td>at_tactic_step</td>
+          <td>583</td>
+        </tr>
+        
+        <tr>
+          <td>ProofState</td>
+          <td>583</td>
+          <td>co_occurs_with</td>
+          <td>3776</td>
+        </tr>
+        
+        <tr>
+          <td>ProofTechnique</td>
+          <td>12</td>
+          <td>defined_in_file</td>
+          <td>10824</td>
+        </tr>
+        
+        <tr>
+          <td>TacticStep</td>
+          <td>30</td>
+          <td>has_proof_state</td>
+          <td>583</td>
+        </tr>
+        
+        <tr>
+          <td>Theorem</td>
+          <td>208</td>
+          <td>invokes_premise</td>
+          <td>1371</td>
+        </tr>
+        
+        <tr>
+          <td></td>
+          <td></td>
+          <td>negative_candidate</td>
+          <td>13381</td>
+        </tr>
+        
+        <tr>
+          <td></td>
+          <td></td>
+          <td>positive_uses</td>
+          <td>1371</td>
+        </tr>
+        
+        <tr>
+          <td></td>
+          <td></td>
+          <td>similar_to_theorem</td>
+          <td>2080</td>
+        </tr>
+        
+        <tr>
+          <td></td>
+          <td></td>
+          <td>uses_proof_technique</td>
+          <td>1046</td>
+        </tr>
+        
+      </table>
+    
+  </section>
+
+  <section>
+    <h2>Domain Coverage</h2>
+    <table>
+      <tr><th>Split</th><th>Domain counts</th></tr>
+      
+      <tr><td>test</td><td>{'.lake': 166, 'Algebra': 1067, 'AlgebraicGeometry': 123, 'AlgebraicTopology': 2, 'Analysis': 1037, 'CategoryTheory': 160, 'Combinatorics': 15, 'Computability': 183, 'Data': 370, 'FieldTheory': 9, 'GroupTheory': 406, 'LinearAlgebra': 222, 'MeasureTheory': 1214, 'ModelTheory': 58, 'NumberTheory': 777, 'Order': 69, 'Probability': 90, 'RepresentationTheory': 15, 'RingTheory': 1410, 'SetTheory': 50, 'Tactic': 4, 'Topology': 189}</td></tr>
+      
+      <tr><td>train</td><td>{'.lake': 215, 'Algebra': 3989, 'AlgebraicGeometry': 1190, 'AlgebraicTopology': 393, 'Analysis': 6885, 'CategoryTheory': 1340, 'Combinatorics': 396, 'Computability': 394, 'Condensed': 101, 'Control': 18, 'Data': 3617, 'Deprecated': 16, 'Dynamics': 181, 'FieldTheory': 900, 'Geometry': 1183, 'GroupTheory': 714, 'InformationTheory': 9, 'LinearAlgebra': 3846, 'Logic': 61, 'MeasureTheory': 4462, 'ModelTheory': 895, 'NumberTheory': 4000, 'Order': 762, 'Probability': 1594, 'RepresentationTheory': 117, 'RingTheory': 6158, 'SetTheory': 492, 'Tactic': 54, 'Topology': 2593}</td></tr>
+      
+      <tr><td>val</td><td>{'.lake': 14, 'Algebra': 239, 'AlgebraicGeometry': 22, 'AlgebraicTopology': 26, 'Analysis': 480, 'CategoryTheory': 320, 'Combinatorics': 16, 'Computability': 29, 'Control': 5, 'Data': 490, 'FieldTheory': 4, 'Geometry': 322, 'GroupTheory': 11, 'LinearAlgebra': 318, 'MeasureTheory': 514, 'ModelTheory': 1, 'NumberTheory': 657, 'Order': 189, 'Probability': 233, 'RingTheory': 1066, 'SetTheory': 116, 'Topology': 717}</td></tr>
+      
+    </table>
+  </section>
+
+  <section>
+    <h2>Function Showcase</h2>
+    <div class="chips"><span class="chip"><code>retrieve_premises</code></span><span class="chip"><code>retrieve_similar_theorems</code></span><span class="chip"><code>explain_premise_match</code></span><span class="chip"><code>get_proof_technique_labels</code></span><span class="chip"><code>get_difficulty_profile</code></span><span class="chip"><code>get_graph_neighborhood</code></span></div>
+  </section>
+
+  <section>
+    <h2>Retrieval Examples</h2>
+    
+      <h3>ps:Real.posLog_mul:2:a1552fe40378</h3>
+      <p>log⁺ (a * b) ≤ log⁺ a + log⁺ b</p>
+      <p>Gold premise: <code>premise:Real.posLog</code> | in train index: <b>True</b></p>
+      <table>
+        <tr><th>Premise</th><th>Score</th><th>Index</th></tr>
+        
+        <tr><td>Eq.not_lt</td><td>0.811</td><td>train</td></tr>
+        
+        <tr><td>Real.logb_self_eq_one_iff</td><td>0.807</td><td>train</td></tr>
+        
+        <tr><td>smul_nonneg_iff</td><td>0.806</td><td>train</td></tr>
+        
+        <tr><td>Ne.not_le_or_not_le</td><td>0.805</td><td>train</td></tr>
+        
+        <tr><td>ENNReal.mul_inv</td><td>0.804</td><td>train</td></tr>
+        
+      </table>
+    
+      <h3>ps:Real.posLog_mul:3:19a298e8a6ed</h3>
+      <p>max 0 (log (a * b)) ≤ max 0 (log a) + max 0 (log b)</p>
+      <p>Gold premise: <code>premise:mul_one</code> | in train index: <b>True</b></p>
+      <table>
+        <tr><th>Premise</th><th>Score</th><th>Index</th></tr>
+        
+        <tr><td>Real.logb_self_eq_one_iff</td><td>0.809</td><td>train</td></tr>
+        
+        <tr><td>smul_nonneg_iff</td><td>0.801</td><td>train</td></tr>
+        
+        <tr><td>ENNReal.mul_inv</td><td>0.800</td><td>train</td></tr>
+        
+        <tr><td>Mathlib.Meta.Positivity.log_nz_of_isRat_neg</td><td>0.795</td><td>train</td></tr>
+        
+        <tr><td>Real.log_ne_zero</td><td>0.795</td><td>train</td></tr>
+        
+      </table>
+    
+      <h3>ps:Real.posLog_mul:4:4392b6745b4d</h3>
+      <p>max (0 + 0) (log a + log b) ≤ max 0 (log a) + max 0 (log b)</p>
+      <p>Gold premise: <code>premise:max_mul_mul_le_max_mul_max'</code> | in train index: <b>True</b></p>
+      <table>
+        <tr><th>Premise</th><th>Score</th><th>Index</th></tr>
+        
+        <tr><td>Real.logb_self_eq_one_iff</td><td>0.811</td><td>train</td></tr>
+        
+        <tr><td>smul_nonneg_iff</td><td>0.801</td><td>train</td></tr>
+        
+        <tr><td>ENNReal.mul_inv</td><td>0.798</td><td>train</td></tr>
+        
+        <tr><td>Mathlib.Meta.Positivity.log_nz_of_isRat_neg</td><td>0.796</td><td>train</td></tr>
+        
+        <tr><td>EReal.sub_nonneg</td><td>0.793</td><td>train</td></tr>
+        
+      </table>
+    
+      <h3>ps:Real.posLog_mul:5:4eab3aed1b6a</h3>
+      <p>log⁺ (a * b) ≤ log⁺ a + log⁺ b</p>
+      <p>Gold premise: <code>premise:Real.posLog</code> | in train index: <b>True</b></p>
+      <table>
+        <tr><th>Premise</th><th>Score</th><th>Index</th></tr>
+        
+        <tr><td>Nat.log_pos</td><td>0.813</td><td>train</td></tr>
+        
+        <tr><td>inv_pos</td><td>0.806</td><td>train</td></tr>
+        
+        <tr><td>Real.posLog_abs</td><td>0.805</td><td>train</td></tr>
+        
+        <tr><td>Real.log_le_sub_one_of_pos</td><td>0.803</td><td>train</td></tr>
+        
+        <tr><td>smul_le_smul_iff_of_pos_left</td><td>0.803</td><td>train</td></tr>
+        
+      </table>
+    
+      <h3>ps:Real.posLog_mul:6:0c249d3e2723</h3>
+      <p>log⁺ (a * b) ≤ log⁺ a + log⁺ b</p>
+      <p>Gold premise: <code>premise:Real.posLog</code> | in train index: <b>True</b></p>
+      <table>
+        <tr><th>Premise</th><th>Score</th><th>Index</th></tr>
+        
+        <tr><td>Real.logb_self_eq_one_iff</td><td>0.808</td><td>train</td></tr>
+        
+        <tr><td>Nat.log_pos</td><td>0.805</td><td>train</td></tr>
+        
+        <tr><td>pos_and_pos_or_neg_and_neg_of_mul_pos</td><td>0.800</td><td>train</td></tr>
+        
+        <tr><td>Real.log</td><td>0.799</td><td>train</td></tr>
+        
+        <tr><td>Real.log_ne_zero_of_pos_of_ne_one</td><td>0.799</td><td>train</td></tr>
+        
+      </table>
+    
+  </section>
+
+  <section>
+    <h2>Proof-Technique Labels</h2>
+    <table>
+      <tr><th>Split</th><th>Label</th><th>Count</th></tr>
+      
+      <tr><td>train</td><td>typeclass_resolution</td><td>3398</td></tr>
+      
+      <tr><td>train</td><td>logical_reasoning</td><td>2596</td></tr>
+      
+      <tr><td>train</td><td>computation</td><td>1349</td></tr>
+      
+      <tr><td>train</td><td>rewriting_or_coercion</td><td>825</td></tr>
+      
+      <tr><td>train</td><td>theorem_application</td><td>341</td></tr>
+      
+      <tr><td>train</td><td>simplification</td><td>112</td></tr>
+      
+      <tr><td>train</td><td>extensionality</td><td>102</td></tr>
+      
+      <tr><td>train</td><td>case_or_constructor_reasoning</td><td>101</td></tr>
+      
+      <tr><td>val</td><td>typeclass_resolution</td><td>411</td></tr>
+      
+      <tr><td>val</td><td>logical_reasoning</td><td>296</td></tr>
+      
+      <tr><td>val</td><td>computation</td><td>162</td></tr>
+      
+      <tr><td>val</td><td>rewriting_or_coercion</td><td>93</td></tr>
+      
+      <tr><td>val</td><td>theorem_application</td><td>35</td></tr>
+      
+      <tr><td>val</td><td>extensionality</td><td>29</td></tr>
+      
+      <tr><td>val</td><td>case_or_constructor_reasoning</td><td>8</td></tr>
+      
+      <tr><td>val</td><td>simplification</td><td>5</td></tr>
+      
+      <tr><td>val</td><td>automation</td><td>5</td></tr>
+      
+      <tr><td>val</td><td>induction</td><td>2</td></tr>
+      
+      <tr><td>test</td><td>typeclass_resolution</td><td>517</td></tr>
+      
+      <tr><td>test</td><td>logical_reasoning</td><td>336</td></tr>
+      
+      <tr><td>test</td><td>computation</td><td>190</td></tr>
+      
+      <tr><td>test</td><td>rewriting_or_coercion</td><td>131</td></tr>
+      
+      <tr><td>test</td><td>theorem_application</td><td>45</td></tr>
+      
+      <tr><td>test</td><td>case_or_constructor_reasoning</td><td>6</td></tr>
+      
+      <tr><td>test</td><td>simplification</td><td>4</td></tr>
+      
+      <tr><td>test</td><td>extensionality</td><td>3</td></tr>
+      
+      <tr><td>demo</td><td>typeclass_resolution</td><td>620</td></tr>
+      
+      <tr><td>demo</td><td>logical_reasoning</td><td>482</td></tr>
+      
+      <tr><td>demo</td><td>computation</td><td>219</td></tr>
+      
+      <tr><td>demo</td><td>rewriting_or_coercion</td><td>94</td></tr>
+      
+      <tr><td>demo</td><td>theorem_application</td><td>39</td></tr>
+      
+      <tr><td>demo</td><td>extensionality</td><td>13</td></tr>
+      
+      <tr><td>demo</td><td>simplification</td><td>10</td></tr>
+      
+      <tr><td>demo</td><td>case_or_constructor_reasoning</td><td>8</td></tr>
+      
+      <tr><td>demo</td><td>induction</td><td>2</td></tr>
+      
+    </table>
+  </section>
+
+  <section>
+    <h2>Difficulty</h2>
+    <table>
+      <tr><th>Split</th><th>Bucket</th><th>Count</th></tr>
+      
+      <tr><td>train</td><td>easy</td><td>4423</td></tr>
+      
+      <tr><td>train</td><td>medium</td><td>299</td></tr>
+      
+      <tr><td>val</td><td>easy</td><td>446</td></tr>
+      
+      <tr><td>val</td><td>medium</td><td>137</td></tr>
+      
+      <tr><td>test</td><td>easy</td><td>545</td></tr>
+      
+      <tr><td>test</td><td>medium</td><td>151</td></tr>
+      
+      <tr><td>demo</td><td>easy</td><td>876</td></tr>
+      
+      <tr><td>demo</td><td>medium</td><td>24</td></tr>
+      
+    </table>
+  </section>
+
+  <section>
+    <h2>Evaluation</h2>
+    <div class="grid">
+      <div><div class="muted">Recall@1</div><div class="stat">0.029</div></div>
+      <div><div class="muted">Recall@5</div><div class="stat">0.043</div></div>
+      <div><div class="muted">Recall@10</div><div class="stat">0.043</div></div>
+      <div><div class="muted">MRR</div><div class="stat">0.036</div></div>
+      <div><div class="muted">Gold premise coverage</div><div class="stat">0.690</div></div>
+      <div><div class="muted">Technique coverage</div><div class="stat">0.828</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Validation</h2>
+    <div class="grid">
+      <div><div class="muted">Schema errors</div><div class="stat">0</div></div>
+      <div><div class="muted">Split leakage</div><div class="stat">False</div></div>
+    </div>
+    <h3>Graph validation</h3>
+    <table>
+      <tr><th>Split</th><th>NetworkX loadable</th><th>Missing endpoints</th></tr>
+      
+      <tr><td>demo</td><td>True</td><td>0</td></tr>
+      
+      <tr><td>test</td><td>True</td><td>0</td></tr>
+      
+      <tr><td>train</td><td>True</td><td>0</td></tr>
+      
+      <tr><td>val</td><td>True</td><td>0</td></tr>
+      
+    </table>
+  </section>
+
+  <section>
+    <h2>Reproducibility</h2>
+    <p><code>conda activate leanrank_kg</code></p><p><code>make install</code></p><p><code>leanrank-kg full-pipeline --config configs/proofatlas.yaml</code></p><p><code>leanrank-kg build-homepage --config configs/proofatlas.yaml</code></p>
+  </section>
+</main>
+</body>
+</html>

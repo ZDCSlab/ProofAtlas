@@ -1,0 +1,1590 @@
+{
+  "commands": [
+    "conda activate leanrank_kg",
+    "make install",
+    "leanrank-kg full-pipeline --config configs/proofatlas.yaml",
+    "leanrank-kg build-homepage --config configs/proofatlas.yaml"
+  ],
+  "dataset": {
+    "configured_rows": 60000,
+    "premise_shape": {
+      "keys": [
+        "code",
+        "full_name",
+        "path",
+        "pid"
+      ],
+      "kind": "dict"
+    },
+    "processed_files": [
+      "data/processed/demo/file_modules.parquet",
+      "data/processed/demo/negative_edges.parquet",
+      "data/processed/demo/positive_edges.parquet",
+      "data/processed/demo/premise_techniques.parquet",
+      "data/processed/demo/premises.parquet",
+      "data/processed/demo/proof_state_features.parquet",
+      "data/processed/demo/proof_state_techniques.parquet",
+      "data/processed/demo/proof_states.parquet",
+      "data/processed/demo/proof_techniques.parquet",
+      "data/processed/demo/theorem_features.parquet",
+      "data/processed/demo/theorems.parquet"
+    ],
+    "project_name": "ProofAtlas",
+    "raw_columns": {
+      "all_pos_premises": "object",
+      "commit": "str",
+      "context": "str",
+      "file_path": "str",
+      "full_name": "str",
+      "neg_premises": "object",
+      "pos_premise": "object",
+      "start": "object",
+      "tactic_idx": "int64"
+    },
+    "sample_rows": 60000,
+    "source": "erbacher/LeanRank-data",
+    "split_counts": [
+      {
+        "edges": 13005,
+        "nodes": 3204,
+        "premises": 1439,
+        "proof_states": 900,
+        "proof_techniques": 12,
+        "split": "demo",
+        "theorems": 285
+      },
+      {
+        "edges": 42196,
+        "nodes": 14218,
+        "premises": 12443,
+        "proof_states": 696,
+        "proof_techniques": 12,
+        "split": "test",
+        "theorems": 209
+      },
+      {
+        "edges": 245514,
+        "nodes": 62808,
+        "premises": 53668,
+        "proof_states": 4722,
+        "proof_techniques": 12,
+        "split": "train",
+        "theorems": 1667
+      },
+      {
+        "edges": 35223,
+        "nodes": 12410,
+        "premises": 10824,
+        "proof_states": 583,
+        "proof_techniques": 12,
+        "split": "val",
+        "theorems": 208
+      }
+    ],
+    "use_huggingface": true
+  },
+  "difficulty_distribution": [
+    {
+      "bucket": "easy",
+      "count": 4423,
+      "split": "train"
+    },
+    {
+      "bucket": "medium",
+      "count": 299,
+      "split": "train"
+    },
+    {
+      "bucket": "easy",
+      "count": 446,
+      "split": "val"
+    },
+    {
+      "bucket": "medium",
+      "count": 137,
+      "split": "val"
+    },
+    {
+      "bucket": "easy",
+      "count": 545,
+      "split": "test"
+    },
+    {
+      "bucket": "medium",
+      "count": 151,
+      "split": "test"
+    },
+    {
+      "bucket": "easy",
+      "count": 876,
+      "split": "demo"
+    },
+    {
+      "bucket": "medium",
+      "count": 24,
+      "split": "demo"
+    }
+  ],
+  "domain_coverage": {
+    "test": {
+      ".lake": 166,
+      "Algebra": 1067,
+      "AlgebraicGeometry": 123,
+      "AlgebraicTopology": 2,
+      "Analysis": 1037,
+      "CategoryTheory": 160,
+      "Combinatorics": 15,
+      "Computability": 183,
+      "Data": 370,
+      "FieldTheory": 9,
+      "GroupTheory": 406,
+      "LinearAlgebra": 222,
+      "MeasureTheory": 1214,
+      "ModelTheory": 58,
+      "NumberTheory": 777,
+      "Order": 69,
+      "Probability": 90,
+      "RepresentationTheory": 15,
+      "RingTheory": 1410,
+      "SetTheory": 50,
+      "Tactic": 4,
+      "Topology": 189
+    },
+    "train": {
+      ".lake": 215,
+      "Algebra": 3989,
+      "AlgebraicGeometry": 1190,
+      "AlgebraicTopology": 393,
+      "Analysis": 6885,
+      "CategoryTheory": 1340,
+      "Combinatorics": 396,
+      "Computability": 394,
+      "Condensed": 101,
+      "Control": 18,
+      "Data": 3617,
+      "Deprecated": 16,
+      "Dynamics": 181,
+      "FieldTheory": 900,
+      "Geometry": 1183,
+      "GroupTheory": 714,
+      "InformationTheory": 9,
+      "LinearAlgebra": 3846,
+      "Logic": 61,
+      "MeasureTheory": 4462,
+      "ModelTheory": 895,
+      "NumberTheory": 4000,
+      "Order": 762,
+      "Probability": 1594,
+      "RepresentationTheory": 117,
+      "RingTheory": 6158,
+      "SetTheory": 492,
+      "Tactic": 54,
+      "Topology": 2593
+    },
+    "val": {
+      ".lake": 14,
+      "Algebra": 239,
+      "AlgebraicGeometry": 22,
+      "AlgebraicTopology": 26,
+      "Analysis": 480,
+      "CategoryTheory": 320,
+      "Combinatorics": 16,
+      "Computability": 29,
+      "Control": 5,
+      "Data": 490,
+      "FieldTheory": 4,
+      "Geometry": 322,
+      "GroupTheory": 11,
+      "LinearAlgebra": 318,
+      "MeasureTheory": 514,
+      "ModelTheory": 1,
+      "NumberTheory": 657,
+      "Order": 189,
+      "Probability": 233,
+      "RingTheory": 1066,
+      "SetTheory": 116,
+      "Topology": 717
+    }
+  },
+  "embedding": {
+    "backend": "sentence_transformers",
+    "batch_size": 512,
+    "device": "cuda",
+    "model_name": "BAAI/bge-base-en-v1.5",
+    "passage_prefix": "Represent this Lean theorem or premise for retrieval: ",
+    "query_prefix": "Represent this Lean proof state for retrieving useful premises: "
+  },
+  "functions": [
+    "retrieve_premises",
+    "retrieve_similar_theorems",
+    "explain_premise_match",
+    "get_proof_technique_labels",
+    "get_difficulty_profile",
+    "get_graph_neighborhood"
+  ],
+  "graph_stats": {
+    "demo": {
+      "edge_count": 13005,
+      "edge_counts_by_type": {
+        "appears_in_file": 285,
+        "at_tactic_step": 900,
+        "co_occurs_with": 2444,
+        "defined_in_file": 1439,
+        "has_proof_state": 900,
+        "invokes_premise": 900,
+        "negative_candidate": 900,
+        "positive_uses": 900,
+        "similar_to_theorem": 2850,
+        "uses_proof_technique": 1487
+      },
+      "node_count": 3204,
+      "node_counts_by_type": {
+        "FileModule": 502,
+        "Premise": 1439,
+        "ProofState": 900,
+        "ProofTechnique": 12,
+        "TacticStep": 66,
+        "Theorem": 285
+      },
+      "split": "demo"
+    },
+    "test": {
+      "edge_count": 42196,
+      "edge_counts_by_type": {
+        "appears_in_file": 209,
+        "at_tactic_step": 696,
+        "co_occurs_with": 4990,
+        "defined_in_file": 12443,
+        "has_proof_state": 696,
+        "invokes_premise": 1690,
+        "negative_candidate": 16460,
+        "positive_uses": 1690,
+        "similar_to_theorem": 2090,
+        "uses_proof_technique": 1232
+      },
+      "node_count": 14218,
+      "node_counts_by_type": {
+        "FileModule": 795,
+        "Premise": 12443,
+        "ProofState": 696,
+        "ProofTechnique": 12,
+        "TacticStep": 63,
+        "Theorem": 209
+      },
+      "split": "test"
+    },
+    "train": {
+      "edge_count": 245514,
+      "edge_counts_by_type": {
+        "appears_in_file": 1667,
+        "at_tactic_step": 4722,
+        "co_occurs_with": 28244,
+        "defined_in_file": 53668,
+        "has_proof_state": 4722,
+        "invokes_premise": 10850,
+        "negative_candidate": 105297,
+        "positive_uses": 10850,
+        "similar_to_theorem": 16670,
+        "uses_proof_technique": 8824
+      },
+      "node_count": 62808,
+      "node_counts_by_type": {
+        "FileModule": 2663,
+        "Premise": 53668,
+        "ProofState": 4722,
+        "ProofTechnique": 12,
+        "TacticStep": 76,
+        "Theorem": 1667
+      },
+      "split": "train"
+    },
+    "val": {
+      "edge_count": 35223,
+      "edge_counts_by_type": {
+        "appears_in_file": 208,
+        "at_tactic_step": 583,
+        "co_occurs_with": 3776,
+        "defined_in_file": 10824,
+        "has_proof_state": 583,
+        "invokes_premise": 1371,
+        "negative_candidate": 13381,
+        "positive_uses": 1371,
+        "similar_to_theorem": 2080,
+        "uses_proof_technique": 1046
+      },
+      "node_count": 12410,
+      "node_counts_by_type": {
+        "FileModule": 753,
+        "Premise": 10824,
+        "ProofState": 583,
+        "ProofTechnique": 12,
+        "TacticStep": 30,
+        "Theorem": 208
+      },
+      "split": "val"
+    }
+  },
+  "metrics": {
+    "AUC": 0.662139,
+    "MRR": 0.036231884057971016,
+    "Recall@1": 0.028985507246376812,
+    "Recall@10": 0.043478260869565216,
+    "Recall@5": 0.043478260869565216,
+    "difficulty_bucket_distribution": [
+      {
+        "bucket": "easy",
+        "count": 4423,
+        "split": "train"
+      },
+      {
+        "bucket": "medium",
+        "count": 299,
+        "split": "train"
+      },
+      {
+        "bucket": "easy",
+        "count": 446,
+        "split": "val"
+      },
+      {
+        "bucket": "medium",
+        "count": 137,
+        "split": "val"
+      },
+      {
+        "bucket": "easy",
+        "count": 545,
+        "split": "test"
+      },
+      {
+        "bucket": "medium",
+        "count": 151,
+        "split": "test"
+      },
+      {
+        "bucket": "easy",
+        "count": 876,
+        "split": "demo"
+      },
+      {
+        "bucket": "medium",
+        "count": 24,
+        "split": "demo"
+      }
+    ],
+    "gold_premise_coverage": 0.69,
+    "proof_technique_label_coverage": 0.8280274834597932
+  },
+  "proof_techniques": [
+    {
+      "count": 3398,
+      "label": "typeclass_resolution",
+      "split": "train"
+    },
+    {
+      "count": 2596,
+      "label": "logical_reasoning",
+      "split": "train"
+    },
+    {
+      "count": 1349,
+      "label": "computation",
+      "split": "train"
+    },
+    {
+      "count": 825,
+      "label": "rewriting_or_coercion",
+      "split": "train"
+    },
+    {
+      "count": 341,
+      "label": "theorem_application",
+      "split": "train"
+    },
+    {
+      "count": 112,
+      "label": "simplification",
+      "split": "train"
+    },
+    {
+      "count": 102,
+      "label": "extensionality",
+      "split": "train"
+    },
+    {
+      "count": 101,
+      "label": "case_or_constructor_reasoning",
+      "split": "train"
+    },
+    {
+      "count": 411,
+      "label": "typeclass_resolution",
+      "split": "val"
+    },
+    {
+      "count": 296,
+      "label": "logical_reasoning",
+      "split": "val"
+    },
+    {
+      "count": 162,
+      "label": "computation",
+      "split": "val"
+    },
+    {
+      "count": 93,
+      "label": "rewriting_or_coercion",
+      "split": "val"
+    },
+    {
+      "count": 35,
+      "label": "theorem_application",
+      "split": "val"
+    },
+    {
+      "count": 29,
+      "label": "extensionality",
+      "split": "val"
+    },
+    {
+      "count": 8,
+      "label": "case_or_constructor_reasoning",
+      "split": "val"
+    },
+    {
+      "count": 5,
+      "label": "simplification",
+      "split": "val"
+    },
+    {
+      "count": 5,
+      "label": "automation",
+      "split": "val"
+    },
+    {
+      "count": 2,
+      "label": "induction",
+      "split": "val"
+    },
+    {
+      "count": 517,
+      "label": "typeclass_resolution",
+      "split": "test"
+    },
+    {
+      "count": 336,
+      "label": "logical_reasoning",
+      "split": "test"
+    },
+    {
+      "count": 190,
+      "label": "computation",
+      "split": "test"
+    },
+    {
+      "count": 131,
+      "label": "rewriting_or_coercion",
+      "split": "test"
+    },
+    {
+      "count": 45,
+      "label": "theorem_application",
+      "split": "test"
+    },
+    {
+      "count": 6,
+      "label": "case_or_constructor_reasoning",
+      "split": "test"
+    },
+    {
+      "count": 4,
+      "label": "simplification",
+      "split": "test"
+    },
+    {
+      "count": 3,
+      "label": "extensionality",
+      "split": "test"
+    },
+    {
+      "count": 620,
+      "label": "typeclass_resolution",
+      "split": "demo"
+    },
+    {
+      "count": 482,
+      "label": "logical_reasoning",
+      "split": "demo"
+    },
+    {
+      "count": 219,
+      "label": "computation",
+      "split": "demo"
+    },
+    {
+      "count": 94,
+      "label": "rewriting_or_coercion",
+      "split": "demo"
+    },
+    {
+      "count": 39,
+      "label": "theorem_application",
+      "split": "demo"
+    },
+    {
+      "count": 13,
+      "label": "extensionality",
+      "split": "demo"
+    },
+    {
+      "count": 10,
+      "label": "simplification",
+      "split": "demo"
+    },
+    {
+      "count": 8,
+      "label": "case_or_constructor_reasoning",
+      "split": "demo"
+    },
+    {
+      "count": 2,
+      "label": "induction",
+      "split": "demo"
+    }
+  ],
+  "retrieval_examples": [
+    {
+      "gold_in_train_index": true,
+      "gold_positive_premise": "premise:Real.posLog",
+      "proof_state": "log\u207a (a * b) \u2264 log\u207a a + log\u207a b",
+      "proof_state_id": "ps:Real.posLog_mul:2:a1552fe40378",
+      "split": "val",
+      "top_retrieved_premises": [
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Eq.not_lt",
+          "index_split": "train",
+          "premise_id": "premise:Eq.not_lt",
+          "score": 0.8106617331504822
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Real.logb_self_eq_one_iff",
+          "index_split": "train",
+          "premise_id": "premise:Real.logb_self_eq_one_iff",
+          "score": 0.8071430921554565
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "smul_nonneg_iff",
+          "index_split": "train",
+          "premise_id": "premise:smul_nonneg_iff",
+          "score": 0.8063610196113586
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Ne.not_le_or_not_le",
+          "index_split": "train",
+          "premise_id": "premise:Ne.not_le_or_not_le",
+          "score": 0.8051789402961731
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "ENNReal.mul_inv",
+          "index_split": "train",
+          "premise_id": "premise:ENNReal.mul_inv",
+          "score": 0.8037539124488831
+        }
+      ]
+    },
+    {
+      "gold_in_train_index": true,
+      "gold_positive_premise": "premise:mul_one",
+      "proof_state": "max 0 (log (a * b)) \u2264 max 0 (log a) + max 0 (log b)",
+      "proof_state_id": "ps:Real.posLog_mul:3:19a298e8a6ed",
+      "split": "val",
+      "top_retrieved_premises": [
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Real.logb_self_eq_one_iff",
+          "index_split": "train",
+          "premise_id": "premise:Real.logb_self_eq_one_iff",
+          "score": 0.8093138933181763
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "smul_nonneg_iff",
+          "index_split": "train",
+          "premise_id": "premise:smul_nonneg_iff",
+          "score": 0.8009193539619446
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "ENNReal.mul_inv",
+          "index_split": "train",
+          "premise_id": "premise:ENNReal.mul_inv",
+          "score": 0.8002822995185852
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Mathlib.Meta.Positivity.log_nz_of_isRat_neg",
+          "index_split": "train",
+          "premise_id": "premise:Mathlib.Meta.Positivity.log_nz_of_isRat_neg",
+          "score": 0.7952752113342285
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Real.log_ne_zero",
+          "index_split": "train",
+          "premise_id": "premise:Real.log_ne_zero",
+          "score": 0.7948941588401794
+        }
+      ]
+    },
+    {
+      "gold_in_train_index": true,
+      "gold_positive_premise": "premise:max_mul_mul_le_max_mul_max'",
+      "proof_state": "max (0 + 0) (log a + log b) \u2264 max 0 (log a) + max 0 (log b)",
+      "proof_state_id": "ps:Real.posLog_mul:4:4392b6745b4d",
+      "split": "val",
+      "top_retrieved_premises": [
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Real.logb_self_eq_one_iff",
+          "index_split": "train",
+          "premise_id": "premise:Real.logb_self_eq_one_iff",
+          "score": 0.8111667633056641
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "smul_nonneg_iff",
+          "index_split": "train",
+          "premise_id": "premise:smul_nonneg_iff",
+          "score": 0.8007449507713318
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "ENNReal.mul_inv",
+          "index_split": "train",
+          "premise_id": "premise:ENNReal.mul_inv",
+          "score": 0.7979661822319031
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Mathlib.Meta.Positivity.log_nz_of_isRat_neg",
+          "index_split": "train",
+          "premise_id": "premise:Mathlib.Meta.Positivity.log_nz_of_isRat_neg",
+          "score": 0.796363353729248
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "EReal.sub_nonneg",
+          "index_split": "train",
+          "premise_id": "premise:EReal.sub_nonneg",
+          "score": 0.7926596403121948
+        }
+      ]
+    },
+    {
+      "gold_in_train_index": true,
+      "gold_positive_premise": "premise:Real.posLog",
+      "proof_state": "log\u207a (a * b) \u2264 log\u207a a + log\u207a b",
+      "proof_state_id": "ps:Real.posLog_mul:5:4eab3aed1b6a",
+      "split": "val",
+      "top_retrieved_premises": [
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Nat.log_pos",
+          "index_split": "train",
+          "premise_id": "premise:Nat.log_pos",
+          "score": 0.8132084012031555
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "inv_pos",
+          "index_split": "train",
+          "premise_id": "premise:inv_pos",
+          "score": 0.8055631518363953
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Real.posLog_abs",
+          "index_split": "train",
+          "premise_id": "premise:Real.posLog_abs",
+          "score": 0.804585337638855
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Real.log_le_sub_one_of_pos",
+          "index_split": "train",
+          "premise_id": "premise:Real.log_le_sub_one_of_pos",
+          "score": 0.8034237623214722
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "smul_le_smul_iff_of_pos_left",
+          "index_split": "train",
+          "premise_id": "premise:smul_le_smul_iff_of_pos_left",
+          "score": 0.8028882741928101
+        }
+      ]
+    },
+    {
+      "gold_in_train_index": true,
+      "gold_positive_premise": "premise:Real.posLog",
+      "proof_state": "log\u207a (a * b) \u2264 log\u207a a + log\u207a b",
+      "proof_state_id": "ps:Real.posLog_mul:6:0c249d3e2723",
+      "split": "val",
+      "top_retrieved_premises": [
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Real.logb_self_eq_one_iff",
+          "index_split": "train",
+          "premise_id": "premise:Real.logb_self_eq_one_iff",
+          "score": 0.8081681132316589
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Nat.log_pos",
+          "index_split": "train",
+          "premise_id": "premise:Nat.log_pos",
+          "score": 0.8054636716842651
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "pos_and_pos_or_neg_and_neg_of_mul_pos",
+          "index_split": "train",
+          "premise_id": "premise:pos_and_pos_or_neg_and_neg_of_mul_pos",
+          "score": 0.7999294996261597
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Real.log",
+          "index_split": "train",
+          "premise_id": "premise:Real.log",
+          "score": 0.7994009256362915
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Real.log_ne_zero_of_pos_of_ne_one",
+          "index_split": "train",
+          "premise_id": "premise:Real.log_ne_zero_of_pos_of_ne_one",
+          "score": 0.7988061904907227
+        }
+      ]
+    },
+    {
+      "gold_in_train_index": true,
+      "gold_positive_premise": "premise:Rat.cast_def",
+      "proof_state": "0 < \u2191q",
+      "proof_state_id": "ps:Rat.cast_pos_of_pos:0:08150ef3d1f2",
+      "split": "val",
+      "top_retrieved_premises": [
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "CauSeq",
+          "index_split": "train",
+          "premise_id": "premise:CauSeq",
+          "score": 0.7957879304885864
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "LittleWedderburn.InductionHyp.field",
+          "index_split": "train",
+          "premise_id": "premise:LittleWedderburn.InductionHyp.field",
+          "score": 0.7895947098731995
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Subfield.toField",
+          "index_split": "train",
+          "premise_id": "premise:Subfield.toField",
+          "score": 0.7782112956047058
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Lean.Meta.Grind.Arith.CommRing.Null.ProofM",
+          "index_split": "train",
+          "premise_id": "premise:Lean.Meta.Grind.Arith.CommRing.Null.ProofM",
+          "score": 0.7739279866218567
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "OrderDual.instField",
+          "index_split": "train",
+          "premise_id": "premise:OrderDual.instField",
+          "score": 0.7738271355628967
+        }
+      ]
+    },
+    {
+      "gold_in_train_index": false,
+      "gold_positive_premise": "premise:Rat.num_pos",
+      "proof_state": "0 < \u2191q.num / \u2191q.den",
+      "proof_state_id": "ps:Rat.cast_pos_of_pos:1:fce2b39a576f",
+      "split": "val",
+      "top_retrieved_premises": [
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "CauSeq",
+          "index_split": "train",
+          "premise_id": "premise:CauSeq",
+          "score": 0.800544023513794
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "LittleWedderburn.InductionHyp.field",
+          "index_split": "train",
+          "premise_id": "premise:LittleWedderburn.InductionHyp.field",
+          "score": 0.7953280806541443
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Subfield.toField",
+          "index_split": "train",
+          "premise_id": "premise:Subfield.toField",
+          "score": 0.7852565050125122
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "le_iff_forall_one_lt_le_mul\u2080",
+          "index_split": "train",
+          "premise_id": "premise:le_iff_forall_one_lt_le_mul\u2080",
+          "score": 0.781933605670929
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Lean.Meta.Grind.Arith.CommRing.Null.ProofM",
+          "index_split": "train",
+          "premise_id": "premise:Lean.Meta.Grind.Arith.CommRing.Null.ProofM",
+          "score": 0.779449462890625
+        }
+      ]
+    },
+    {
+      "gold_in_train_index": true,
+      "gold_positive_premise": "premise:SetLike.coe_injective",
+      "proof_state": "map f (iInf s) = \u2a05 i, map f (s i)",
+      "proof_state_id": "ps:StarSubalgebra.map_iInf:0:f494a8a32965",
+      "split": "val",
+      "top_retrieved_premises": [
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "AlgHom.ker_coe_equiv",
+          "index_split": "train",
+          "premise_id": "premise:AlgHom.ker_coe_equiv",
+          "score": 0.8339951634407043
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "StarSubalgebra.map",
+          "index_split": "train",
+          "premise_id": "premise:StarSubalgebra.map",
+          "score": 0.8319219350814819
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "AlgHom",
+          "index_split": "train",
+          "premise_id": "premise:AlgHom",
+          "score": 0.8257727026939392
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Subalgebra.comap",
+          "index_split": "train",
+          "premise_id": "premise:Subalgebra.comap",
+          "score": 0.8247893452644348
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Pi.evalNonUnitalStarAlgHom",
+          "index_split": "train",
+          "premise_id": "premise:Pi.evalNonUnitalStarAlgHom",
+          "score": 0.8245357871055603
+        }
+      ]
+    },
+    {
+      "gold_in_train_index": true,
+      "gold_positive_premise": "premise:Set.injOn_of_injective",
+      "proof_state": "\u2191(map f (iInf s)) = \u2191(\u2a05 i, map f (s i))",
+      "proof_state_id": "ps:StarSubalgebra.map_iInf:1:e60c7f383bfa",
+      "split": "val",
+      "top_retrieved_premises": [
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "AlgHom.ker_coe_equiv",
+          "index_split": "train",
+          "premise_id": "premise:AlgHom.ker_coe_equiv",
+          "score": 0.8386281132698059
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "algebraMap",
+          "index_split": "train",
+          "premise_id": "premise:algebraMap",
+          "score": 0.8294820189476013
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "AlgHom.comap_ker",
+          "index_split": "train",
+          "premise_id": "premise:AlgHom.comap_ker",
+          "score": 0.8287923336029053
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "AlgHom",
+          "index_split": "train",
+          "premise_id": "premise:AlgHom",
+          "score": 0.826776385307312
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Subalgebra.comap",
+          "index_split": "train",
+          "premise_id": "premise:Subalgebra.comap",
+          "score": 0.8266959190368652
+        }
+      ]
+    },
+    {
+      "gold_in_train_index": false,
+      "gold_positive_premise": "premise:add_self_div_two",
+      "proof_state": "a / 2 + a / 2 = a",
+      "proof_state_id": "ps:add_halves:0:fe284e83ed81",
+      "split": "val",
+      "top_retrieved_premises": [
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Function.Injective.divisionSemiring",
+          "index_split": "train",
+          "premise_id": "premise:Function.Injective.divisionSemiring",
+          "score": 0.7807866334915161
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "LinearEquiv.smulOfNeZero",
+          "index_split": "train",
+          "premise_id": "premise:LinearEquiv.smulOfNeZero",
+          "score": 0.7799728512763977
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Sym2.pairOther",
+          "index_split": "train",
+          "premise_id": "premise:Sym2.pairOther",
+          "score": 0.7777043581008911
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "CategoryTheory.discreteEquiv",
+          "index_split": "train",
+          "premise_id": "premise:CategoryTheory.discreteEquiv",
+          "score": 0.7772924304008484
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Lean.Meta.Grind.Arith.CommRing.Null.ProofM",
+          "index_split": "train",
+          "premise_id": "premise:Lean.Meta.Grind.Arith.CommRing.Null.ProofM",
+          "score": 0.7763058543205261
+        }
+      ]
+    },
+    {
+      "gold_in_train_index": true,
+      "gold_positive_premise": "premise:Finset.mul_prod_erase",
+      "proof_state": "nodal s v = (X - C (v i)) * nodal (s.erase i) v",
+      "proof_state_id": "ps:Lagrange.nodal_eq_mul_nodal_erase:0:536e420cff97",
+      "split": "val",
+      "top_retrieved_premises": [
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Equiv.Set.sumCompl",
+          "index_split": "train",
+          "premise_id": "premise:Equiv.Set.sumCompl",
+          "score": 0.8111919164657593
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "finsuppEquivDFinsupp",
+          "index_split": "train",
+          "premise_id": "premise:finsuppEquivDFinsupp",
+          "score": 0.8097019195556641
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Quotient.decidableEq",
+          "index_split": "train",
+          "premise_id": "premise:Quotient.decidableEq",
+          "score": 0.8064213991165161
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "ite_congr",
+          "index_split": "train",
+          "premise_id": "premise:ite_congr",
+          "score": 0.803378164768219
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "decide_implies",
+          "index_split": "train",
+          "premise_id": "premise:decide_implies",
+          "score": 0.8030264973640442
+        }
+      ]
+    },
+    {
+      "gold_in_train_index": false,
+      "gold_positive_premise": "premise:Set.pairwise_disjoint_Ico_mul_zpow",
+      "proof_state": "Pairwise (Disjoint on fun n => Ico (b ^ n) (b ^ (n + 1)))",
+      "proof_state_id": "ps:Set.pairwise_disjoint_Ico_zpow:0:76b303309cd9",
+      "split": "val",
+      "top_retrieved_premises": [
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "CanonicallyOrderedMul.toIsOrderedMonoid",
+          "index_split": "train",
+          "premise_id": "premise:CanonicallyOrderedMul.toIsOrderedMonoid",
+          "score": 0.8057518005371094
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Monoid.CoprodI.Rel",
+          "index_split": "train",
+          "premise_id": "premise:Monoid.CoprodI.Rel",
+          "score": 0.8036978840827942
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Monoid.CoprodI.of",
+          "index_split": "train",
+          "premise_id": "premise:Monoid.CoprodI.of",
+          "score": 0.7999103665351868
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Submonoid.induction_of_closure_eq_top_left",
+          "index_split": "train",
+          "premise_id": "premise:Submonoid.induction_of_closure_eq_top_left",
+          "score": 0.7996001839637756
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Submonoid.induction_of_closure_eq_top_right",
+          "index_split": "train",
+          "premise_id": "premise:Submonoid.induction_of_closure_eq_top_right",
+          "score": 0.7986326813697815
+        }
+      ]
+    },
+    {
+      "gold_in_train_index": true,
+      "gold_positive_premise": "premise:smul_one_mul",
+      "proof_state": "c \u2022 \u22a4 = if c = 0 then 0 else \u22a4",
+      "proof_state_id": "ps:ENNReal.smul_top:0:d31cf4df49a4",
+      "split": "val",
+      "top_retrieved_premises": [
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "NoZeroSMulDivisors",
+          "index_split": "train",
+          "premise_id": "premise:NoZeroSMulDivisors",
+          "score": 0.8316290974617004
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "noZeroSMulDivisors_int_iff_isAddTorsionFree",
+          "index_split": "train",
+          "premise_id": "premise:noZeroSMulDivisors_int_iff_isAddTorsionFree",
+          "score": 0.8253797292709351
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "noZeroSMulDivisors_nat_iff_isAddTorsionFree",
+          "index_split": "train",
+          "premise_id": "premise:noZeroSMulDivisors_nat_iff_isAddTorsionFree",
+          "score": 0.8091726303100586
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Set.zero_mem_smul_iff",
+          "index_split": "train",
+          "premise_id": "premise:Set.zero_mem_smul_iff",
+          "score": 0.8082983493804932
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "smul_ne_zero_iff",
+          "index_split": "train",
+          "premise_id": "premise:smul_ne_zero_iff",
+          "score": 0.8068645000457764
+        }
+      ]
+    },
+    {
+      "gold_in_train_index": true,
+      "gold_positive_premise": "premise:one_ne_zero",
+      "proof_state": "(if c \u2022 1 = 0 then 0 else \u22a4) = if c = 0 then 0 else \u22a4",
+      "proof_state_id": "ps:ENNReal.smul_top:1:77d5d2be4894",
+      "split": "val",
+      "top_retrieved_premises": [
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "NoZeroSMulDivisors",
+          "index_split": "train",
+          "premise_id": "premise:NoZeroSMulDivisors",
+          "score": 0.8302164077758789
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "noZeroSMulDivisors_int_iff_isAddTorsionFree",
+          "index_split": "train",
+          "premise_id": "premise:noZeroSMulDivisors_int_iff_isAddTorsionFree",
+          "score": 0.8220354318618774
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Set.zero_mem_smul_iff",
+          "index_split": "train",
+          "premise_id": "premise:Set.zero_mem_smul_iff",
+          "score": 0.8066291213035583
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "noZeroSMulDivisors_nat_iff_isAddTorsionFree",
+          "index_split": "train",
+          "premise_id": "premise:noZeroSMulDivisors_nat_iff_isAddTorsionFree",
+          "score": 0.8063669204711914
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "DFinsupp.toFinsupp_smul",
+          "index_split": "train",
+          "premise_id": "premise:DFinsupp.toFinsupp_smul",
+          "score": 0.8063588738441467
+        }
+      ]
+    },
+    {
+      "gold_in_train_index": false,
+      "gold_positive_premise": "premise:Batteries.UnionFind.Equiv",
+      "proof_state": "empty.Equiv a b \u2194 a = b",
+      "proof_state_id": "ps:Batteries.UnionFind.equiv_empty:0:e6b003c14cb4",
+      "split": "val",
+      "top_retrieved_premises": [
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Nat.ne_iff_lt_or_gt",
+          "index_split": "train",
+          "premise_id": "premise:Nat.ne_iff_lt_or_gt",
+          "score": 0.8076674938201904
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Nat.lt_or_gt_of_ne",
+          "index_split": "train",
+          "premise_id": "premise:Nat.lt_or_gt_of_ne",
+          "score": 0.799950122833252
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Finset.union_eq_empty",
+          "index_split": "train",
+          "premise_id": "premise:Finset.union_eq_empty",
+          "score": 0.7986447811126709
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Lean.Meta.Grind.Arith.CommRing.Null.ProofM",
+          "index_split": "train",
+          "premise_id": "premise:Lean.Meta.Grind.Arith.CommRing.Null.ProofM",
+          "score": 0.7965306639671326
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Set.vsub_eq_empty",
+          "index_split": "train",
+          "premise_id": "premise:Set.vsub_eq_empty",
+          "score": 0.7917632460594177
+        }
+      ]
+    },
+    {
+      "gold_in_train_index": false,
+      "gold_positive_premise": "premise:EmbeddingLike.map_ne_one_iff",
+      "proof_state": "((finSuccEquiv R n) f).support.Nonempty",
+      "proof_state_id": "ps:MvPolynomial.support_finSuccEquiv_nonempty:0:ae59282f8869",
+      "split": "val",
+      "top_retrieved_premises": [
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "MvPolynomial.support_finSuccEquiv_nonempty",
+          "index_split": "train",
+          "premise_id": "premise:MvPolynomial.support_finSuccEquiv_nonempty",
+          "score": 0.8589591979980469
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "MvPolynomial.finSuccEquiv_comp_C_eq_C",
+          "index_split": "train",
+          "premise_id": "premise:MvPolynomial.finSuccEquiv_comp_C_eq_C",
+          "score": 0.8220939040184021
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "finSuccAboveEquiv",
+          "index_split": "train",
+          "premise_id": "premise:finSuccAboveEquiv",
+          "score": 0.8177750110626221
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "finsuppEquivDFinsupp",
+          "index_split": "train",
+          "premise_id": "premise:finsuppEquivDFinsupp",
+          "score": 0.8172585368156433
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "piFinTwoEquiv",
+          "index_split": "train",
+          "premise_id": "premise:piFinTwoEquiv",
+          "score": 0.8148772120475769
+        }
+      ]
+    },
+    {
+      "gold_in_train_index": true,
+      "gold_positive_premise": "premise:DifferentiableAt",
+      "proof_state": "ConformalAt f x",
+      "proof_state_id": "ps:conformalAt_iff_isConformalMap_fderiv:4:825a3e141110",
+      "split": "val",
+      "top_retrieved_premises": [
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "ModuleCat.semilinearMapAddEquiv",
+          "index_split": "train",
+          "premise_id": "premise:ModuleCat.semilinearMapAddEquiv",
+          "score": 0.8148127198219299
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "AffineMap.lineMap_eq_lineMap_iff",
+          "index_split": "train",
+          "premise_id": "premise:AffineMap.lineMap_eq_lineMap_iff",
+          "score": 0.807831346988678
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "Monoid.CoprodI.of",
+          "index_split": "train",
+          "premise_id": "premise:Monoid.CoprodI.of",
+          "score": 0.8062862753868103
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "AddMonoidHom.coe_toIntLinearMap_ker",
+          "index_split": "train",
+          "premise_id": "premise:AddMonoidHom.coe_toIntLinearMap_ker",
+          "score": 0.8025826811790466
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "addMonoidHomLequivInt",
+          "index_split": "train",
+          "premise_id": "premise:addMonoidHomLequivInt",
+          "score": 0.8008502721786499
+        }
+      ]
+    },
+    {
+      "gold_in_train_index": true,
+      "gold_positive_premise": "premise:fderiv",
+      "proof_state": "ConformalAt f x",
+      "proof_state_id": "ps:conformalAt_iff_isConformalMap_fderiv:5:6eea3b2f3f30",
+      "split": "val",
+      "top_retrieved_premises": [
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "ModuleCat.semilinearMapAddEquiv",
+          "index_split": "train",
+          "premise_id": "premise:ModuleCat.semilinearMapAddEquiv",
+          "score": 0.8063575029373169
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "AffineMap.lineMap_eq_lineMap_iff",
+          "index_split": "train",
+          "premise_id": "premise:AffineMap.lineMap_eq_lineMap_iff",
+          "score": 0.8024845123291016
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "addMonoidHomLequivInt",
+          "index_split": "train",
+          "premise_id": "premise:addMonoidHomLequivInt",
+          "score": 0.8013370633125305
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "inv_pos",
+          "index_split": "train",
+          "premise_id": "premise:inv_pos",
+          "score": 0.7989879846572876
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "SSet.stdSimplex.obj\u2080Equiv",
+          "index_split": "train",
+          "premise_id": "premise:SSet.stdSimplex.obj\u2080Equiv",
+          "score": 0.7989046573638916
+        }
+      ]
+    },
+    {
+      "gold_in_train_index": true,
+      "gold_positive_premise": "premise:fderiv_zero_of_not_differentiableAt",
+      "proof_state": "ConformalAt f x",
+      "proof_state_id": "ps:conformalAt_iff_isConformalMap_fderiv:7:db6071b595b1",
+      "split": "val",
+      "top_retrieved_premises": [
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "ModuleCat.semilinearMapAddEquiv",
+          "index_split": "train",
+          "premise_id": "premise:ModuleCat.semilinearMapAddEquiv",
+          "score": 0.8149214386940002
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "AffineMap.lineMap_eq_lineMap_iff",
+          "index_split": "train",
+          "premise_id": "premise:AffineMap.lineMap_eq_lineMap_iff",
+          "score": 0.8060783743858337
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "BoundedContinuousFunction.norm_mkOfCompact",
+          "index_split": "train",
+          "premise_id": "premise:BoundedContinuousFunction.norm_mkOfCompact",
+          "score": 0.8048974871635437
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "CategoryTheory.MorphismProperty.colimMap",
+          "index_split": "train",
+          "premise_id": "premise:CategoryTheory.MorphismProperty.colimMap",
+          "score": 0.8046941161155701
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "MulActionHom.comp",
+          "index_split": "train",
+          "premise_id": "premise:MulActionHom.comp",
+          "score": 0.8036589622497559
+        }
+      ]
+    },
+    {
+      "gold_in_train_index": true,
+      "gold_positive_premise": "premise:Submodule.Quotient.eq",
+      "proof_state": "x \u2261 y [SMOD \u22a5] \u2194 x = y",
+      "proof_state_id": "ps:SModEq.bot:0:ad19a3e03f7c",
+      "split": "val",
+      "top_retrieved_premises": [
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "ModuleCat.sMulCommClass_mk",
+          "index_split": "train",
+          "premise_id": "premise:ModuleCat.sMulCommClass_mk",
+          "score": 0.8199121952056885
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "SModEq.def",
+          "index_split": "train",
+          "premise_id": "premise:SModEq.def",
+          "score": 0.8127015233039856
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "addMonoidHomLequivInt",
+          "index_split": "train",
+          "premise_id": "premise:addMonoidHomLequivInt",
+          "score": 0.8123292326927185
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "RingEquiv.opOp",
+          "index_split": "train",
+          "premise_id": "premise:RingEquiv.opOp",
+          "score": 0.8092284202575684
+        },
+        {
+          "explanation": "Cosine similarity over BAAI/bge-base-en-v1.5 embeddings on cuda for proof-state queries and train-index premise text",
+          "full_name": "RingEquiv.toCommSemiRingCatIso",
+          "index_split": "train",
+          "premise_id": "premise:RingEquiv.toCommSemiRingCatIso",
+          "score": 0.8084047436714172
+        }
+      ]
+    }
+  ],
+  "validation": {
+    "context": {
+      "demo": {
+        "coverage": 1.0,
+        "nonempty_goal_text": 900,
+        "proof_states": 900
+      },
+      "test": {
+        "coverage": 1.0,
+        "nonempty_goal_text": 696,
+        "proof_states": 696
+      },
+      "train": {
+        "coverage": 1.0,
+        "nonempty_goal_text": 4722,
+        "proof_states": 4722
+      },
+      "val": {
+        "coverage": 1.0,
+        "nonempty_goal_text": 583,
+        "proof_states": 583
+      }
+    },
+    "graph": {
+      "demo": {
+        "edge_count": 13005,
+        "missing_endpoint_count": 0,
+        "networkx_loadable": true,
+        "node_count": 3204,
+        "split": "demo"
+      },
+      "test": {
+        "edge_count": 42196,
+        "missing_endpoint_count": 0,
+        "networkx_loadable": true,
+        "node_count": 14218,
+        "split": "test"
+      },
+      "train": {
+        "edge_count": 245514,
+        "missing_endpoint_count": 0,
+        "networkx_loadable": true,
+        "node_count": 62808,
+        "split": "train"
+      },
+      "val": {
+        "edge_count": 35223,
+        "missing_endpoint_count": 0,
+        "networkx_loadable": true,
+        "node_count": 12410,
+        "split": "val"
+      }
+    },
+    "schema": {
+      "error_count": 0,
+      "errors": [],
+      "tables": {
+        "demo/file_modules": {
+          "rows": 488,
+          "valid_rows": 488
+        },
+        "demo/premises": {
+          "rows": 1439,
+          "valid_rows": 1439
+        },
+        "demo/proof_states": {
+          "rows": 900,
+          "valid_rows": 900
+        },
+        "demo/proof_techniques": {
+          "rows": 12,
+          "valid_rows": 12
+        },
+        "demo/theorems": {
+          "rows": 285,
+          "valid_rows": 285
+        },
+        "test/file_modules": {
+          "rows": 552,
+          "valid_rows": 552
+        },
+        "test/premises": {
+          "rows": 12443,
+          "valid_rows": 12443
+        },
+        "test/proof_states": {
+          "rows": 696,
+          "valid_rows": 696
+        },
+        "test/proof_techniques": {
+          "rows": 12,
+          "valid_rows": 12
+        },
+        "test/theorems": {
+          "rows": 209,
+          "valid_rows": 209
+        },
+        "train/file_modules": {
+          "rows": 1979,
+          "valid_rows": 1979
+        },
+        "train/premises": {
+          "rows": 53668,
+          "valid_rows": 53668
+        },
+        "train/proof_states": {
+          "rows": 4722,
+          "valid_rows": 4722
+        },
+        "train/proof_techniques": {
+          "rows": 12,
+          "valid_rows": 12
+        },
+        "train/theorems": {
+          "rows": 1667,
+          "valid_rows": 1667
+        },
+        "val/file_modules": {
+          "rows": 545,
+          "valid_rows": 545
+        },
+        "val/premises": {
+          "rows": 10824,
+          "valid_rows": 10824
+        },
+        "val/proof_states": {
+          "rows": 583,
+          "valid_rows": 583
+        },
+        "val/proof_techniques": {
+          "rows": 12,
+          "valid_rows": 12
+        },
+        "val/theorems": {
+          "rows": 208,
+          "valid_rows": 208
+        }
+      }
+    },
+    "split_leakage": {
+      "has_leakage": false,
+      "overlaps": {
+        "test_vs_train": [],
+        "test_vs_val": [],
+        "train_vs_val": []
+      },
+      "theorem_counts": {
+        "test": 209,
+        "train": 1667,
+        "val": 208
+      }
+    }
+  }
+}

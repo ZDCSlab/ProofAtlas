@@ -1,0 +1,1 @@
+{"type":"object","required":["id","full_name","file_path","split"],"properties":{"id":{"type":"string"},"full_name":{"type":"string"},"file_path":{"type":"string"},"domain_tag":{"type":"string"},"subdomain_tag":{"type":"string"},"split":{"type":"string"}}}

@@ -1,0 +1,1 @@
+{"type":"object","required":["id","theorem_id","context","goal_text","tactic_idx"],"properties":{"id":{"type":"string"},"theorem_id":{"type":"string"},"context":{"type":"string"},"goal_text":{"type":"string"},"tactic_idx":{"type":"integer"},"local_hypotheses":{"type":"array"},"symbols":{"type":"array"}}}
