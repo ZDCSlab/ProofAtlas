@@ -1,4 +1,4 @@
-.PHONY: help install sample process build-graph label difficulty premise-trace-supervision train-difficulty embed build-index benchmark-index profile-pipeline security-review augment-graph train-ranker evaluate validate report experiment-report homepage audit refresh-production-report refresh-production-timing verify-delivery demo test smoke clean
+.PHONY: help install sample process build-graph label difficulty premise-trace-supervision train-difficulty embed build-index benchmark-index profile-pipeline security-review augment-graph train-ranker evaluate validate report experiment-report homepage audit refresh-production-report refresh-production-timing refresh-production-full-eval verify-delivery demo test smoke clean
 
 CONFIG ?= configs/sample.yaml
 PRODUCTION_CONFIG ?= configs/proofatlas.yaml
@@ -25,6 +25,7 @@ help:
 	@echo "  make audit          Run MVP completion audit"
 	@echo "  make refresh-production-report Refresh proofatlas evaluation/report/homepage/audit"
 	@echo "  make refresh-production-timing Run forced production pipeline timing, then refresh reports"
+	@echo "  make refresh-production-full-eval Run full held-out production evaluation, then refresh reports"
 	@echo "  make verify-delivery Run tests, production audit, and diff whitespace check"
 	@echo "  make demo           Run full demo pipeline"
 	@echo "  make test           Run unit tests"
@@ -103,6 +104,13 @@ refresh-production-report:
 refresh-production-timing:
 	$(PIPELINE_RUN) leanrank-kg full-pipeline --config $(PRODUCTION_CONFIG) --force
 	$(MAKE) refresh-production-report PRODUCTION_CONFIG=$(PRODUCTION_CONFIG) PIPELINE_RUN="$(PIPELINE_RUN)"
+
+refresh-production-full-eval:
+	$(PIPELINE_RUN) leanrank-kg evaluate --config $(PRODUCTION_CONFIG) --full-heldout
+	$(PIPELINE_RUN) leanrank-kg profile-pipeline --config $(PRODUCTION_CONFIG)
+	$(PIPELINE_RUN) leanrank-kg build-experiment-report --config $(PRODUCTION_CONFIG)
+	$(PIPELINE_RUN) leanrank-kg build-homepage --config $(PRODUCTION_CONFIG)
+	$(PIPELINE_RUN) leanrank-kg audit --config $(PRODUCTION_CONFIG)
 
 verify-delivery:
 	$(VERIFY_RUN) pytest -q

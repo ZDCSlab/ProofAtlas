@@ -12,7 +12,7 @@
     {
       "area": "evaluation_scope",
       "priority": "medium",
-      "recommendation": "Current held-out metrics are sampled because evaluation limits are configured. Proof-state limits: {'test': 100, 'val': 100}; theorem limits: {'test': 50, 'val': 50}. For final quantitative claims, rerun evaluation with these limits removed or raised enough to cover the full held-out split."
+      "recommendation": "Current held-out metrics are sampled because evaluation limits are configured. Proof-state limits: {'test': 100, 'val': 100}; theorem limits: {'test': 50, 'val': 50}. For final quantitative claims, run `make refresh-production-full-eval` or rerun evaluation with these limits removed or raised enough to cover the full held-out split."
     }
   ],
   "scale_profile": {

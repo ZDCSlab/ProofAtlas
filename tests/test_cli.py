@@ -22,6 +22,9 @@ def test_query_retrieval_commands_are_registered():
     result = runner.invoke(app, ["profile-pipeline", "--help"])
     assert result.exit_code == 0
     assert "--output-path" in result.output
+    result = runner.invoke(app, ["evaluate", "--help"])
+    assert result.exit_code == 0
+    assert "--full-heldout" in result.output
     result = runner.invoke(app, ["premise-trace-supervision-report", "--help"])
     assert result.exit_code == 0
     assert "--output-path" in result.output

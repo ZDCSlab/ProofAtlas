@@ -175,8 +175,8 @@ def train_difficulty_cmd(config: str = "configs/sample.yaml") -> None:
 
 
 @app.command("evaluate")
-def evaluate_cmd(config: str = "configs/sample.yaml") -> None:
-    evaluate.run(config)
+def evaluate_cmd(config: str = "configs/sample.yaml", full_heldout: bool = False) -> None:
+    evaluate.run(config, full_heldout=full_heldout)
 
 
 @app.command("build-homepage")

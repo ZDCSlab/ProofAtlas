@@ -491,7 +491,7 @@ def _recommendations(
                 "recommendation": (
                     "Current held-out metrics are sampled because evaluation limits are configured. "
                     f"Proof-state limits: {evaluation_scope.get('proof_state_limits')}; theorem limits: {evaluation_scope.get('theorem_limits')}. "
-                    "For final quantitative claims, rerun evaluation with these limits removed or raised enough to cover the full held-out split."
+                    "For final quantitative claims, run `make refresh-production-full-eval` or rerun evaluation with these limits removed or raised enough to cover the full held-out split."
                 ),
             }
         )

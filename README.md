@@ -185,6 +185,14 @@ make refresh-production-timing
 
 This runs `leanrank-kg full-pipeline --config configs/proofatlas.yaml --force`, then refreshes the evaluation report, homepage, and audit against the newly written timing artifact.
 
+To refresh full held-out production evaluation metrics instead of the sampled test-set metrics:
+
+```bash
+make refresh-production-full-eval
+```
+
+This runs `leanrank-kg evaluate --config configs/proofatlas.yaml --full-heldout`, then refreshes the profile, experiment report, homepage, and audit. The reranked proof-state diagnostic and case-study limits still follow `configs/proofatlas.yaml`; the override applies to the core proof-state-level and theorem-level held-out retrieval metrics.
+
 To verify the delivery after refreshing artifacts:
 
 ```bash

@@ -586,7 +586,7 @@ def _evaluate_proof_state_query_representations(
     }
 
 
-def run(config_path: str) -> None:
+def run(config_path: str, full_heldout: bool = False) -> None:
     _embedding_ids.cache_clear()
     _load_embedding.cache_clear()
     _load_diagnostic_sentence_transformer.cache_clear()
@@ -600,6 +600,11 @@ def run(config_path: str) -> None:
     max_val_theorems = eval_config.get("max_val_theorems")
     max_test_proof_states = eval_config.get("max_test_proof_states")
     max_test_theorems = eval_config.get("max_test_theorems")
+    if full_heldout:
+        max_val_proof_states = None
+        max_val_theorems = None
+        max_test_proof_states = None
+        max_test_theorems = None
     batch_size = int(eval_config.get("batch_size", 256))
     use_gpu = bool(eval_config.get("use_gpu", False))
     gpu_device = str(eval_config.get("gpu_device", "cuda:0"))
@@ -735,6 +740,7 @@ def run(config_path: str) -> None:
         "evaluation_scope": {
             "proof_state_limits": proof_state_limits,
             "theorem_limits": theorem_limits,
+            "full_heldout_override": bool(full_heldout),
             "is_sampled": any(value is not None for value in [*proof_state_limits.values(), *theorem_limits.values()]),
             "ranking_backend": "batched_embedding_topk",
             "batch_size": batch_size,
