@@ -86,6 +86,18 @@ Pipeline bottleneck profile:
 | Primary bottleneck | share of total | 0.2704 |
 | Top-3 timed stages | share of total | 0.5195 |
 
+Artifact reuse and retraining policy:
+
+| Artifact | Field | Value |
+| --- | --- | ---: |
+| Artifact reuse | reuse by default | True |
+| Embedding cache | rows | 244391 |
+| Index cache | entity manifests | 12 |
+| Premise ranker | exists | True |
+| Difficulty estimator | exists | True |
+
+Do not retrain by default. Reuse embeddings, indexes, and trained models for report/homepage refreshes; rerun ranker training only after ranker feature, label, split, or relevant config changes.
+
 Pipeline timing:
 
 - Total seconds: 551.6511

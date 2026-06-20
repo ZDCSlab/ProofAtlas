@@ -136,6 +136,21 @@ def test_readme_performance_snapshot_matches_committed_artifacts() -> None:
     assert _readme_table_row(readme, "Top-3 timed stages", "share of total")[2] == f"{float(bottleneck['top3_stage_share_of_total']):.4f}"
 
 
+def test_readme_artifact_reuse_policy_matches_committed_profile() -> None:
+    repo = Path(__file__).resolve().parents[1]
+    readme = (repo / "README.md").read_text(encoding="utf-8")
+    profile = json.loads((repo / "outputs/reports/pipeline_performance_report.json").read_text(encoding="utf-8"))
+    reuse = profile["throughput_profile"]["refresh_reuse_profile"]
+    cache = reuse["artifact_cache"]
+
+    assert _readme_artifact_field(readme, "Artifact reuse", "reuse by default") == str(reuse["reuse_by_default"])
+    assert _readme_artifact_field(readme, "Embedding cache", "rows") == str(cache["embedding_rows"])
+    assert _readme_artifact_field(readme, "Index cache", "entity manifests") == str(cache["indexed_entity_count"])
+    assert _readme_artifact_field(readme, "Premise ranker", "exists") == str(cache["premise_ranker_exists"])
+    assert _readme_artifact_field(readme, "Difficulty estimator", "exists") == str(cache["difficulty_estimator_exists"])
+    assert reuse["training_repeat_policy"] in readme
+
+
 def test_delivery_audit_performance_snapshot_matches_committed_artifacts() -> None:
     repo = Path(__file__).resolve().parents[1]
     audit = (repo / "docs/proofatlas_delivery_audit.md").read_text(encoding="utf-8")
@@ -159,6 +174,21 @@ def test_delivery_audit_performance_snapshot_matches_committed_artifacts() -> No
     assert _readme_table_row(audit, "Primary bottleneck", "share of total")[2] == f"{float(bottleneck['primary_stage_share_of_total']):.4f}"
     assert _readme_table_row(audit, "Top-3 timed stages", "share of total")[2] == f"{float(bottleneck['top3_stage_share_of_total']):.4f}"
     assert f"Total seconds: {float(timing['total_seconds']):.4f}" in audit
+
+
+def test_delivery_audit_artifact_reuse_policy_matches_committed_profile() -> None:
+    repo = Path(__file__).resolve().parents[1]
+    audit = (repo / "docs/proofatlas_delivery_audit.md").read_text(encoding="utf-8")
+    profile = json.loads((repo / "outputs/reports/pipeline_performance_report.json").read_text(encoding="utf-8"))
+    reuse = profile["throughput_profile"]["refresh_reuse_profile"]
+    cache = reuse["artifact_cache"]
+
+    assert _readme_artifact_field(audit, "Artifact reuse", "reuse by default") == str(reuse["reuse_by_default"])
+    assert _readme_artifact_field(audit, "Embedding cache", "rows") == str(cache["embedding_rows"])
+    assert _readme_artifact_field(audit, "Index cache", "entity manifests") == str(cache["indexed_entity_count"])
+    assert _readme_artifact_field(audit, "Premise ranker", "exists") == str(cache["premise_ranker_exists"])
+    assert _readme_artifact_field(audit, "Difficulty estimator", "exists") == str(cache["difficulty_estimator_exists"])
+    assert reuse["training_repeat_policy"] in audit
 
 
 def test_delivery_audit_metric_uncertainty_matches_committed_profile() -> None:
