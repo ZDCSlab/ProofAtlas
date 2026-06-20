@@ -375,12 +375,39 @@ def _sum_matrix_rows(embeddings: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def _throughput_profile(sample: dict[str, Any], embeddings: dict[str, Any], index: dict[str, Any], benchmark: dict[str, Any], timings: dict[str, Any]) -> dict[str, Any]:
+def _throughput_profile(
+    sample: dict[str, Any],
+    embeddings: dict[str, Any],
+    index: dict[str, Any],
+    benchmark: dict[str, Any],
+    timings: dict[str, Any],
+    evaluation: dict[str, Any],
+) -> dict[str, Any]:
     matrix_rows = _sum_matrix_rows(embeddings)
     total_seconds = float(timings.get("total_seconds") or 0.0)
     current_rows = int(sample.get("total_split_rows") or 0)
     embedding_rows = int(matrix_rows.get("total_embedding_rows") or 0)
     stage_seconds = timings.get("stage_seconds", {}) if isinstance(timings.get("stage_seconds"), dict) else {}
+    current_evaluation_seconds = (
+        (evaluation.get("evaluation_timing") or {}).get("total_seconds")
+        if isinstance(evaluation, dict)
+        else None
+    )
+    timed_evaluate_seconds = stage_seconds.get("evaluate")
+    evaluation_timing_delta = {
+        "timed_pipeline_evaluate_seconds": timed_evaluate_seconds,
+        "current_evaluation_seconds": current_evaluation_seconds,
+        "timed_to_current_ratio": (
+            float(timed_evaluate_seconds) / float(current_evaluation_seconds)
+            if timed_evaluate_seconds is not None and current_evaluation_seconds and float(current_evaluation_seconds) > 0
+            else None
+        ),
+        "current_faster_than_pipeline_timing": (
+            bool(float(current_evaluation_seconds) < float(timed_evaluate_seconds) * 0.75)
+            if timed_evaluate_seconds is not None and current_evaluation_seconds is not None
+            else None
+        ),
+    }
     index_build_seconds = 0.0
     for split in (index.get("manifests") or {}).values():
         for manifest in (split or {}).values():
@@ -445,6 +472,7 @@ def _throughput_profile(sample: dict[str, Any], embeddings: dict[str, Any], inde
         "pipeline_seconds_per_100k_processed_rows": _per_100k(current_rows),
         "pipeline_seconds_per_100k_embedding_rows": _per_100k(embedding_rows),
         "timed_stage_seconds": stage_seconds,
+        "evaluation_timing_delta": evaluation_timing_delta,
         "slowest_stage": bottleneck,
         "bottleneck_profile": bottleneck_profile,
         "index_build_seconds_total": index_build_seconds,
@@ -525,6 +553,20 @@ def _recommendations(
                 ),
             }
         )
+    evaluation_delta = throughput.get("evaluation_timing_delta") or {}
+    if evaluation_delta.get("current_faster_than_pipeline_timing") is True:
+        recommendations.append(
+            {
+                "priority": "medium",
+                "area": "performance_timing",
+                "recommendation": (
+                    "The current standalone evaluation is materially faster than the saved full-pipeline timing. "
+                    f"Saved pipeline evaluate seconds: {evaluation_delta.get('timed_pipeline_evaluate_seconds')}; "
+                    f"current evaluation seconds: {evaluation_delta.get('current_evaluation_seconds')}. "
+                    "Rerun `make refresh-production-timing` before using full-pipeline bottleneck shares as final throughput evidence."
+                ),
+            }
+        )
     bottleneck_profile = throughput.get("bottleneck_profile") or {}
     primary_share = bottleneck_profile.get("primary_stage_share_of_total")
     if primary_share is not None and primary_share >= 0.2:
@@ -588,7 +630,7 @@ def build_report(config_path: str = "configs/proofatlas.yaml") -> dict[str, Any]
     evaluation = _evaluation_stage()
     readiness = _readiness_stage()
     scale = _scale_profile(config, sample, index, readiness)
-    throughput = _throughput_profile(sample, embeddings, index, benchmark, timings)
+    throughput = _throughput_profile(sample, embeddings, index, benchmark, timings, evaluation)
     recommendations = _recommendations(config, sample, benchmark, readiness, scale, throughput, evaluation)
     return {
         "config_path": config_path,

@@ -98,6 +98,11 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                 "processed_rows_per_second": 1000.0,
                 "pipeline_seconds_per_100k_processed_rows": 100.0,
                 "slowest_stage": "evaluate",
+                "evaluation_timing_delta": {
+                    "timed_pipeline_evaluate_seconds": 5.0,
+                    "current_evaluation_seconds": 4.0,
+                    "timed_to_current_ratio": 1.25,
+                },
                 "bottleneck_profile": {
                     "primary_stage": "evaluate",
                     "primary_stage_share_of_total": 0.4,
@@ -202,6 +207,9 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "Total embedding rows" in text
     assert "Primary bottleneck share" in text
     assert "Top-3 timed-stage share" in text
+    assert "Saved pipeline evaluate seconds" in text
+    assert "Current standalone evaluation seconds" in text
+    assert "Timed/current evaluation ratio" in text
     assert "Bottleneck stage" in text
     assert "ANN Index Benchmark" in text
     assert "Recall@1 vs exact" in text

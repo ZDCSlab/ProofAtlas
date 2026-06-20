@@ -207,6 +207,7 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     evaluation_substages = evaluation_timing.get("slowest_substages", []) if isinstance(evaluation_timing, dict) else []
     recommendations = pipeline.get("recommendations", [])
     throughput = pipeline.get("throughput_profile", {}) if isinstance(pipeline, dict) else {}
+    evaluation_timing_delta = throughput.get("evaluation_timing_delta", {}) if isinstance(throughput, dict) else {}
     bottleneck_profile = throughput.get("bottleneck_profile", {}) if isinstance(throughput, dict) else {}
     bench_entities = benchmark.get("entities", {}) if isinstance(benchmark, dict) else {}
     actual_backend_info = evaluation_scope.get("actual_backend_info", {}) if isinstance(evaluation_scope, dict) else {}
@@ -525,6 +526,9 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
             f"- Processed rows/sec: `{throughput.get('processed_rows_per_second', 'n/a')}`",
             f"- Pipeline seconds per 100k processed rows: `{throughput.get('pipeline_seconds_per_100k_processed_rows', 'n/a')}`",
             f"- Slowest timed stage: `{throughput.get('slowest_stage', 'n/a')}`",
+            f"- Saved pipeline evaluate seconds: `{evaluation_timing_delta.get('timed_pipeline_evaluate_seconds', 'n/a')}`",
+            f"- Current standalone evaluation seconds: `{evaluation_timing_delta.get('current_evaluation_seconds', 'n/a')}`",
+            f"- Timed/current evaluation ratio: `{evaluation_timing_delta.get('timed_to_current_ratio', 'n/a')}`",
             f"- Primary bottleneck share: `{bottleneck_profile.get('primary_stage_share_of_total', 'n/a')}`",
             f"- Top-3 timed-stage share: `{bottleneck_profile.get('top3_stage_share_of_total', 'n/a')}`",
             f"- Mean index speedup vs exact: `{throughput.get('mean_index_speedup_vs_exact', 'n/a')}`",

@@ -104,12 +104,72 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
     assert report["throughput_profile"]["bottleneck_profile"]["primary_stage"] == "evaluate"
     assert report["throughput_profile"]["bottleneck_profile"]["primary_stage_share_of_total"] == 0.3
     assert report["throughput_profile"]["bottleneck_profile"]["top3_stage_share_of_total"] == 0.3
+    assert report["throughput_profile"]["evaluation_timing_delta"]["timed_pipeline_evaluate_seconds"] == 3.0
+    assert report["throughput_profile"]["evaluation_timing_delta"]["current_evaluation_seconds"] == 2.5
+    assert report["throughput_profile"]["evaluation_timing_delta"]["timed_to_current_ratio"] == 1.2
     assert report["stages"]["evaluation"]["evaluation_timing"]["total_seconds"] == 2.5
     assert report["stages"]["evaluation"]["evaluation_timing"]["substage_count"] == 2
     assert report["stages"]["evaluation"]["evaluation_timing"]["slowest_substages"][0]["name"] == "test_theorem_retrieval"
     assert any(row["area"] == "indexing" for row in report["recommendations"])
     assert any(row["area"] == "pipeline_bottleneck" for row in report["recommendations"])
     assert (tmp_path / "outputs/reports/pipeline_performance_report.json").exists()
+
+
+def test_pipeline_profile_flags_stale_evaluate_timing_after_speedup(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "configs").mkdir()
+    (tmp_path / "outputs/reports").mkdir(parents=True)
+    (tmp_path / "configs/proofatlas.yaml").write_text(
+        "\n".join(
+            [
+                "dataset_name: erbacher/LeanRank-data",
+                "project_name: ProofAtlas",
+                "sample: {total_theorems: 10000, total_rows: 60000}",
+                "embedding: {backend: sentence_transformers, device: cuda}",
+                "index: {backend: hnswlib, metric: cosine}",
+            ]
+        ),
+        encoding="utf-8",
+    )
+    config_hash = stable_hash(
+        json.dumps(
+            {
+                "dataset_name": "erbacher/LeanRank-data",
+                "project_name": "ProofAtlas",
+                "sample": {"total_theorems": 10000, "total_rows": 60000},
+                "embedding": {"backend": "sentence_transformers", "device": "cuda"},
+                "index": {"backend": "hnswlib", "metric": "cosine"},
+            },
+            sort_keys=True,
+        ),
+        16,
+    )
+    write_json("outputs/reports/corpus_manifest.json", {"dataset_name": "erbacher/LeanRank-data", "sample_plan": {"total_theorems": 10000}, "split_counts": {"test": 10}})
+    write_json("outputs/reports/index_benchmark.json", {"entities": {"premise": {"backend": "hnswlib", "indexed_available": True, "speedup_vs_exact": 5.0, "recall_at_10_vs_exact": 0.99, "top_k": 10}}})
+    write_json(
+        "outputs/reports/pipeline_run_timings.json",
+        {
+            "config_hash": config_hash,
+            "passed": True,
+            "total_seconds": 100.0,
+            "slowest_stages": [{"name": "evaluate", "seconds": 80.0}],
+            "stages": [{"name": "evaluate", "status": "passed", "seconds": 80.0}],
+        },
+    )
+    write_json(
+        "outputs/reports/test_set_evaluation.json",
+        {"evaluation_scope": {"is_sampled": False, "total_seconds": 20.0}},
+    )
+    (tmp_path / "data/processed/test").mkdir(parents=True)
+    write_parquet(pd.DataFrame({"proof_state_id": [f"ps{i}" for i in range(10)]}), "data/processed/test/proof_states.parquet")
+    write_parquet(pd.DataFrame({"theorem_id": [f"thm{i}" for i in range(10)]}), "data/processed/test/theorems.parquet")
+
+    report = pipeline_profile.run("configs/proofatlas.yaml")
+
+    delta = report["throughput_profile"]["evaluation_timing_delta"]
+    assert delta["timed_to_current_ratio"] == 4.0
+    assert delta["current_faster_than_pipeline_timing"] is True
+    assert any(row["area"] == "performance_timing" for row in report["recommendations"])
 
 
 def test_pipeline_profile_recommends_full_timing_for_cached_runs(tmp_path, monkeypatch):

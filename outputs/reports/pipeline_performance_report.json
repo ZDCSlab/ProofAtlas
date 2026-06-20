@@ -5,6 +5,11 @@
   "project_name": "ProofAtlas",
   "recommendations": [
     {
+      "area": "performance_timing",
+      "priority": "medium",
+      "recommendation": "The current standalone evaluation is materially faster than the saved full-pipeline timing. Saved pipeline evaluate seconds: 211.32586570014246; current evaluation seconds: 24.223363942001015. Rerun `make refresh-production-timing` before using full-pipeline bottleneck shares as final throughput evidence."
+    },
+    {
       "area": "pipeline_bottleneck",
       "priority": "medium",
       "recommendation": "Evaluation is the current largest timed bottleneck. Keep full held-out metrics for final claims, but use sampled evaluation during development and prioritize batched/vectorized scoring or parallel domain shards before scaling evaluation further."
@@ -2224,6 +2229,12 @@
     },
     "embedding_rows_per_second": 330.203333923758,
     "estimated_seconds_at_requested_source_rows": 887.0969787659075,
+    "evaluation_timing_delta": {
+      "current_evaluation_seconds": 24.223363942001015,
+      "current_faster_than_pipeline_timing": true,
+      "timed_pipeline_evaluate_seconds": 211.32586570014246,
+      "timed_to_current_ratio": 8.724051135347203
+    },
     "index_build_seconds_total": 6.437091332161799,
     "mean_index_speedup_vs_exact": 17.744239287034144,
     "min_index_recall_vs_exact": 0.9640000000000002,

@@ -10,6 +10,7 @@ __pycache__/
 coverage.xml
 htmlcov/
 .ipynb_checkpoints/
+.cache/
 build/
 dist/
 *.egg-info/
@@ -28,6 +29,13 @@ docs/*.pdf
 
 # Generated LeanRank/ProofAtlas data and model artifacts.
 # These are reproducible from configs/proofatlas.yaml and are too large for git.
+checkpoints/
+lightning_logs/
+mlruns/
+models/
+runs/
+tensorboard/
+wandb/
 data/processed/
 data/sample/
 data/raw/

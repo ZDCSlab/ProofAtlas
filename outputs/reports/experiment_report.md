@@ -432,6 +432,9 @@ These timings split the `evaluate` pipeline stage into proof-state retrieval, th
 - Processed rows/sec: `394.5453635598055`
 - Pipeline seconds per 100k processed rows: `253.45627964740214`
 - Slowest timed stage: `evaluate`
+- Saved pipeline evaluate seconds: `211.32586570014246`
+- Current standalone evaluation seconds: `24.223363942001015`
+- Timed/current evaluation ratio: `8.724051135347203`
 - Primary bottleneck share: `0.28552813073522093`
 - Top-3 timed-stage share: `0.5962491304310673`
 - Mean index speedup vs exact: `17.744239287034144`
@@ -448,6 +451,7 @@ These timings split the `evaluate` pipeline stage into proof-state retrieval, th
 
 ## Recommendations
 
+- `medium` `performance_timing`: The current standalone evaluation is materially faster than the saved full-pipeline timing. Saved pipeline evaluate seconds: 211.32586570014246; current evaluation seconds: 24.223363942001015. Rerun `make refresh-production-timing` before using full-pipeline bottleneck shares as final throughput evidence.
 - `medium` `pipeline_bottleneck`: Evaluation is the current largest timed bottleneck. Keep full held-out metrics for final claims, but use sampled evaluation during development and prioritize batched/vectorized scoring or parallel domain shards before scaling evaluation further.
 
 ## Interpretation
