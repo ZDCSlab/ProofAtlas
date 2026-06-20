@@ -83,10 +83,13 @@ Pipeline scale profile:
 Most recent verified checks:
 
 ```bash
+make refresh-production-report
 conda run -n leanrank_kg pytest -q
 conda run -n leanrank_kg leanrank-kg audit --config configs/proofatlas.yaml
 git diff --check
 ```
+
+`make refresh-production-report` is the standard production artifact refresh entrypoint. It runs evaluation, pipeline profiling, experiment-report generation, homepage generation, and audit with `configs/proofatlas.yaml`.
 
 Recent passing result:
 
@@ -105,4 +108,3 @@ The current deliverable is suitable as a LeanRank-data retrieval demo and experi
 3. Expand the sampled held-out evaluation to larger query counts once runtime is acceptable.
 4. Validate retrieval quality across repeated LeanRank-data refreshes and track metric trends.
 5. Harden public API deployment with real auth, rate limiting, TLS, persistent monitoring, and operational logs.
-
