@@ -295,6 +295,14 @@ The current ranking labels come from normalized LeanRank-data premise supervisio
 - LeanRank premise supervision ready: `True`
 - Embedding devices: `['cuda:0', 'cuda:1', 'cuda:2', 'cuda:3', 'cuda:4', 'cuda:5', 'cuda:6']`
 - ANN backend availability: `{'faiss': False, 'hnswlib': True, 'lancedb': False}`
+- Total embedding rows: `244391`
+- Embedding rows by entity: `{'premise': 203601, 'proof_state': 30498, 'theorem': 10292}`
+- Processed rows/sec: `72424.70825867582`
+- Pipeline seconds per 100k processed rows: `1.3807442570957256`
+- Slowest timed stage: `evaluate`
+- Mean index speedup vs exact: `15.42905823807312`
+- Minimum index recall vs exact: `0.9890000000000001`
+- Estimated seconds at requested source rows: `4.832604899835039`
 
 ## Recommendations
 

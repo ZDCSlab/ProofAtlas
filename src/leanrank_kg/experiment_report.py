@@ -99,6 +99,7 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     validation_theorem_metrics = test_eval.get("validation", {}).get("theorem_retrieval", {}).get("metrics", {})
     evaluation_scope = test_eval.get("evaluation_scope", {}) if isinstance(test_eval, dict) else {}
     recommendations = pipeline.get("recommendations", [])
+    throughput = pipeline.get("throughput_profile", {}) if isinstance(pipeline, dict) else {}
     bench_entities = benchmark.get("entities", {}) if isinstance(benchmark, dict) else {}
     actual_backend_info = evaluation_scope.get("actual_backend_info", {}) if isinstance(evaluation_scope, dict) else {}
     actual_proof_backend = actual_backend_info.get("proof_state", {}).get("test", {}).get("actual_backend", "n/a")
@@ -368,6 +369,14 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
             f"- LeanRank premise supervision ready: `{pipeline.get('scale_profile', {}).get('leanrank_premise_supervision_ready', 'n/a')}`",
             f"- Embedding devices: `{pipeline.get('scale_profile', {}).get('embedding_devices', [])}`",
             f"- ANN backend availability: `{pipeline.get('scale_profile', {}).get('ann_backend_availability', {})}`",
+            f"- Total embedding rows: `{throughput.get('total_embedding_rows', 'n/a')}`",
+            f"- Embedding rows by entity: `{throughput.get('embedding_rows_by_entity', {})}`",
+            f"- Processed rows/sec: `{throughput.get('processed_rows_per_second', 'n/a')}`",
+            f"- Pipeline seconds per 100k processed rows: `{throughput.get('pipeline_seconds_per_100k_processed_rows', 'n/a')}`",
+            f"- Slowest timed stage: `{throughput.get('slowest_stage', 'n/a')}`",
+            f"- Mean index speedup vs exact: `{throughput.get('mean_index_speedup_vs_exact', 'n/a')}`",
+            f"- Minimum index recall vs exact: `{throughput.get('min_index_recall_vs_exact', 'n/a')}`",
+            f"- Estimated seconds at requested source rows: `{throughput.get('estimated_seconds_at_requested_source_rows', 'n/a')}`",
             "",
             "## Recommendations",
             "",

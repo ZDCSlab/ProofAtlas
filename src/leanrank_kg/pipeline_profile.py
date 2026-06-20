@@ -293,6 +293,78 @@ def _scale_profile(config: dict[str, Any], sample: dict[str, Any], index: dict[s
     }
 
 
+def _sum_matrix_rows(embeddings: dict[str, Any]) -> dict[str, Any]:
+    by_split: dict[str, int] = {}
+    by_entity: dict[str, int] = {name: 0 for name in MATRIX_STEMS}
+    total_rows = 0
+    total_bytes = 0
+    for split, split_info in (embeddings.get("splits") or {}).items():
+        split_rows = 0
+        for entity, matrix_info in (split_info.get("matrices") or {}).items():
+            rows = int(matrix_info.get("rows") or 0)
+            bytes_ = int(matrix_info.get("bytes") or 0)
+            split_rows += rows
+            by_entity[entity] = by_entity.get(entity, 0) + rows
+            total_bytes += bytes_
+        by_split[split] = split_rows
+        total_rows += split_rows
+    return {
+        "total_embedding_rows": total_rows,
+        "embedding_rows_by_split": by_split,
+        "embedding_rows_by_entity": by_entity,
+        "embedding_matrix_bytes": total_bytes,
+    }
+
+
+def _throughput_profile(sample: dict[str, Any], embeddings: dict[str, Any], index: dict[str, Any], benchmark: dict[str, Any], timings: dict[str, Any]) -> dict[str, Any]:
+    matrix_rows = _sum_matrix_rows(embeddings)
+    total_seconds = float(timings.get("total_seconds") or 0.0)
+    current_rows = int(sample.get("total_split_rows") or 0)
+    embedding_rows = int(matrix_rows.get("total_embedding_rows") or 0)
+    stage_seconds = timings.get("stage_seconds", {}) if isinstance(timings.get("stage_seconds"), dict) else {}
+    index_build_seconds = 0.0
+    for split in (index.get("manifests") or {}).values():
+        for manifest in (split or {}).values():
+            index_build_seconds += float(manifest.get("build_seconds") or 0.0)
+    speedups = [
+        float(row.get("speedup_vs_exact"))
+        for row in (benchmark.get("entities") or {}).values()
+        if row.get("speedup_vs_exact") is not None
+    ]
+    recalls = [
+        float(row.get("recall_vs_exact"))
+        for row in (benchmark.get("entities") or {}).values()
+        if row.get("recall_vs_exact") is not None
+    ]
+    slowest = timings.get("slowest_stages", []) if isinstance(timings.get("slowest_stages"), list) else []
+    bottleneck = slowest[0].get("name") if slowest and isinstance(slowest[0], dict) else None
+
+    def _per_100k(rows: int) -> float | None:
+        if total_seconds <= 0 or rows <= 0:
+            return None
+        return total_seconds / rows * 100000
+
+    requested_rows = int((sample.get("sample_plan") or {}).get("source_rows") or current_rows or 0)
+    scale_factor = (requested_rows / current_rows) if current_rows else None
+    estimated_seconds_at_requested_source = (total_seconds * scale_factor) if scale_factor is not None else None
+    return {
+        **matrix_rows,
+        "total_pipeline_seconds": total_seconds,
+        "processed_rows_per_second": (current_rows / total_seconds) if total_seconds > 0 else None,
+        "embedding_rows_per_second": (embedding_rows / total_seconds) if total_seconds > 0 else None,
+        "pipeline_seconds_per_100k_processed_rows": _per_100k(current_rows),
+        "pipeline_seconds_per_100k_embedding_rows": _per_100k(embedding_rows),
+        "timed_stage_seconds": stage_seconds,
+        "slowest_stage": bottleneck,
+        "index_build_seconds_total": index_build_seconds,
+        "mean_index_speedup_vs_exact": (sum(speedups) / len(speedups)) if speedups else None,
+        "min_index_recall_vs_exact": min(recalls) if recalls else None,
+        "requested_source_rows": requested_rows,
+        "scale_factor_from_current_to_requested_source_rows": scale_factor,
+        "estimated_seconds_at_requested_source_rows": estimated_seconds_at_requested_source,
+    }
+
+
 def _recommendations(config: dict[str, Any], sample: dict[str, Any], benchmark: dict[str, Any], readiness: dict[str, Any], scale: dict[str, Any]) -> list[dict[str, str]]:
     recommendations: list[dict[str, str]] = []
     if sample.get("dataset_name") != "erbacher/LeanRank-data":
@@ -366,6 +438,7 @@ def build_report(config_path: str = "configs/proofatlas.yaml") -> dict[str, Any]
     evaluation = _evaluation_stage()
     readiness = _readiness_stage()
     scale = _scale_profile(config, sample, index, readiness)
+    throughput = _throughput_profile(sample, embeddings, index, benchmark, timings)
     recommendations = _recommendations(config, sample, benchmark, readiness, scale)
     return {
         "config_path": config_path,
@@ -385,6 +458,7 @@ def build_report(config_path: str = "configs/proofatlas.yaml") -> dict[str, Any]
             "readiness": readiness,
         },
         "scale_profile": scale,
+        "throughput_profile": throughput,
         "recommendations": recommendations,
     }
 

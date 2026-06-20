@@ -1,5 +1,5 @@
 {
-  "config_hash": "f05ace67c5ca83c9",
+  "config_hash": "375be84aecb4e7d9",
   "config_path": "configs/proofatlas.yaml",
   "dataset_name": "erbacher/LeanRank-data",
   "project_name": "ProofAtlas",
@@ -604,7 +604,11 @@
           },
           "query_representation_diagnostic_examples": 50,
           "ranking_backend": "batched_embedding_topk",
-          "rerank_candidate_k": 100,
+          "rerank_candidate_k": 50,
+          "rerank_candidate_k_values": [
+            50,
+            100
+          ],
           "rerank_max_test_proof_states": 20,
           "theorem_limits": {
             "test": 50,
@@ -2051,5 +2055,53 @@
       },
       "total_seconds": 4.03193892003037
     }
+  },
+  "throughput_profile": {
+    "embedding_matrix_bytes": 684695627,
+    "embedding_rows_by_entity": {
+      "premise": 203601,
+      "proof_state": 30498,
+      "theorem": 10292
+    },
+    "embedding_rows_by_split": {
+      "demo": 2608,
+      "test": 42385,
+      "train": 159284,
+      "val": 40114
+    },
+    "embedding_rows_per_second": 60613.76544815295,
+    "estimated_seconds_at_requested_source_rows": 4.832604899835039,
+    "index_build_seconds_total": 7.234744182555005,
+    "mean_index_speedup_vs_exact": 15.42905823807312,
+    "min_index_recall_vs_exact": 0.9890000000000001,
+    "pipeline_seconds_per_100k_embedding_rows": 1.6497902623379626,
+    "pipeline_seconds_per_100k_processed_rows": 1.3807442570957256,
+    "processed_rows_per_second": 72424.70825867582,
+    "requested_source_rows": 350000,
+    "scale_factor_from_current_to_requested_source_rows": 1.1985808802377984,
+    "slowest_stage": "evaluate",
+    "timed_stage_seconds": {
+      "audit": 0.030059436103329062,
+      "augment_graph": 0.2610417869873345,
+      "benchmark_index": 0.01507668406702578,
+      "build_graph": 0.16650403710082173,
+      "build_index": 0.03927870490588248,
+      "compute_difficulty": 0.5077923759818077,
+      "deployment_security": 0.0006097140721976757,
+      "embed": 0.11111249588429928,
+      "evaluate": 0.7713274869602174,
+      "experiment_report": 0.005627359030768275,
+      "homepage": 0.13950243196450174,
+      "label_techniques": 0.05671381205320358,
+      "normalize": 0.6338117111008614,
+      "pipeline_profile": 0.10683665191754699,
+      "premise_trace_supervision": 0.052529524778947234,
+      "sample": 0.029836331959813833,
+      "train_difficulty": 0.10172297107055783,
+      "train_ranker": 0.2961821330245584,
+      "validate": 0.7055891670752317
+    },
+    "total_embedding_rows": 244391,
+    "total_pipeline_seconds": 4.03193892003037
   }
 }

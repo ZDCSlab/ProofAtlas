@@ -49,5 +49,8 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
     assert report["dataset_name"] == "erbacher/LeanRank-data"
     assert report["scale_profile"]["target_dataset_confirmed"] is True
     assert report["scale_profile"]["scale_bucket"] == "large"
+    assert "throughput_profile" in report
+    assert report["throughput_profile"]["mean_index_speedup_vs_exact"] == 1.6
+    assert report["throughput_profile"]["min_index_recall_vs_exact"] == 1.0
     assert any(row["area"] == "indexing" for row in report["recommendations"])
     assert (tmp_path / "outputs/reports/pipeline_performance_report.json").exists()

@@ -52,7 +52,23 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
             },
         },
     )
-    write_json("outputs/reports/pipeline_performance_report.json", {"scale_profile": {"leanrank_premise_supervision_ready": True}, "recommendations": []})
+    write_json(
+        "outputs/reports/pipeline_performance_report.json",
+        {
+            "scale_profile": {"leanrank_premise_supervision_ready": True},
+            "throughput_profile": {
+                "total_embedding_rows": 42,
+                "embedding_rows_by_entity": {"proof_state": 10, "premise": 20, "theorem": 12},
+                "processed_rows_per_second": 1000.0,
+                "pipeline_seconds_per_100k_processed_rows": 100.0,
+                "slowest_stage": "evaluate",
+                "mean_index_speedup_vs_exact": 12.5,
+                "min_index_recall_vs_exact": 0.98,
+                "estimated_seconds_at_requested_source_rows": 350.0,
+            },
+            "recommendations": [],
+        },
+    )
     write_json("outputs/reports/pipeline_run_timings.json", {"total_seconds": 12.5, "stage_count": 3, "slowest_stages": [{"name": "embed", "seconds": 5.0}]})
 
     result = experiment_report.run("configs/proofatlas.yaml")
@@ -76,3 +92,6 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "Local Lean/mathlib source extraction is out of scope" in text
     assert "Pipeline Timing" in text
     assert "LeanRank premise supervision ready" in text
+    assert "Total embedding rows" in text
+    assert "Mean index speedup vs exact" in text
+    assert "Estimated seconds at requested source rows" in text
