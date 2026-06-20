@@ -209,6 +209,7 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     throughput = pipeline.get("throughput_profile", {}) if isinstance(pipeline, dict) else {}
     evaluation_timing_delta = throughput.get("evaluation_timing_delta", {}) if isinstance(throughput, dict) else {}
     bottleneck_profile = throughput.get("bottleneck_profile", {}) if isinstance(throughput, dict) else {}
+    embedding_bottleneck = throughput.get("embedding_bottleneck_profile", {}) if isinstance(throughput, dict) else {}
     bench_entities = benchmark.get("entities", {}) if isinstance(benchmark, dict) else {}
     actual_backend_info = evaluation_scope.get("actual_backend_info", {}) if isinstance(evaluation_scope, dict) else {}
     actual_proof_backend = actual_backend_info.get("proof_state", {}).get("test", {}).get("actual_backend", "n/a")
@@ -523,6 +524,11 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
             f"- Throughput timing basis: `{throughput.get('throughput_basis', 'n/a')}`",
             f"- Scale estimate reliable: `{throughput.get('scale_estimate_reliable', 'n/a')}`",
             f"- Embedding rows by entity: `{throughput.get('embedding_rows_by_entity', {})}`",
+            f"- Embedding rows by split: `{embedding_bottleneck.get('embedding_rows_by_split', {})}`",
+            f"- Embedding matrix bytes: `{embedding_bottleneck.get('embedding_matrix_bytes', 'n/a')}`",
+            f"- Embed stage seconds: `{embedding_bottleneck.get('embed_stage_seconds', 'n/a')}`",
+            f"- Embed stage share of total: `{embedding_bottleneck.get('embed_stage_share_of_total', 'n/a')}`",
+            f"- Embedding rows/sec during embed stage: `{embedding_bottleneck.get('embedding_rows_per_embed_second', 'n/a')}`",
             f"- Processed rows/sec: `{throughput.get('processed_rows_per_second', 'n/a')}`",
             f"- Pipeline seconds per 100k processed rows: `{throughput.get('pipeline_seconds_per_100k_processed_rows', 'n/a')}`",
             f"- Slowest timed stage: `{throughput.get('slowest_stage', 'n/a')}`",

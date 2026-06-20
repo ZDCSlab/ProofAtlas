@@ -83,8 +83,8 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
             "passed": True,
             "total_seconds": 10.0,
             "stage_count": 2,
-            "slowest_stages": [{"name": "evaluate", "seconds": 3.0}],
-            "stages": [{"name": "evaluate", "status": "passed", "seconds": 3.0}],
+            "slowest_stages": [{"name": "evaluate", "seconds": 3.0}, {"name": "embed", "seconds": 2.0}],
+            "stages": [{"name": "evaluate", "status": "passed", "seconds": 3.0}, {"name": "embed", "status": "passed", "seconds": 2.0}],
         },
     )
     report = pipeline_profile.run("configs/proofatlas.yaml")
@@ -96,14 +96,17 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
     assert report["throughput_profile"]["mean_index_speedup_vs_exact"] == 1.6
     assert report["throughput_profile"]["min_index_recall_vs_exact"] == 1.0
     assert report["stages"]["timings"]["config_matches_current"] is True
-    assert report["stages"]["timings"]["executed_stage_count"] == 1
+    assert report["stages"]["timings"]["executed_stage_count"] == 2
     assert report["stages"]["timings"]["skipped_stage_count"] == 0
     assert report["throughput_profile"]["timing_config_matches_current"] is True
     assert report["throughput_profile"]["throughput_basis"] == "executed_pipeline_run"
     assert report["throughput_profile"]["scale_estimate_reliable"] is True
     assert report["throughput_profile"]["bottleneck_profile"]["primary_stage"] == "evaluate"
     assert report["throughput_profile"]["bottleneck_profile"]["primary_stage_share_of_total"] == 0.3
-    assert report["throughput_profile"]["bottleneck_profile"]["top3_stage_share_of_total"] == 0.3
+    assert report["throughput_profile"]["bottleneck_profile"]["top3_stage_share_of_total"] == 0.5
+    assert report["throughput_profile"]["embedding_bottleneck_profile"]["embed_stage_seconds"] == 2.0
+    assert report["throughput_profile"]["embedding_bottleneck_profile"]["embed_stage_share_of_total"] == 0.2
+    assert report["throughput_profile"]["embedding_bottleneck_profile"]["embedding_rows_per_embed_second"] == 0.0
     assert report["throughput_profile"]["evaluation_timing_delta"]["timed_pipeline_evaluate_seconds"] == 3.0
     assert report["throughput_profile"]["evaluation_timing_delta"]["current_evaluation_seconds"] == 2.5
     assert report["throughput_profile"]["evaluation_timing_delta"]["timed_to_current_ratio"] == 1.2

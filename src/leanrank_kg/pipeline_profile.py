@@ -445,6 +445,16 @@ def _throughput_profile(
         "top3_stage_share_of_total": (top3_seconds / total_seconds) if total_seconds > 0 and bottleneck_rows else None,
         "top_stages": bottleneck_rows,
     }
+    embed_seconds = stage_seconds.get("embed")
+    embed_seconds_f = float(embed_seconds) if embed_seconds is not None else None
+    embedding_bottleneck_profile = {
+        "embed_stage_seconds": embed_seconds,
+        "embed_stage_share_of_total": (embed_seconds_f / total_seconds) if embed_seconds_f is not None and total_seconds > 0 else None,
+        "embedding_rows_per_embed_second": (embedding_rows / embed_seconds_f) if embed_seconds_f and embed_seconds_f > 0 else None,
+        "embedding_rows_by_entity": matrix_rows.get("embedding_rows_by_entity", {}),
+        "embedding_rows_by_split": matrix_rows.get("embedding_rows_by_split", {}),
+        "embedding_matrix_bytes": matrix_rows.get("embedding_matrix_bytes"),
+    }
 
     def _per_100k(rows: int) -> float | None:
         if total_seconds <= 0 or rows <= 0:
@@ -475,6 +485,7 @@ def _throughput_profile(
         "evaluation_timing_delta": evaluation_timing_delta,
         "slowest_stage": bottleneck,
         "bottleneck_profile": bottleneck_profile,
+        "embedding_bottleneck_profile": embedding_bottleneck_profile,
         "index_build_seconds_total": index_build_seconds,
         "mean_index_speedup_vs_exact": (sum(speedups) / len(speedups)) if speedups else None,
         "min_index_recall_vs_exact": min(recalls) if recalls else None,

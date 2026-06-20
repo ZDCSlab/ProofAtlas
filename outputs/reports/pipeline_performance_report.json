@@ -2210,6 +2210,23 @@
         }
       ]
     },
+    "embedding_bottleneck_profile": {
+      "embed_stage_seconds": 149.16317718615755,
+      "embed_stage_share_of_total": 0.2703940719938502,
+      "embedding_matrix_bytes": 684695627,
+      "embedding_rows_by_entity": {
+        "premise": 203601,
+        "proof_state": 30498,
+        "theorem": 10292
+      },
+      "embedding_rows_by_split": {
+        "demo": 2608,
+        "test": 42385,
+        "train": 159284,
+        "val": 40114
+      },
+      "embedding_rows_per_embed_second": 1638.4137466782227
+    },
     "embedding_matrix_bytes": 684695627,
     "embedding_rows_by_entity": {
       "premise": 203601,

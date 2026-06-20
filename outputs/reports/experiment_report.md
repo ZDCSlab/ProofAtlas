@@ -429,6 +429,11 @@ These timings split the `evaluate` pipeline stage into proof-state retrieval, th
 - Throughput timing basis: `executed_pipeline_run`
 - Scale estimate reliable: `True`
 - Embedding rows by entity: `{'premise': 203601, 'proof_state': 30498, 'theorem': 10292}`
+- Embedding rows by split: `{'demo': 2608, 'test': 42385, 'train': 159284, 'val': 40114}`
+- Embedding matrix bytes: `684695627`
+- Embed stage seconds: `149.16317718615755`
+- Embed stage share of total: `0.2703940719938502`
+- Embedding rows/sec during embed stage: `1638.4137466782227`
 - Processed rows/sec: `529.3418606425042`
 - Pipeline seconds per 100k processed rows: `188.91383326197186`
 - Slowest timed stage: `embed`

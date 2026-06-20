@@ -95,6 +95,13 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                 "throughput_basis": "executed_pipeline_run",
                 "scale_estimate_reliable": True,
                 "embedding_rows_by_entity": {"proof_state": 10, "premise": 20, "theorem": 12},
+                "embedding_bottleneck_profile": {
+                    "embed_stage_seconds": 2.0,
+                    "embed_stage_share_of_total": 0.2,
+                    "embedding_rows_per_embed_second": 21.0,
+                    "embedding_rows_by_split": {"train": 30, "test": 12},
+                    "embedding_matrix_bytes": 1234,
+                },
                 "processed_rows_per_second": 1000.0,
                 "pipeline_seconds_per_100k_processed_rows": 100.0,
                 "slowest_stage": "evaluate",
@@ -205,6 +212,11 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "Scale estimate reliable" in text
     assert "LeanRank premise supervision ready" in text
     assert "Total embedding rows" in text
+    assert "Embedding rows by split" in text
+    assert "Embedding matrix bytes" in text
+    assert "Embed stage seconds" in text
+    assert "Embed stage share of total" in text
+    assert "Embedding rows/sec during embed stage" in text
     assert "Primary bottleneck share" in text
     assert "Top-3 timed-stage share" in text
     assert "Saved pipeline evaluate seconds" in text
