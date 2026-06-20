@@ -273,6 +273,25 @@ HTML = """<!doctype html>
       <div class="status"><div class="label">Hardness mean</div><div class="value">{{ "%.3f"|format(production_evidence.supervision.train_negative_hardness_mean or 0) }}</div><div class="note">train negative candidate hardness</div></div>
       <div class="status"><div class="label">Embedding throughput</div><div class="value">{{ "%.1f"|format(production_evidence.timing.embedding_rows_per_second or 0) }}</div><div class="note">embedding rows per second</div></div>
     </div>
+    {% set failure_profile = production_evidence.failure_profile|default({}) %}
+    {% set proof_failure = failure_profile.proof_state|default({}) %}
+    {% set theorem_failure = failure_profile.theorem|default({}) %}
+    {% set reranked_failure = failure_profile.reranked_proof_state|default({}) %}
+    <h3 style="margin-top:16px">Retrieval Failure Profile</h3>
+    <div class="status-row">
+      <div class="status warn"><div class="label">Proof-state miss top {{ proof_failure.max_k|default(100) }}</div><div class="value">{{ "{:,}".format(proof_failure.zero_recall_at_max_k|default(0) or 0) }}</div><div class="note">{{ "{:,}".format(proof_failure.retrievable_queries|default(0) or 0) }} retrievable proof-state queries</div></div>
+      <div class="status"><div class="label">Proof-state no train gold</div><div class="value">{{ "{:,}".format(proof_failure.queries_without_train_gold|default(0) or 0) }}</div><div class="note">held-out queries with no train-side gold premise</div></div>
+      <div class="status ok"><div class="label">Theorem miss top {{ theorem_failure.max_k|default(100) }}</div><div class="value">{{ "{:,}".format(theorem_failure.zero_recall_at_max_k|default(0) or 0) }}</div><div class="note">{{ "{:,}".format(theorem_failure.retrievable_queries|default(0) or 0) }} retrievable theorem queries</div></div>
+      <div class="status"><div class="label">Rerank miss top {{ reranked_failure.max_k|default(10) }}</div><div class="value">{{ "{:,}".format(reranked_failure.zero_recall_at_max_k|default(0) or 0) }}</div><div class="note">homepage/API-style diagnostic queries</div></div>
+    </div>
+    {% set zero_domains = proof_failure.zero_recall_domains|default([]) %}
+    {% if zero_domains %}
+    <div class="chips" style="margin-top:12px">
+      {% for row in zero_domains[:6] %}
+      <span class="chip">{{ row.domain_tag }}: {{ row.zero_recall_queries }}</span>
+      {% endfor %}
+    </div>
+    {% endif %}
   </section>
 
   <section>

@@ -17,6 +17,12 @@ dist/
 *.prof
 .DS_Store
 
+# The homepage is the demo deliverable, so keep generated static assets tracked.
+!homepage/
+!homepage/index.html
+!homepage/assets/
+!homepage/assets/**
+
 # Project documentation is source material; keep only bulky local reference PDFs out.
 docs/*.pdf
 

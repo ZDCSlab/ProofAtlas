@@ -283,12 +283,17 @@ def _production_evidence(
     premise_supervision: dict[str, Any],
     pipeline_run_timings: dict[str, Any],
     pipeline_performance: dict[str, Any],
+    test_set_evaluation: dict[str, Any],
 ) -> dict[str, Any]:
     current_supervision = premise_supervision.get("current_artifact_supervision", {})
     train_supervision = premise_supervision.get("splits", {}).get("train", {})
     throughput = pipeline_performance.get("throughput_profile", {})
     scale = pipeline_performance.get("scale_profile", {})
     timing_summary = pipeline_performance.get("stages", {}).get("pipeline_run_timings", {})
+    test_eval = test_set_evaluation.get("test", {}) if isinstance(test_set_evaluation, dict) else {}
+    proof_failure = test_eval.get("proof_state_retrieval", {}).get("failure_profile", {})
+    theorem_failure = test_eval.get("theorem_retrieval", {}).get("failure_profile", {})
+    reranked_failure = test_eval.get("proof_state_reranked_retrieval", {}).get("failure_profile", {})
     return {
         "heldout": {
             "proof_state_evaluated_queries": metrics.get("test_proof_state_evaluated_queries"),
@@ -319,6 +324,11 @@ def _production_evidence(
             "embedding_device": scale.get("embedding_device"),
             "embedding_devices": scale.get("embedding_devices", []),
             "slowest_stage": throughput.get("slowest_stage"),
+        },
+        "failure_profile": {
+            "proof_state": proof_failure,
+            "theorem": theorem_failure,
+            "reranked_proof_state": reranked_failure,
         },
     }
 
@@ -396,6 +406,7 @@ def build_summary(config_path: str | None = None) -> dict[str, Any]:
     premise_supervision = read_json("outputs/reports/premise_trace_supervision_report.json", {})
     pipeline_run_timings = read_json("outputs/reports/pipeline_run_timings.json", {})
     pipeline_performance = read_json("outputs/reports/pipeline_performance_report.json", {})
+    test_set_evaluation = read_json("outputs/reports/test_set_evaluation.json", {})
     validation = {
         "schema": read_json("outputs/reports/schema_validation_summary.json", {}),
         "split_leakage": read_json("outputs/reports/split_leakage_report.json", {}),
@@ -465,6 +476,7 @@ def build_summary(config_path: str | None = None) -> dict[str, Any]:
             premise_supervision=premise_supervision,
             pipeline_run_timings=pipeline_run_timings,
             pipeline_performance=pipeline_performance,
+            test_set_evaluation=test_set_evaluation,
         ),
         "difficulty_estimator_metrics": difficulty_estimator_metrics,
         "refresh_dashboard": refresh_dashboard,

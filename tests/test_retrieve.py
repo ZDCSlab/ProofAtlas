@@ -321,6 +321,8 @@ def test_text_query_retrieval_and_theorem_guidance_are_json_serializable(tmp_pat
     assert "heldout" in homepage_summary["production_evidence"]
     assert "supervision" in homepage_summary["production_evidence"]
     assert "timing" in homepage_summary["production_evidence"]
+    assert homepage_summary["production_evidence"]["failure_profile"]["proof_state"]["rank_buckets"]
+    assert homepage_summary["production_evidence"]["failure_profile"]["theorem"]["gold_coverage_buckets"]
     assert corpus_manifest["data_supervision"]["kind"] == "synthetic_demo_rows"
     assert "trend" in refresh_dashboard
     assert "deltas" in refresh_trend
@@ -364,8 +366,13 @@ def test_text_query_retrieval_and_theorem_guidance_are_json_serializable(tmp_pat
     assert "Pipeline Summary" in html
     assert "Refresh Dashboard" in html
     assert "Production Evidence" in html
+    assert "Retrieval Failure Profile" in html
     assert "Proof-state test coverage" in html
     assert "Theorem test coverage" in html
+    assert "Proof-state miss top" in html
+    assert "Proof-state no train gold" in html
+    assert "Theorem miss top" in html
+    assert "Rerank miss top" in html
     assert "Positive premise edges" in html
     assert "Negative candidates" in html
     assert "Scale estimate reliable" in html
