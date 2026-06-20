@@ -293,6 +293,29 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                     "artifact_reuse_by_default": True,
                     "bottleneck_interpretation": "evaluation is the largest timed stage despite batched GPU scoring",
                 },
+                "cpu_io_efficiency_profile": {
+                    "method": "cpu_io_stage_seconds_normalized_by_processed_rows",
+                    "current_processed_rows": 1000,
+                    "stage_count": 1,
+                    "total_cpu_io_seconds": 2.0,
+                    "total_cpu_io_share_of_pipeline": 0.1,
+                    "stages": [
+                        {
+                            "name": "validate",
+                            "seconds": 2.0,
+                            "share_of_total": 0.1,
+                            "seconds_per_100k_processed_rows": 200.0,
+                            "optimization_priority": "medium",
+                        }
+                    ],
+                    "top_stage": {
+                        "name": "validate",
+                        "seconds": 2.0,
+                        "share_of_total": 0.1,
+                        "seconds_per_100k_processed_rows": 200.0,
+                        "optimization_priority": "medium",
+                    },
+                },
                 "processed_rows_per_second": 1000.0,
                 "pipeline_seconds_per_100k_processed_rows": 100.0,
                 "slowest_stage": "evaluate",
@@ -633,6 +656,9 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "not a corpus extractor" in text
     assert "hnswlib parameters" in text
     assert "CPU/IO-Heavy Stages" in text
+    assert "cpu_io_stage_seconds_normalized_by_processed_rows" in text
+    assert "Seconds / 100k rows" in text
+    assert "200.0000" in text
     assert "Performance Acceptance Gates" in text
     assert "Required gates passed" in text
     assert "target_dataset" in text

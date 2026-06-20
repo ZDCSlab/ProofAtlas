@@ -78,6 +78,9 @@ wandb/
 data/processed/
 data/sample/
 data/raw/
+outputs/embeddings/
+outputs/graph/
+outputs/indexes/
 outputs/*
 !outputs/.gitkeep
 !outputs/reports/

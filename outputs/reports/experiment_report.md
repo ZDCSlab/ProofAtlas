@@ -671,12 +671,16 @@ This profile records the resource choices used by the committed LeanRank-data ru
 
 ### CPU/IO-Heavy Stages
 
-| Stage | Seconds | Share of total |
-| --- | ---: | ---: |
-| `sample` | 80.5672 | 0.1613 |
-| `augment_graph` | 50.8827 | 0.1019 |
-| `normalize` | 43.7230 | 0.0876 |
-| `validate` | 38.6715 | 0.0774 |
+- Method: `cpu_io_stage_seconds_normalized_by_processed_rows`
+- Total CPU/IO seconds: `213.84446891304106`
+- Total CPU/IO share: `0.42825593134082185`
+
+| Stage | Seconds | Share of total | Seconds / 100k rows | Priority |
+| --- | ---: | ---: | ---: | --- |
+| `sample` | 80.5672 | 0.1613 | 27.5904 | `high` |
+| `augment_graph` | 50.8827 | 0.1019 | 17.4249 | `medium` |
+| `normalize` | 43.7230 | 0.0876 | 14.9730 | `medium` |
+| `validate` | 38.6715 | 0.0774 | 13.2431 | `medium` |
 
 ### Performance Acceptance Gates
 
@@ -761,18 +765,18 @@ These linear projections use the current timed pipeline as a capacity-planning b
 This profile records the local footprint of generated LeanRank-data artifacts. It is a practical scale-up signal because embeddings and ANN indexes can dominate disk usage before model training becomes the bottleneck.
 
 - Method: `filesystem_artifact_footprint_with_linear_scale_projection`
-- Total artifact bytes: `3052578383`
-- Total artifact GiB: `2.8429351588711143`
-- Bytes per processed row: `10453.60595797433`
+- Total artifact bytes: `3052642989`
+- Total artifact GiB: `2.84299532789737`
+- Bytes per processed row: `10453.827202306755`
 - Unreferenced index artifact bytes: `1502501178`
 - Unreferenced index artifact count: `12`
 
 | Projection | Target rows | Scale factor | Artifact GiB |
 | --- | ---: | ---: | ---: |
-| `current_1x` | 292012 | 1.0000 | 2.8429 |
-| `current_2x` | 584024 | 2.0000 | 5.6859 |
-| `current_5x` | 1460060 | 5.0000 | 14.2147 |
-| `configured_source_rows` | 350000 | 1.1986 | 3.4075 |
+| `current_1x` | 292012 | 1.0000 | 2.8430 |
+| `current_2x` | 584024 | 2.0000 | 5.6860 |
+| `current_5x` | 1460060 | 5.0000 | 14.2150 |
+| `configured_source_rows` | 350000 | 1.1986 | 3.4076 |
 
 Largest generated artifact files:
 
@@ -825,6 +829,7 @@ Training is not repeated for every report or homepage refresh. The default workf
 
 - `medium` `pipeline_bottleneck`: Embedding is the current largest timed bottleneck. Reuse cached embeddings when training/reranking only, and keep multi-GPU sentence-transformer encoding enabled for larger LeanRank-data refreshes.
 - `medium` `retrieval_accuracy`: Proof-state Recall@100 is low, so proof-state premise retrieval is currently limited by candidate generation or embeddings before reranking. Prioritize stronger proof-state/query representations, domain-aware candidate pools, and embedding model comparisons before adding heavier rerankers.
+- `medium` `cpu_io_efficiency`: `sample` is the largest CPU/IO-heavy stage at 27.5904 seconds per 100k processed rows. Use this profile to prioritize CPU/vectorization work before the next larger LeanRank-data refresh.
 
 ## Interpretation
 

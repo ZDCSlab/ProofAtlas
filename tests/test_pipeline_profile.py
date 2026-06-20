@@ -247,6 +247,11 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
     assert execution_mode["index_mode"] == "sklearn_indexed_candidate_generation"
     assert execution_mode["primary_timed_bottleneck"] == "evaluate"
     assert execution_mode["artifact_reuse_by_default"] is False
+    cpu_io_efficiency = report["throughput_profile"]["cpu_io_efficiency_profile"]
+    assert cpu_io_efficiency["method"] == "cpu_io_stage_seconds_normalized_by_processed_rows"
+    assert cpu_io_efficiency["current_processed_rows"] == 100
+    assert cpu_io_efficiency["stage_count"] == 0
+    assert cpu_io_efficiency["total_cpu_io_seconds"] == 0.0
     acceptance = report["throughput_profile"]["performance_acceptance_profile"]
     assert acceptance["summary"]["total_gate_count"] >= 8
     assert acceptance["summary"]["required_gates_passed"] is False
@@ -426,3 +431,26 @@ def test_pipeline_profile_recommends_full_timing_for_cached_runs(tmp_path, monke
     assert report["stages"]["evaluation"]["held_out_test_coverage"]["theorem_coverage_fraction"] == 0.25
     assert any(row["area"] == "performance_timing" and row["priority"] == "high" for row in report["recommendations"])
     assert any(row["area"] == "evaluation_scope" and row["priority"] == "medium" for row in report["recommendations"])
+
+
+def test_cpu_io_efficiency_profile_normalizes_stage_costs() -> None:
+    profile = pipeline_profile._cpu_io_efficiency_profile(
+        {"current_total_split_rows": 200000},
+        {
+            "total_pipeline_seconds": 200.0,
+            "resource_parallelism_profile": {
+                "cpu_or_io_heavy_stages": [
+                    {"name": "sample", "seconds": 80.0},
+                    {"name": "normalize", "seconds": 20.0},
+                ]
+            },
+        },
+    )
+
+    assert profile["method"] == "cpu_io_stage_seconds_normalized_by_processed_rows"
+    assert profile["stage_count"] == 2
+    assert profile["total_cpu_io_seconds"] == 100.0
+    assert profile["total_cpu_io_share_of_pipeline"] == 0.5
+    assert profile["top_stage"]["name"] == "sample"
+    assert profile["top_stage"]["seconds_per_100k_processed_rows"] == 40.0
+    assert profile["top_stage"]["optimization_priority"] == "high"

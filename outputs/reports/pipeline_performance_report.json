@@ -13,6 +13,11 @@
       "area": "retrieval_accuracy",
       "priority": "medium",
       "recommendation": "Proof-state Recall@100 is low, so proof-state premise retrieval is currently limited by candidate generation or embeddings before reranking. Prioritize stronger proof-state/query representations, domain-aware candidate pools, and embedding model comparisons before adding heavier rerankers."
+    },
+    {
+      "area": "cpu_io_efficiency",
+      "priority": "medium",
+      "recommendation": "`sample` is the largest CPU/IO-heavy stage at 27.5904 seconds per 100k processed rows. Use this profile to prioritize CPU/vectorization work before the next larger LeanRank-data refresh."
     }
   ],
   "scale_profile": {
@@ -3448,7 +3453,7 @@
         "outputs/reports",
         "homepage/assets"
       ],
-      "bytes_per_processed_row": 10453.60595797433,
+      "bytes_per_processed_row": 10453.827202306755,
       "directories": {
         "data/processed": {
           "bytes": 46533700,
@@ -3457,7 +3462,7 @@
           "path": "data/processed"
         },
         "homepage/assets": {
-          "bytes": 2053197,
+          "bytes": 2053650,
           "exists": true,
           "file_count": 11,
           "path": "homepage/assets"
@@ -3475,7 +3480,7 @@
           "path": "outputs/indexes"
         },
         "outputs/reports": {
-          "bytes": 19149247,
+          "bytes": 19213400,
           "exists": true,
           "file_count": 39,
           "path": "outputs/reports"
@@ -3531,36 +3536,36 @@
       ],
       "projections": [
         {
-          "estimated_artifact_bytes": 3052578383.0,
-          "estimated_artifact_gib": 2.8429351588711143,
+          "estimated_artifact_bytes": 3052642989.0,
+          "estimated_artifact_gib": 2.84299532789737,
           "label": "current_1x",
           "scale_factor_vs_current": 1.0,
           "target_processed_rows": 292012
         },
         {
-          "estimated_artifact_bytes": 6105156766.0,
-          "estimated_artifact_gib": 5.6858703177422285,
+          "estimated_artifact_bytes": 6105285978.0,
+          "estimated_artifact_gib": 5.68599065579474,
           "label": "current_2x",
           "scale_factor_vs_current": 2.0,
           "target_processed_rows": 584024
         },
         {
-          "estimated_artifact_bytes": 15262891915.0,
-          "estimated_artifact_gib": 14.214675794355571,
+          "estimated_artifact_bytes": 15263214945.0,
+          "estimated_artifact_gib": 14.21497663948685,
           "label": "current_5x",
           "scale_factor_vs_current": 5.0,
           "target_processed_rows": 1460060
         },
         {
-          "estimated_artifact_bytes": 3658762085.291015,
-          "estimated_artifact_gib": 3.4074877251787252,
+          "estimated_artifact_bytes": 3658839520.807364,
+          "estimated_artifact_gib": 3.407559842623178,
           "label": "configured_source_rows",
           "scale_factor_vs_current": 1.1985808802377984,
           "target_processed_rows": 350000
         }
       ],
-      "total_artifact_bytes": 3052578383,
-      "total_artifact_gib": 2.8429351588711143,
+      "total_artifact_bytes": 3052642989,
+      "total_artifact_gib": 2.84299532789737,
       "unreferenced_index_artifact_bytes": 1502501178,
       "unreferenced_index_artifact_count": 12,
       "unreferenced_index_artifact_gib": 1.3993132654577494,
@@ -3648,6 +3653,51 @@
           "share_of_total": 0.07744562780998777
         }
       ]
+    },
+    "cpu_io_efficiency_profile": {
+      "current_processed_rows": 292012,
+      "interpretation": "CPU/IO stage costs are normalized by processed split rows so future LeanRank-data runs can compare sampling, normalization, graph augmentation, validation, and difficulty computation without rerunning embeddings.",
+      "method": "cpu_io_stage_seconds_normalized_by_processed_rows",
+      "stage_count": 4,
+      "stages": [
+        {
+          "name": "sample",
+          "optimization_priority": "high",
+          "seconds": 80.56720186397433,
+          "seconds_per_100k_processed_rows": 27.590373636691073,
+          "share_of_total": 0.16134802197671516
+        },
+        {
+          "name": "augment_graph",
+          "optimization_priority": "medium",
+          "seconds": 50.88269817898981,
+          "seconds_per_100k_processed_rows": 17.424865477785094,
+          "share_of_total": 0.10190030824055761
+        },
+        {
+          "name": "normalize",
+          "optimization_priority": "medium",
+          "seconds": 43.72302240296267,
+          "seconds_per_100k_processed_rows": 14.973022479542852,
+          "share_of_total": 0.08756197331356133
+        },
+        {
+          "name": "validate",
+          "optimization_priority": "medium",
+          "seconds": 38.67154646711424,
+          "seconds_per_100k_processed_rows": 13.243136058488773,
+          "share_of_total": 0.07744562780998777
+        }
+      ],
+      "top_stage": {
+        "name": "sample",
+        "optimization_priority": "high",
+        "seconds": 80.56720186397433,
+        "seconds_per_100k_processed_rows": 27.590373636691073,
+        "share_of_total": 0.16134802197671516
+      },
+      "total_cpu_io_seconds": 213.84446891304106,
+      "total_cpu_io_share_of_pipeline": 0.42825593134082185
     },
     "embedding_bottleneck_profile": {
       "embed_stage_seconds": 148.68840552284382,

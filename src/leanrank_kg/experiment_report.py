@@ -314,13 +314,16 @@ def _refresh_reuse_table(profile: dict[str, Any]) -> str:
 
 def _cpu_stage_table(rows: list[dict[str, Any]]) -> str:
     lines = [
-        "| Stage | Seconds | Share of total |",
-        "| --- | ---: | ---: |",
+        "| Stage | Seconds | Share of total | Seconds / 100k rows | Priority |",
+        "| --- | ---: | ---: | ---: | --- |",
     ]
     for row in rows[:5]:
-        lines.append(f"| `{row.get('name', 'n/a')}` | {_fmt(row.get('seconds'))} | {_fmt(row.get('share_of_total'))} |")
+        lines.append(
+            f"| `{row.get('name', 'n/a')}` | {_fmt(row.get('seconds'))} | {_fmt(row.get('share_of_total'))} | "
+            f"{_fmt(row.get('seconds_per_100k_processed_rows'))} | `{row.get('optimization_priority', 'n/a')}` |"
+        )
     if len(lines) == 2:
-        lines.append("| n/a | n/a | n/a |")
+        lines.append("| n/a | n/a | n/a | n/a | n/a |")
     return "\n".join(lines)
 
 
@@ -560,6 +563,7 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     refresh_cache = refresh_reuse.get("artifact_cache", {}) if isinstance(refresh_reuse, dict) else {}
     resource_parallelism = throughput.get("resource_parallelism_profile", {}) if isinstance(throughput, dict) else {}
     execution_mode = throughput.get("execution_mode_summary", {}) if isinstance(throughput, dict) else {}
+    cpu_io_efficiency = throughput.get("cpu_io_efficiency_profile", {}) if isinstance(throughput, dict) else {}
     performance_acceptance = throughput.get("performance_acceptance_profile", {}) if isinstance(throughput, dict) else {}
     performance_acceptance_summary = performance_acceptance.get("summary", {}) if isinstance(performance_acceptance, dict) else {}
     scale_projection = throughput.get("scale_projection_profile", {}) if isinstance(throughput, dict) else {}
@@ -1091,7 +1095,17 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
             "",
             "### CPU/IO-Heavy Stages",
             "",
-            _cpu_stage_table(resource_parallelism.get("cpu_or_io_heavy_stages", []) if isinstance(resource_parallelism, dict) else []),
+            f"- Method: `{cpu_io_efficiency.get('method', 'n/a')}`",
+            f"- Total CPU/IO seconds: `{cpu_io_efficiency.get('total_cpu_io_seconds', 'n/a')}`",
+            f"- Total CPU/IO share: `{cpu_io_efficiency.get('total_cpu_io_share_of_pipeline', 'n/a')}`",
+            "",
+            _cpu_stage_table(
+                cpu_io_efficiency.get("stages", [])
+                if isinstance(cpu_io_efficiency, dict) and cpu_io_efficiency.get("stages")
+                else resource_parallelism.get("cpu_or_io_heavy_stages", [])
+                if isinstance(resource_parallelism, dict)
+                else []
+            ),
             "",
             "### Performance Acceptance Gates",
             "",

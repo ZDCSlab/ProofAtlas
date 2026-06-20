@@ -1078,6 +1078,41 @@ def _execution_mode_summary(throughput: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _cpu_io_efficiency_profile(scale: dict[str, Any], throughput: dict[str, Any]) -> dict[str, Any]:
+    current_rows = int(scale.get("current_total_split_rows") or 0)
+    total_seconds = float(throughput.get("total_pipeline_seconds") or 0.0)
+    resources = throughput.get("resource_parallelism_profile", {}) if isinstance(throughput, dict) else {}
+    cpu_rows = resources.get("cpu_or_io_heavy_stages", []) if isinstance(resources, dict) else []
+    stages = []
+    cumulative_seconds = 0.0
+    for row in cpu_rows:
+        if not isinstance(row, dict):
+            continue
+        seconds = float(row.get("seconds") or 0.0)
+        cumulative_seconds += seconds
+        stages.append(
+            {
+                "name": row.get("name"),
+                "seconds": seconds,
+                "share_of_total": (seconds / total_seconds) if total_seconds > 0 else None,
+                "seconds_per_100k_processed_rows": (seconds / current_rows * 100000.0) if current_rows > 0 else None,
+                "optimization_priority": "high" if seconds >= 60.0 or (total_seconds > 0 and seconds / total_seconds >= 0.15) else "medium",
+            }
+        )
+    return {
+        "method": "cpu_io_stage_seconds_normalized_by_processed_rows",
+        "current_processed_rows": current_rows,
+        "stage_count": len(stages),
+        "total_cpu_io_seconds": cumulative_seconds,
+        "total_cpu_io_share_of_pipeline": (cumulative_seconds / total_seconds) if total_seconds > 0 else None,
+        "stages": stages,
+        "top_stage": stages[0] if stages else {},
+        "interpretation": (
+            "CPU/IO stage costs are normalized by processed split rows so future LeanRank-data runs can compare sampling, normalization, graph augmentation, validation, and difficulty computation without rerunning embeddings."
+        ),
+    }
+
+
 def _performance_acceptance_profile(
     scale: dict[str, Any],
     throughput: dict[str, Any],
@@ -1448,6 +1483,22 @@ def _recommendations(
                 ),
             }
         )
+    cpu_io = throughput.get("cpu_io_efficiency_profile") or {}
+    top_cpu_stage = cpu_io.get("top_stage") or {}
+    if top_cpu_stage.get("optimization_priority") == "high":
+        seconds_per_100k = top_cpu_stage.get("seconds_per_100k_processed_rows")
+        seconds_per_100k_text = f"{seconds_per_100k:.4f}" if isinstance(seconds_per_100k, float) else str(seconds_per_100k)
+        recommendations.append(
+            {
+                "priority": "medium",
+                "area": "cpu_io_efficiency",
+                "recommendation": (
+                    f"`{top_cpu_stage.get('name')}` is the largest CPU/IO-heavy stage at "
+                    f"{seconds_per_100k_text} seconds per 100k processed rows. "
+                    "Use this profile to prioritize CPU/vectorization work before the next larger LeanRank-data refresh."
+                ),
+            }
+        )
     evaluation_scope = (evaluation.get("test_set_evaluation") or {}).get("evaluation_scope", {})
     if evaluation_scope.get("is_sampled") is True:
         recommendations.append(
@@ -1494,6 +1545,7 @@ def build_report(config_path: str = "configs/proofatlas.yaml") -> dict[str, Any]
     throughput["refresh_reuse_profile"] = _refresh_reuse_profile(config, sample, embeddings, index)
     throughput["resource_parallelism_profile"] = _resource_parallelism_profile(config, embeddings, index, benchmark, evaluation, throughput)
     throughput["execution_mode_summary"] = _execution_mode_summary(throughput)
+    throughput["cpu_io_efficiency_profile"] = _cpu_io_efficiency_profile(scale, throughput)
     throughput["performance_acceptance_profile"] = _performance_acceptance_profile(scale, throughput, evaluation)
     throughput["scale_projection_profile"] = _scale_projection_profile(scale, throughput)
     throughput["artifact_storage_profile"] = _artifact_storage_profile(scale, throughput)
