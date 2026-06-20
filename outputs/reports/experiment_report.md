@@ -88,7 +88,7 @@ This plan connects the held-out retrieval metrics, reranked diagnostic, ranker a
 
 | Priority | Area | Target metric | Current value | Reason |
 | ---: | --- | --- | ---: | --- |
-| 1 | `proof_state_query_and_embedding` | proof_state Recall@100 | 0.2362 | Proof-state gold premises are often absent from the top-100 candidate pool, so top-k reranking cannot recover them. Validation query diagnostic currently favors `full_name_goal`. |
+| 1 | `proof_state_query_and_embedding` | proof_state Recall@100 | 0.2362 | Proof-state gold premises are often absent from the top-100 candidate pool, so top-k reranking cannot recover them. Validation query diagnostic currently favors `stored_plus_goal_only`. |
 | 2 | `theorem_level_reranking` | theorem_retrieval Recall@10 | 0.4940 | Theorem-level Recall@100 is substantially higher than Recall@10, leaving useful headroom for ordering candidates already in the pool. |
 | 3 | `ranker_feature_iteration` | validation/test Recall@10 and MAP | 0.0383 | Ranker ablation says `frequency` is the strongest currently measured feature group by delta_without_group. |
 | 4 | `hard_negative_training` | MRR/MAP after reranking | 9.5478 | LeanRank-data already provides positive premises and hard negative candidates, so training/evaluation changes can reuse existing labels without extracting new data. |
@@ -117,9 +117,9 @@ Query representation diagnostic summary:
 
 | Metric | Value |
 | --- | ---: |
-| `validation` | {'best_variant_by_recall': 'full_name_goal', 'evaluated_queries': 50, 'selection_metric': 'Recall@100'} |
-| `test` | {'best_variant_by_recall': 'full_name_goal', 'evaluated_queries': 50, 'selection_metric': 'Recall@100'} |
-| `validation_test_best_variant_match` | True |
+| `validation` | {'best_variant_by_recall': 'stored_plus_goal_only', 'evaluated_queries': 50, 'selection_metric': 'Recall@100'} |
+| `test` | {'best_variant_by_recall': 'stored_plus_full_name_context_goal', 'evaluated_queries': 50, 'selection_metric': 'Recall@100'} |
+| `validation_test_best_variant_match` | False |
 
 Strongest ranker feature groups:
 
@@ -138,7 +138,7 @@ Validation diagnostics are the safer signal for choosing proof-state query text 
 Validation split:
 
 - Evaluated queries: `50`
-- Best variant by `Recall@100`: `full_name_goal`
+- Best variant by `Recall@100`: `stored_plus_goal_only`
 
 | Query Representation | Recall@50 | Recall@100 | MRR | MAP |
 | --- | ---: | ---: | ---: | ---: |
@@ -146,12 +146,18 @@ Validation split:
 | `full_name_context_goal` | 0.1719 | 0.1927 | 0.0707 | 0.0476 |
 | `full_name_goal` | 0.2396 | 0.2604 | 0.0745 | 0.0481 |
 | `goal_only` | 0.1589 | 0.1797 | 0.0727 | 0.0589 |
+| `stored_embedding` | 0.2396 | 0.2604 | 0.0745 | 0.0481 |
+| `stored_plus_context_goal` | 0.1693 | 0.2396 | 0.0540 | 0.0373 |
+| `stored_plus_full_name_context_goal` | 0.1953 | 0.2604 | 0.0669 | 0.0461 |
+| `stored_plus_full_name_goal` | 0.2396 | 0.2604 | 0.0745 | 0.0481 |
+| `stored_plus_goal_only` | 0.2396 | 0.2682 | 0.0708 | 0.0528 |
+| `stored_plus_theorem_id_goal` | 0.2552 | 0.2604 | 0.0766 | 0.0498 |
 | `theorem_id_goal` | 0.2344 | 0.2604 | 0.0764 | 0.0504 |
 
 Test split:
 
 - Evaluated queries: `50`
-- Best variant by `Recall@100`: `full_name_goal`
+- Best variant by `Recall@100`: `stored_plus_full_name_context_goal`
 
 | Query Representation | Recall@50 | Recall@100 | MRR | MAP |
 | --- | ---: | ---: | ---: | ---: |
@@ -159,6 +165,12 @@ Test split:
 | `full_name_context_goal` | 0.2075 | 0.2378 | 0.0887 | 0.0528 |
 | `full_name_goal` | 0.2491 | 0.2700 | 0.0777 | 0.0491 |
 | `goal_only` | 0.1806 | 0.1806 | 0.0588 | 0.0265 |
+| `stored_embedding` | 0.2491 | 0.2700 | 0.0777 | 0.0491 |
+| `stored_plus_context_goal` | 0.1840 | 0.2491 | 0.1076 | 0.0600 |
+| `stored_plus_full_name_context_goal` | 0.2309 | 0.2925 | 0.0958 | 0.0556 |
+| `stored_plus_full_name_goal` | 0.2491 | 0.2700 | 0.0777 | 0.0491 |
+| `stored_plus_goal_only` | 0.2266 | 0.2543 | 0.0651 | 0.0406 |
+| `stored_plus_theorem_id_goal` | 0.2491 | 0.2700 | 0.0779 | 0.0493 |
 | `theorem_id_goal` | 0.2387 | 0.2700 | 0.0755 | 0.0484 |
 
 ## Held-Out Test Set Metrics
@@ -574,7 +586,7 @@ This profile verifies that the learned premise ranker uses normalized LeanRank-d
 - Timing config matches current report config: `True`
 - Timing generated at: `2026-06-20T22:46:12.435080+00:00`
 - Timing report: `outputs/reports/pipeline_run_timings.json`
-- Evaluation internal total seconds: `24.94140063994564`
+- Evaluation internal total seconds: `26.384093748172745`
 - Evaluation timed substages: `7`
 
 | Stage | Seconds |
@@ -596,13 +608,13 @@ These timings split the `evaluate` pipeline stage into proof-state retrieval, th
 
 | Evaluation substage | Seconds | Queries | Backend |
 | --- | ---: | ---: | --- |
-| `test_reranked_proof_state_retrieval` | 14.4020 | 20 | batched_torch_cuda_then_rerank |
-| `val_proof_state_retrieval` | 6.8574 | 2822 | torch_cuda |
-| `test_proof_state_retrieval` | 0.9590 | 3053 | torch_cuda |
-| `val_proof_state_query_representation_diagnostic` | 0.8329 | 50 | n/a |
-| `test_proof_state_query_representation_diagnostic` | 0.6676 | 50 | n/a |
-| `test_theorem_retrieval` | 0.4308 | 1000 | torch_cuda |
-| `val_theorem_retrieval` | 0.3222 | 1000 | torch_cuda |
+| `test_reranked_proof_state_retrieval` | 14.4539 | 20 | batched_torch_cuda_then_rerank |
+| `val_proof_state_retrieval` | 6.9215 | 2822 | torch_cuda |
+| `val_proof_state_query_representation_diagnostic` | 1.6064 | 50 | n/a |
+| `test_proof_state_query_representation_diagnostic` | 1.1581 | 50 | n/a |
+| `test_proof_state_retrieval` | 0.9978 | 3053 | torch_cuda |
+| `test_theorem_retrieval` | 0.4331 | 1000 | torch_cuda |
+| `val_theorem_retrieval` | 0.3376 | 1000 | torch_cuda |
 
 ### Rerank Evaluation Cost Profile
 
@@ -614,11 +626,11 @@ The reranked proof-state diagnostic follows the slower homepage/API-style path. 
 - Sampled rerank queries: `20`
 - Full proof-state queries: `3053`
 - Sampled fraction of full proof-state eval: `0.006550933508024894`
-- Rerank seconds/query: `0.7200987580465152`
-- Batched embedding seconds/query: `0.0003141030190128783`
-- Rerank/batched seconds per query: `2292.55599105525`
-- Projected full rerank seconds: `2198.461508316011`
-- Projected full rerank minutes: `36.641025138600185`
+- Rerank seconds/query: `0.722693252505269`
+- Batched embedding seconds/query: `0.0003268397654947583`
+- Rerank/batched seconds per query: `2211.154604799333`
+- Projected full rerank seconds: `2206.382499898586`
+- Projected full rerank minutes: `36.77304166497643`
 - Sampled rerank Recall@10 delta: `0.0526104662069575`
 - Policy: keep reranked proof-state evaluation sampled for development and use full batched embedding evaluation for final held-out coverage
 
@@ -728,8 +740,8 @@ These gates summarize whether the committed performance evidence is strong enoug
 - Pipeline seconds per 100k processed rows: `170.99914395400992`
 - Slowest timed stage: `embed`
 - Saved pipeline evaluate seconds: `19.468068956863135`
-- Current standalone evaluation seconds: `24.94140063994564`
-- Timed/current evaluation ratio: `0.7805523530095367`
+- Current standalone evaluation seconds: `26.384093748172745`
+- Timed/current evaluation ratio: `0.737871429001097`
 - Primary bottleneck share: `0.2977710478575022`
 - Top-3 timed-stage share: `0.561019378074775`
 - Mean index speedup vs exact: `17.07151721843473`
@@ -765,9 +777,9 @@ These linear projections use the current timed pipeline as a capacity-planning b
 This profile records the local footprint of generated LeanRank-data artifacts. It is a practical scale-up signal because embeddings and ANN indexes can dominate disk usage before model training becomes the bottleneck.
 
 - Method: `filesystem_artifact_footprint_with_linear_scale_projection`
-- Total artifact bytes: `3052642989`
-- Total artifact GiB: `2.84299532789737`
-- Bytes per processed row: `10453.827202306755`
+- Total artifact bytes: `3052667030`
+- Total artifact GiB: `2.843017717823386`
+- Bytes per processed row: `10453.90953111516`
 - Unreferenced index artifact bytes: `1502501178`
 - Unreferenced index artifact count: `12`
 
@@ -775,7 +787,7 @@ This profile records the local footprint of generated LeanRank-data artifacts. I
 | --- | ---: | ---: | ---: |
 | `current_1x` | 292012 | 1.0000 | 2.8430 |
 | `current_2x` | 584024 | 2.0000 | 5.6860 |
-| `current_5x` | 1460060 | 5.0000 | 14.2150 |
+| `current_5x` | 1460060 | 5.0000 | 14.2151 |
 | `configured_source_rows` | 350000 | 1.1986 | 3.4076 |
 
 Largest generated artifact files:

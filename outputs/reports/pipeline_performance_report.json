@@ -396,35 +396,35 @@
             "candidate_k": 50,
             "evaluated_queries": 20,
             "name": "test_reranked_proof_state_retrieval",
-            "seconds": 14.401975160930306,
+            "seconds": 14.453865050105378,
             "split": "test"
           },
           {
             "actual_backend": "torch_cuda",
             "evaluated_queries": 2822,
             "name": "val_proof_state_retrieval",
-            "seconds": 6.857373162871227,
+            "seconds": 6.92148191598244,
             "split": "val"
+          },
+          {
+            "best_variant_by_recall": "stored_plus_goal_only",
+            "evaluated_queries": 50,
+            "name": "val_proof_state_query_representation_diagnostic",
+            "seconds": 1.6063684159889817,
+            "split": "val"
+          },
+          {
+            "best_variant_by_recall": "stored_plus_full_name_context_goal",
+            "evaluated_queries": 50,
+            "name": "test_proof_state_query_representation_diagnostic",
+            "seconds": 1.1580695090815425,
+            "split": "test"
           },
           {
             "actual_backend": "torch_cuda",
             "evaluated_queries": 3053,
             "name": "test_proof_state_retrieval",
-            "seconds": 0.9589565170463175,
-            "split": "test"
-          },
-          {
-            "best_variant_by_recall": "full_name_goal",
-            "evaluated_queries": 50,
-            "name": "val_proof_state_query_representation_diagnostic",
-            "seconds": 0.8328703090082854,
-            "split": "val"
-          },
-          {
-            "best_variant_by_recall": "full_name_goal",
-            "evaluated_queries": 50,
-            "name": "test_proof_state_query_representation_diagnostic",
-            "seconds": 0.6676025029737502,
+            "seconds": 0.997841804055497,
             "split": "test"
           },
           {
@@ -432,7 +432,7 @@
             "case_study_limit": 0,
             "evaluated_queries": 1000,
             "name": "test_theorem_retrieval",
-            "seconds": 0.43081551417708397,
+            "seconds": 0.433087405981496,
             "split": "test"
           },
           {
@@ -440,13 +440,13 @@
             "case_study_limit": 0,
             "evaluated_queries": 1000,
             "name": "val_theorem_retrieval",
-            "seconds": 0.3221506639383733,
+            "seconds": 0.33760711504146457,
             "split": "val"
           }
         ],
         "substage_count": 7,
-        "substage_seconds_total": 24.471743830945343,
-        "total_seconds": 24.94140063994564
+        "substage_seconds_total": 25.9083212162368,
+        "total_seconds": 26.384093748172745
       },
       "held_out_test_coverage": {
         "proof_state_configured_limit": null,
@@ -752,14 +752,14 @@
               "actual_backend": "torch_cuda",
               "evaluated_queries": 2822,
               "name": "val_proof_state_retrieval",
-              "seconds": 6.857373162871227,
+              "seconds": 6.92148191598244,
               "split": "val"
             },
             {
               "actual_backend": "torch_cuda",
               "evaluated_queries": 3053,
               "name": "test_proof_state_retrieval",
-              "seconds": 0.9589565170463175,
+              "seconds": 0.997841804055497,
               "split": "test"
             },
             {
@@ -767,7 +767,7 @@
               "case_study_limit": 0,
               "evaluated_queries": 1000,
               "name": "val_theorem_retrieval",
-              "seconds": 0.3221506639383733,
+              "seconds": 0.33760711504146457,
               "split": "val"
             },
             {
@@ -775,7 +775,7 @@
               "case_study_limit": 0,
               "evaluated_queries": 1000,
               "name": "test_theorem_retrieval",
-              "seconds": 0.43081551417708397,
+              "seconds": 0.433087405981496,
               "split": "test"
             },
             {
@@ -783,21 +783,21 @@
               "candidate_k": 50,
               "evaluated_queries": 20,
               "name": "test_reranked_proof_state_retrieval",
-              "seconds": 14.401975160930306,
+              "seconds": 14.453865050105378,
               "split": "test"
             },
             {
-              "best_variant_by_recall": "full_name_goal",
+              "best_variant_by_recall": "stored_plus_goal_only",
               "evaluated_queries": 50,
               "name": "val_proof_state_query_representation_diagnostic",
-              "seconds": 0.8328703090082854,
+              "seconds": 1.6063684159889817,
               "split": "val"
             },
             {
-              "best_variant_by_recall": "full_name_goal",
+              "best_variant_by_recall": "stored_plus_full_name_context_goal",
               "evaluated_queries": 50,
               "name": "test_proof_state_query_representation_diagnostic",
-              "seconds": 0.6676025029737502,
+              "seconds": 1.1580695090815425,
               "split": "test"
             }
           ],
@@ -805,14 +805,14 @@
             "test": null,
             "val": null
           },
-          "total_seconds": 24.94140063994564,
+          "total_seconds": 26.384093748172745,
           "use_gpu": true
         },
         "label_policy": "held-out test positive_edges are used only for evaluation",
         "task": "premise_ranking_and_theorem_guidance",
         "test": {
           "proof_state_query_representation_diagnostic": {
-            "best_variant_by_recall": "full_name_goal",
+            "best_variant_by_recall": "stored_plus_full_name_context_goal",
             "evaluated_queries": 50,
             "selection_metric": "Recall@100",
             "split": "test",
@@ -923,6 +923,288 @@
                   "gold_premises_total": 108,
                   "nDCG@100": 0.06432836873664868,
                   "nDCG@50": 0.06432836873664868
+                }
+              },
+              "stored_embedding": {
+                "backend_info": {
+                  "actual_backend": "torch_cuda",
+                  "actual_gpu_device": "cuda:0",
+                  "candidate_count": 127561,
+                  "fallback_reason": null,
+                  "query_count": 50,
+                  "query_representation": "stored_embedding",
+                  "requested_gpu_device": "cuda:0",
+                  "requested_use_gpu": true,
+                  "top_k": 100
+                },
+                "metrics": {
+                  "MAP": 0.04907959117211424,
+                  "MRR": 0.07771440677965351,
+                  "Recall@100": 0.26996527777777773,
+                  "Recall@50": 0.24913194444444442,
+                  "evaluated_queries": 50,
+                  "evaluated_retrievable_queries": 48,
+                  "gold_premise_coverage": 0.8796296296296297,
+                  "gold_premises_in_train_index": 95,
+                  "gold_premises_missing_from_train_index": 13,
+                  "gold_premises_total": 108,
+                  "nDCG@100": 0.10333235075672063,
+                  "nDCG@50": 0.09997725134512803
+                }
+              },
+              "stored_plus_context_goal": {
+                "backend_info": {
+                  "actual_backend": "fused_torch_cuda_torch_cuda",
+                  "actual_gpu_device": "cuda:0",
+                  "candidate_count": 127561,
+                  "fallback_reason": null,
+                  "fused_representations": [
+                    "stored_embedding",
+                    "context_goal"
+                  ],
+                  "query_count": 50,
+                  "query_representation": "stored_plus_context_goal",
+                  "requested_gpu_device": "cuda:0",
+                  "requested_use_gpu": true,
+                  "stored_backend": {
+                    "actual_backend": "torch_cuda",
+                    "actual_gpu_device": "cuda:0",
+                    "candidate_count": 127561,
+                    "fallback_reason": null,
+                    "query_count": 50,
+                    "requested_gpu_device": "cuda:0",
+                    "requested_use_gpu": true,
+                    "top_k": 100
+                  },
+                  "top_k": 100,
+                  "variant_backend": {
+                    "actual_backend": "torch_cuda",
+                    "actual_gpu_device": "cuda:0",
+                    "candidate_count": 127561,
+                    "fallback_reason": null,
+                    "query_count": 50,
+                    "requested_gpu_device": "cuda:0",
+                    "requested_use_gpu": true,
+                    "top_k": 100
+                  }
+                },
+                "metrics": {
+                  "MAP": 0.05996552641797719,
+                  "MRR": 0.10763453061776446,
+                  "Recall@100": 0.24913194444444442,
+                  "Recall@50": 0.18402777777777776,
+                  "evaluated_queries": 50,
+                  "evaluated_retrievable_queries": 48,
+                  "gold_premise_coverage": 0.8796296296296297,
+                  "gold_premises_in_train_index": 95,
+                  "gold_premises_missing_from_train_index": 13,
+                  "gold_premises_total": 108,
+                  "nDCG@100": 0.1084771952937514,
+                  "nDCG@50": 0.09607762616895778
+                }
+              },
+              "stored_plus_full_name_context_goal": {
+                "backend_info": {
+                  "actual_backend": "fused_torch_cuda_torch_cuda",
+                  "actual_gpu_device": "cuda:0",
+                  "candidate_count": 127561,
+                  "fallback_reason": null,
+                  "fused_representations": [
+                    "stored_embedding",
+                    "full_name_context_goal"
+                  ],
+                  "query_count": 50,
+                  "query_representation": "stored_plus_full_name_context_goal",
+                  "requested_gpu_device": "cuda:0",
+                  "requested_use_gpu": true,
+                  "stored_backend": {
+                    "actual_backend": "torch_cuda",
+                    "actual_gpu_device": "cuda:0",
+                    "candidate_count": 127561,
+                    "fallback_reason": null,
+                    "query_count": 50,
+                    "requested_gpu_device": "cuda:0",
+                    "requested_use_gpu": true,
+                    "top_k": 100
+                  },
+                  "top_k": 100,
+                  "variant_backend": {
+                    "actual_backend": "torch_cuda",
+                    "actual_gpu_device": "cuda:0",
+                    "candidate_count": 127561,
+                    "fallback_reason": null,
+                    "query_count": 50,
+                    "requested_gpu_device": "cuda:0",
+                    "requested_use_gpu": true,
+                    "top_k": 100
+                  }
+                },
+                "metrics": {
+                  "MAP": 0.055552060018936304,
+                  "MRR": 0.0958447872383965,
+                  "Recall@100": 0.2925347222222222,
+                  "Recall@50": 0.23090277777777776,
+                  "evaluated_queries": 50,
+                  "evaluated_retrievable_queries": 48,
+                  "gold_premise_coverage": 0.8796296296296297,
+                  "gold_premises_in_train_index": 95,
+                  "gold_premises_missing_from_train_index": 13,
+                  "gold_premises_total": 108,
+                  "nDCG@100": 0.11479692600362097,
+                  "nDCG@50": 0.10264768472516413
+                }
+              },
+              "stored_plus_full_name_goal": {
+                "backend_info": {
+                  "actual_backend": "fused_torch_cuda_torch_cuda",
+                  "actual_gpu_device": "cuda:0",
+                  "candidate_count": 127561,
+                  "fallback_reason": null,
+                  "fused_representations": [
+                    "stored_embedding",
+                    "full_name_goal"
+                  ],
+                  "query_count": 50,
+                  "query_representation": "stored_plus_full_name_goal",
+                  "requested_gpu_device": "cuda:0",
+                  "requested_use_gpu": true,
+                  "stored_backend": {
+                    "actual_backend": "torch_cuda",
+                    "actual_gpu_device": "cuda:0",
+                    "candidate_count": 127561,
+                    "fallback_reason": null,
+                    "query_count": 50,
+                    "requested_gpu_device": "cuda:0",
+                    "requested_use_gpu": true,
+                    "top_k": 100
+                  },
+                  "top_k": 100,
+                  "variant_backend": {
+                    "actual_backend": "torch_cuda",
+                    "actual_gpu_device": "cuda:0",
+                    "candidate_count": 127561,
+                    "fallback_reason": null,
+                    "query_count": 50,
+                    "requested_gpu_device": "cuda:0",
+                    "requested_use_gpu": true,
+                    "top_k": 100
+                  }
+                },
+                "metrics": {
+                  "MAP": 0.04907959117211424,
+                  "MRR": 0.07771440677965351,
+                  "Recall@100": 0.26996527777777773,
+                  "Recall@50": 0.24913194444444442,
+                  "evaluated_queries": 50,
+                  "evaluated_retrievable_queries": 48,
+                  "gold_premise_coverage": 0.8796296296296297,
+                  "gold_premises_in_train_index": 95,
+                  "gold_premises_missing_from_train_index": 13,
+                  "gold_premises_total": 108,
+                  "nDCG@100": 0.10333235075672063,
+                  "nDCG@50": 0.09997725134512803
+                }
+              },
+              "stored_plus_goal_only": {
+                "backend_info": {
+                  "actual_backend": "fused_torch_cuda_torch_cuda",
+                  "actual_gpu_device": "cuda:0",
+                  "candidate_count": 127561,
+                  "fallback_reason": null,
+                  "fused_representations": [
+                    "stored_embedding",
+                    "goal_only"
+                  ],
+                  "query_count": 50,
+                  "query_representation": "stored_plus_goal_only",
+                  "requested_gpu_device": "cuda:0",
+                  "requested_use_gpu": true,
+                  "stored_backend": {
+                    "actual_backend": "torch_cuda",
+                    "actual_gpu_device": "cuda:0",
+                    "candidate_count": 127561,
+                    "fallback_reason": null,
+                    "query_count": 50,
+                    "requested_gpu_device": "cuda:0",
+                    "requested_use_gpu": true,
+                    "top_k": 100
+                  },
+                  "top_k": 100,
+                  "variant_backend": {
+                    "actual_backend": "torch_cuda",
+                    "actual_gpu_device": "cuda:0",
+                    "candidate_count": 127561,
+                    "fallback_reason": null,
+                    "query_count": 50,
+                    "requested_gpu_device": "cuda:0",
+                    "requested_use_gpu": true,
+                    "top_k": 100
+                  }
+                },
+                "metrics": {
+                  "MAP": 0.040618771034293226,
+                  "MRR": 0.06513373390560541,
+                  "Recall@100": 0.25434027777777773,
+                  "Recall@50": 0.2265625,
+                  "evaluated_queries": 50,
+                  "evaluated_retrievable_queries": 48,
+                  "gold_premise_coverage": 0.8796296296296297,
+                  "gold_premises_in_train_index": 95,
+                  "gold_premises_missing_from_train_index": 13,
+                  "gold_premises_total": 108,
+                  "nDCG@100": 0.09479316914694415,
+                  "nDCG@50": 0.08914292863489554
+                }
+              },
+              "stored_plus_theorem_id_goal": {
+                "backend_info": {
+                  "actual_backend": "fused_torch_cuda_torch_cuda",
+                  "actual_gpu_device": "cuda:0",
+                  "candidate_count": 127561,
+                  "fallback_reason": null,
+                  "fused_representations": [
+                    "stored_embedding",
+                    "theorem_id_goal"
+                  ],
+                  "query_count": 50,
+                  "query_representation": "stored_plus_theorem_id_goal",
+                  "requested_gpu_device": "cuda:0",
+                  "requested_use_gpu": true,
+                  "stored_backend": {
+                    "actual_backend": "torch_cuda",
+                    "actual_gpu_device": "cuda:0",
+                    "candidate_count": 127561,
+                    "fallback_reason": null,
+                    "query_count": 50,
+                    "requested_gpu_device": "cuda:0",
+                    "requested_use_gpu": true,
+                    "top_k": 100
+                  },
+                  "top_k": 100,
+                  "variant_backend": {
+                    "actual_backend": "torch_cuda",
+                    "actual_gpu_device": "cuda:0",
+                    "candidate_count": 127561,
+                    "fallback_reason": null,
+                    "query_count": 50,
+                    "requested_gpu_device": "cuda:0",
+                    "requested_use_gpu": true,
+                    "top_k": 100
+                  }
+                },
+                "metrics": {
+                  "MAP": 0.04930305037017782,
+                  "MRR": 0.07794996185117153,
+                  "Recall@100": 0.26996527777777773,
+                  "Recall@50": 0.24913194444444442,
+                  "evaluated_queries": 50,
+                  "evaluated_retrievable_queries": 48,
+                  "gold_premise_coverage": 0.8796296296296297,
+                  "gold_premises_in_train_index": 95,
+                  "gold_premises_missing_from_train_index": 13,
+                  "gold_premises_total": 108,
+                  "nDCG@100": 0.1035964904228696,
+                  "nDCG@50": 0.10026205139672749
                 }
               },
               "theorem_id_goal": {
@@ -1904,7 +2186,7 @@
         ],
         "validation": {
           "proof_state_query_representation_diagnostic": {
-            "best_variant_by_recall": "full_name_goal",
+            "best_variant_by_recall": "stored_plus_goal_only",
             "evaluated_queries": 50,
             "selection_metric": "Recall@100",
             "split": "val",
@@ -2015,6 +2297,288 @@
                   "gold_premises_total": 120,
                   "nDCG@100": 0.09161326371997847,
                   "nDCG@50": 0.08680674040648662
+                }
+              },
+              "stored_embedding": {
+                "backend_info": {
+                  "actual_backend": "torch_cuda",
+                  "actual_gpu_device": "cuda:0",
+                  "candidate_count": 127561,
+                  "fallback_reason": null,
+                  "query_count": 50,
+                  "query_representation": "stored_embedding",
+                  "requested_gpu_device": "cuda:0",
+                  "requested_use_gpu": true,
+                  "top_k": 100
+                },
+                "metrics": {
+                  "MAP": 0.04809809749496615,
+                  "MRR": 0.0745358563591956,
+                  "Recall@100": 0.2604166666666667,
+                  "Recall@50": 0.23958333333333334,
+                  "evaluated_queries": 50,
+                  "evaluated_retrievable_queries": 48,
+                  "gold_premise_coverage": 0.9333333333333333,
+                  "gold_premises_in_train_index": 112,
+                  "gold_premises_missing_from_train_index": 8,
+                  "gold_premises_total": 120,
+                  "nDCG@100": 0.10044147825972982,
+                  "nDCG@50": 0.09680432346706219
+                }
+              },
+              "stored_plus_context_goal": {
+                "backend_info": {
+                  "actual_backend": "fused_torch_cuda_torch_cuda",
+                  "actual_gpu_device": "cuda:0",
+                  "candidate_count": 127561,
+                  "fallback_reason": null,
+                  "fused_representations": [
+                    "stored_embedding",
+                    "context_goal"
+                  ],
+                  "query_count": 50,
+                  "query_representation": "stored_plus_context_goal",
+                  "requested_gpu_device": "cuda:0",
+                  "requested_use_gpu": true,
+                  "stored_backend": {
+                    "actual_backend": "torch_cuda",
+                    "actual_gpu_device": "cuda:0",
+                    "candidate_count": 127561,
+                    "fallback_reason": null,
+                    "query_count": 50,
+                    "requested_gpu_device": "cuda:0",
+                    "requested_use_gpu": true,
+                    "top_k": 100
+                  },
+                  "top_k": 100,
+                  "variant_backend": {
+                    "actual_backend": "torch_cuda",
+                    "actual_gpu_device": "cuda:0",
+                    "candidate_count": 127561,
+                    "fallback_reason": null,
+                    "query_count": 50,
+                    "requested_gpu_device": "cuda:0",
+                    "requested_use_gpu": true,
+                    "top_k": 100
+                  }
+                },
+                "metrics": {
+                  "MAP": 0.03726229618179034,
+                  "MRR": 0.05397672967051833,
+                  "Recall@100": 0.23958333333333334,
+                  "Recall@50": 0.16927083333333334,
+                  "evaluated_queries": 50,
+                  "evaluated_retrievable_queries": 48,
+                  "gold_premise_coverage": 0.9333333333333333,
+                  "gold_premises_in_train_index": 112,
+                  "gold_premises_missing_from_train_index": 8,
+                  "gold_premises_total": 120,
+                  "nDCG@100": 0.08313380950378314,
+                  "nDCG@50": 0.07077108872157029
+                }
+              },
+              "stored_plus_full_name_context_goal": {
+                "backend_info": {
+                  "actual_backend": "fused_torch_cuda_torch_cuda",
+                  "actual_gpu_device": "cuda:0",
+                  "candidate_count": 127561,
+                  "fallback_reason": null,
+                  "fused_representations": [
+                    "stored_embedding",
+                    "full_name_context_goal"
+                  ],
+                  "query_count": 50,
+                  "query_representation": "stored_plus_full_name_context_goal",
+                  "requested_gpu_device": "cuda:0",
+                  "requested_use_gpu": true,
+                  "stored_backend": {
+                    "actual_backend": "torch_cuda",
+                    "actual_gpu_device": "cuda:0",
+                    "candidate_count": 127561,
+                    "fallback_reason": null,
+                    "query_count": 50,
+                    "requested_gpu_device": "cuda:0",
+                    "requested_use_gpu": true,
+                    "top_k": 100
+                  },
+                  "top_k": 100,
+                  "variant_backend": {
+                    "actual_backend": "torch_cuda",
+                    "actual_gpu_device": "cuda:0",
+                    "candidate_count": 127561,
+                    "fallback_reason": null,
+                    "query_count": 50,
+                    "requested_gpu_device": "cuda:0",
+                    "requested_use_gpu": true,
+                    "top_k": 100
+                  }
+                },
+                "metrics": {
+                  "MAP": 0.04614329305533904,
+                  "MRR": 0.06688034540388503,
+                  "Recall@100": 0.2604166666666667,
+                  "Recall@50": 0.1953125,
+                  "evaluated_queries": 50,
+                  "evaluated_retrievable_queries": 48,
+                  "gold_premise_coverage": 0.9333333333333333,
+                  "gold_premises_in_train_index": 112,
+                  "gold_premises_missing_from_train_index": 8,
+                  "gold_premises_total": 120,
+                  "nDCG@100": 0.09650453312786826,
+                  "nDCG@50": 0.0852389923597559
+                }
+              },
+              "stored_plus_full_name_goal": {
+                "backend_info": {
+                  "actual_backend": "fused_torch_cuda_torch_cuda",
+                  "actual_gpu_device": "cuda:0",
+                  "candidate_count": 127561,
+                  "fallback_reason": null,
+                  "fused_representations": [
+                    "stored_embedding",
+                    "full_name_goal"
+                  ],
+                  "query_count": 50,
+                  "query_representation": "stored_plus_full_name_goal",
+                  "requested_gpu_device": "cuda:0",
+                  "requested_use_gpu": true,
+                  "stored_backend": {
+                    "actual_backend": "torch_cuda",
+                    "actual_gpu_device": "cuda:0",
+                    "candidate_count": 127561,
+                    "fallback_reason": null,
+                    "query_count": 50,
+                    "requested_gpu_device": "cuda:0",
+                    "requested_use_gpu": true,
+                    "top_k": 100
+                  },
+                  "top_k": 100,
+                  "variant_backend": {
+                    "actual_backend": "torch_cuda",
+                    "actual_gpu_device": "cuda:0",
+                    "candidate_count": 127561,
+                    "fallback_reason": null,
+                    "query_count": 50,
+                    "requested_gpu_device": "cuda:0",
+                    "requested_use_gpu": true,
+                    "top_k": 100
+                  }
+                },
+                "metrics": {
+                  "MAP": 0.04809809749496615,
+                  "MRR": 0.0745358563591956,
+                  "Recall@100": 0.2604166666666667,
+                  "Recall@50": 0.23958333333333334,
+                  "evaluated_queries": 50,
+                  "evaluated_retrievable_queries": 48,
+                  "gold_premise_coverage": 0.9333333333333333,
+                  "gold_premises_in_train_index": 112,
+                  "gold_premises_missing_from_train_index": 8,
+                  "gold_premises_total": 120,
+                  "nDCG@100": 0.10044147825972982,
+                  "nDCG@50": 0.09680432346706219
+                }
+              },
+              "stored_plus_goal_only": {
+                "backend_info": {
+                  "actual_backend": "fused_torch_cuda_torch_cuda",
+                  "actual_gpu_device": "cuda:0",
+                  "candidate_count": 127561,
+                  "fallback_reason": null,
+                  "fused_representations": [
+                    "stored_embedding",
+                    "goal_only"
+                  ],
+                  "query_count": 50,
+                  "query_representation": "stored_plus_goal_only",
+                  "requested_gpu_device": "cuda:0",
+                  "requested_use_gpu": true,
+                  "stored_backend": {
+                    "actual_backend": "torch_cuda",
+                    "actual_gpu_device": "cuda:0",
+                    "candidate_count": 127561,
+                    "fallback_reason": null,
+                    "query_count": 50,
+                    "requested_gpu_device": "cuda:0",
+                    "requested_use_gpu": true,
+                    "top_k": 100
+                  },
+                  "top_k": 100,
+                  "variant_backend": {
+                    "actual_backend": "torch_cuda",
+                    "actual_gpu_device": "cuda:0",
+                    "candidate_count": 127561,
+                    "fallback_reason": null,
+                    "query_count": 50,
+                    "requested_gpu_device": "cuda:0",
+                    "requested_use_gpu": true,
+                    "top_k": 100
+                  }
+                },
+                "metrics": {
+                  "MAP": 0.05276567557096351,
+                  "MRR": 0.07076884614837578,
+                  "Recall@100": 0.2682291666666667,
+                  "Recall@50": 0.23958333333333334,
+                  "evaluated_queries": 50,
+                  "evaluated_retrievable_queries": 48,
+                  "gold_premise_coverage": 0.9333333333333333,
+                  "gold_premises_in_train_index": 112,
+                  "gold_premises_missing_from_train_index": 8,
+                  "gold_premises_total": 120,
+                  "nDCG@100": 0.10569978370995382,
+                  "nDCG@50": 0.10038195304820181
+                }
+              },
+              "stored_plus_theorem_id_goal": {
+                "backend_info": {
+                  "actual_backend": "fused_torch_cuda_torch_cuda",
+                  "actual_gpu_device": "cuda:0",
+                  "candidate_count": 127561,
+                  "fallback_reason": null,
+                  "fused_representations": [
+                    "stored_embedding",
+                    "theorem_id_goal"
+                  ],
+                  "query_count": 50,
+                  "query_representation": "stored_plus_theorem_id_goal",
+                  "requested_gpu_device": "cuda:0",
+                  "requested_use_gpu": true,
+                  "stored_backend": {
+                    "actual_backend": "torch_cuda",
+                    "actual_gpu_device": "cuda:0",
+                    "candidate_count": 127561,
+                    "fallback_reason": null,
+                    "query_count": 50,
+                    "requested_gpu_device": "cuda:0",
+                    "requested_use_gpu": true,
+                    "top_k": 100
+                  },
+                  "top_k": 100,
+                  "variant_backend": {
+                    "actual_backend": "torch_cuda",
+                    "actual_gpu_device": "cuda:0",
+                    "candidate_count": 127561,
+                    "fallback_reason": null,
+                    "query_count": 50,
+                    "requested_gpu_device": "cuda:0",
+                    "requested_use_gpu": true,
+                    "top_k": 100
+                  }
+                },
+                "metrics": {
+                  "MAP": 0.04984283257372598,
+                  "MRR": 0.07660794609589495,
+                  "Recall@100": 0.2604166666666667,
+                  "Recall@50": 0.2552083333333333,
+                  "evaluated_queries": 50,
+                  "evaluated_retrievable_queries": 48,
+                  "gold_premise_coverage": 0.9333333333333333,
+                  "gold_premises_in_train_index": 112,
+                  "gold_premises_missing_from_train_index": 8,
+                  "gold_premises_total": 120,
+                  "nDCG@100": 0.1021886968241495,
+                  "nDCG@50": 0.10077547759004435
                 }
               },
               "theorem_id_goal": {
@@ -3453,7 +4017,7 @@
         "outputs/reports",
         "homepage/assets"
       ],
-      "bytes_per_processed_row": 10453.827202306755,
+      "bytes_per_processed_row": 10453.90953111516,
       "directories": {
         "data/processed": {
           "bytes": 46533700,
@@ -3462,7 +4026,7 @@
           "path": "data/processed"
         },
         "homepage/assets": {
-          "bytes": 2053650,
+          "bytes": 2053624,
           "exists": true,
           "file_count": 11,
           "path": "homepage/assets"
@@ -3480,7 +4044,7 @@
           "path": "outputs/indexes"
         },
         "outputs/reports": {
-          "bytes": 19213400,
+          "bytes": 19237467,
           "exists": true,
           "file_count": 39,
           "path": "outputs/reports"
@@ -3536,36 +4100,36 @@
       ],
       "projections": [
         {
-          "estimated_artifact_bytes": 3052642989.0,
-          "estimated_artifact_gib": 2.84299532789737,
+          "estimated_artifact_bytes": 3052667030.0,
+          "estimated_artifact_gib": 2.843017717823386,
           "label": "current_1x",
           "scale_factor_vs_current": 1.0,
           "target_processed_rows": 292012
         },
         {
-          "estimated_artifact_bytes": 6105285978.0,
-          "estimated_artifact_gib": 5.68599065579474,
+          "estimated_artifact_bytes": 6105334060.0,
+          "estimated_artifact_gib": 5.686035435646772,
           "label": "current_2x",
           "scale_factor_vs_current": 2.0,
           "target_processed_rows": 584024
         },
         {
-          "estimated_artifact_bytes": 15263214945.0,
-          "estimated_artifact_gib": 14.21497663948685,
+          "estimated_artifact_bytes": 15263335150.0,
+          "estimated_artifact_gib": 14.215088589116931,
           "label": "current_5x",
           "scale_factor_vs_current": 5.0,
           "target_processed_rows": 1460060
         },
         {
-          "estimated_artifact_bytes": 3658839520.807364,
-          "estimated_artifact_gib": 3.407559842623178,
+          "estimated_artifact_bytes": 3658868335.890306,
+          "estimated_artifact_gib": 3.407586678760411,
           "label": "configured_source_rows",
           "scale_factor_vs_current": 1.1985808802377984,
           "target_processed_rows": 350000
         }
       ],
-      "total_artifact_bytes": 3052642989,
-      "total_artifact_gib": 2.84299532789737,
+      "total_artifact_bytes": 3052667030,
+      "total_artifact_gib": 2.843017717823386,
       "unreferenced_index_artifact_bytes": 1502501178,
       "unreferenced_index_artifact_count": 12,
       "unreferenced_index_artifact_gib": 1.3993132654577494,
@@ -3731,10 +4295,10 @@
     "embedding_rows_per_second": 489.4299854857369,
     "estimated_seconds_at_requested_source_rows": 598.4970038390347,
     "evaluation_timing_delta": {
-      "current_evaluation_seconds": 24.94140063994564,
+      "current_evaluation_seconds": 26.384093748172745,
       "current_faster_than_pipeline_timing": false,
       "timed_pipeline_evaluate_seconds": 19.468068956863135,
-      "timed_to_current_ratio": 0.7805523530095367
+      "timed_to_current_ratio": 0.737871429001097
     },
     "execution_mode_summary": {
       "ann_index_active": true,
@@ -4028,23 +4592,23 @@
       },
       "query_representation_diagnostic": {
         "test": {
-          "best_variant_by_recall": "full_name_goal",
+          "best_variant_by_recall": "stored_plus_full_name_context_goal",
           "evaluated_queries": 50,
           "selection_metric": "Recall@100"
         },
         "validation": {
-          "best_variant_by_recall": "full_name_goal",
+          "best_variant_by_recall": "stored_plus_goal_only",
           "evaluated_queries": 50,
           "selection_metric": "Recall@100"
         },
-        "validation_test_best_variant_match": true
+        "validation_test_best_variant_match": false
       },
       "recommended_sequence": [
         {
           "area": "proof_state_query_and_embedding",
           "current_value": 0.23617207100657536,
           "priority": 1,
-          "reason": "Proof-state gold premises are often absent from the top-100 candidate pool, so top-k reranking cannot recover them. Validation query diagnostic currently favors `full_name_goal`.",
+          "reason": "Proof-state gold premises are often absent from the top-100 candidate pool, so top-k reranking cannot recover them. Validation query diagnostic currently favors `stored_plus_goal_only`.",
           "target_metric": "proof_state Recall@100"
         },
         {
@@ -4214,8 +4778,8 @@
     "requested_source_rows": 350000,
     "rerank_evaluation_cost_profile": {
       "batched_embedding_recall_at_10": 0.11624918291584951,
-      "batched_embedding_seconds": 0.9589565170463175,
-      "batched_embedding_seconds_per_query": 0.0003141030190128783,
+      "batched_embedding_seconds": 0.997841804055497,
+      "batched_embedding_seconds_per_query": 0.0003268397654947583,
       "candidate_k": 50,
       "candidate_k_values": [
         50,
@@ -4224,13 +4788,13 @@
       "full_proof_state_queries": 3053,
       "method": "project_full_rerank_cost_from_user_facing_sampled_rerank_diagnostic",
       "policy": "keep reranked proof-state evaluation sampled for development and use full batched embedding evaluation for final held-out coverage",
-      "projected_full_rerank_minutes": 36.641025138600185,
-      "projected_full_rerank_seconds": 2198.461508316011,
+      "projected_full_rerank_minutes": 36.77304166497643,
+      "projected_full_rerank_seconds": 2206.382499898586,
       "rerank_backend": "batched_torch_cuda_then_rerank",
-      "rerank_seconds": 14.401975160930306,
-      "rerank_seconds_per_query": 0.7200987580465152,
+      "rerank_seconds": 14.453865050105378,
+      "rerank_seconds_per_query": 0.722693252505269,
       "rerank_stage_name": "test_reranked_proof_state_retrieval",
-      "rerank_to_batched_seconds_per_query_ratio": 2292.55599105525,
+      "rerank_to_batched_seconds_per_query_ratio": 2211.154604799333,
       "reranked_recall_at_10": 0.16885964912280702,
       "sampled_fraction_of_full_proof_state_eval": 0.006550933508024894,
       "sampled_rerank_queries": 20,

@@ -740,12 +740,43 @@ def _evaluate_proof_state_query_representations(
         for proof_state_id in query_ids
     }
     train_premise_ids = _embedding_ids("train", "Premise")
+    train_premise_matrix = _load_embedding("train", "premise")
+    proof_state_embedding_ids = _embedding_ids(split, "ProofState")
+    proof_state_row = {proof_state_id: idx for idx, proof_state_id in enumerate(proof_state_embedding_ids)}
+    variants_by_query = {
+        proof_state_id: _proof_state_query_variants(proof_states_by_id.loc[proof_state_id])
+        for proof_state_id in query_ids
+    }
     variant_texts: dict[str, list[str]] = {}
-    for proof_state_id in query_ids:
-        variants = _proof_state_query_variants(proof_states_by_id.loc[proof_state_id])
+    for variants in variants_by_query.values():
         for variant_name, text in variants.items():
             variant_texts.setdefault(variant_name, []).append(text)
     results = {}
+    stored_query_ids = [proof_state_id for proof_state_id in query_ids if proof_state_id in proof_state_row]
+    stored_matrix_all = _load_embedding(split, "proof_state")
+    stored_query_matrix = (
+        stored_matrix_all[[proof_state_row[proof_state_id] for proof_state_id in stored_query_ids]]
+        if stored_query_ids
+        else np.zeros((0, train_premise_matrix.shape[1]), dtype=np.float32)
+    )
+    if stored_query_ids:
+        stored_rows, _, stored_backend_info = _ranking_rows_from_embeddings(
+            query_ids=stored_query_ids,
+            query_matrix=stored_query_matrix,
+            gold_by_query=gold_by_query,
+            query_info=query_info,
+            train_premise_ids=train_premise_ids,
+            train_premises=train_premises,
+            top_ks=top_ks,
+            batch_size=batch_size,
+            use_gpu=use_gpu,
+            gpu_device=gpu_device,
+        )
+        stored_backend_info["query_representation"] = "stored_embedding"
+        results["stored_embedding"] = {
+            "metrics": _metric_summary(stored_rows, top_ks),
+            "backend_info": stored_backend_info,
+        }
     for variant_name, texts in variant_texts.items():
         if len(texts) != len(query_ids):
             continue
@@ -765,6 +796,57 @@ def _evaluate_proof_state_query_representations(
         results[variant_name] = {
             "metrics": _metric_summary(rows, top_ks),
             "backend_info": backend_info,
+        }
+        fused_query_ids = [
+            proof_state_id
+            for proof_state_id in stored_query_ids
+            if variant_name in variants_by_query[proof_state_id]
+        ]
+        if not fused_query_ids:
+            continue
+        fused_texts = [variants_by_query[proof_state_id][variant_name] for proof_state_id in fused_query_ids]
+        fused_stored_matrix = stored_matrix_all[[proof_state_row[proof_state_id] for proof_state_id in fused_query_ids]]
+        fused_variant_matrix = _encode_diagnostic_queries(fused_texts)
+        stored_neighbors, stored_backend = _batched_topk(
+            fused_stored_matrix,
+            train_premise_matrix,
+            max(top_ks),
+            batch_size=batch_size,
+            use_gpu=use_gpu,
+            gpu_device=gpu_device,
+        )
+        variant_neighbors, variant_backend = _batched_topk(
+            fused_variant_matrix,
+            train_premise_matrix,
+            max(top_ks),
+            batch_size=batch_size,
+            use_gpu=use_gpu,
+            gpu_device=gpu_device,
+        )
+        fused_rows = []
+        for proof_state_id, stored_neighbor_idx, variant_neighbor_idx in zip(
+            fused_query_ids,
+            stored_neighbors,
+            variant_neighbors,
+            strict=True,
+        ):
+            retrieved_ids = _fuse_neighbor_rows([stored_neighbor_idx, variant_neighbor_idx], train_premise_ids, max(top_ks))
+            fused_rows.append(
+                {
+                    **query_info.get(proof_state_id, {}),
+                    **_ranking_row(retrieved_ids, gold_by_query.get(proof_state_id, set()), train_premises, top_ks),
+                }
+            )
+        results[f"stored_plus_{variant_name}"] = {
+            "metrics": _metric_summary(fused_rows, top_ks),
+            "backend_info": {
+                **variant_backend,
+                "actual_backend": f"fused_{stored_backend.get('actual_backend', 'stored')}_{variant_backend.get('actual_backend', 'query')}",
+                "query_representation": f"stored_plus_{variant_name}",
+                "fused_representations": ["stored_embedding", variant_name],
+                "stored_backend": stored_backend,
+                "variant_backend": variant_backend,
+            },
         }
     recall_key = f"Recall@{max(top_ks)}"
     best_variant = max(results, key=lambda name: float(results[name]["metrics"].get(recall_key, 0.0))) if results else None

@@ -86,6 +86,65 @@ def test_full_heldout_override_removes_core_evaluation_limits(tmp_path, monkeypa
     assert data["evaluation_scope"]["proof_state_query_representation"] == "stored_embedding"
 
 
+def test_query_representation_diagnostic_includes_stored_and_fused_variants(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    write_parquet(
+        pd.DataFrame(
+            [
+                {
+                    "id": "ps:a",
+                    "full_name": "Mathlib.A",
+                    "theorem_id": "thm:a",
+                    "context": "x : Nat",
+                    "goal_text": "x = x",
+                    "domain_tag": "Logic",
+                    "subdomain_tag": "Eq",
+                }
+            ]
+        ),
+        "data/processed/val/proof_states.parquet",
+    )
+    write_parquet(
+        pd.DataFrame([{"proof_state_id": "ps:a", "premise_id": "premise:eq_refl"}]),
+        "data/processed/val/positive_edges.parquet",
+    )
+
+    def fake_embedding_ids(split: str, entity_type: str) -> list[str]:
+        if entity_type == "Premise":
+            return ["premise:miss", "premise:eq_refl"]
+        if entity_type == "ProofState":
+            return ["ps:a"]
+        return []
+
+    def fake_load_embedding(split: str, kind: str) -> np.ndarray:
+        if split == "train" and kind == "premise":
+            return np.asarray([[1.0, 0.0], [0.0, 1.0]], dtype=np.float32)
+        if split == "val" and kind == "proof_state":
+            return np.asarray([[1.0, 0.0]], dtype=np.float32)
+        raise AssertionError((split, kind))
+
+    monkeypatch.setattr(evaluate, "_embedding_ids", fake_embedding_ids)
+    monkeypatch.setattr(evaluate, "_load_embedding", fake_load_embedding)
+    monkeypatch.setattr(evaluate, "_encode_diagnostic_queries", lambda texts: np.asarray([[0.0, 1.0] for _ in texts], dtype=np.float32))
+
+    result = evaluate._evaluate_proof_state_query_representations(
+        "val",
+        [1, 2],
+        {"premise:eq_refl"},
+        max_examples=1,
+        batch_size=4,
+        use_gpu=False,
+        gpu_device="cuda:0",
+    )
+
+    variants = result["variants"]
+    assert "stored_embedding" in variants
+    assert "full_name_goal" in variants
+    assert "stored_plus_full_name_goal" in variants
+    assert variants["stored_plus_full_name_goal"]["backend_info"]["fused_representations"] == ["stored_embedding", "full_name_goal"]
+    assert result["best_variant_by_recall"] in variants
+
+
 def test_theorem_evaluation_skips_case_study_query_text_when_disabled(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     (tmp_path / "data/processed/test").mkdir(parents=True)
