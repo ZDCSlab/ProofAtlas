@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Any
 
 import joblib
 import pandas as pd
@@ -13,7 +14,7 @@ from .utils import SPLITS, load_config, write_json, write_parquet
 def _texts(split: str) -> tuple[pd.DataFrame, pd.DataFrame]:
     ps = pd.read_parquet(f"data/processed/{split}/proof_states.parquet")
     prem = pd.read_parquet(f"data/processed/{split}/premises.parquet")
-    ps_text = ps["context"].fillna("") + " " + ps["goal_text"].fillna("")
+    ps_text = ps["full_name"].fillna("") + " " + ps["goal_text"].fillna("")
     prem_text = prem["full_name"].fillna("") + " " + prem["code"].fillna("") + " " + prem["file_path"].fillna("")
     return ps.assign(_text=ps_text), prem.assign(_text=prem_text)
 
@@ -67,14 +68,16 @@ def _run_tfidf() -> None:
             ps, prem = _texts(split)
         except FileNotFoundError:
             continue
-        ps_x = vectorizer.transform(ps["_text"])
-        prem_x = vectorizer.transform(prem["_text"])
+        dim = len(vectorizer.get_feature_names_out())
+        ps_x = vectorizer.transform(ps["_text"]) if len(ps) else sparse.csr_matrix((0, dim))
+        prem_x = vectorizer.transform(prem["_text"]) if len(prem) else sparse.csr_matrix((0, dim))
         _write_embeddings(split, ps, prem, ps_x, prem_x)
 
 
 def _run_sentence_transformers(
     model_name: str,
     device: str | None = None,
+    devices: list[str] | None = None,
     batch_size: int = 128,
     query_prefix: str = "",
     passage_prefix: str = "",
@@ -86,18 +89,28 @@ def _run_sentence_transformers(
             "SentenceTransformer embeddings require the optional dependency: "
             "pip install -e '.[hf]'"
         ) from exc
+    use_multi_process = bool(devices and len(devices) > 1)
     Path("outputs/embeddings").mkdir(parents=True, exist_ok=True)
-    model = SentenceTransformer(model_name, device=device)
-    for split in SPLITS + ["demo"]:
-        try:
-            ps, prem = _texts(split)
-        except FileNotFoundError:
-            continue
-        ps_texts = [query_prefix + text for text in ps["_text"].tolist()]
-        prem_texts = [passage_prefix + text for text in prem["_text"].tolist()]
-        ps_x = model.encode(ps_texts, normalize_embeddings=True, show_progress_bar=True, batch_size=batch_size)
-        prem_x = model.encode(prem_texts, normalize_embeddings=True, show_progress_bar=True, batch_size=batch_size)
-        _write_embeddings(split, ps, prem, ps_x, prem_x)
+    model = SentenceTransformer(model_name, device="cpu" if use_multi_process else device)
+    pool: dict[str, Any] | None = model.start_multi_process_pool(target_devices=devices) if use_multi_process else None
+    try:
+        for split in SPLITS + ["demo"]:
+            try:
+                ps, prem = _texts(split)
+            except FileNotFoundError:
+                continue
+            ps_texts = [query_prefix + text for text in ps["_text"].tolist()]
+            prem_texts = [passage_prefix + text for text in prem["_text"].tolist()]
+            if pool is not None:
+                ps_x = model.encode_multi_process(ps_texts, pool, normalize_embeddings=True, batch_size=batch_size, show_progress_bar=True)
+                prem_x = model.encode_multi_process(prem_texts, pool, normalize_embeddings=True, batch_size=batch_size, show_progress_bar=True)
+            else:
+                ps_x = model.encode(ps_texts, normalize_embeddings=True, show_progress_bar=True, batch_size=batch_size)
+                prem_x = model.encode(prem_texts, normalize_embeddings=True, show_progress_bar=True, batch_size=batch_size)
+            _write_embeddings(split, ps, prem, ps_x, prem_x)
+    finally:
+        if pool is not None:
+            model.stop_multi_process_pool(pool)
 
 
 def run(config_path: str) -> None:
@@ -106,13 +119,16 @@ def run(config_path: str) -> None:
     backend = embedding_config.get("backend", "tfidf")
     model_name = embedding_config.get("model_name", "sentence-transformers/all-MiniLM-L6-v2")
     device = embedding_config.get("device")
+    devices = embedding_config.get("devices")
+    if isinstance(devices, str):
+        devices = [part.strip() for part in devices.split(",") if part.strip()]
     batch_size = int(embedding_config.get("batch_size", 128))
     query_prefix = embedding_config.get("query_prefix", "")
     passage_prefix = embedding_config.get("passage_prefix", "")
     if backend == "tfidf":
         _run_tfidf()
     elif backend in {"sentence_transformers", "sentence-transformer", "hf"}:
-        _run_sentence_transformers(model_name, device=device, batch_size=batch_size, query_prefix=query_prefix, passage_prefix=passage_prefix)
+        _run_sentence_transformers(model_name, device=device, devices=devices, batch_size=batch_size, query_prefix=query_prefix, passage_prefix=passage_prefix)
     else:
         raise ValueError(f"Unknown embedding backend: {backend}")
     write_json(
@@ -121,8 +137,12 @@ def run(config_path: str) -> None:
             "backend": backend,
             "model_name": model_name if backend != "tfidf" else None,
             "device": device if backend != "tfidf" else None,
+            "devices": devices if backend != "tfidf" else None,
+            "multi_process": bool(devices and len(devices) > 1) if backend != "tfidf" else False,
             "batch_size": batch_size if backend != "tfidf" else None,
             "query_prefix": query_prefix if backend != "tfidf" else None,
             "passage_prefix": passage_prefix if backend != "tfidf" else None,
+            "proof_state_text_template": "full_name + goal_text",
+            "premise_text_template": "full_name + code + file_path",
         },
     )

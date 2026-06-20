@@ -5,7 +5,7 @@ from typing import Any
 
 import pandas as pd
 from scipy import sparse
-from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.neighbors import NearestNeighbors
 
 
 def _jaccard(left: set[str], right: set[str]) -> float:
@@ -39,13 +39,21 @@ def theorem_similarity_rows(split: str, top_k: int = 10) -> list[dict[str, Any]]
     embedding_ids = _theorem_embedding_ids(split)
     if not embedding_ids:
         embedding_ids = ps["theorem_id"].drop_duplicates().tolist()
-    tfidf = cosine_similarity(thm_x) if thm_x.shape[0] else []
-    tfidf_lookup = {
-        (src, dst): float(tfidf[i, j])
-        for i, src in enumerate(embedding_ids)
-        for j, dst in enumerate(embedding_ids)
-        if i != j
-    }
+    embedding_row = {theorem_id: idx for idx, theorem_id in enumerate(embedding_ids)}
+    neighbor_lookup: dict[str, list[tuple[str, float]]] = {}
+    if thm_x.shape[0] > 1 and embedding_ids:
+        n_neighbors = min(thm_x.shape[0], max(top_k * 8 + 1, top_k + 1))
+        neighbors = NearestNeighbors(n_neighbors=n_neighbors, metric="cosine", algorithm="brute")
+        neighbors.fit(thm_x)
+        distances, indices = neighbors.kneighbors(thm_x)
+        for src_idx, src in enumerate(embedding_ids):
+            rows_for_src = []
+            for distance, dst_idx in zip(distances[src_idx], indices[src_idx], strict=True):
+                dst = embedding_ids[int(dst_idx)]
+                if src == dst:
+                    continue
+                rows_for_src.append((dst, max(0.0, 1.0 - float(distance))))
+            neighbor_lookup[src] = rows_for_src
     ps_to_thm = ps.set_index("id")["theorem_id"].to_dict()
     premise_sets: dict[str, set[str]] = {tid: set() for tid in thm["id"]}
     for row in pos.to_dict(orient="records"):
@@ -65,19 +73,22 @@ def theorem_similarity_rows(split: str, top_k: int = 10) -> list[dict[str, Any]]
         src_info = thm_lookup[src]
         src_features = feature_lookup.get(src, {})
         scored = []
-        for dst in ids:
+        candidates = neighbor_lookup.get(src, [])
+        if not candidates:
+            src_idx = embedding_row.get(src)
+            candidates = [(dst, 0.0) for dst in ids if dst != src and (src_idx is None or dst in embedding_row)]
+        for dst, tfidf_score in candidates:
             if src == dst:
                 continue
             dst_info = thm_lookup[dst]
             dst_features = feature_lookup.get(dst, {})
-            tfidf_score = tfidf_lookup.get((src, dst), 0.0)
             shared_premise_score = _jaccard(premise_sets.get(src, set()), premise_sets.get(dst, set()))
             same_domain_score = float(src_info.get("domain_tag") == dst_info.get("domain_tag"))
             same_namespace_score = float(_namespace(src_info.get("full_name", "")) == _namespace(dst_info.get("full_name", "")))
             file_namespace_score = max(same_domain_score, same_namespace_score)
             technique_score = _jaccard(technique_sets.get(src, set()), technique_sets.get(dst, set()))
-            src_diff = float(src_features.get("mean_proof_state_difficulty", 0.0))
-            dst_diff = float(dst_features.get("mean_proof_state_difficulty", 0.0))
+            src_diff = float(src_features.get("theorem_complexity_score", src_features.get("mean_proof_state_difficulty", 0.0)))
+            dst_diff = float(dst_features.get("theorem_complexity_score", dst_features.get("mean_proof_state_difficulty", 0.0)))
             difficulty_score = max(0.0, 1.0 - abs(src_diff - dst_diff))
             score = (
                 0.40 * tfidf_score

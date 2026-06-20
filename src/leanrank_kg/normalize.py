@@ -14,10 +14,38 @@ from .utils import (
     premise_id,
     proof_state_id,
     theorem_id,
+    write_json,
     write_jsonl,
     write_parquet,
 )
 from .validate import validate_context_coverage, validate_processed_schemas
+
+
+TABLE_COLUMNS = {
+    "theorems": ["id", "full_name", "file_path", "domain_tag", "subdomain_tag", "split"],
+    "proof_states": [
+        "id",
+        "theorem_id",
+        "full_name",
+        "tactic_idx",
+        "context",
+        "goal_text",
+        "local_hypotheses",
+        "symbols",
+        "tactic",
+        "domain_tag",
+        "subdomain_tag",
+        "split",
+    ],
+    "premises": ["id", "full_name", "file_path", "code", "domain_tag", "subdomain_tag"],
+    "file_modules": ["id", "file_path", "domain_tag", "subdomain_tag"],
+    "positive_edges": ["proof_state_id", "premise_id", "source"],
+    "negative_edges": ["proof_state_id", "premise_id", "source"],
+}
+
+
+def _frame(rows: list[dict[str, Any]], table: str) -> pd.DataFrame:
+    return pd.DataFrame(rows, columns=TABLE_COLUMNS[table])
 
 
 def _premise_rows(items: list[dict[str, Any]]) -> list[dict[str, str]]:
@@ -38,6 +66,29 @@ def _premise_rows(items: list[dict[str, Any]]) -> list[dict[str, str]]:
                 }
             )
     return rows
+
+
+def _filter_negative_positive_conflicts(frames: dict[str, pd.DataFrame]) -> dict[str, Any]:
+    positives = frames["positive_edges"]
+    negatives = frames["negative_edges"]
+    if positives.empty or negatives.empty:
+        frames["negative_edges"].attrs["positive_negative_overlap_removed"] = 0
+        return {
+            "positive_negative_overlap_removed": 0,
+            "negative_edges_before_filter": int(len(negatives)),
+            "negative_edges_after_filter": int(len(negatives)),
+        }
+    positive_pairs = set(zip(positives["proof_state_id"], positives["premise_id"], strict=False))
+    negative_pairs = list(zip(negatives["proof_state_id"], negatives["premise_id"], strict=False))
+    keep_mask = [pair not in positive_pairs for pair in negative_pairs]
+    removed = int(len(keep_mask) - sum(keep_mask))
+    frames["negative_edges"] = negatives.loc[keep_mask].reset_index(drop=True)
+    frames["negative_edges"].attrs["positive_negative_overlap_removed"] = removed
+    return {
+        "positive_negative_overlap_removed": removed,
+        "negative_edges_before_filter": int(len(negatives)),
+        "negative_edges_after_filter": int(len(frames["negative_edges"])),
+    }
 
 
 def normalize_split(split: str, df: pd.DataFrame) -> dict[str, pd.DataFrame]:
@@ -88,26 +139,33 @@ def normalize_split(split: str, df: pd.DataFrame) -> dict[str, pd.DataFrame]:
             errors.append({"split": split, "row": row, "error": str(exc)})
     write_jsonl("outputs/reports/normalization_errors.jsonl", errors)
     frames = {
-        "theorems": pd.DataFrame(theorems).drop_duplicates("id"),
-        "proof_states": pd.DataFrame(proof_states).drop_duplicates("id"),
-        "premises": pd.DataFrame(premises).drop_duplicates("id"),
-        "file_modules": pd.DataFrame(files).drop_duplicates("id"),
-        "positive_edges": pd.DataFrame(pos_edges).drop_duplicates(),
-        "negative_edges": pd.DataFrame(neg_edges).drop_duplicates(),
+        "theorems": _frame(theorems, "theorems").drop_duplicates("id"),
+        "proof_states": _frame(proof_states, "proof_states").drop_duplicates("id"),
+        "premises": _frame(premises, "premises").drop_duplicates("id"),
+        "file_modules": _frame(files, "file_modules").drop_duplicates("id"),
+        "positive_edges": _frame(pos_edges, "positive_edges").drop_duplicates(),
+        "negative_edges": _frame(neg_edges, "negative_edges").drop_duplicates(),
     }
+    frames["negative_edges"].attrs["normalization_conflicts"] = _filter_negative_positive_conflicts(frames)
     return frames
 
 
 def run(config_path: str) -> None:
     config = load_config(config_path)
     demo_limit = int(config["sample"]["committed_demo_rows"])
+    validation_config = config.get("validation", {}) or {}
+    max_schema_rows = validation_config.get("max_schema_rows_per_table")
     demo_parts: dict[str, list[pd.DataFrame]] = {}
     full_parts: dict[str, list[pd.DataFrame]] = {}
+    conflict_report = {"splits": {}, "total_positive_negative_overlap_removed": 0}
     for split in SPLITS:
         path = Path(f"data/sample/{split}_rows.parquet")
         if not path.exists():
             continue
         frames = normalize_split(split, pd.read_parquet(path))
+        split_conflicts = frames["negative_edges"].attrs.get("normalization_conflicts", {})
+        conflict_report["splits"][split] = split_conflicts
+        conflict_report["total_positive_negative_overlap_removed"] += int(split_conflicts.get("positive_negative_overlap_removed", 0))
         for name, frame in frames.items():
             write_parquet(frame, f"data/processed/{split}/{name}.parquet")
             full_parts.setdefault(name, []).append(frame)
@@ -130,5 +188,6 @@ def run(config_path: str) -> None:
         demo_tables["file_modules"] = all_tables["file_modules"][all_tables["file_modules"]["file_path"].isin(required_files)].drop_duplicates("id")
     for name, demo in demo_tables.items():
         write_parquet(demo, f"data/processed/demo/{name}.parquet")
-    validate_processed_schemas()
+    write_json("outputs/reports/normalization_label_conflicts.json", conflict_report)
+    validate_processed_schemas(max_rows_per_table=int(max_schema_rows) if max_schema_rows is not None else None)
     validate_context_coverage()

@@ -1,0 +1,687 @@
+{
+  "edges": [
+    {
+      "edge_type": "has_proof_state",
+      "source": "thm:ADEInequality.admissible_of_one_lt_sumInv_aux",
+      "target": "ps:ADEInequality.admissible_of_one_lt_sumInv_aux:1:c6463962d1a9"
+    },
+    {
+      "edge_type": "has_proof_state",
+      "source": "thm:ADEInequality.lt_four",
+      "target": "ps:ADEInequality.lt_four:2:565396ff3bd2"
+    },
+    {
+      "edge_type": "has_proof_state",
+      "source": "thm:ADEInequality.lt_four",
+      "target": "ps:ADEInequality.lt_four:4:300b9e4150ec"
+    },
+    {
+      "edge_type": "has_proof_state",
+      "source": "thm:ADEInequality.lt_four",
+      "target": "ps:ADEInequality.lt_four:6:e4804a49fe8a"
+    },
+    {
+      "edge_type": "has_proof_state",
+      "source": "thm:ADEInequality.lt_four",
+      "target": "ps:ADEInequality.lt_four:9:b901c0da59fe"
+    },
+    {
+      "edge_type": "has_proof_state",
+      "source": "thm:Acc.mem_range_rank_of_le",
+      "target": "ps:Acc.mem_range_rank_of_le:1:3eb983c12077"
+    },
+    {
+      "edge_type": "has_proof_state",
+      "source": "thm:Acc.mem_range_rank_of_le",
+      "target": "ps:Acc.mem_range_rank_of_le:4:7d238ac3bf45"
+    },
+    {
+      "edge_type": "has_proof_state",
+      "source": "thm:Acc.mem_range_rank_of_le",
+      "target": "ps:Acc.mem_range_rank_of_le:6:59a870af2a49"
+    },
+    {
+      "edge_type": "has_proof_state",
+      "source": "thm:Acc.mem_range_rank_of_le",
+      "target": "ps:Acc.mem_range_rank_of_le:8:356600c9c96a"
+    },
+    {
+      "edge_type": "has_proof_state",
+      "source": "thm:AddChar.starComp_apply",
+      "target": "ps:AddChar.starComp_apply:0:703e3ed17c16"
+    },
+    {
+      "edge_type": "has_proof_state",
+      "source": "thm:AddChar.tendsto_eval_one_sub_pow",
+      "target": "ps:AddChar.tendsto_eval_one_sub_pow:0:49b91591b57f"
+    },
+    {
+      "edge_type": "has_proof_state",
+      "source": "thm:AddChar.tendsto_eval_one_sub_pow",
+      "target": "ps:AddChar.tendsto_eval_one_sub_pow:1:974bdb620faa"
+    },
+    {
+      "edge_type": "has_proof_state",
+      "source": "thm:AddCircle.addWellApproximable_ae_empty_or_univ",
+      "target": "ps:AddCircle.addWellApproximable_ae_empty_or_univ:0:1d6fff186dac"
+    },
+    {
+      "edge_type": "has_proof_state",
+      "source": "thm:AddCircle.addWellApproximable_ae_empty_or_univ",
+      "target": "ps:AddCircle.addWellApproximable_ae_empty_or_univ:1:dafa2f0fe504"
+    },
+    {
+      "edge_type": "has_proof_state",
+      "source": "thm:AddCircle.addWellApproximable_ae_empty_or_univ",
+      "target": "ps:AddCircle.addWellApproximable_ae_empty_or_univ:2:01f838325eee"
+    },
+    {
+      "edge_type": "has_proof_state",
+      "source": "thm:AddCircle.addWellApproximable_ae_empty_or_univ",
+      "target": "ps:AddCircle.addWellApproximable_ae_empty_or_univ:3:433af79dc30f"
+    },
+    {
+      "edge_type": "has_proof_state",
+      "source": "thm:AddCircle.addWellApproximable_ae_empty_or_univ",
+      "target": "ps:AddCircle.addWellApproximable_ae_empty_or_univ:4:be2ca6a971b5"
+    },
+    {
+      "edge_type": "has_proof_state",
+      "source": "thm:AddCircle.addWellApproximable_ae_empty_or_univ",
+      "target": "ps:AddCircle.addWellApproximable_ae_empty_or_univ:5:03072b48ca0c"
+    },
+    {
+      "edge_type": "has_proof_state",
+      "source": "thm:AddCircle.addWellApproximable_ae_empty_or_univ",
+      "target": "ps:AddCircle.addWellApproximable_ae_empty_or_univ:6:60ff8e34c6ca"
+    },
+    {
+      "edge_type": "has_proof_state",
+      "source": "thm:AddCircle.addWellApproximable_ae_empty_or_univ",
+      "target": "ps:AddCircle.addWellApproximable_ae_empty_or_univ:7:bac4e22856f2"
+    },
+    {
+      "edge_type": "has_proof_state",
+      "source": "thm:AddCircle.addWellApproximable_ae_empty_or_univ",
+      "target": "ps:AddCircle.addWellApproximable_ae_empty_or_univ:8:afa7732329ef"
+    },
+    {
+      "edge_type": "has_proof_state",
+      "source": "thm:AddCircle.addWellApproximable_ae_empty_or_univ",
+      "target": "ps:AddCircle.addWellApproximable_ae_empty_or_univ:9:1fe47071fcb4"
+    },
+    {
+      "edge_type": "has_proof_state",
+      "source": "thm:AddCircle.addWellApproximable_ae_empty_or_univ",
+      "target": "ps:AddCircle.addWellApproximable_ae_empty_or_univ:10:a5c4cecc8566"
+    },
+    {
+      "edge_type": "has_proof_state",
+      "source": "thm:AddCircle.addWellApproximable_ae_empty_or_univ",
+      "target": "ps:AddCircle.addWellApproximable_ae_empty_or_univ:11:630a9196ebfa"
+    },
+    {
+      "edge_type": "has_proof_state",
+      "source": "thm:AddCircle.addWellApproximable_ae_empty_or_univ",
+      "target": "ps:AddCircle.addWellApproximable_ae_empty_or_univ:12:9ba124c19f86"
+    },
+    {
+      "edge_type": "has_proof_state",
+      "source": "thm:AddCircle.addWellApproximable_ae_empty_or_univ",
+      "target": "ps:AddCircle.addWellApproximable_ae_empty_or_univ:13:019e72c64cda"
+    },
+    {
+      "edge_type": "has_proof_state",
+      "source": "thm:AddCircle.addWellApproximable_ae_empty_or_univ",
+      "target": "ps:AddCircle.addWellApproximable_ae_empty_or_univ:14:9bb45b9182f5"
+    },
+    {
+      "edge_type": "has_proof_state",
+      "source": "thm:AddCircle.addWellApproximable_ae_empty_or_univ",
+      "target": "ps:AddCircle.addWellApproximable_ae_empty_or_univ:15:d2b4d914dafd"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ADEInequality.admissible_of_one_lt_sumInv_aux",
+      "target": "thm:ArithmeticFunction.vonMangoldt.abscissaOfAbsConv_residueClass_le_one"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ADEInequality.admissible_of_one_lt_sumInv_aux",
+      "target": "thm:AddChar.sum_eq_zero_of_ne_one"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ADEInequality.admissible_of_one_lt_sumInv_aux",
+      "target": "thm:ADEInequality.lt_four"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ADEInequality.admissible_of_one_lt_sumInv_aux",
+      "target": "thm:AddChar.tendsto_eval_one_sub_pow"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ADEInequality.admissible_of_one_lt_sumInv_aux",
+      "target": "thm:AddCircle.addWellApproximable_ae_empty_or_univ"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ADEInequality.admissible_of_one_lt_sumInv_aux",
+      "target": "thm:ArithmeticFunction.LSeriesSummable_vonMangoldt"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ADEInequality.admissible_of_one_lt_sumInv_aux",
+      "target": "thm:ArithmeticFunction.vonMangoldt.F''_le"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ADEInequality.admissible_of_one_lt_sumInv_aux",
+      "target": "thm:AddChar.starComp_apply"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ADEInequality.admissible_of_one_lt_sumInv_aux",
+      "target": "thm:Acc.mem_range_rank_of_le"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ADEInequality.admissible_of_one_lt_sumInv_aux",
+      "target": "thm:AlgebraicGeometry.IsOpenImmersion.range_pullback_fst_of_right"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ADEInequality.lt_four",
+      "target": "thm:ADEInequality.admissible_of_one_lt_sumInv_aux"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ADEInequality.lt_four",
+      "target": "thm:AddChar.sum_eq_zero_of_ne_one"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ADEInequality.lt_four",
+      "target": "thm:ArithmeticFunction.vonMangoldt.F''_le"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ADEInequality.lt_four",
+      "target": "thm:ArithmeticFunction.vonMangoldt.abscissaOfAbsConv_residueClass_le_one"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ADEInequality.lt_four",
+      "target": "thm:ArithmeticFunction.LSeriesSummable_vonMangoldt"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ADEInequality.lt_four",
+      "target": "thm:AddChar.tendsto_eval_one_sub_pow"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ADEInequality.lt_four",
+      "target": "thm:AddChar.starComp_apply"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ADEInequality.lt_four",
+      "target": "thm:ArithmeticFunction.pow_apply"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:Acc.mem_range_rank_of_le",
+      "target": "thm:ArithmeticFunction.vonMangoldt.abscissaOfAbsConv_residueClass_le_one"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:Acc.mem_range_rank_of_le",
+      "target": "thm:AlgebraicGeometry.IsOpenImmersion.range_pullback_fst_of_right"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:Acc.mem_range_rank_of_le",
+      "target": "thm:ADEInequality.admissible_of_one_lt_sumInv_aux"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:AddChar.starComp_apply",
+      "target": "thm:AddChar.tendsto_eval_one_sub_pow"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:AddChar.starComp_apply",
+      "target": "thm:AddChar.sum_eq_zero_of_ne_one"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:AddChar.tendsto_eval_one_sub_pow",
+      "target": "thm:AddChar.sum_eq_zero_of_ne_one"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:AddChar.tendsto_eval_one_sub_pow",
+      "target": "thm:AddChar.starComp_apply"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:AddChar.tendsto_eval_one_sub_pow",
+      "target": "thm:ArithmeticFunction.vonMangoldt.abscissaOfAbsConv_residueClass_le_one"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:AddCircle.addWellApproximable_ae_empty_or_univ",
+      "target": "thm:ArithmeticFunction.vonMangoldt.abscissaOfAbsConv_residueClass_le_one"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:AddCircle.addWellApproximable_ae_empty_or_univ",
+      "target": "thm:AddChar.sum_eq_zero_of_ne_one"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:AddCircle.addWellApproximable_ae_empty_or_univ",
+      "target": "thm:AddChar.tendsto_eval_one_sub_pow"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:AddCircle.addWellApproximable_ae_empty_or_univ",
+      "target": "thm:ArithmeticFunction.vonMangoldt.F''_le"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:AddCircle.addWellApproximable_ae_empty_or_univ",
+      "target": "thm:ADEInequality.lt_four"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:AddCircle.addWellApproximable_ae_empty_or_univ",
+      "target": "thm:ArithmeticFunction.LSeriesSummable_vonMangoldt"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:AddChar.sum_eq_zero_of_ne_one",
+      "target": "thm:AddChar.tendsto_eval_one_sub_pow"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:AddChar.sum_eq_zero_of_ne_one",
+      "target": "thm:AddChar.starComp_apply"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:AddChar.sum_eq_zero_of_ne_one",
+      "target": "thm:ArithmeticFunction.vonMangoldt.abscissaOfAbsConv_residueClass_le_one"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ArithmeticFunction.pow_apply",
+      "target": "thm:ArithmeticFunction.vonMangoldt.F''_le"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ArithmeticFunction.pow_apply",
+      "target": "thm:ArithmeticFunction.LSeriesSummable_vonMangoldt"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ArithmeticFunction.pow_apply",
+      "target": "thm:ArithmeticFunction.vonMangoldt.abscissaOfAbsConv_residueClass_le_one"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ArithmeticFunction.pow_apply",
+      "target": "thm:AddChar.tendsto_eval_one_sub_pow"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ArithmeticFunction.pow_apply",
+      "target": "thm:ADEInequality.lt_four"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ArithmeticFunction.pow_apply",
+      "target": "thm:AddChar.sum_eq_zero_of_ne_one"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ArithmeticFunction.pow_apply",
+      "target": "thm:ADEInequality.admissible_of_one_lt_sumInv_aux"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ArithmeticFunction.vonMangoldt.F''_le",
+      "target": "thm:ArithmeticFunction.vonMangoldt.abscissaOfAbsConv_residueClass_le_one"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ArithmeticFunction.vonMangoldt.F''_le",
+      "target": "thm:ArithmeticFunction.LSeriesSummable_vonMangoldt"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ArithmeticFunction.vonMangoldt.F''_le",
+      "target": "thm:AddChar.tendsto_eval_one_sub_pow"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ArithmeticFunction.vonMangoldt.F''_le",
+      "target": "thm:ADEInequality.lt_four"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ArithmeticFunction.vonMangoldt.F''_le",
+      "target": "thm:AddChar.sum_eq_zero_of_ne_one"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ArithmeticFunction.vonMangoldt.F''_le",
+      "target": "thm:ArithmeticFunction.pow_apply"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ArithmeticFunction.vonMangoldt.F''_le",
+      "target": "thm:AddCircle.addWellApproximable_ae_empty_or_univ"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ArithmeticFunction.LSeriesSummable_vonMangoldt",
+      "target": "thm:ArithmeticFunction.vonMangoldt.abscissaOfAbsConv_residueClass_le_one"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ArithmeticFunction.LSeriesSummable_vonMangoldt",
+      "target": "thm:ArithmeticFunction.vonMangoldt.F''_le"
+    },
+    {
+      "edge_type": "similar_to_theorem",
+      "source": "thm:ArithmeticFunction.LSeriesSummable_vonMangoldt",
+      "target": "thm:AddChar.tendsto_eval_one_sub_pow"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "thm:ADEInequality.admissible_of_one_lt_sumInv_aux",
+      "label": "admissible_of_one_lt_sumInv_aux",
+      "node_type": "Theorem",
+      "x": 90,
+      "y": 60
+    },
+    {
+      "id": "thm:ADEInequality.lt_four",
+      "label": "lt_four",
+      "node_type": "Theorem",
+      "x": 90,
+      "y": 102
+    },
+    {
+      "id": "thm:Acc.mem_range_rank_of_le",
+      "label": "mem_range_rank_of_le",
+      "node_type": "Theorem",
+      "x": 90,
+      "y": 144
+    },
+    {
+      "id": "thm:AddChar.starComp_apply",
+      "label": "starComp_apply",
+      "node_type": "Theorem",
+      "x": 90,
+      "y": 186
+    },
+    {
+      "id": "thm:AddChar.tendsto_eval_one_sub_pow",
+      "label": "tendsto_eval_one_sub_pow",
+      "node_type": "Theorem",
+      "x": 90,
+      "y": 228
+    },
+    {
+      "id": "thm:AddCircle.addWellApproximable_ae_empty_or_univ",
+      "label": "addWellApproximable_ae_empty_or_univ",
+      "node_type": "Theorem",
+      "x": 90,
+      "y": 270
+    },
+    {
+      "id": "thm:AddChar.sum_eq_zero_of_ne_one",
+      "label": "sum_eq_zero_of_ne_one",
+      "node_type": "Theorem",
+      "x": 90,
+      "y": 312
+    },
+    {
+      "id": "thm:AlgebraicGeometry.IsOpenImmersion.range_pullback_fst_of_right",
+      "label": "range_pullback_fst_of_right",
+      "node_type": "Theorem",
+      "x": 90,
+      "y": 354
+    },
+    {
+      "id": "thm:ArithmeticFunction.pow_apply",
+      "label": "pow_apply",
+      "node_type": "Theorem",
+      "x": 90,
+      "y": 396
+    },
+    {
+      "id": "thm:ArithmeticFunction.vonMangoldt.F''_le",
+      "label": "F''_le",
+      "node_type": "Theorem",
+      "x": 90,
+      "y": 438
+    },
+    {
+      "id": "thm:ArithmeticFunction.LSeriesSummable_vonMangoldt",
+      "label": "LSeriesSummable_vonMangoldt",
+      "node_type": "Theorem",
+      "x": 90,
+      "y": 480
+    },
+    {
+      "id": "thm:ArithmeticFunction.vonMangoldt.abscissaOfAbsConv_residueClass_le_one",
+      "label": "abscissaOfAbsConv_residueClass_le_one",
+      "node_type": "Theorem",
+      "x": 90,
+      "y": 522
+    },
+    {
+      "id": "ps:ADEInequality.admissible_of_one_lt_sumInv_aux:1:c6463962d1a9",
+      "label": "admissible_of_one_lt_sumInv_aux",
+      "node_type": "ProofState",
+      "x": 235,
+      "y": 60
+    },
+    {
+      "id": "ps:ADEInequality.lt_four:2:565396ff3bd2",
+      "label": "lt_four",
+      "node_type": "ProofState",
+      "x": 235,
+      "y": 102
+    },
+    {
+      "id": "ps:ADEInequality.lt_four:4:300b9e4150ec",
+      "label": "lt_four",
+      "node_type": "ProofState",
+      "x": 235,
+      "y": 144
+    },
+    {
+      "id": "ps:ADEInequality.lt_four:6:e4804a49fe8a",
+      "label": "lt_four",
+      "node_type": "ProofState",
+      "x": 235,
+      "y": 186
+    },
+    {
+      "id": "ps:ADEInequality.lt_four:9:b901c0da59fe",
+      "label": "lt_four",
+      "node_type": "ProofState",
+      "x": 235,
+      "y": 228
+    },
+    {
+      "id": "ps:Acc.mem_range_rank_of_le:1:3eb983c12077",
+      "label": "mem_range_rank_of_le",
+      "node_type": "ProofState",
+      "x": 235,
+      "y": 270
+    },
+    {
+      "id": "ps:Acc.mem_range_rank_of_le:4:7d238ac3bf45",
+      "label": "mem_range_rank_of_le",
+      "node_type": "ProofState",
+      "x": 235,
+      "y": 312
+    },
+    {
+      "id": "ps:Acc.mem_range_rank_of_le:6:59a870af2a49",
+      "label": "mem_range_rank_of_le",
+      "node_type": "ProofState",
+      "x": 235,
+      "y": 354
+    },
+    {
+      "id": "ps:Acc.mem_range_rank_of_le:8:356600c9c96a",
+      "label": "mem_range_rank_of_le",
+      "node_type": "ProofState",
+      "x": 235,
+      "y": 396
+    },
+    {
+      "id": "ps:AddChar.starComp_apply:0:703e3ed17c16",
+      "label": "starComp_apply",
+      "node_type": "ProofState",
+      "x": 235,
+      "y": 438
+    },
+    {
+      "id": "ps:AddChar.tendsto_eval_one_sub_pow:0:49b91591b57f",
+      "label": "tendsto_eval_one_sub_pow",
+      "node_type": "ProofState",
+      "x": 235,
+      "y": 480
+    },
+    {
+      "id": "ps:AddChar.tendsto_eval_one_sub_pow:1:974bdb620faa",
+      "label": "tendsto_eval_one_sub_pow",
+      "node_type": "ProofState",
+      "x": 235,
+      "y": 522
+    },
+    {
+      "id": "ps:AddCircle.addWellApproximable_ae_empty_or_univ:0:1d6fff186dac",
+      "label": "addWellApproximable_ae_empty_or_univ",
+      "node_type": "ProofState",
+      "x": 235,
+      "y": 564
+    },
+    {
+      "id": "ps:AddCircle.addWellApproximable_ae_empty_or_univ:1:dafa2f0fe504",
+      "label": "addWellApproximable_ae_empty_or_univ",
+      "node_type": "ProofState",
+      "x": 235,
+      "y": 606
+    },
+    {
+      "id": "ps:AddCircle.addWellApproximable_ae_empty_or_univ:2:01f838325eee",
+      "label": "addWellApproximable_ae_empty_or_univ",
+      "node_type": "ProofState",
+      "x": 235,
+      "y": 648
+    },
+    {
+      "id": "ps:AddCircle.addWellApproximable_ae_empty_or_univ:3:433af79dc30f",
+      "label": "addWellApproximable_ae_empty_or_univ",
+      "node_type": "ProofState",
+      "x": 235,
+      "y": 690
+    },
+    {
+      "id": "ps:AddCircle.addWellApproximable_ae_empty_or_univ:4:be2ca6a971b5",
+      "label": "addWellApproximable_ae_empty_or_univ",
+      "node_type": "ProofState",
+      "x": 235,
+      "y": 732
+    },
+    {
+      "id": "ps:AddCircle.addWellApproximable_ae_empty_or_univ:5:03072b48ca0c",
+      "label": "addWellApproximable_ae_empty_or_univ",
+      "node_type": "ProofState",
+      "x": 235,
+      "y": 774
+    },
+    {
+      "id": "ps:AddCircle.addWellApproximable_ae_empty_or_univ:6:60ff8e34c6ca",
+      "label": "addWellApproximable_ae_empty_or_univ",
+      "node_type": "ProofState",
+      "x": 235,
+      "y": 816
+    },
+    {
+      "id": "ps:AddCircle.addWellApproximable_ae_empty_or_univ:7:bac4e22856f2",
+      "label": "addWellApproximable_ae_empty_or_univ",
+      "node_type": "ProofState",
+      "x": 235,
+      "y": 858
+    },
+    {
+      "id": "ps:AddCircle.addWellApproximable_ae_empty_or_univ:8:afa7732329ef",
+      "label": "addWellApproximable_ae_empty_or_univ",
+      "node_type": "ProofState",
+      "x": 235,
+      "y": 900
+    },
+    {
+      "id": "ps:AddCircle.addWellApproximable_ae_empty_or_univ:9:1fe47071fcb4",
+      "label": "addWellApproximable_ae_empty_or_univ",
+      "node_type": "ProofState",
+      "x": 235,
+      "y": 942
+    },
+    {
+      "id": "ps:AddCircle.addWellApproximable_ae_empty_or_univ:10:a5c4cecc8566",
+      "label": "addWellApproximable_ae_empty_or_univ",
+      "node_type": "ProofState",
+      "x": 235,
+      "y": 984
+    },
+    {
+      "id": "ps:AddCircle.addWellApproximable_ae_empty_or_univ:11:630a9196ebfa",
+      "label": "addWellApproximable_ae_empty_or_univ",
+      "node_type": "ProofState",
+      "x": 235,
+      "y": 1026
+    },
+    {
+      "id": "ps:AddCircle.addWellApproximable_ae_empty_or_univ:12:9ba124c19f86",
+      "label": "addWellApproximable_ae_empty_or_univ",
+      "node_type": "ProofState",
+      "x": 235,
+      "y": 1068
+    },
+    {
+      "id": "ps:AddCircle.addWellApproximable_ae_empty_or_univ:13:019e72c64cda",
+      "label": "addWellApproximable_ae_empty_or_univ",
+      "node_type": "ProofState",
+      "x": 235,
+      "y": 1110
+    },
+    {
+      "id": "ps:AddCircle.addWellApproximable_ae_empty_or_univ:14:9bb45b9182f5",
+      "label": "addWellApproximable_ae_empty_or_univ",
+      "node_type": "ProofState",
+      "x": 235,
+      "y": 1152
+    },
+    {
+      "id": "ps:AddCircle.addWellApproximable_ae_empty_or_univ:15:d2b4d914dafd",
+      "label": "addWellApproximable_ae_empty_or_univ",
+      "node_type": "ProofState",
+      "x": 235,
+      "y": 1194
+    }
+  ],
+  "split": "demo"
+}

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from itertools import combinations
+
 import pandas as pd
 
 from .utils import SPLITS, file_id, technique_id, write_json, write_parquet
@@ -15,6 +17,35 @@ def _nodes(df: pd.DataFrame, node_type: str, cols: list[str] | None = None) -> p
     return out
 
 
+def _edge_frame(source: pd.Series, target: pd.Series, edge_type: str) -> pd.DataFrame:
+    return pd.DataFrame(
+        {
+            "source": source.astype(str).to_numpy(),
+            "target": target.astype(str).to_numpy(),
+            "edge_type": edge_type,
+            "weight": 1.0,
+        }
+    )
+
+
+def _map_file_ids(paths: pd.Series) -> pd.Series:
+    path_text = paths.fillna("").astype(str)
+    id_by_path = {path: file_id(path) for path in path_text[path_text.astype(bool)].unique()}
+    return path_text.map(id_by_path).fillna("")
+
+
+def _co_occurrence_edges(pos: pd.DataFrame) -> pd.DataFrame:
+    rows = []
+    if pos.empty:
+        return pd.DataFrame(columns=["source", "target", "edge_type", "weight"])
+    for premise_ids in pos.groupby("proof_state_id", sort=False)["premise_id"].unique():
+        unique_ids = sorted(str(premise_id) for premise_id in premise_ids)
+        for left, right in combinations(unique_ids, 2):
+            rows.append((left, right, "co_occurs_with", 1.0))
+            rows.append((right, left, "co_occurs_with", 1.0))
+    return pd.DataFrame(rows, columns=["source", "target", "edge_type", "weight"])
+
+
 def build_split(split: str, enriched: bool = False) -> tuple[pd.DataFrame, pd.DataFrame, dict]:
     base = f"data/processed/{split}"
     thm = pd.read_parquet(f"{base}/theorems.parquet")
@@ -25,7 +56,7 @@ def build_split(split: str, enriched: bool = False) -> tuple[pd.DataFrame, pd.Da
     neg = pd.read_parquet(f"{base}/negative_edges.parquet")
     premise_files = prem[prem["file_path"].fillna("").astype(bool)][["file_path", "domain_tag", "subdomain_tag"]].copy()
     if not premise_files.empty:
-        premise_files["id"] = premise_files["file_path"].map(file_id)
+        premise_files["id"] = _map_file_ids(premise_files["file_path"])
         files = pd.concat([files, premise_files[["id", "file_path", "domain_tag", "subdomain_tag"]]], ignore_index=True).drop_duplicates("id")
     nodes = pd.concat(
         [
@@ -36,29 +67,27 @@ def build_split(split: str, enriched: bool = False) -> tuple[pd.DataFrame, pd.Da
         ],
         ignore_index=True,
     ).drop_duplicates("id")
-    edges = []
-    for row in ps.to_dict(orient="records"):
-        edges.append({"source": row["theorem_id"], "target": row["id"], "edge_type": "has_proof_state", "weight": 1.0})
-        edges.append({"source": row["id"], "target": f"tactic:{int(row['tactic_idx'])}", "edge_type": "at_tactic_step", "weight": 1.0})
-    tactic_nodes = pd.DataFrame([{"id": e["target"], "node_type": "TacticStep"} for e in edges if e["edge_type"] == "at_tactic_step"]).drop_duplicates("id")
+    tactic_targets = "tactic:" + ps["theorem_id"].astype(str) + ":" + ps["tactic_idx"].astype(int).astype(str)
+    tactic_nodes = pd.DataFrame({"id": tactic_targets, "node_type": "TacticStep"}).drop_duplicates("id")
     nodes = pd.concat([nodes, tactic_nodes], ignore_index=True).drop_duplicates("id")
-    for row in thm.to_dict(orient="records"):
-        edges.append({"source": row["id"], "target": file_id(row["file_path"]), "edge_type": "appears_in_file", "weight": 1.0})
-    for row in prem.to_dict(orient="records"):
-        if row.get("file_path"):
-            edges.append({"source": row["id"], "target": file_id(row["file_path"]), "edge_type": "defined_in_file", "weight": 1.0})
-    for row in pos.to_dict(orient="records"):
-        edges.append({"source": row["proof_state_id"], "target": row["premise_id"], "edge_type": "positive_uses", "weight": 1.0})
-        edges.append({"source": row["proof_state_id"], "target": row["premise_id"], "edge_type": "invokes_premise", "weight": 1.0})
-    for proof_state_id, group in pos.groupby("proof_state_id"):
-        premise_ids = sorted(set(group["premise_id"]))
-        for i, left in enumerate(premise_ids):
-            for right in premise_ids[i + 1 :]:
-                edges.append({"source": left, "target": right, "edge_type": "co_occurs_with", "weight": 1.0})
-                edges.append({"source": right, "target": left, "edge_type": "co_occurs_with", "weight": 1.0})
-    for row in neg.to_dict(orient="records"):
-        edges.append({"source": row["proof_state_id"], "target": row["premise_id"], "edge_type": "negative_candidate", "weight": 1.0})
-    edge_df = pd.DataFrame(edges).drop_duplicates()
+
+    edge_frames = [
+        _edge_frame(ps["theorem_id"], ps["id"], "has_proof_state"),
+        _edge_frame(ps["id"], tactic_targets, "at_tactic_step"),
+        _edge_frame(thm["id"], _map_file_ids(thm["file_path"]), "appears_in_file"),
+    ]
+    premise_with_file = prem[prem["file_path"].fillna("").astype(bool)]
+    if not premise_with_file.empty:
+        edge_frames.append(_edge_frame(premise_with_file["id"], _map_file_ids(premise_with_file["file_path"]), "defined_in_file"))
+    edge_frames.append(_edge_frame(pos["proof_state_id"], pos["premise_id"], "positive_uses"))
+
+    ps_to_theorem = ps.set_index("id")["theorem_id"].to_dict()
+    invokes = pos.assign(theorem_source=pos["proof_state_id"].map(ps_to_theorem)).dropna(subset=["theorem_source"])
+    if not invokes.empty:
+        edge_frames.append(_edge_frame(invokes["theorem_source"], invokes["premise_id"], "invokes_premise"))
+    edge_frames.append(_co_occurrence_edges(pos))
+    edge_frames.append(_edge_frame(neg["proof_state_id"], neg["premise_id"], "negative_candidate"))
+    edge_df = pd.concat(edge_frames, ignore_index=True).drop_duplicates()
     stats = {
         "split": split,
         "node_count": int(len(nodes)),

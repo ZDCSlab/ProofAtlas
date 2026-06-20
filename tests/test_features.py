@@ -1,6 +1,7 @@
 import pandas as pd
+import json
 
-from leanrank_kg import build_graph, compute_difficulty, download_or_sample, embed, normalize, train_ranker, weak_label_proof_technique
+from leanrank_kg import build_graph, compute_difficulty, download_or_sample, embed, normalize, train_difficulty, train_ranker, weak_label_proof_technique
 
 
 def _write_config(tmp_path, rows=100):
@@ -22,7 +23,13 @@ def test_difficulty_features_are_table_driven(tmp_path, monkeypatch):
     thm_features = pd.read_parquet("data/processed/train/theorem_features.parquet")
     assert ps_features["avg_positive_premise_length"].between(0, 1).all()
     assert ps_features["negative_candidate_hardness"].between(0, 1).all()
+    assert ps_features["theorem_complexity_score"].between(0, 1).all()
+    assert set(ps_features["difficulty_target_source"]) == {"proof_length_tactic_count_premise_count_negative_candidates"}
     assert thm_features["num_unique_positive_premises"].max() > 0
+    assert thm_features["theorem_complexity_score"].between(0, 1).all()
+    assert {"proof_length_score", "tactic_count_score", "premise_count_score", "negative_candidate_count_score"} <= set(thm_features.columns)
+    target_report = json.loads((tmp_path / "outputs/reports/difficulty_target_report.json").read_text(encoding="utf-8"))
+    assert target_report["target"] == "theorem_features.theorem_complexity_score"
 
 
 def test_ranker_features_use_processed_feature_tables(tmp_path, monkeypatch):
@@ -39,4 +46,57 @@ def test_ranker_features_use_processed_feature_tables(tmp_path, monkeypatch):
     assert features["proof_state_difficulty"].between(0, 1).all()
     assert features["negative_candidate_hardness"].between(0, 1).all()
     assert features["premise_frequency"].between(0, 1).all()
-    assert features[["proof_state_difficulty", "negative_candidate_hardness", "premise_frequency"]].nunique().sum() > 3
+    assert features["symbol_name_overlap"].between(0, 1).all()
+    assert features["symbol_context_overlap"].between(0, 1).all()
+    assert features["graph_premise_degree"].between(0, 1).all()
+    assert features["theorem_neighborhood_premise_score"].between(0, 1).all()
+    assert features[
+        [
+            "proof_state_difficulty",
+            "negative_candidate_hardness",
+            "premise_frequency",
+            "symbol_context_overlap",
+            "graph_premise_degree",
+            "theorem_neighborhood_premise_score",
+        ]
+    ].nunique().sum() > 6
+
+
+def test_ranker_writes_feature_ablation_report(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    cfg = _write_config(tmp_path, 120)
+    download_or_sample.run(cfg, 120)
+    normalize.run(cfg)
+    build_graph.run(cfg)
+    weak_label_proof_technique.run(cfg)
+    compute_difficulty.run(cfg)
+    embed.run(cfg)
+    train_ranker.run(cfg)
+    metrics = json.loads((tmp_path / "outputs/reports/ranker_validation_metrics.json").read_text(encoding="utf-8"))
+    assert metrics["feature_columns"]
+    assert "feature_groups" in metrics
+    if "feature_ablation" in metrics:
+        ablation = metrics["feature_ablation"]
+        assert "full_auc" in ablation
+        assert {"embedding_similarity", "namespace_domain", "proof_technique", "difficulty", "frequency", "symbol_overlap", "graph", "theorem_neighborhood"} <= set(ablation["groups"])
+        assert "delta_without_group" in ablation["groups"]["embedding_similarity"]
+    assert {"symbol_overlap", "graph", "theorem_neighborhood"} <= set(metrics["feature_groups"])
+
+
+def test_difficulty_estimator_trains_from_feature_tables(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    cfg = _write_config(tmp_path, 100)
+    download_or_sample.run(cfg, 100)
+    normalize.run(cfg)
+    compute_difficulty.run(cfg)
+    train_difficulty.run(cfg)
+    assert (tmp_path / "outputs/models/difficulty_estimator.joblib").exists()
+    metrics = __import__("json").loads((tmp_path / "outputs/reports/difficulty_estimator_metrics.json").read_text(encoding="utf-8"))
+    assert metrics["train"]["rows"] > 0
+    assert metrics["train"]["mae"] >= 0
+    assert "calibration_bins" in metrics["train"]
+    assert "residual_quantiles" in metrics["train"]
+    assert {"p50", "p80", "p95"} <= set(metrics["train"]["residual_quantiles"])
+    assert "context_length_score" in metrics["feature_columns"]
+    assert metrics["target"] == "proof_state_features.theorem_complexity_score"
+    assert metrics["target_source"] == "proof_length_tactic_count_premise_count_negative_candidates"

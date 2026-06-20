@@ -27,6 +27,10 @@ dependencies = [
 [project.optional-dependencies]
 dev = ["pytest"]
 hf = ["sentence-transformers"]
+api = ["fastapi", "uvicorn"]
+ann = ["hnswlib"]
+faiss = ["faiss-cpu"]
+lancedb = ["lancedb"]
 
 [project.scripts]
 leanrank-kg = "leanrank_kg.cli:app"

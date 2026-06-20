@@ -1,6 +1,11 @@
 dataset_name: erbacher/LeanRank-data
 random_seed: 42
 use_huggingface: false
+corpus:
+  lean_version: unknown
+  mathlib_commit: unknown
+  extraction_pipeline: LeanRank synthetic-compatible sample
+  source_revision: local
 sample:
   total_rows: 60000
   small_debug_rows: 1000
@@ -19,3 +24,13 @@ proof_techniques:
 embedding:
   backend: tfidf
   model_name: sentence-transformers/all-MiniLM-L6-v2
+index:
+  backend: sklearn
+  metric: cosine
+  n_neighbors: 100
+  create_vector_index: false
+index_benchmark:
+  split: train
+  top_k: 10
+  query_count: 25
+  seed: 42

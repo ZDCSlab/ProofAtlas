@@ -11,16 +11,25 @@ dist/
 *.egg-info/
 .DS_Store
 
-# Local planning/reference documents are kept out of the public repo.
-docs/
+# Project documentation is source material; keep only bulky local reference PDFs out.
+docs/*.pdf
 
 # Generated LeanRank/ProofAtlas data and model artifacts.
 # These are reproducible from configs/proofatlas.yaml and are too large for git.
 data/processed/
 data/sample/
 data/raw/
-outputs/embeddings/
-outputs/models/
-outputs/graph/
-outputs/reports/
+outputs/*
 !outputs/.gitkeep
+!outputs/reports/
+outputs/reports/*
+!outputs/reports/artifact_compatibility_report.json
+!outputs/reports/corpus_manifest.json
+!outputs/reports/experiment_report.md
+!outputs/reports/index_benchmark.json
+!outputs/reports/metrics.json
+!outputs/reports/mvp_completion_audit.json
+!outputs/reports/pipeline_performance_report.json
+!outputs/reports/premise_trace_supervision_report.json
+!outputs/reports/ranker_validation_metrics.json
+!outputs/reports/test_set_evaluation.json

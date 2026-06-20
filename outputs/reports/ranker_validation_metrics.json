@@ -1,0 +1,132 @@
+{
+  "feature_ablation": {
+    "feature_columns": [
+      "cosine_similarity",
+      "same_namespace",
+      "same_domain",
+      "proof_technique_overlap",
+      "proof_state_difficulty",
+      "negative_candidate_hardness",
+      "premise_frequency",
+      "symbol_name_overlap",
+      "symbol_context_overlap",
+      "graph_premise_degree",
+      "theorem_neighborhood_premise_score"
+    ],
+    "full_auc": 0.825379,
+    "groups": {
+      "difficulty": {
+        "auc_group_only": 0.632403,
+        "auc_without_group": 0.8055380000000001,
+        "columns": [
+          "proof_state_difficulty",
+          "negative_candidate_hardness"
+        ],
+        "delta_without_group": 0.019840999999999887
+      },
+      "embedding_similarity": {
+        "auc_group_only": 0.6252215,
+        "auc_without_group": 0.819774,
+        "columns": [
+          "cosine_similarity"
+        ],
+        "delta_without_group": 0.005604999999999971
+      },
+      "frequency": {
+        "auc_group_only": 0.7878414999999999,
+        "auc_without_group": 0.8070589999999999,
+        "columns": [
+          "premise_frequency"
+        ],
+        "delta_without_group": 0.018320000000000114
+      },
+      "graph": {
+        "auc_group_only": 0.6947325,
+        "auc_without_group": 0.820083,
+        "columns": [
+          "graph_premise_degree"
+        ],
+        "delta_without_group": 0.005295999999999967
+      },
+      "namespace_domain": {
+        "auc_group_only": 0.44447349999999997,
+        "auc_without_group": 0.8525309999999999,
+        "columns": [
+          "same_namespace",
+          "same_domain"
+        ],
+        "delta_without_group": -0.027151999999999954
+      },
+      "proof_technique": {
+        "auc_group_only": 0.6490000000000001,
+        "auc_without_group": 0.7739339999999999,
+        "columns": [
+          "proof_technique_overlap"
+        ],
+        "delta_without_group": 0.051445000000000074
+      },
+      "symbol_overlap": {
+        "auc_group_only": 0.654192,
+        "auc_without_group": 0.790402,
+        "columns": [
+          "symbol_name_overlap",
+          "symbol_context_overlap"
+        ],
+        "delta_without_group": 0.034976999999999925
+      },
+      "theorem_neighborhood": {
+        "auc_group_only": 0.6013390000000001,
+        "auc_without_group": 0.824741,
+        "columns": [
+          "theorem_neighborhood_premise_score"
+        ],
+        "delta_without_group": 0.0006380000000000274
+      }
+    }
+  },
+  "feature_columns": [
+    "cosine_similarity",
+    "same_namespace",
+    "same_domain",
+    "proof_technique_overlap",
+    "proof_state_difficulty",
+    "negative_candidate_hardness",
+    "premise_frequency",
+    "symbol_name_overlap",
+    "symbol_context_overlap",
+    "graph_premise_degree",
+    "theorem_neighborhood_premise_score"
+  ],
+  "feature_groups": {
+    "difficulty": [
+      "proof_state_difficulty",
+      "negative_candidate_hardness"
+    ],
+    "embedding_similarity": [
+      "cosine_similarity"
+    ],
+    "frequency": [
+      "premise_frequency"
+    ],
+    "graph": [
+      "graph_premise_degree"
+    ],
+    "namespace_domain": [
+      "same_namespace",
+      "same_domain"
+    ],
+    "proof_technique": [
+      "proof_technique_overlap"
+    ],
+    "symbol_overlap": [
+      "symbol_name_overlap",
+      "symbol_context_overlap"
+    ],
+    "theorem_neighborhood": [
+      "theorem_neighborhood_premise_score"
+    ]
+  },
+  "train_pairs": 2000,
+  "validation_auc": 0.825379,
+  "validation_pairs": 2000
+}

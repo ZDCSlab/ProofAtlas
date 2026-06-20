@@ -25,6 +25,10 @@ HTML = """<!doctype html>
     header{background:#182433;color:white;padding:34px 7vw 28px;border-bottom:5px solid #2dd4bf}
     header h1{font-size:48px;line-height:1;margin:0 0 12px;letter-spacing:0}
     header p{max-width:900px;color:#dbe6f3;font-size:18px;margin:0}
+    header .demo-form{margin-top:18px;max-width:980px}
+    header .demo-form label{color:#dbe6f3}
+    header .demo-form textarea,header .demo-form input,header .demo-form select{border-color:#42546b;background:#f8fbff;color:var(--ink)}
+    header .sample-row{display:flex;gap:8px;flex-wrap:wrap}
     main{max-width:1220px;margin:auto;padding:20px}
     section{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:22px;margin:18px 0}
     h2,h3{margin:0 0 12px;letter-spacing:0}
@@ -50,6 +54,7 @@ HTML = """<!doctype html>
     .dark .note{color:#d0d9e6}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
     .two-col{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+    .workbench{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(360px,.88fr);gap:16px;align-items:start}
     .status-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
     .status{border:1px solid var(--line);border-radius:8px;padding:12px;background:#fbfcfe}
     .status.ok{border-color:#badfcb;background:var(--soft-green)}
@@ -76,12 +81,38 @@ HTML = """<!doctype html>
     .goal{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#f2f6fb;border:1px solid #dce5ef;border-radius:6px;padding:10px;overflow-wrap:anywhere}
     .ranked{display:grid;gap:8px;margin-top:10px}
     .rank{display:grid;grid-template-columns:minmax(150px,1fr) minmax(0,1.2fr) 54px;gap:10px;align-items:center;font-size:13px}
+    .demo-form{display:grid;gap:12px}
+    .demo-form label{display:grid;gap:6px;font-size:13px;font-weight:700;color:#334155}
+    .demo-form textarea,.demo-form input,.demo-form select{width:100%;border:1px solid var(--line);border-radius:6px;padding:9px;font:inherit;background:white;color:var(--ink)}
+    .demo-form textarea{min-height:136px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;resize:vertical}
+    .demo-controls{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:10px}
+    .demo-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .button{border:1px solid #174ea6;background:var(--blue);color:white;border-radius:6px;padding:9px 13px;font-weight:800;cursor:pointer}
+    .button.secondary{border-color:var(--line);background:white;color:#27364a}
+    .demo-output{border:1px solid var(--line);border-radius:8px;background:#fbfcfe;padding:12px;min-height:120px;display:grid;gap:10px}
+    .guidance-panel{min-height:360px}
+    .guidance-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .guidance-block{border:1px solid var(--line);border-radius:8px;background:#fbfcfe;padding:12px;min-width:0}
+    .relation-path{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#f7fafc;border:1px solid var(--line);border-radius:8px;padding:12px;white-space:pre-wrap;overflow-wrap:anywhere}
+    .demo-error{color:var(--rose);font-weight:700}
+    .graph-view{border:1px solid var(--line);border-radius:8px;background:#fbfcfe;min-height:360px;overflow:auto}
+    .graph-svg{width:100%;min-width:760px;height:360px;display:block}
+    .graph-edge{stroke:#9aa8b8;stroke-width:1.2;opacity:.72;cursor:pointer}
+    .graph-edge.active{stroke:var(--rose);stroke-width:2.6;opacity:1}
+    .graph-node{stroke:white;stroke-width:1.5;cursor:pointer}
+    .graph-node.active{stroke:var(--ink);stroke-width:3}
+    .graph-label{font-size:11px;fill:#263547;pointer-events:none}
+    .legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+    .legend span{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+    .swatch{width:10px;height:10px;border-radius:50%;display:inline-block}
+    .edge-swatch{width:24px;height:3px;border-radius:999px;display:inline-block;background:#9aa8b8}
+    .graph-detail{border:1px solid var(--line);border-radius:8px;background:#fff;padding:10px;margin-top:10px;min-height:76px}
     .timeline{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
     .step{border-left:4px solid var(--teal);background:#f8fbfd;border-radius:8px;padding:12px;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
     .section-lead{color:var(--muted);max-width:850px;margin:0 0 16px}
     @media (max-width:900px){
       header h1{font-size:38px}
-      .hero-grid,.two-col,.timeline{grid-template-columns:1fr}
+      .hero-grid,.two-col,.timeline,.workbench,.guidance-grid{grid-template-columns:1fr}
       .kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
     }
     @media (max-width:560px){
@@ -89,39 +120,82 @@ HTML = """<!doctype html>
       section{padding:16px}
       .kpi-grid{grid-template-columns:1fr}
       .bar-row,.mini-bar,.rank{grid-template-columns:1fr}
+      .demo-controls{grid-template-columns:1fr}
       .bar-track{height:14px}
     }
   </style>
 </head>
 <body>
 <header>
-  <div class="eyebrow">Real LeanRank data + GPU semantic retrieval</div>
-  <h1>{{ dataset.project_name }}</h1>
-  <p>A proof knowledge atlas that turns Lean/mathlib proof states into a searchable graph of theorems, premises, techniques, difficulty signals, and retrieval evidence.</p>
-  <div class="hero-grid">
-    <div class="hero-panel">
-      <h2>What the reviewer should see first</h2>
-      <div class="chips">
-        <span class="pill ok">Theorem-disjoint KG: {{ overview.total_theorems }} theorems</span>
-        <span class="pill info">{{ embedding.model_name }}</span>
-        <span class="pill info">GPU: {{ embedding.device }}</span>
-        <span class="pill ok">Schema errors: {{ overview.schema_errors }}</span>
-        <span class="pill ok">Missing graph endpoints: {{ overview.missing_graph_endpoints }}</span>
-      </div>
+  <div class="eyebrow">Research demo dashboard</div>
+  <h1>LeanRank Proof Knowledge Graph</h1>
+  <p>Visualizing Lean/mathlib proof relations and retrieving proof guidance for new theorems.</p>
+  <div class="demo-form">
+    <label>Lean theorem or proof goal
+      <textarea id="api-theorem">theorem Nat.self_eq (x : Nat) : x = x := by
+  simpa</textarea>
+    </label>
+    <div class="sample-row" id="sample-theorems"></div>
+    <div class="demo-controls">
+      <label>API URL
+        <input id="api-url" value="http://127.0.0.1:8000/retrieve-theorem-guidance">
+      </label>
+      <label>Input type
+        <select id="api-input-type">
+          <option value="lean">lean</option>
+          <option value="theorem">theorem</option>
+          <option value="proof_state">proof_state</option>
+          <option value="goal">goal</option>
+        </select>
+      </label>
+      <label>Premises
+        <input id="api-k-premises" type="number" min="1" max="50" value="10">
+      </label>
+      <label>Theorems
+        <input id="api-k-theorems" type="number" min="1" max="20" value="5">
+      </label>
     </div>
-    <div class="hero-panel">
-      <h2>Pipeline</h2>
-      <div class="chips">
-        <span class="chip">LeanRank rows</span>
-        <span class="chip">normalized entities</span>
-        <span class="chip">knowledge graph</span>
-        <span class="chip">BGE embeddings</span>
-        <span class="chip">retrieval demo</span>
-      </div>
+    <div class="demo-actions">
+      <button class="button" id="api-submit" type="button">Get Proof Guidance</button>
+      <button class="button secondary" id="api-metrics" type="button">Metrics</button>
+      <button class="button secondary" id="api-clear" type="button">Clear</button>
+      <label class="muted"><input id="api-validate-lean" type="checkbox"> Lean check</label>
+      <span class="muted" id="api-status">Idle</span>
     </div>
   </div>
 </header>
 <main>
+  <section>
+    <h2>Interactive Proof Guidance Workbench</h2>
+    <p class="section-lead">The graph visualization and guidance panel are backed by generated files in <code>homepage/assets/</code>. Sample theorem buttons load precomputed guidance; the main action can call a local API server for live retrieval.</p>
+    <div class="workbench">
+      <div>
+        <h3>Knowledge Graph Overview</h3>
+        <div class="graph-view">
+          <svg class="graph-svg" id="kg-svg" viewBox="0 0 900 360" role="img" aria-label="LeanRank proof knowledge graph sample"></svg>
+        </div>
+        <div class="legend" id="kg-legend"></div>
+        <h3 style="margin-top:12px">Edge Types</h3>
+        <div class="legend" id="kg-edge-legend"></div>
+        <div class="graph-detail" id="kg-detail">
+          <span class="muted">Click a graph node or edge to inspect its proof relation.</span>
+        </div>
+        <div class="status-row" style="margin-top:12px">
+          <div class="status"><div class="label">Theorems</div><div class="value">{{ overview.total_theorems }}</div><div class="note">train/val/test</div></div>
+          <div class="status"><div class="label">Proof states</div><div class="value">{{ overview.train_proof_states }}</div><div class="note">train split</div></div>
+          <div class="status"><div class="label">Premises</div><div class="value">{{ overview.train_premises }}</div><div class="note">train split</div></div>
+          <div class="status"><div class="label">Edges</div><div class="value">{{ overview.total_edges }}</div><div class="note">typed graph relations</div></div>
+        </div>
+      </div>
+      <div>
+        <h3>Proof Guidance Panel</h3>
+        <div class="demo-output guidance-panel" id="api-output">
+          <span class="muted">Choose a sample theorem or run live retrieval.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section>
     <h2>Executive Snapshot</h2>
     <div class="kpi-grid">
@@ -173,10 +247,115 @@ HTML = """<!doctype html>
   <section>
     <h2>Retrieval Quality Signals</h2>
     <div class="kpi-grid">
-      <div class="kpi"><div class="label">AUC</div><div class="value">{{ "%.3f"|format(metrics.get("AUC", 0)) }}</div><div class="note">Ranker validation</div></div>
+      <div class="kpi"><div class="label">AUC</div><div class="value">{{ "%.3f"|format(metrics.get("AUC") or 0) }}</div><div class="note">Ranker validation</div></div>
       <div class="kpi"><div class="label">Recall@10</div><div class="value">{{ "%.3f"|format(metrics.get("Recall@10", 0)) }}</div><div class="note">Gold premise in top 10</div></div>
-      <div class="kpi"><div class="label">MRR</div><div class="value">{{ "%.3f"|format(metrics.get("MRR", 0)) }}</div><div class="note">Mean reciprocal rank</div></div>
-      <div class="kpi"><div class="label">Technique coverage</div><div class="value">{{ "%.3f"|format(metrics.get("proof_technique_label_coverage", 0)) }}</div><div class="note">Weak labels over proof states</div></div>
+      <div class="kpi"><div class="label">Theorem Recall@10</div><div class="value">{{ "%.3f"|format(metrics.get("theorem_retrieval_Recall@10", 0)) }}</div><div class="note">{{ metrics.get("theorem_retrieval_evaluated_theorems", 0) }} held-out theorems</div></div>
+      <div class="kpi"><div class="label">Train gold premises</div><div class="value">{{ metrics.get("theorem_retrieval_gold_premises_in_train_index", 0) }}</div><div class="note">{{ metrics.get("theorem_retrieval_gold_premises_missing_from_train_index", 0) }} held-out gold premises missing</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Refresh Dashboard</h2>
+    <p class="section-lead">A compact post-refresh health view combining artifact compatibility, KG scale, parsing coverage, retrieval quality, index benchmark, and difficulty calibration signals.</p>
+    <div class="status-row">
+      {% for name, passed in refresh_dashboard.quality_gates.items() %}
+      <div class="status {{ 'ok' if passed else 'warn' }}"><div class="label">{{ name.replace('_', ' ') }}</div><div class="value">{{ 'pass' if passed else 'check' }}</div><div class="note">refresh quality gate</div></div>
+      {% endfor %}
+    </div>
+    <div class="kpi-grid" style="margin-top:12px">
+      <div class="kpi"><div class="label">Refresh ready</div><div class="value">{{ refresh_dashboard.ready_for_refresh_comparison }}</div><div class="note">all dashboard gates passing</div></div>
+      <div class="kpi"><div class="label">Supervision</div><div class="value">{{ refresh_dashboard.corpus.data_supervision.kind|default("unknown") }}</div><div class="note">proof traces: {{ refresh_dashboard.corpus.data_supervision.has_tactic_states|default(false) }}</div></div>
+      <div class="kpi"><div class="label">Min parse coverage</div><div class="value">{{ "%.3f"|format(refresh_dashboard.parsing.minimum_context_coverage or 0) }}</div><div class="note">context_parse_coverage</div></div>
+      <div class="kpi"><div class="label">Index recall</div><div class="value">{{ "%.3f"|format(refresh_dashboard.index_benchmark.get("premise", {}).get("recall_vs_exact") or 0) }}</div><div class="note">premise index vs exact cosine</div></div>
+      <div class="kpi"><div class="label">Difficulty MAE</div><div class="value">{{ "%.3f"|format(refresh_dashboard.difficulty.train_mae or 0) }}</div><div class="note">train estimator calibration</div></div>
+      <div class="kpi"><div class="label">Trend baseline</div><div class="value">{{ 'yes' if refresh_trend.has_previous else 'no' }}</div><div class="note">previous refresh snapshot</div></div>
+      <div class="kpi"><div class="label">Theorem delta</div><div class="value">{{ "%.0f"|format(refresh_trend.deltas.get("theorems", {}).get("absolute") or 0) }}</div><div class="note">change from previous dashboard</div></div>
+      <div class="kpi"><div class="label">Recall delta</div><div class="value">{{ "%.3f"|format(refresh_trend.deltas.get("theorem_recall_at_10", {}).get("absolute") or 0) }}</div><div class="note">theorem Recall@10 change</div></div>
+      <div class="kpi"><div class="label">Gate changes</div><div class="value">{{ refresh_trend.quality_gate_changes|length }}</div><div class="note">quality gates changed</div></div>
+      <div class="kpi"><div class="label">History entries</div><div class="value">{{ refresh_history.entry_count }}</div><div class="note">bounded refresh trend history</div></div>
+    </div>
+    {% if refresh_dashboard.artifact_compatibility.warnings %}
+    <div class="chips" style="margin-top:12px">
+      {% for warning in refresh_dashboard.artifact_compatibility.warnings %}
+      <span class="chip">{{ warning.replace('_', ' ') }}</span>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </section>
+
+  <section>
+    <h2>New Theorem Proof Guidance</h2>
+    <p class="section-lead">Precomputed held-out theorem case studies show the end-to-end guidance bundle: premises, similar theorems, likely techniques, related proof patterns, difficulty, and graph evidence.</p>
+    {% for case in theorem_case_studies[:3] %}
+    <div class="example">
+      <h3>{{ case.full_name }}</h3>
+      <p class="muted">Gold premises in train index: <b>{{ case.gold_premises_in_train_index }}</b> / {{ case.gold_positive_premise_count }} | missing from train: <b>{{ case.gold_premises_missing_from_train_index }}</b> | coverage: <b>{{ "%.3f"|format(case.gold_premise_train_coverage) }}</b></p>
+      <div class="goal">{{ case.guidance.query.theorem_text[:420] }}</div>
+      <h3>Relevant Premises</h3>
+      <div class="ranked">
+        {% for r in case.guidance.ranked_premises[:5] %}
+        <div class="rank">
+          <code>{{ r.full_name }}</code>
+          <div class="bar-track"><div class="bar green" style="width:{{ (r.score * 100)|round(1) }}%"></div></div>
+          <b>{{ "%.3f"|format(r.score) }}</b>
+        </div>
+        {% if r.ranking_reasons %}
+        <p class="muted">{{ r.ranking_reasons[:2]|join("; ") }}</p>
+        {% endif %}
+        {% endfor %}
+      </div>
+      <h3>Similar Theorems</h3>
+      <div class="ranked">
+        {% for r in case.guidance.similar_theorems[:3] %}
+        <div class="rank">
+          <code>{{ r.full_name }}</code>
+          <div class="bar-track"><div class="bar teal" style="width:{{ (r.score * 100)|round(1) }}%"></div></div>
+          <b>{{ "%.3f"|format(r.score) }}</b>
+        </div>
+        {% endfor %}
+      </div>
+      <p class="muted">Difficulty: <b>{{ case.guidance.difficulty_profile.difficulty_bucket }}</b> / {{ "%.3f"|format(case.guidance.difficulty_profile.difficulty_score) }} | {{ case.guidance.difficulty_profile.signals.calibrated_by|default("query_heuristic") }}</p>
+    </div>
+    {% endfor %}
+  </section>
+
+  <section>
+    <h2>Evaluation And Examples</h2>
+    <p class="section-lead">Compact held-out guidance examples summarize whether the pipeline returns a plausible premise, a proof-template theorem, and a proof-technique hint for each query theorem.</p>
+    <div class="status-row" style="margin-bottom:12px">
+      <div class="status"><div class="label">Case studies</div><div class="value">{{ theorem_case_studies|length }}</div><div class="note">precomputed theorem guidance examples</div></div>
+      <div class="status"><div class="label">Retrieval examples</div><div class="value">{{ retrieval_examples|length }}</div><div class="note">proof-state premise queries</div></div>
+      <div class="status"><div class="label">Theorem Recall@10</div><div class="value">{{ "%.3f"|format(metrics.get("theorem_retrieval_Recall@10", 0)) }}</div><div class="note">held-out theorem retrieval</div></div>
+      <div class="status"><div class="label">Premise Recall@10</div><div class="value">{{ "%.3f"|format(metrics.get("Recall@10", 0)) }}</div><div class="note">premise ranking metric</div></div>
+    </div>
+    <table>
+      <tr><th>Query theorem</th><th>Top premise</th><th>Similar theorem</th><th>Suggested technique</th></tr>
+      {% for case in theorem_case_studies[:8] %}
+      {% set top_premise = case.guidance.ranked_premises[0] if case.guidance.ranked_premises else {} %}
+      {% set top_theorem = case.guidance.similar_theorems[0] if case.guidance.similar_theorems else {} %}
+      {% set top_technique = case.guidance.likely_proof_techniques[0] if case.guidance.likely_proof_techniques else {} %}
+      <tr>
+        <td><code>{{ case.full_name }}</code></td>
+        <td><code>{{ top_premise.full_name|default("none") }}</code><br><span class="muted">{{ "%.3f"|format(top_premise.score|default(0)) }}</span></td>
+        <td><code>{{ top_theorem.full_name|default("none") }}</code><br><span class="muted">{{ "%.3f"|format(top_theorem.score|default(0)) }}</span></td>
+        <td><code>{{ top_technique.label|default("unknown") }}</code></td>
+      </tr>
+      {% endfor %}
+    </table>
+  </section>
+
+  <section>
+    <h2>Why Were These Premises Recommended?</h2>
+    <p class="section-lead">The demo exposes graph and retrieval evidence instead of only showing lemma names. A typical explanation path is:</p>
+    <div class="relation-path">New Theorem
+  -> similar proof state
+  -> previously used premise
+  -> recommended lemma</div>
+    <div class="status-row" style="margin-top:12px">
+      <div class="status"><div class="label">Text retrieval</div><div class="value">goal</div><div class="note">statement and proof-state similarity</div></div>
+      <div class="status"><div class="label">Graph evidence</div><div class="value">paths</div><div class="note">theorem, proof-state, premise relations</div></div>
+      <div class="status"><div class="label">Ranking reasons</div><div class="value">signals</div><div class="note">namespace, symbols, frequency, learned score</div></div>
+      <div class="status"><div class="label">Difficulty</div><div class="value">profile</div><div class="note">complexity and historical prior</div></div>
     </div>
   </section>
 
@@ -212,7 +391,8 @@ HTML = """<!doctype html>
   </section>
 
   <section>
-    <h2>System Capabilities</h2>
+    <h2>Pipeline Summary</h2>
+    <p class="section-lead">LeanRank Data -> Normalize Records -> Build Proof KG -> Add Weak Labels + Difficulty Features -> Generate Embeddings -> Train Premise Ranker -> Retrieve Proof Guidance -> Homepage Demo.</p>
     <div class="timeline">
       {% for fn in functions %}
       <div class="step"><h3><code>{{ fn }}</code></h3><p class="muted">Ready in the Python package and represented by homepage artifacts.</p></div>
@@ -239,9 +419,267 @@ HTML = """<!doctype html>
   <section>
     <h2>Reproducibility</h2>
     <p class="section-lead">The public repo keeps source code, configs, homepage assets, and tests. Large raw data, generated embeddings, and graph artifacts are intentionally reproducible rather than checked into git.</p>
+    <div class="status-row">
+      <div class="status"><div class="label">Corpus source</div><div class="value">{{ corpus_manifest.source_kind|default("unknown") }}</div><div class="note">{{ corpus_manifest.dataset_name|default(dataset.source) }}</div></div>
+      <div class="status {{ 'ok' if corpus_manifest.data_supervision.has_tactic_states|default(false) and corpus_manifest.data_supervision.has_true_positive_premises|default(false) else 'warn' }}"><div class="label">Data supervision</div><div class="value">{{ corpus_manifest.data_supervision.kind|default("unknown") }}</div><div class="note">premise labels: {{ corpus_manifest.data_supervision.has_true_positive_premises|default(false) }}</div></div>
+      <div class="status"><div class="label">Config hash</div><div class="value">{{ corpus_manifest.config_hash|default("unknown") }}</div><div class="note">{{ corpus_manifest.config_path|default("") }}</div></div>
+      <div class="status"><div class="label">Mathlib commit</div><div class="value">{{ corpus_manifest.corpus.mathlib_commit|default("unknown") }}</div><div class="note">Lean {{ corpus_manifest.corpus.lean_version|default("unknown") }}</div></div>
+      <div class="status"><div class="label">Sampled theorems</div><div class="value">{{ corpus_manifest.sampled_theorems|default(overview.total_theorems) }}</div><div class="note">{{ corpus_manifest.sampled_rows|default(dataset.sample_rows) }} rows</div></div>
+    </div>
     <div class="chips">{% for cmd in commands %}<span class="chip"><code>{{ cmd }}</code></span>{% endfor %}</div>
   </section>
 </main>
+<script>
+const output = document.getElementById('api-output');
+const statusEl = document.getElementById('api-status');
+const graphData = {{ graph_visualization|tojson }};
+const caseStudies = {{ theorem_case_studies|tojson }};
+const graphColors = {Theorem:'#2563eb',ProofState:'#0e7490',Premise:'#0f8a5f',ProofTechnique:'#be123c',TacticStep:'#b7791f',FileModule:'#64748b'};
+const edgeDescriptions = {
+  has_proof_state:'theorem has proof state',
+  appears_in_file:'theorem belongs to module',
+  defined_in_file:'premise is defined in module',
+  positive_uses:'proof state previously used premise',
+  negative_candidate:'proof state contrasted with negative candidate',
+  invokes_premise:'theorem uses premise',
+  at_tactic_step:'proof state occurs at tactic step',
+  uses_proof_technique:'proof state suggests proof technique',
+  similar_to_theorem:'theorem is similar to theorem',
+  co_occurs_with:'premises co-occur in proof state'
+};
+function escapeHtml(value){
+  return String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]));
+}
+function scoreBar(value, cls='green'){
+  const pct = Math.max(0, Math.min(100, Number(value || 0) * 100)).toFixed(1);
+  return `<div class="bar-track"><div class="bar ${cls}" style="width:${pct}%"></div></div>`;
+}
+function signalSummary(signals){
+  const parts = [];
+  if (!signals) return parts;
+  if (Number(signals.same_namespace_score || 0) > 0) parts.push('shared namespace');
+  if (Number(signals.same_domain_score || 0) > 0) parts.push('shared domain');
+  if (Number(signals.graph_neighbor_score || 0) > 0) parts.push('graph-neighbor evidence');
+  if (Number(signals.proof_technique_overlap_score || 0) > 0) parts.push('proof-technique overlap');
+  if (Number(signals.premise_frequency_score || 0) > 0) parts.push('historical premise frequency');
+  if (Number(signals.learned_ranker_score || 0) > 0) parts.push('learned ranker signal');
+  if (Number(signals.parsed_symbol_overlap_score || 0) > 0) parts.push('shared parsed symbols');
+  return parts;
+}
+function renderExplanationPaths(data){
+  const premisePaths = (data.ranked_premises || []).slice(0, 4).map(row => {
+    const reasons = (row.ranking_reasons || []).slice(0, 3);
+    const signals = signalSummary(row.signals || {});
+    const bullets = [...reasons, ...signals].slice(0, 5).map(reason => `<li>${escapeHtml(reason)}</li>`).join('');
+    return `<div class="guidance-block"><h3><code>${escapeHtml(row.full_name || row.premise_id || 'premise')}</code></h3><div class="relation-path">New theorem -> retrieved proof context -> ${escapeHtml(row.full_name || 'recommended premise')}</div><ul>${bullets || '<li>Ranked by embedding similarity and available retrieval signals.</li>'}</ul></div>`;
+  }).join('');
+  const graphPaths = (data.graph_evidence || []).slice(0, 3).map(item => {
+    const edges = (item.edges || []).slice(0, 3).map(edge => `<li><code>${escapeHtml(edge.edge_type)}</code>: ${escapeHtml(edge.source)} -> ${escapeHtml(edge.target)}</li>`).join('');
+    return `<div class="guidance-block"><h3>Graph evidence for <code>${escapeHtml(item.entity_id || 'entity')}</code></h3><ul>${edges || '<li>No sampled graph edges for this entity.</li>'}</ul></div>`;
+  }).join('');
+  return premisePaths || graphPaths
+    ? `<div class="guidance-grid">${premisePaths}${graphPaths}</div>`
+    : '<div class="relation-path">New theorem -> similar proof state -> historical premise usage -> ranked recommendation</div>';
+}
+function renderGraph(){
+  const svg = document.getElementById('kg-svg');
+  const legend = document.getElementById('kg-legend');
+  const edgeLegend = document.getElementById('kg-edge-legend');
+  const detail = document.getElementById('kg-detail');
+  if (!svg || !graphData || !graphData.nodes || graphData.nodes.length === 0) return;
+  const nodes = new Map(graphData.nodes.map(node => [node.id, node]));
+  const setDetail = html => { if (detail) detail.innerHTML = html; };
+  const clearActive = () => svg.querySelectorAll('.active').forEach(el => el.classList.remove('active'));
+  const maxY = Math.max(340, ...graphData.nodes.map(node => Number(node.y || 0) + 38));
+  svg.setAttribute('viewBox', `0 0 900 ${maxY}`);
+  svg.innerHTML = '';
+  for (const edge of graphData.edges || []) {
+    const source = nodes.get(edge.source);
+    const target = nodes.get(edge.target);
+    if (!source || !target) continue;
+    const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1', source.x); line.setAttribute('y1', source.y);
+    line.setAttribute('x2', target.x); line.setAttribute('y2', target.y);
+    line.setAttribute('class', 'graph-edge');
+    line.setAttribute('tabindex', '0');
+    const title = document.createElementNS('http://www.w3.org/2000/svg','title');
+    title.textContent = edge.edge_type;
+    line.appendChild(title);
+    const showEdge = () => {
+      clearActive();
+      line.classList.add('active');
+      setDetail(`<h3>${escapeHtml(edgeDescriptions[edge.edge_type] || edge.edge_type)}</h3><p><code>${escapeHtml(source.label || source.id)}</code> -> <code>${escapeHtml(target.label || target.id)}</code></p><p class="muted">Edge type: <b>${escapeHtml(edge.edge_type)}</b></p>`);
+    };
+    line.addEventListener('click', showEdge);
+    line.addEventListener('keydown', event => { if (event.key === 'Enter' || event.key === ' ') showEdge(); });
+    svg.appendChild(line);
+  }
+  for (const node of graphData.nodes) {
+    const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    circle.setAttribute('cx', node.x); circle.setAttribute('cy', node.y); circle.setAttribute('r', node.node_type === 'Theorem' ? 10 : 8);
+    circle.setAttribute('fill', graphColors[node.node_type] || '#475569');
+    circle.setAttribute('class', 'graph-node');
+    circle.setAttribute('tabindex', '0');
+    const title = document.createElementNS('http://www.w3.org/2000/svg','title');
+    title.textContent = `${node.node_type}: ${node.id}`;
+    circle.appendChild(title);
+    const showNode = () => {
+      clearActive();
+      circle.classList.add('active');
+      const incident = (graphData.edges || []).filter(edge => edge.source === node.id || edge.target === node.id).slice(0, 8);
+      const relations = incident.map(edge => {
+        const otherId = edge.source === node.id ? edge.target : edge.source;
+        const other = nodes.get(otherId) || {label: otherId, id: otherId};
+        const arrow = edge.source === node.id ? '->' : '<-';
+        return `<li><code>${escapeHtml(edge.edge_type)}</code> ${arrow} ${escapeHtml(other.label || other.id)}</li>`;
+      }).join('');
+      setDetail(`<h3>${escapeHtml(node.node_type)}: ${escapeHtml(node.label || node.id)}</h3><p class="muted"><code>${escapeHtml(node.id)}</code></p><ul>${relations || '<li>No sampled incident relations.</li>'}</ul>`);
+    };
+    circle.addEventListener('click', showNode);
+    circle.addEventListener('keydown', event => { if (event.key === 'Enter' || event.key === ' ') showNode(); });
+    svg.appendChild(circle);
+    const label = document.createElementNS('http://www.w3.org/2000/svg','text');
+    label.setAttribute('x', Number(node.x) + 12); label.setAttribute('y', Number(node.y) + 4);
+    label.setAttribute('class', 'graph-label');
+    label.textContent = node.label;
+    svg.appendChild(label);
+  }
+  const types = [...new Set(graphData.nodes.map(node => node.node_type))];
+  legend.innerHTML = types.map(type => `<span><i class="swatch" style="background:${graphColors[type] || '#475569'}"></i>${escapeHtml(type)}</span>`).join('');
+  const edgeTypes = [...new Set((graphData.edges || []).map(edge => edge.edge_type))];
+  if (edgeLegend) edgeLegend.innerHTML = edgeTypes.map(type => `<span><i class="edge-swatch"></i>${escapeHtml(edgeDescriptions[type] || type)}</span>`).join('');
+}
+function renderGuidance(data){
+  const premises = (data.ranked_premises || []).slice(0, 6).map(row => {
+    const reasons = (row.ranking_reasons || []).slice(0, 2).map(escapeHtml).join('; ');
+    const statement = row.code || row.statement || row.file_path || '';
+    return `<div><div class="rank"><code>${escapeHtml(row.full_name)}</code>${scoreBar(row.score,'green')}<b>${Number(row.score || 0).toFixed(3)}</b></div>${statement ? `<p class="muted">${escapeHtml(String(statement).slice(0, 180))}</p>` : ''}${reasons ? `<p class="muted">${reasons}</p>` : ''}</div>`;
+  }).join('');
+  const theorems = (data.similar_theorems || []).slice(0, 4).map(row => {
+    const statement = row.statement || row.theorem_text || row.file_path || '';
+    return `<div><div class="rank"><code>${escapeHtml(row.full_name)}</code>${scoreBar(row.score,'teal')}<b>${Number(row.score || 0).toFixed(3)}</b></div>${statement ? `<p class="muted">${escapeHtml(String(statement).slice(0, 160))}</p>` : ''}</div>`;
+  }).join('');
+  const techniques = (data.likely_proof_techniques || []).map(row => `<span class="chip">${escapeHtml(row.label)}</span>`).join('');
+  const proofStates = (data.similar_proof_states || data.related_proof_states || []).slice(0, 3).map(row => {
+    const goal = row.goal_text || row.context || row.proof_state || '';
+    const source = row.full_name || row.theorem_id || row.proof_state_id || '';
+    return `<div><code>${escapeHtml(source)}</code><div class="goal">${escapeHtml(String(goal).slice(0, 260))}</div></div>`;
+  }).join('');
+  const difficulty = data.difficulty_profile || {};
+  const query = data.query || {};
+  const lean = data.lean_diagnostics || {};
+  const leanSummary = lean.summary || {};
+  const source = query.retrieval_query_source || 'parsed_theorem_text';
+  const extracted = query.lean_extracted_proof_state_count || 0;
+  const diffSignals = difficulty.signals || {};
+  const service = data.service || {};
+  const serviceLine = service.request_id ? `<p class="muted">Request: <code>${escapeHtml(service.request_id)}</code>; duration: <b>${Number(service.duration_ms || 0).toFixed(1)} ms</b></p>` : '';
+  const difficultyScore = typeof difficulty.difficulty_score === 'number' ? Number(difficulty.difficulty_score) : 0;
+  const explanations = renderExplanationPaths(data);
+  output.innerHTML = `<div class="guidance-grid"><div class="guidance-block"><h3>Relevant Lemmas / Premises</h3><div class="ranked">${premises || '<span class="muted">No premises returned.</span>'}</div></div><div class="guidance-block"><h3>Similar Theorems</h3><div class="ranked">${theorems || '<span class="muted">No similar theorems returned.</span>'}</div></div><div class="guidance-block"><h3>Likely Proof Techniques</h3><div class="chips">${techniques || '<span class="muted">No labels returned.</span>'}</div><h3 style="margin-top:14px">Difficulty Profile</h3><div class="rank"><code>${escapeHtml(difficulty.difficulty_bucket || 'unknown')}</code>${scoreBar(difficultyScore,'amber')}<b>${difficultyScore.toFixed(3)}</b></div><p class="muted">${escapeHtml(diffSignals.calibrated_by || 'query_heuristic')}</p></div><div class="guidance-block"><h3>Related Proof States / Patterns</h3><div class="ranked">${proofStates || '<span class="muted">No proof states returned.</span>'}</div></div></div><h3>Premise Ranking And Explanation</h3><p class="muted">Query source: <b>${escapeHtml(source)}</b>; Lean proof states: <b>${Number(extracted)}</b>${lean.checked ? `; unsolved goals: <b>${leanSummary.has_unsolved_goals ? 'yes' : 'no'}</b>` : ''}</p>${explanations}${serviceLine}`;
+}
+function renderCaseStudy(index){
+  const item = caseStudies[index];
+  if (!item) return;
+  const guidance = item.guidance || {};
+  const text = guidance.query?.theorem_text || item.theorem_text || item.full_name || '';
+  document.getElementById('api-theorem').value = text;
+  renderGuidance(guidance);
+  statusEl.textContent = `Loaded sample: ${item.full_name || index + 1}`;
+}
+function tokenSet(text){
+  return new Set(String(text || '').toLowerCase().split(/[^a-z0-9_'.]+/).filter(token => token.length > 2));
+}
+function localCaseScore(queryText, item){
+  const queryTokens = tokenSet(queryText);
+  const guidance = item.guidance || {};
+  const candidateText = [
+    item.full_name,
+    item.theorem_text,
+    guidance.query && guidance.query.theorem_text,
+    ...(guidance.ranked_premises || []).slice(0, 5).map(row => row.full_name),
+    ...(guidance.similar_theorems || []).slice(0, 5).map(row => row.full_name),
+  ].join(' ');
+  const candidateTokens = tokenSet(candidateText);
+  let overlap = 0;
+  queryTokens.forEach(token => { if (candidateTokens.has(token)) overlap += 1; });
+  return overlap / Math.max(1, queryTokens.size);
+}
+function renderLocalFallback(queryText, reason){
+  if (!caseStudies || caseStudies.length === 0) {
+    output.innerHTML = `<span class="demo-error">${escapeHtml(reason || 'API unavailable and no local case studies exist.')}</span>`;
+    statusEl.textContent = 'Error';
+    return;
+  }
+  let bestIndex = 0;
+  let bestScore = -1;
+  caseStudies.forEach((item, index) => {
+    const score = localCaseScore(queryText, item);
+    if (score > bestScore) {
+      bestScore = score;
+      bestIndex = index;
+    }
+  });
+  const item = caseStudies[bestIndex];
+  renderGuidance(item.guidance || {});
+  output.insertAdjacentHTML('afterbegin', `<div class="status warn"><div class="label">Local asset fallback</div><div class="value">sample match</div><div class="note">API unavailable; showing nearest precomputed case study <code>${escapeHtml(item.full_name || `Sample ${bestIndex + 1}`)}</code> with token-overlap score ${bestScore.toFixed(3)}.</div></div>`);
+  statusEl.textContent = 'Local asset fallback';
+}
+function renderSampleButtons(){
+  const container = document.getElementById('sample-theorems');
+  if (!container) return;
+  const samples = (caseStudies || []).slice(0, 4);
+  container.innerHTML = samples.map((item, index) => `<button class="button secondary sample-button" type="button" data-sample-index="${index}">${escapeHtml((item.full_name || `Sample ${index + 1}`).split('.').slice(-2).join('.'))}</button>`).join('');
+  container.querySelectorAll('[data-sample-index]').forEach(button => {
+    button.addEventListener('click', () => renderCaseStudy(Number(button.dataset.sampleIndex)));
+  });
+}
+document.getElementById('api-submit').addEventListener('click', async () => {
+  statusEl.textContent = 'Retrieving';
+  output.innerHTML = '<span class="muted">Retrieving guidance...</span>';
+  const slowTimer = window.setTimeout(() => { statusEl.textContent = 'Still running'; }, 2500);
+  const payload = {
+    theorem_text: document.getElementById('api-theorem').value,
+    input_type: document.getElementById('api-input-type').value,
+    k_premises: Number(document.getElementById('api-k-premises').value || 10),
+    k_theorems: Number(document.getElementById('api-k-theorems').value || 5),
+    index_split: 'train',
+    validate_lean: document.getElementById('api-validate-lean').checked
+  };
+  try {
+    const response = await fetch(document.getElementById('api-url').value, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)});
+    if (!response.ok) throw new Error(await response.text());
+    renderGuidance(await response.json());
+    statusEl.textContent = 'Done';
+  } catch (error) {
+    renderLocalFallback(payload.theorem_text, error.message);
+  } finally {
+    window.clearTimeout(slowTimer);
+  }
+});
+document.getElementById('api-metrics').addEventListener('click', async () => {
+  statusEl.textContent = 'Loading metrics';
+  const url = new URL(document.getElementById('api-url').value);
+  url.pathname = '/metrics';
+  try {
+    const response = await fetch(url.toString());
+    if (!response.ok) throw new Error(await response.text());
+    const data = await response.json();
+    output.innerHTML = `<h3>API Metrics</h3><table><tr><th>Total</th><th>Success</th><th>Failed</th><th>Avg ms</th></tr><tr><td>${Number(data.total_requests || 0)}</td><td>${Number(data.successful_requests || 0)}</td><td>${Number(data.failed_requests || 0)}</td><td>${Number(data.average_duration_ms || 0).toFixed(1)}</td></tr></table><pre>${escapeHtml(JSON.stringify(data.last_request || {}, null, 2))}</pre>`;
+    statusEl.textContent = 'Metrics loaded';
+  } catch (error) {
+    output.innerHTML = `<span class="demo-error">${escapeHtml(error.message)}</span>`;
+    statusEl.textContent = 'Error';
+  }
+});
+document.getElementById('api-clear').addEventListener('click', () => {
+  output.innerHTML = '<span class="muted">Choose a sample theorem or run live retrieval.</span>';
+  statusEl.textContent = 'Idle';
+});
+renderGraph();
+renderSampleButtons();
+renderCaseStudy(0);
+</script>
 </body>
 </html>"""
 
@@ -252,6 +690,12 @@ def run(config_path: str) -> None:
     for name, data in [
         ("metrics", summary["metrics"]),
         ("retrieval_examples", summary["retrieval_examples"]),
+        ("theorem_retrieval_case_studies", summary["theorem_case_studies"]),
+        ("graph_visualization", summary["graph_visualization"]),
+        ("corpus_manifest", summary["corpus_manifest"]),
+        ("refresh_dashboard", summary["refresh_dashboard"]),
+        ("refresh_trend", summary["refresh_trend"]),
+        ("refresh_history", summary["refresh_history"]),
         ("domain_coverage", summary["domain_coverage"]),
         ("graph_stats", summary["graph_stats"]),
         ("homepage_summary", summary),

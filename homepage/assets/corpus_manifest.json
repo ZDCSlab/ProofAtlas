@@ -1,0 +1,62 @@
+{
+  "config_hash": "30f1b8ab4273d20c",
+  "config_path": "configs/proofatlas.yaml",
+  "corpus": {
+    "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
+    "extraction_config_hash": "3dd7ecf53cc1215c",
+    "extraction_pipeline": "LeanRank Hugging Face dataset",
+    "lean_version": "unknown",
+    "mathlib_commit": "unknown",
+    "mathlib_path": "",
+    "provenance_resolution": {
+      "lean_version": "config/env/lean",
+      "mathlib_commit": "config/env/git",
+      "source_revision": "config/env/git"
+    },
+    "source_path": "",
+    "source_revision": "erbacher/LeanRank-data"
+  },
+  "data_supervision": {
+    "has_negative_candidates": true,
+    "has_real_mathlib_source": true,
+    "has_tactic_states": true,
+    "has_true_positive_premises": true,
+    "kind": "leanrank_proof_state_rows",
+    "limitations": [],
+    "premise_label_semantics": "leanrank_positive_and_negative_candidates",
+    "proof_trace_level": "proof_state_rows",
+    "suitable_for": {
+      "kg_visualization": true,
+      "premise_ranking_training": true,
+      "proof_state_pattern_training": true,
+      "theorem_text_retrieval_demo": true
+    }
+  },
+  "dataset_name": "erbacher/LeanRank-data",
+  "debug_rows": null,
+  "project_name": "ProofAtlas",
+  "random_seed": 42,
+  "sample_plan": {
+    "source_rows": 350000,
+    "target_theorems": 10000,
+    "unit": "theorem"
+  },
+  "sampled_rows": 292012,
+  "sampled_theorems": 10000,
+  "source_kind": "huggingface",
+  "split_counts": {
+    "test": {
+      "rows": 28910,
+      "theorems": 1000
+    },
+    "train": {
+      "rows": 234520,
+      "theorems": 8000
+    },
+    "val": {
+      "rows": 28582,
+      "theorems": 1000
+    }
+  },
+  "use_huggingface_requested": true
+}

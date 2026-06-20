@@ -25,6 +25,7 @@ def ensure_dirs() -> None:
         "outputs/reports",
         "outputs/graph",
         "outputs/embeddings",
+        "outputs/indexes",
         "outputs/models",
         "homepage/assets",
     ]:

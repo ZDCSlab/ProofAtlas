@@ -1,12 +1,16 @@
 from __future__ import annotations
 
+import json
+import os
 import random
+import subprocess
 from collections import defaultdict
+from pathlib import Path
 from typing import Any
 
 import pandas as pd
 
-from .utils import domain_from_path, ensure_dirs, load_config, write_json, write_jsonl, write_parquet
+from .utils import domain_from_path, ensure_dirs, load_config, stable_hash, write_json, write_jsonl, write_parquet
 
 REQUIRED_FIELDS = [
     "file_path",
@@ -27,6 +31,8 @@ DOMAINS = [
     ("Data", "Nat", "Nat.add_comm"),
     ("Order", "Lattice", "le_trans"),
 ]
+
+UNKNOWN_VALUES = {"", "unknown", "none", "null", "placeholder"}
 
 
 def _premise(name: str, domain: str, subdomain: str, i: int) -> dict[str, str]:
@@ -90,6 +96,42 @@ def _try_huggingface(config: dict[str, Any], limit: int) -> pd.DataFrame | None:
         return None
 
 
+def _data_supervision_profile(source_kind: str) -> dict[str, Any]:
+    if source_kind == "huggingface":
+        return {
+            "kind": "leanrank_proof_state_rows",
+            "proof_trace_level": "proof_state_rows",
+            "has_real_mathlib_source": True,
+            "has_tactic_states": True,
+            "has_true_positive_premises": True,
+            "has_negative_candidates": True,
+            "premise_label_semantics": "leanrank_positive_and_negative_candidates",
+            "suitable_for": {
+                "kg_visualization": True,
+                "theorem_text_retrieval_demo": True,
+                "premise_ranking_training": True,
+                "proof_state_pattern_training": True,
+            },
+            "limitations": [],
+        }
+    return {
+        "kind": "synthetic_demo_rows",
+        "proof_trace_level": "synthetic_proof_state_rows",
+        "has_real_mathlib_source": False,
+        "has_tactic_states": True,
+        "has_true_positive_premises": True,
+        "has_negative_candidates": True,
+        "premise_label_semantics": "synthetic_demo_labels",
+        "suitable_for": {
+            "kg_visualization": True,
+            "theorem_text_retrieval_demo": True,
+            "premise_ranking_training": False,
+            "proof_state_pattern_training": False,
+        },
+        "limitations": ["Synthetic rows are for deterministic demos and tests, not prediction-quality claims."],
+    }
+
+
 def _sample_by_theorem(df: pd.DataFrame, total_theorems: int, seed: int) -> pd.DataFrame:
     if df.empty or total_theorems <= 0:
         return df.head(0).copy()
@@ -112,6 +154,99 @@ def _sample_plan(config: dict[str, Any], debug_rows: int | None) -> dict[str, An
         return {"unit": "theorem", "target_theorems": total_theorems, "source_rows": source_rows}
     total_rows = int(sample["total_rows"])
     return {"unit": "row", "target_rows": total_rows, "source_rows": total_rows}
+
+
+def _known(value: Any) -> str | None:
+    if value is None:
+        return None
+    text = str(value).strip()
+    if text.lower() in UNKNOWN_VALUES:
+        return None
+    return text
+
+
+def _run_text(cmd: list[str], cwd: str | Path | None = None) -> str | None:
+    try:
+        result = subprocess.run(cmd, cwd=cwd, check=False, capture_output=True, text=True, timeout=10)
+    except Exception:
+        return None
+    if result.returncode != 0:
+        return None
+    return result.stdout.strip() or result.stderr.strip() or None
+
+
+def _git_commit(path: str | Path | None) -> str | None:
+    if not path:
+        return None
+    root = Path(path)
+    if root.is_file():
+        root = root.parent
+    if not root.exists():
+        return None
+    return _run_text(["git", "rev-parse", "HEAD"], cwd=root)
+
+
+def _lean_version() -> str | None:
+    return _run_text(["lean", "--version"])
+
+
+def _resolve_corpus_provenance(config: dict[str, Any], config_path: str) -> dict[str, Any]:
+    corpus_config = config.get("corpus", {}) or {}
+    env = os.environ
+    mathlib_path = _known(corpus_config.get("mathlib_path")) or _known(env.get("PROOFATLAS_MATHLIB_PATH"))
+    source_path = _known(corpus_config.get("source_path")) or _known(env.get("PROOFATLAS_SOURCE_PATH"))
+    source_revision = (
+        _known(corpus_config.get("source_revision"))
+        or _known(env.get("PROOFATLAS_SOURCE_REVISION"))
+        or _git_commit(source_path)
+        or _git_commit(Path(config_path).resolve().parent)
+        or "unknown"
+    )
+    corpus_version = (
+        _known(corpus_config.get("corpus_version"))
+        or _known(env.get("PROOFATLAS_CORPUS_VERSION"))
+        or (
+            f"{config.get('dataset_name', 'corpus')}@{source_revision}"
+            if source_revision != "unknown"
+            else str(config.get("dataset_name", "unknown"))
+        )
+    )
+    mathlib_commit = (
+        _known(corpus_config.get("mathlib_commit"))
+        or _known(env.get("PROOFATLAS_MATHLIB_COMMIT"))
+        or _git_commit(mathlib_path)
+        or "unknown"
+    )
+    lean_version = (
+        _known(corpus_config.get("lean_version"))
+        or _known(env.get("PROOFATLAS_LEAN_VERSION"))
+        or _lean_version()
+        or "unknown"
+    )
+    extraction_config = {
+        "dataset_name": config.get("dataset_name", ""),
+        "source_kind": config.get("source_kind", corpus_config.get("source_kind", "")),
+        "use_huggingface": bool(config.get("use_huggingface", False)),
+        "sample": config.get("sample", {}),
+        "split": config.get("split", {}),
+        "embedding": config.get("embedding", {}),
+        "index": config.get("index", {}),
+    }
+    return {
+        "corpus_version": corpus_version,
+        "lean_version": lean_version,
+        "mathlib_commit": mathlib_commit,
+        "mathlib_path": mathlib_path or "",
+        "extraction_pipeline": _known(corpus_config.get("extraction_pipeline")) or "LeanRank",
+        "source_revision": source_revision,
+        "source_path": source_path or "",
+        "extraction_config_hash": stable_hash(json.dumps(extraction_config, sort_keys=True), 16),
+        "provenance_resolution": {
+            "lean_version": "config/env/lean",
+            "mathlib_commit": "config/env/git",
+            "source_revision": "config/env/git",
+        },
+    }
 
 
 def _adapt_premise(value: Any) -> dict[str, Any]:
@@ -192,6 +327,8 @@ def run(config_path: str, debug_rows: int | None = None) -> None:
     plan = _sample_plan(config, debug_rows)
     seed = int(config["random_seed"])
     raw = _try_huggingface(config, int(plan["source_rows"]))
+    used_huggingface = raw is not None
+    source_kind = "huggingface" if used_huggingface else "synthetic"
     if raw is None:
         raw = synthetic_rows(int(plan["source_rows"]), seed)
     raw = raw.head(int(plan["source_rows"])).reset_index(drop=True)
@@ -205,6 +342,7 @@ def run(config_path: str, debug_rows: int | None = None) -> None:
     write_json("outputs/reports/raw_schema.json", schema)
     write_jsonl("outputs/reports/raw_preview.jsonl", raw.head(5).to_dict(orient="records"))
     df = adapt_rows(raw)
+    data_supervision = _data_supervision_profile(source_kind)
     source_theorems = int(df["full_name"].nunique()) if not df.empty else 0
     if plan["unit"] == "theorem":
         df = _sample_by_theorem(df, int(plan["target_theorems"]), seed)
@@ -214,6 +352,8 @@ def run(config_path: str, debug_rows: int | None = None) -> None:
         "outputs/reports/sampling_report.json",
         {
             "unit": plan["unit"],
+            "source_kind": source_kind,
+            "data_supervision": data_supervision,
             "source_rows": int(plan["source_rows"]),
             "source_theorems": source_theorems,
             "target_rows": int(plan.get("target_rows", len(df))),
@@ -229,3 +369,29 @@ def run(config_path: str, debug_rows: int | None = None) -> None:
         write_parquet(split_df, f"data/sample/{split}_rows.parquet")
         domain_report[split] = split_df["domain_tag"].value_counts().to_dict()
     write_json("outputs/reports/domain_distribution.json", domain_report)
+    corpus_provenance = _resolve_corpus_provenance(config, config_path)
+    write_json(
+        "outputs/reports/corpus_manifest.json",
+        {
+            "project_name": config.get("project_name", "ProofAtlas"),
+            "dataset_name": config.get("dataset_name", ""),
+            "source_kind": source_kind,
+            "data_supervision": data_supervision,
+            "use_huggingface_requested": bool(config.get("use_huggingface", False)),
+            "config_path": config_path,
+            "config_hash": stable_hash(json.dumps(config, sort_keys=True), 16),
+            "random_seed": seed,
+            "debug_rows": debug_rows,
+            "sample_plan": plan,
+            "sampled_rows": int(len(df)),
+            "sampled_theorems": int(df["full_name"].nunique()) if not df.empty else 0,
+            "split_counts": {
+                split: {
+                    "rows": int(len(split_df)),
+                    "theorems": int(split_df["full_name"].nunique()) if not split_df.empty else 0,
+                }
+                for split, split_df in splits.items()
+            },
+            "corpus": corpus_provenance,
+        },
+    )

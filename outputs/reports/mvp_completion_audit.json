@@ -1,0 +1,842 @@
+{
+  "checks": {
+    "artifact:docs/proofatlas_deployment_guide.md": {
+      "detail": "exists",
+      "passed": true,
+      "path": "docs/proofatlas_deployment_guide.md"
+    },
+    "artifact:homepage/assets/graph_visualization.json": {
+      "detail": "exists",
+      "passed": true,
+      "path": "homepage/assets/graph_visualization.json"
+    },
+    "artifact:homepage/assets/refresh_dashboard.json": {
+      "detail": "exists",
+      "passed": true,
+      "path": "homepage/assets/refresh_dashboard.json"
+    },
+    "artifact:homepage/assets/refresh_history.json": {
+      "detail": "exists",
+      "passed": true,
+      "path": "homepage/assets/refresh_history.json"
+    },
+    "artifact:homepage/assets/refresh_trend.json": {
+      "detail": "exists",
+      "passed": true,
+      "path": "homepage/assets/refresh_trend.json"
+    },
+    "artifact:homepage/assets/theorem_retrieval_case_studies.json": {
+      "detail": "exists",
+      "passed": true,
+      "path": "homepage/assets/theorem_retrieval_case_studies.json"
+    },
+    "artifact:notebooks/leanrank_kg_demo.ipynb": {
+      "detail": "exists",
+      "passed": true,
+      "path": "notebooks/leanrank_kg_demo.ipynb"
+    },
+    "artifact:outputs/indexes/index_summary.json": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/indexes/index_summary.json"
+    },
+    "artifact:outputs/models/difficulty_estimator.joblib": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/models/difficulty_estimator.joblib"
+    },
+    "artifact:outputs/models/premise_ranker.joblib": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/models/premise_ranker.joblib"
+    },
+    "artifact:outputs/reports/artifact_compatibility_report.json": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/reports/artifact_compatibility_report.json"
+    },
+    "artifact:outputs/reports/corpus_manifest.json": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/reports/corpus_manifest.json"
+    },
+    "artifact:outputs/reports/deployment_security_review.json": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/reports/deployment_security_review.json"
+    },
+    "artifact:outputs/reports/difficulty_distribution.csv": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/reports/difficulty_distribution.csv"
+    },
+    "artifact:outputs/reports/difficulty_estimator_metrics.json": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/reports/difficulty_estimator_metrics.json"
+    },
+    "artifact:outputs/reports/domain_distribution.json": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/reports/domain_distribution.json"
+    },
+    "artifact:outputs/reports/experiment_report.md": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/reports/experiment_report.md"
+    },
+    "artifact:outputs/reports/homepage_summary.json": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/reports/homepage_summary.json"
+    },
+    "artifact:outputs/reports/index_benchmark.json": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/reports/index_benchmark.json"
+    },
+    "artifact:outputs/reports/metrics.json": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/reports/metrics.json"
+    },
+    "artifact:outputs/reports/pipeline_performance_report.json": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/reports/pipeline_performance_report.json"
+    },
+    "artifact:outputs/reports/pipeline_run_timings.json": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/reports/pipeline_run_timings.json"
+    },
+    "artifact:outputs/reports/premise_trace_supervision_report.json": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/reports/premise_trace_supervision_report.json"
+    },
+    "artifact:outputs/reports/proof_technique_distribution.csv": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/reports/proof_technique_distribution.csv"
+    },
+    "artifact:outputs/reports/ranker_validation_metrics.json": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/reports/ranker_validation_metrics.json"
+    },
+    "artifact:outputs/reports/raw_schema.json": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/reports/raw_schema.json"
+    },
+    "artifact:outputs/reports/refresh_dashboard.json": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/reports/refresh_dashboard.json"
+    },
+    "artifact:outputs/reports/refresh_history.json": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/reports/refresh_history.json"
+    },
+    "artifact:outputs/reports/refresh_trend.json": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/reports/refresh_trend.json"
+    },
+    "artifact:outputs/reports/retrieval_examples.json": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/reports/retrieval_examples.json"
+    },
+    "artifact:outputs/reports/retrieval_examples.md": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/reports/retrieval_examples.md"
+    },
+    "artifact:outputs/reports/test_set_evaluation.json": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/reports/test_set_evaluation.json"
+    },
+    "artifact:outputs/reports/theorem_query_parse_coverage.json": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/reports/theorem_query_parse_coverage.json"
+    },
+    "artifact:outputs/reports/theorem_retrieval_case_studies.json": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/reports/theorem_retrieval_case_studies.json"
+    },
+    "embedding:demo:premise": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/embeddings/demo_premise_embeddings.npz"
+    },
+    "embedding:demo:proof_state": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/embeddings/demo_proof_state_embeddings.npz"
+    },
+    "embedding:demo:theorem": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/embeddings/demo_theorem_embeddings.npz"
+    },
+    "embedding:test:premise": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/embeddings/test_premise_embeddings.npz"
+    },
+    "embedding:test:proof_state": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/embeddings/test_proof_state_embeddings.npz"
+    },
+    "embedding:test:theorem": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/embeddings/test_theorem_embeddings.npz"
+    },
+    "embedding:train:premise": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/embeddings/train_premise_embeddings.npz"
+    },
+    "embedding:train:proof_state": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/embeddings/train_proof_state_embeddings.npz"
+    },
+    "embedding:train:theorem": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/embeddings/train_theorem_embeddings.npz"
+    },
+    "embedding:val:premise": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/embeddings/val_premise_embeddings.npz"
+    },
+    "embedding:val:proof_state": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/embeddings/val_proof_state_embeddings.npz"
+    },
+    "embedding:val:theorem": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/embeddings/val_theorem_embeddings.npz"
+    },
+    "file:Makefile": {
+      "detail": "exists",
+      "passed": true,
+      "path": "Makefile"
+    },
+    "file:README.md": {
+      "detail": "exists",
+      "passed": true,
+      "path": "README.md"
+    },
+    "file:configs/sample.yaml": {
+      "detail": "exists",
+      "passed": true,
+      "path": "configs/sample.yaml"
+    },
+    "file:homepage/index.html": {
+      "detail": "exists",
+      "passed": true,
+      "path": "homepage/index.html"
+    },
+    "file:pyproject.toml": {
+      "detail": "exists",
+      "passed": true,
+      "path": "pyproject.toml"
+    },
+    "graph:demo:edges": {
+      "detail": "13802 rows",
+      "passed": true,
+      "path": "outputs/graph/demo/edges_enriched.parquet"
+    },
+    "graph:demo:nodes": {
+      "detail": "3952 rows",
+      "passed": true,
+      "path": "outputs/graph/demo/nodes_enriched.parquet"
+    },
+    "graph:test:edges": {
+      "detail": "159705 rows",
+      "passed": true,
+      "path": "outputs/graph/test/edges_enriched.parquet"
+    },
+    "graph:test:nodes": {
+      "detail": "47549 rows",
+      "passed": true,
+      "path": "outputs/graph/test/nodes_enriched.parquet"
+    },
+    "graph:train:edges": {
+      "detail": "1073855 rows",
+      "passed": true,
+      "path": "outputs/graph/train/edges_enriched.parquet"
+    },
+    "graph:train:nodes": {
+      "detail": "187971 rows",
+      "passed": true,
+      "path": "outputs/graph/train/nodes_enriched.parquet"
+    },
+    "graph:val:edges": {
+      "detail": "151856 rows",
+      "passed": true,
+      "path": "outputs/graph/val/edges_enriched.parquet"
+    },
+    "graph:val:nodes": {
+      "detail": "44902 rows",
+      "passed": true,
+      "path": "outputs/graph/val/nodes_enriched.parquet"
+    },
+    "index:demo:premise": {
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.028483940055593848",
+      "passed": true,
+      "path": "outputs/indexes/demo_premise_neighbors.bin"
+    },
+    "index:demo:proof_state": {
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.0885496421251446",
+      "passed": true,
+      "path": "outputs/indexes/demo_proof_state_neighbors.bin"
+    },
+    "index:demo:theorem": {
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.01577346003614366",
+      "passed": true,
+      "path": "outputs/indexes/demo_theorem_neighbors.bin"
+    },
+    "index:test:premise": {
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.9094658591784537",
+      "passed": true,
+      "path": "outputs/indexes/test_premise_neighbors.bin"
+    },
+    "index:test:proof_state": {
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.04700329294428229",
+      "passed": true,
+      "path": "outputs/indexes/test_proof_state_neighbors.bin"
+    },
+    "index:test:theorem": {
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.08902867999859154",
+      "passed": true,
+      "path": "outputs/indexes/test_theorem_neighbors.bin"
+    },
+    "index:train:premise": {
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=4.374131576856598",
+      "passed": true,
+      "path": "outputs/indexes/train_premise_neighbors.bin"
+    },
+    "index:train:proof_state": {
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.5842231891583651",
+      "passed": true,
+      "path": "outputs/indexes/train_proof_state_neighbors.bin"
+    },
+    "index:train:theorem": {
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.14043334708549082",
+      "passed": true,
+      "path": "outputs/indexes/train_theorem_neighbors.bin"
+    },
+    "index:val:premise": {
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.8127631039824337",
+      "passed": true,
+      "path": "outputs/indexes/val_premise_neighbors.bin"
+    },
+    "index:val:proof_state": {
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.05399951501749456",
+      "passed": true,
+      "path": "outputs/indexes/val_proof_state_neighbors.bin"
+    },
+    "index:val:theorem": {
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.09088857611641288",
+      "passed": true,
+      "path": "outputs/indexes/val_theorem_neighbors.bin"
+    },
+    "index_manifest:demo:premise": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/indexes/demo_premise_index_manifest.json"
+    },
+    "index_manifest:demo:proof_state": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/indexes/demo_proof_state_index_manifest.json"
+    },
+    "index_manifest:demo:theorem": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/indexes/demo_theorem_index_manifest.json"
+    },
+    "index_manifest:test:premise": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/indexes/test_premise_index_manifest.json"
+    },
+    "index_manifest:test:proof_state": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/indexes/test_proof_state_index_manifest.json"
+    },
+    "index_manifest:test:theorem": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/indexes/test_theorem_index_manifest.json"
+    },
+    "index_manifest:train:premise": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/indexes/train_premise_index_manifest.json"
+    },
+    "index_manifest:train:proof_state": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/indexes/train_proof_state_index_manifest.json"
+    },
+    "index_manifest:train:theorem": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/indexes/train_theorem_index_manifest.json"
+    },
+    "index_manifest:val:premise": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/indexes/val_premise_index_manifest.json"
+    },
+    "index_manifest:val:proof_state": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/indexes/val_proof_state_index_manifest.json"
+    },
+    "index_manifest:val:theorem": {
+      "detail": "exists",
+      "passed": true,
+      "path": "outputs/indexes/val_theorem_index_manifest.json"
+    },
+    "processed:demo:file_modules": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/demo/file_modules.parquet"
+    },
+    "processed:demo:negative_edges": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/demo/negative_edges.parquet"
+    },
+    "processed:demo:positive_edges": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/demo/positive_edges.parquet"
+    },
+    "processed:demo:premise_techniques": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/demo/premise_techniques.parquet"
+    },
+    "processed:demo:premises": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/demo/premises.parquet"
+    },
+    "processed:demo:proof_state_features": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/demo/proof_state_features.parquet"
+    },
+    "processed:demo:proof_state_techniques": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/demo/proof_state_techniques.parquet"
+    },
+    "processed:demo:proof_states": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/demo/proof_states.parquet"
+    },
+    "processed:demo:proof_techniques": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/demo/proof_techniques.parquet"
+    },
+    "processed:demo:theorem_features": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/demo/theorem_features.parquet"
+    },
+    "processed:demo:theorems": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/demo/theorems.parquet"
+    },
+    "processed:test:file_modules": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/test/file_modules.parquet"
+    },
+    "processed:test:negative_edges": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/test/negative_edges.parquet"
+    },
+    "processed:test:positive_edges": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/test/positive_edges.parquet"
+    },
+    "processed:test:premise_techniques": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/test/premise_techniques.parquet"
+    },
+    "processed:test:premises": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/test/premises.parquet"
+    },
+    "processed:test:proof_state_features": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/test/proof_state_features.parquet"
+    },
+    "processed:test:proof_state_techniques": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/test/proof_state_techniques.parquet"
+    },
+    "processed:test:proof_states": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/test/proof_states.parquet"
+    },
+    "processed:test:proof_techniques": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/test/proof_techniques.parquet"
+    },
+    "processed:test:theorem_features": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/test/theorem_features.parquet"
+    },
+    "processed:test:theorems": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/test/theorems.parquet"
+    },
+    "processed:train:file_modules": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/train/file_modules.parquet"
+    },
+    "processed:train:negative_edges": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/train/negative_edges.parquet"
+    },
+    "processed:train:positive_edges": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/train/positive_edges.parquet"
+    },
+    "processed:train:premise_techniques": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/train/premise_techniques.parquet"
+    },
+    "processed:train:premises": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/train/premises.parquet"
+    },
+    "processed:train:proof_state_features": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/train/proof_state_features.parquet"
+    },
+    "processed:train:proof_state_techniques": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/train/proof_state_techniques.parquet"
+    },
+    "processed:train:proof_states": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/train/proof_states.parquet"
+    },
+    "processed:train:proof_techniques": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/train/proof_techniques.parquet"
+    },
+    "processed:train:theorem_features": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/train/theorem_features.parquet"
+    },
+    "processed:train:theorems": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/train/theorems.parquet"
+    },
+    "processed:val:file_modules": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/val/file_modules.parquet"
+    },
+    "processed:val:negative_edges": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/val/negative_edges.parquet"
+    },
+    "processed:val:positive_edges": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/val/positive_edges.parquet"
+    },
+    "processed:val:premise_techniques": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/val/premise_techniques.parquet"
+    },
+    "processed:val:premises": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/val/premises.parquet"
+    },
+    "processed:val:proof_state_features": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/val/proof_state_features.parquet"
+    },
+    "processed:val:proof_state_techniques": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/val/proof_state_techniques.parquet"
+    },
+    "processed:val:proof_states": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/val/proof_states.parquet"
+    },
+    "processed:val:proof_techniques": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/val/proof_techniques.parquet"
+    },
+    "processed:val:theorem_features": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/val/theorem_features.parquet"
+    },
+    "processed:val:theorems": {
+      "detail": "exists",
+      "passed": true,
+      "path": "data/processed/val/theorems.parquet"
+    },
+    "schema:file_module": {
+      "detail": "exists",
+      "passed": true,
+      "path": "schemas/file_module.schema.json"
+    },
+    "schema:premise": {
+      "detail": "exists",
+      "passed": true,
+      "path": "schemas/premise.schema.json"
+    },
+    "schema:proof_state": {
+      "detail": "exists",
+      "passed": true,
+      "path": "schemas/proof_state.schema.json"
+    },
+    "schema:proof_technique": {
+      "detail": "exists",
+      "passed": true,
+      "path": "schemas/proof_technique.schema.json"
+    },
+    "schema:theorem": {
+      "detail": "exists",
+      "passed": true,
+      "path": "schemas/theorem.schema.json"
+    },
+    "source:api": {
+      "detail": "exists",
+      "passed": true,
+      "path": "src/leanrank_kg/api.py"
+    },
+    "source:benchmark_index": {
+      "detail": "exists",
+      "passed": true,
+      "path": "src/leanrank_kg/benchmark_index.py"
+    },
+    "source:build_index": {
+      "detail": "exists",
+      "passed": true,
+      "path": "src/leanrank_kg/build_index.py"
+    },
+    "source:deployment_security": {
+      "detail": "exists",
+      "passed": true,
+      "path": "src/leanrank_kg/deployment_security.py"
+    },
+    "source:experiment_report": {
+      "detail": "exists",
+      "passed": true,
+      "path": "src/leanrank_kg/experiment_report.py"
+    },
+    "source:lean_check": {
+      "detail": "exists",
+      "passed": true,
+      "path": "src/leanrank_kg/lean_check.py"
+    },
+    "source:pipeline_profile": {
+      "detail": "exists",
+      "passed": true,
+      "path": "src/leanrank_kg/pipeline_profile.py"
+    },
+    "source:pipeline_timing": {
+      "detail": "exists",
+      "passed": true,
+      "path": "src/leanrank_kg/pipeline_timing.py"
+    },
+    "source:premise_trace_supervision": {
+      "detail": "exists",
+      "passed": true,
+      "path": "src/leanrank_kg/premise_trace_supervision.py"
+    },
+    "source:query": {
+      "detail": "exists",
+      "passed": true,
+      "path": "src/leanrank_kg/query.py"
+    },
+    "validation:artifact_compatibility": {
+      "detail": "artifact_compatibility={'config_hash_matches': True, 'failures': [], 'warnings': [], 'data_supervision': 'leanrank_proof_state_rows', 'splits': ['test', 'train', 'val']}",
+      "passed": true,
+      "path": "outputs/reports/artifact_compatibility_report.json"
+    },
+    "validation:corpus_manifest": {
+      "detail": "corpus_manifest={'source_kind': 'huggingface', 'data_supervision': 'leanrank_proof_state_rows', 'config_hash': '30f1b8ab4273d20c', 'corpus_version': 'erbacher/LeanRank-data@erbacher/LeanRank-data', 'extraction_config_hash': '3dd7ecf53cc1215c', 'splits': ['test', 'train', 'val']}",
+      "passed": true,
+      "path": "outputs/reports/corpus_manifest.json"
+    },
+    "validation:deployment_guide": {
+      "detail": "missing=[]",
+      "passed": true,
+      "path": "docs/proofatlas_deployment_guide.md"
+    },
+    "validation:deployment_security_review": {
+      "detail": "deployment_security={'passed': True, 'failures': [], 'warnings': ['readiness_gated_startup'], 'public_exposure_ready': False}",
+      "passed": true,
+      "path": "outputs/reports/deployment_security_review.json"
+    },
+    "validation:difficulty_estimator": {
+      "detail": "difficulty_estimator={'train_rows': 23723, 'train_mae': 0.03893516332772901, 'residual_quantiles': {'p50': 0.027527784331568966, 'p80': 0.054857658983094075, 'p95': 0.11347958086444797}}",
+      "passed": true,
+      "path": "outputs/reports/difficulty_estimator_metrics.json"
+    },
+    "validation:experiment_report": {
+      "detail": "missing=[]",
+      "passed": true,
+      "path": "outputs/reports/experiment_report.md"
+    },
+    "validation:graph_endpoints": {
+      "detail": "missing_endpoint_counts={'demo': 0, 'test': 0, 'train': 0, 'val': 0}",
+      "passed": true,
+      "path": "outputs/reports/graph_validation_summary.json"
+    },
+    "validation:graph_visualization": {
+      "detail": "graph_sample={'nodes': 40, 'edges': 80}",
+      "passed": true,
+      "path": "homepage/assets/graph_visualization.json"
+    },
+    "validation:homepage_sections": {
+      "detail": "missing=[]",
+      "passed": true,
+      "path": "homepage/index.html"
+    },
+    "validation:index_benchmark": {
+      "detail": "index_benchmark={'premise': {'backend': 'hnswlib', 'indexed_available': True, 'exact_ms_per_query': 69.12065093871206, 'indexed_ms_per_query': 3.773068960290402}, 'proof_state': {'backend': 'hnswlib', 'indexed_available': True, 'exact_ms_per_query': 12.772339859511703, 'indexed_ms_per_query': 0.840118310879916}, 'theorem': {'backend': 'hnswlib', 'indexed_available': True, 'exact_ms_per_query': 4.08946119947359, 'indexed_ms_per_query': 0.3203733800910413}}",
+      "passed": true,
+      "path": "outputs/reports/index_benchmark.json"
+    },
+    "validation:index_summary": {
+      "detail": "index_summary={'backend': 'hnswlib', 'metric': 'cosine', 'corpus': {'corpus_version': 'erbacher/LeanRank-data@erbacher/LeanRank-data', 'extraction_config_hash': '3dd7ecf53cc1215c', 'mathlib_commit': 'unknown', 'source_revision': 'erbacher/LeanRank-data'}, 'splits': ['demo', 'test', 'train', 'val']}",
+      "passed": true,
+      "path": "outputs/indexes/index_summary.json"
+    },
+    "validation:pipeline_performance_report": {
+      "detail": "pipeline_performance={'dataset_name': 'erbacher/LeanRank-data', 'scale_profile': {'ann_backend_availability': {'faiss': False, 'hnswlib': True, 'lancedb': False}, 'current_total_split_rows': 292012, 'dataset_name': 'erbacher/LeanRank-data', 'embedding_backend': 'sentence_transformers', 'embedding_device': 'cuda', 'embedding_devices': ['cuda:0', 'cuda:1', 'cuda:2', 'cuda:3', 'cuda:4', 'cuda:5', 'cuda:6'], 'index_backend': 'hnswlib', 'leanrank_premise_supervision_ready': True, 'requested_rows': 60000, 'requested_theorems': 10000, 'scale_bucket': 'large', 'source_rows': 350000, 'target_dataset_confirmed': True}, 'recommendations': [{'area': 'monitoring', 'priority': 'low', 'recommendation': 'Keep this profile report as the baseline and compare it after every larger LeanRank-data refresh.'}], 'stage_keys': ['benchmark', 'embeddings', 'evaluation', 'graph', 'indexes', 'processed', 'readiness', 'sample', 'timings']}",
+      "passed": true,
+      "path": "outputs/reports/pipeline_performance_report.json"
+    },
+    "validation:pipeline_run_timings": {
+      "detail": "pipeline_run_timings={'passed': True, 'total_seconds': 4.03193892003037, 'stage_count': 19, 'stages': ['sample', 'normalize', 'build_graph', 'label_techniques', 'compute_difficulty', 'premise_trace_supervision', 'train_difficulty', 'embed', 'build_index', 'benchmark_index', 'augment_graph', 'train_ranker', 'evaluate', 'validate', 'homepage', 'deployment_security', 'pipeline_profile', 'experiment_report', 'audit']}",
+      "passed": true,
+      "path": "outputs/reports/pipeline_run_timings.json"
+    },
+    "validation:premise_trace_supervision": {
+      "detail": "premise_trace_supervision={'dataset_name': 'erbacher/LeanRank-data', 'current': {'has_negative_candidate_hardness': True, 'has_negative_candidates': True, 'has_positive_edges': True, 'negative_to_positive_edge_ratio': 9.547775010437512, 'quality_checks': {'all_negative_edges_have_valid_endpoints': True, 'all_positive_edges_have_valid_endpoints': True, 'all_positive_negative_pairs_disjoint': True}, 'total_negative_edges': 663198, 'total_positive_edges': 69461}, 'scope': 'erbacher/LeanRank-data normalized positive/negative premise supervision'}",
+      "passed": true,
+      "path": "outputs/reports/premise_trace_supervision_report.json"
+    },
+    "validation:ranker_ablation": {
+      "detail": "ranker_ablation={'validation_auc': 0.825379, 'groups': ['difficulty', 'embedding_similarity', 'frequency', 'graph', 'namespace_domain', 'proof_technique', 'symbol_overlap', 'theorem_neighborhood'], 'has_ablation': True}",
+      "passed": true,
+      "path": "outputs/reports/ranker_validation_metrics.json"
+    },
+    "validation:refresh_dashboard": {
+      "detail": "refresh_dashboard={'ready': True, 'gates': {'artifact_compatible': True, 'graph_valid': True, 'index_benchmark_present': True, 'parsing_coverage_present': True, 'schema_clean': True, 'split_clean': True, 'theorem_eval_present': True, 'theorem_query_parse_present': True}}",
+      "passed": true,
+      "path": "outputs/reports/refresh_dashboard.json"
+    },
+    "validation:refresh_history": {
+      "detail": "refresh_history={'entry_count': 7, 'history_limit': 20}",
+      "passed": true,
+      "path": "outputs/reports/refresh_history.json"
+    },
+    "validation:refresh_trend": {
+      "detail": "refresh_trend={'has_previous': True, 'delta_keys': ['artifact_compatible', 'difficulty_train_mae', 'edges', 'minimum_context_coverage', 'nodes', 'premise_index_recall_vs_exact', 'premise_recall_at_10', 'premises', 'proof_states', 'ready_for_refresh_comparison', 'theorem_mrr', 'theorem_recall_at_10', 'theorems']}",
+      "passed": true,
+      "path": "outputs/reports/refresh_trend.json"
+    },
+    "validation:retrieval_examples": {
+      "detail": "examples=20",
+      "passed": true,
+      "path": "outputs/reports/retrieval_examples.json"
+    },
+    "validation:schema": {
+      "detail": "error_count=0",
+      "passed": true,
+      "path": "outputs/reports/schema_validation_summary.json"
+    },
+    "validation:split_leakage": {
+      "detail": "has_leakage=False",
+      "passed": true,
+      "path": "outputs/reports/split_leakage_report.json"
+    },
+    "validation:test_set_evaluation": {
+      "detail": "test_set_evaluation={'candidate_pool': 'train premise index', 'proof_state_metrics': {'MAP': 0.04599873631316425, 'MRR': 0.07540784240556661, 'Recall@1': 0.0013297872340425532, 'Recall@10': 0.12792553191489361, 'Recall@100': 0.30895390070921985, 'Recall@5': 0.09618794326241133, 'Recall@50': 0.27952127659574466, 'evaluated_queries': 100, 'evaluated_retrievable_queries': 94, 'gold_premise_coverage': 0.8634361233480177, 'gold_premises_in_train_index': 196, 'gold_premises_missing_from_train_index': 31, 'gold_premises_total': 227, 'nDCG@1': 0.010638297872340425, 'nDCG@10': 0.0680313806460776, 'nDCG@100': 0.11228497381341818, 'nDCG@5': 0.056143712293221945, 'nDCG@50': 0.10587642044776965}, 'theorem_metrics': {'theorem_retrieval_MAP': 0.35601788179788446, 'theorem_retrieval_MRR': 0.547312376522293, 'theorem_retrieval_Recall@1': 0.2434065934065934, 'theorem_retrieval_Recall@10': 0.42328861316509003, 'theorem_retrieval_Recall@100': 0.664224887774834, 'theorem_retrieval_Recall@5': 0.3849657324415649, 'theorem_retrieval_Recall@50': 0.5941816656907956, 'theorem_retrieval_evaluated_theorems': 50, 'theorem_retrieval_evaluated_theorems_with_train_gold': 49, 'theorem_retrieval_gold_premise_coverage': 0.8679245283018868, 'theorem_retrieval_gold_premises_in_train_index': 230, 'theorem_retrieval_gold_premises_missing_from_train_index': 35, 'theorem_retrieval_gold_premises_total': 265, 'theorem_retrieval_nDCG@1': 0.4489795918367347, 'theorem_retrieval_nDCG@10': 0.413929397649813, 'theorem_retrieval_nDCG@100': 0.48791441763346055, 'theorem_retrieval_nDCG@5': 0.395975865777386, 'theorem_retrieval_nDCG@50': 0.46930715432145537}, 'proof_state_domains': [{'domain_tag': 'AlgebraicGeometry', 'metrics': {'MAP': 0.03937557686354427, 'MRR': 0.06576622586143911, 'Recall@1': 0.0, 'Recall@10': 0.10707070707070708, 'Recall@100': 0.3424242424242424, 'Recall@5': 0.09090909090909091, 'Recall@50': 0.2888888888888889, 'evaluated_queries': 37, 'evaluated_retrievable_queries': 33, 'gold_premise_coverage': 0.8271604938271605, 'gold_premises_in_train_index': 67, 'gold_premises_missing_from_train_index': 14, 'gold_premises_total': 81, 'nDCG@1': 0.0, 'nDCG@10': 0.058580274402794695, 'nDCG@100': 0.1154691724933392, 'nDCG@5': 0.04970060276831396, 'nDCG@50': 0.10209464992926293}, 'subdomain_tags': ['AffineScheme.lean', 'IdealSheaf', 'Morphisms', 'Scheme.lean', 'Sites', 'StructureSheaf.lean']}, {'domain_tag': 'RingTheory', 'metrics': {'MAP': 0.029703956251687817, 'MRR': 0.036775924925735885, 'Recall@1': 0.0, 'Recall@10': 0.09782608695652174, 'Recall@100': 0.21739130434782608, 'Recall@5': 0.05434782608695652, 'Recall@50': 0.21739130434782608, 'evaluated_queries': 24, 'evaluated_retrievable_queries': 23, 'gold_premise_coverage': 0.8913043478260869, 'gold_premises_in_train_index': 41, 'gold_premises_missing_from_train_index': 5, 'gold_premises_total': 46, 'nDCG@1': 0.0, 'nDCG@10': 0.04354177693932394, 'nDCG@100': 0.07217423225415386, 'nDCG@5': 0.02904902331613554, 'nDCG@50': 0.07217423225415386}, 'subdomain_tags': ['Algebraic', 'Etale', 'Extension', 'Kaehler', 'Norm', 'Trace']}, {'domain_tag': 'LinearAlgebra', 'metrics': {'MAP': 0.013676544207998586, 'MRR': 0.012726551807937787, 'Recall@1': 0.0, 'Recall@10': 0.0, 'Recall@100': 0.3333333333333333, 'Recall@5': 0.0, 'Recall@50': 0.2222222222222222, 'evaluated_queries': 9, 'evaluated_retrievable_queries': 9, 'gold_premise_coverage': 1.0, 'gold_premises_in_train_index': 21, 'gold_premises_missing_from_train_index': 0, 'gold_premises_total': 21, 'nDCG@1': 0.0, 'nDCG@10': 0.0, 'nDCG@100': 0.07209456506037565, 'nDCG@5': 0.0, 'nDCG@50': 0.05420070153188182}, 'subdomain_tags': ['AffineSpace']}, {'domain_tag': 'NumberTheory', 'metrics': {'MAP': 0.08139886227058765, 'MRR': 0.1262013505915945, 'Recall@1': 0.0, 'Recall@10': 0.30000000000000004, 'Recall@100': 0.55, 'Recall@5': 0.2777777777777778, 'Recall@50': 0.55, 'evaluated_queries': 9, 'evaluated_retrievable_queries': 9, 'gold_premise_coverage': 0.8148148148148148, 'gold_premises_in_train_index': 22, 'gold_premises_missing_from_train_index': 5, 'gold_premises_total': 27, 'nDCG@1': 0.0, 'nDCG@10': 0.13360097673111332, 'nDCG@100': 0.20468506748514448, 'nDCG@5': 0.12017749865339174, 'nDCG@50': 0.20468506748514448}, 'subdomain_tags': ['ArithmeticFunction.lean', 'LSeries', 'LegendreSymbol']}, {'domain_tag': 'Analysis', 'metrics': {'MAP': 0.03571428571428571, 'MRR': 0.03571428571428571, 'Recall@1': 0.0, 'Recall@10': 0.25, 'Recall@100': 0.25, 'Recall@5': 0.0, 'Recall@50': 0.25, 'evaluated_queries': 5, 'evaluated_retrievable_queries': 4, 'gold_premise_coverage': 0.7142857142857143, 'gold_premises_in_train_index': 5, 'gold_premises_missing_from_train_index': 2, 'gold_premises_total': 7, 'nDCG@1': 0.0, 'nDCG@10': 0.08333333333333333, 'nDCG@100': 0.08333333333333333, 'nDCG@5': 0.0, 'nDCG@50': 0.08333333333333333}, 'subdomain_tags': ['Analytic', 'Normed']}, {'domain_tag': 'Algebra', 'metrics': {'MAP': 0.0989057239057239, 'MRR': 0.375, 'Recall@1': 0.03125, 'Recall@10': 0.15625, 'Recall@100': 0.21875, 'Recall@5': 0.15625, 'Recall@50': 0.21875, 'evaluated_queries': 4, 'evaluated_retrievable_queries': 4, 'gold_premise_coverage': 0.8666666666666667, 'gold_premises_in_train_index': 13, 'gold_premises_missing_from_train_index': 2, 'gold_premises_total': 15, 'nDCG@1': 0.25, 'nDCG@10': 0.1599488775005497, 'nDCG@100': 0.18553252876775356, 'nDCG@5': 0.18150325312703944, 'nDCG@50': 0.18553252876775356}, 'subdomain_tags': ['ModEq.lean', 'Order']}, {'domain_tag': 'FieldTheory', 'metrics': {'MAP': 0.13174964936886396, 'MRR': 0.1384992987377279, 'Recall@1': 0.0, 'Recall@10': 0.25, 'Recall@100': 0.5, 'Recall@5': 0.25, 'Recall@50': 0.5, 'evaluated_queries': 4, 'evaluated_retrievable_queries': 4, 'gold_premise_coverage': 0.875, 'gold_premises_in_train_index': 7, 'gold_premises_missing_from_train_index': 1, 'gold_premises_total': 8, 'nDCG@1': 0.0, 'nDCG@10': 0.15773243839286438, 'nDCG@100': 0.21598622366848538, 'nDCG@5': 0.15773243839286438, 'nDCG@50': 0.21598622366848538}, 'subdomain_tags': ['Normal']}, {'domain_tag': 'Topology', 'metrics': {'MAP': 0.0, 'MRR': 0.0, 'Recall@1': 0.0, 'Recall@10': 0.0, 'Recall@100': 0.0, 'Recall@5': 0.0, 'Recall@50': 0.0, 'evaluated_queries': 3, 'evaluated_retrievable_queries': 3, 'gold_premise_coverage': 0.8333333333333334, 'gold_premises_in_train_index': 5, 'gold_premises_missing_from_train_index': 1, 'gold_premises_total': 6, 'nDCG@1': 0.0, 'nDCG@10': 0.0, 'nDCG@100': 0.0, 'nDCG@5': 0.0, 'nDCG@50': 0.0}, 'subdomain_tags': ['Instances']}, {'domain_tag': 'CategoryTheory', 'metrics': {'MAP': 0.03125, 'MRR': 0.125, 'Recall@1': 0.0, 'Recall@10': 0.25, 'Recall@100': 0.25, 'Recall@5': 0.0, 'Recall@50': 0.25, 'evaluated_queries': 1, 'evaluated_retrievable_queries': 1, 'gold_premise_coverage': 1.0, 'gold_premises_in_train_index': 4, 'gold_premises_missing_from_train_index': 0, 'gold_premises_total': 4, 'nDCG@1': 0.0, 'nDCG@10': 0.123151194370365, 'nDCG@100': 0.123151194370365, 'nDCG@5': 0.0, 'nDCG@50': 0.123151194370365}, 'subdomain_tags': ['Action']}, {'domain_tag': 'Computability', 'metrics': {'MAP': 0.0, 'MRR': 0.0, 'Recall@1': 0.0, 'Recall@10': 0.0, 'Recall@100': 0.0, 'Recall@5': 0.0, 'Recall@50': 0.0, 'evaluated_queries': 1, 'evaluated_retrievable_queries': 1, 'gold_premise_coverage': 1.0, 'gold_premises_in_train_index': 4, 'gold_premises_missing_from_train_index': 0, 'gold_premises_total': 4, 'nDCG@1': 0.0, 'nDCG@10': 0.0, 'nDCG@100': 0.0, 'nDCG@5': 0.0, 'nDCG@50': 0.0}, 'subdomain_tags': ['AkraBazzi']}, {'domain_tag': 'Data', 'metrics': {'MAP': 0.38888888888888884, 'MRR': 0.5, 'Recall@1': 0.0, 'Recall@10': 0.6666666666666666, 'Recall@100': 0.6666666666666666, 'Recall@5': 0.6666666666666666, 'Recall@50': 0.6666666666666666, 'evaluated_queries': 1, 'evaluated_retrievable_queries': 1, 'gold_premise_coverage': 1.0, 'gold_premises_in_train_index': 3, 'gold_premises_missing_from_train_index': 0, 'gold_premises_total': 3, 'nDCG@1': 0.0, 'nDCG@10': 0.5307212739772434, 'nDCG@100': 0.5307212739772434, 'nDCG@5': 0.5307212739772434, 'nDCG@50': 0.5307212739772434}, 'subdomain_tags': ['List']}, {'domain_tag': 'Geometry', 'metrics': {'MAP': 0.0, 'MRR': 0.0, 'Recall@1': 0.0, 'Recall@10': 0.0, 'Recall@100': 0.0, 'Recall@5': 0.0, 'Recall@50': 0.0, 'evaluated_queries': 1, 'evaluated_retrievable_queries': 1, 'gold_premise_coverage': 0.75, 'gold_premises_in_train_index': 3, 'gold_premises_missing_from_train_index': 1, 'gold_premises_total': 4, 'nDCG@1': 0.0, 'nDCG@10': 0.0, 'nDCG@100': 0.0, 'nDCG@5': 0.0, 'nDCG@50': 0.0}, 'subdomain_tags': ['Euclidean']}, {'domain_tag': 'Order', 'metrics': {'MAP': 0.0, 'MRR': 0.0, 'Recall@1': 0.0, 'Recall@10': 0.0, 'Recall@100': 0.0, 'Recall@5': 0.0, 'Recall@50': 0.0, 'evaluated_queries': 1, 'evaluated_retrievable_queries': 1, 'gold_premise_coverage': 1.0, 'gold_premises_in_train_index': 1, 'gold_premises_missing_from_train_index': 0, 'gold_premises_total': 1, 'nDCG@1': 0.0, 'nDCG@10': 0.0, 'nDCG@100': 0.0, 'nDCG@5': 0.0, 'nDCG@50': 0.0}, 'subdomain_tags': ['Lattice.lean']}], 'theorem_domains': [{'domain_tag': 'AlgebraicGeometry', 'metrics': {'theorem_retrieval_MAP': 0.3404238370308426, 'theorem_retrieval_MRR': 0.536165577342048, 'theorem_retrieval_Recall@1': 0.28632478632478636, 'theorem_retrieval_Recall@10': 0.39883540760733743, 'theorem_retrieval_Recall@100': 0.5832065919785219, 'theorem_retrieval_Recall@5': 0.3662468136152347, 'theorem_retrieval_Recall@50': 0.5587865675584973, 'theorem_retrieval_evaluated_queries': 9, 'theorem_retrieval_evaluated_retrievable_queries': 9, 'theorem_retrieval_gold_premise_coverage': 0.8055555555555556, 'theorem_retrieval_gold_premises_in_train_index': 58, 'theorem_retrieval_gold_premises_missing_from_train_index': 14, 'theorem_retrieval_gold_premises_total': 72, 'theorem_retrieval_nDCG@1': 0.4444444444444444, 'theorem_retrieval_nDCG@10': 0.40403384008727866, 'theorem_retrieval_nDCG@100': 0.4629684345201716, 'theorem_retrieval_nDCG@5': 0.38885484790001634, 'theorem_retrieval_nDCG@50': 0.4542641538068668}, 'subdomain_tags': ['AffineScheme.lean', 'IdealSheaf', 'Morphisms', 'Scheme.lean', 'Sites', 'StructureSheaf.lean']}, {'domain_tag': 'Analysis', 'metrics': {'theorem_retrieval_MAP': 0.26189879564879565, 'theorem_retrieval_MRR': 0.40170940170940167, 'theorem_retrieval_Recall@1': 0.16666666666666666, 'theorem_retrieval_Recall@10': 0.27777777777777773, 'theorem_retrieval_Recall@100': 0.75, 'theorem_retrieval_Recall@5': 0.27777777777777773, 'theorem_retrieval_Recall@50': 0.75, 'theorem_retrieval_evaluated_queries': 7, 'theorem_retrieval_evaluated_retrievable_queries': 6, 'theorem_retrieval_gold_premise_coverage': 0.85, 'theorem_retrieval_gold_premises_in_train_index': 17, 'theorem_retrieval_gold_premises_missing_from_train_index': 3, 'theorem_retrieval_gold_premises_total': 20, 'theorem_retrieval_nDCG@1': 0.3333333333333333, 'theorem_retrieval_nDCG@10': 0.2749884291752682, 'theorem_retrieval_nDCG@100': 0.4147976185879152, 'theorem_retrieval_nDCG@5': 0.2773455099043313, 'theorem_retrieval_nDCG@50': 0.4147976185879152}, 'subdomain_tags': ['Analytic', 'Asymptotics', 'Normed']}, {'domain_tag': 'RingTheory', 'metrics': {'theorem_retrieval_MAP': 0.12304591573180404, 'theorem_retrieval_MRR': 0.2318936877076412, 'theorem_retrieval_Recall@1': 0.0, 'theorem_retrieval_Recall@10': 0.24999999999999997, 'theorem_retrieval_Recall@100': 0.530952380952381, 'theorem_retrieval_Recall@5': 0.15952380952380954, 'theorem_retrieval_Recall@50': 0.42857142857142855, 'theorem_retrieval_evaluated_queries': 7, 'theorem_retrieval_evaluated_retrievable_queries': 7, 'theorem_retrieval_gold_premise_coverage': 0.9090909090909091, 'theorem_retrieval_gold_premises_in_train_index': 40, 'theorem_retrieval_gold_premises_missing_from_train_index': 4, 'theorem_retrieval_gold_premises_total': 44, 'theorem_retrieval_nDCG@1': 0.0, 'theorem_retrieval_nDCG@10': 0.19193729652079547, 'theorem_retrieval_nDCG@100': 0.2699917991147671, 'theorem_retrieval_nDCG@5': 0.13427108052968884, 'theorem_retrieval_nDCG@50': 0.24114672437483647}, 'subdomain_tags': ['Algebraic', 'DedekindDomain', 'Etale', 'Extension', 'Kaehler', 'Norm', 'Trace']}, {'domain_tag': 'LinearAlgebra', 'metrics': {'theorem_retrieval_MAP': 0.45061525316752754, 'theorem_retrieval_MRR': 0.7244444444444444, 'theorem_retrieval_Recall@1': 0.19722222222222222, 'theorem_retrieval_Recall@10': 0.561111111111111, 'theorem_retrieval_Recall@100': 0.7388888888888889, 'theorem_retrieval_Recall@5': 0.5027777777777778, 'theorem_retrieval_Recall@50': 0.6833333333333332, 'theorem_retrieval_evaluated_queries': 6, 'theorem_retrieval_evaluated_retrievable_queries': 6, 'theorem_retrieval_gold_premise_coverage': 1.0, 'theorem_retrieval_gold_premises_in_train_index': 27, 'theorem_retrieval_gold_premises_missing_from_train_index': 0, 'theorem_retrieval_gold_premises_total': 27, 'theorem_retrieval_nDCG@1': 0.6666666666666666, 'theorem_retrieval_nDCG@10': 0.5346622996812719, 'theorem_retrieval_nDCG@100': 0.5980177548045952, 'theorem_retrieval_nDCG@5': 0.5197528807922985, 'theorem_retrieval_nDCG@50': 0.5822691440496401}, 'subdomain_tags': ['AffineSpace', 'Determinant.lean', 'Dual', 'Matrix']}, {'domain_tag': '.lake', 'metrics': {'theorem_retrieval_MAP': 0.6193323108729116, 'theorem_retrieval_MRR': 0.65, 'theorem_retrieval_Recall@1': 0.5, 'theorem_retrieval_Recall@10': 0.6285714285714286, 'theorem_retrieval_Recall@100': 0.7714285714285715, 'theorem_retrieval_Recall@5': 0.6285714285714286, 'theorem_retrieval_Recall@50': 0.6857142857142857, 'theorem_retrieval_evaluated_queries': 5, 'theorem_retrieval_evaluated_retrievable_queries': 5, 'theorem_retrieval_gold_premise_coverage': 0.7058823529411765, 'theorem_retrieval_gold_premises_in_train_index': 12, 'theorem_retrieval_gold_premises_missing_from_train_index': 5, 'theorem_retrieval_gold_premises_total': 17, 'theorem_retrieval_nDCG@1': 0.6, 'theorem_retrieval_nDCG@10': 0.6236765585910726, 'theorem_retrieval_nDCG@100': 0.6744849185719651, 'theorem_retrieval_nDCG@5': 0.6292136699685413, 'theorem_retrieval_nDCG@50': 0.6468794924255786}, 'subdomain_tags': ['packages']}, {'domain_tag': 'Algebra', 'metrics': {'theorem_retrieval_MAP': 0.5263749303591985, 'theorem_retrieval_MRR': 0.7857142857142857, 'theorem_retrieval_Recall@1': 0.5, 'theorem_retrieval_Recall@10': 0.53125, 'theorem_retrieval_Recall@100': 0.84375, 'theorem_retrieval_Recall@5': 0.5, 'theorem_retrieval_Recall@50': 0.71875, 'theorem_retrieval_evaluated_queries': 4, 'theorem_retrieval_evaluated_retrievable_queries': 4, 'theorem_retrieval_gold_premise_coverage': 0.8666666666666667, 'theorem_retrieval_gold_premises_in_train_index': 13, 'theorem_retrieval_gold_premises_missing_from_train_index': 2, 'theorem_retrieval_gold_premises_total': 15, 'theorem_retrieval_nDCG@1': 0.75, 'theorem_retrieval_nDCG@10': 0.5776521549467006, 'theorem_retrieval_nDCG@100': 0.6625154702307958, 'theorem_retrieval_nDCG@5': 0.5565735963827292, 'theorem_retrieval_nDCG@50': 0.6387240465918753}, 'subdomain_tags': ['ModEq.lean', 'Order']}, {'domain_tag': 'NumberTheory', 'metrics': {'theorem_retrieval_MAP': 0.29593857846698757, 'theorem_retrieval_MRR': 0.5625, 'theorem_retrieval_Recall@1': 0.1875, 'theorem_retrieval_Recall@10': 0.3352272727272727, 'theorem_retrieval_Recall@100': 0.5909090909090909, 'theorem_retrieval_Recall@5': 0.3352272727272727, 'theorem_retrieval_Recall@50': 0.3806818181818182, 'theorem_retrieval_evaluated_queries': 4, 'theorem_retrieval_evaluated_retrievable_queries': 4, 'theorem_retrieval_gold_premise_coverage': 0.8888888888888888, 'theorem_retrieval_gold_premises_in_train_index': 32, 'theorem_retrieval_gold_premises_missing_from_train_index': 4, 'theorem_retrieval_gold_premises_total': 36, 'theorem_retrieval_nDCG@1': 0.5, 'theorem_retrieval_nDCG@10': 0.3654082920985698, 'theorem_retrieval_nDCG@100': 0.43773032881617524, 'theorem_retrieval_nDCG@5': 0.37822828846685874, 'theorem_retrieval_nDCG@50': 0.3881173573449277}, 'subdomain_tags': ['ArithmeticFunction.lean', 'LSeries', 'LegendreSymbol']}, {'domain_tag': 'CategoryTheory', 'metrics': {'theorem_retrieval_MAP': 0.375, 'theorem_retrieval_MRR': 1.0, 'theorem_retrieval_Recall@1': 0.25, 'theorem_retrieval_Recall@10': 0.5, 'theorem_retrieval_Recall@100': 0.5, 'theorem_retrieval_Recall@5': 0.5, 'theorem_retrieval_Recall@50': 0.5, 'theorem_retrieval_evaluated_queries': 1, 'theorem_retrieval_evaluated_retrievable_queries': 1, 'theorem_retrieval_gold_premise_coverage': 1.0, 'theorem_retrieval_gold_premises_in_train_index': 4, 'theorem_retrieval_gold_premises_missing_from_train_index': 0, 'theorem_retrieval_gold_premises_total': 4, 'theorem_retrieval_nDCG@1': 1.0, 'theorem_retrieval_nDCG@10': 0.5585075862632192, 'theorem_retrieval_nDCG@100': 0.5585075862632192, 'theorem_retrieval_nDCG@5': 0.5585075862632192, 'theorem_retrieval_nDCG@50': 0.5585075862632192}, 'subdomain_tags': ['Action']}, {'domain_tag': 'Computability', 'metrics': {'theorem_retrieval_MAP': 0.05615488847196164, 'theorem_retrieval_MRR': 0.07692307692307693, 'theorem_retrieval_Recall@1': 0.0, 'theorem_retrieval_Recall@10': 0.0, 'theorem_retrieval_Recall@100': 0.75, 'theorem_retrieval_Recall@5': 0.0, 'theorem_retrieval_Recall@50': 0.5, 'theorem_retrieval_evaluated_queries': 1, 'theorem_retrieval_evaluated_retrievable_queries': 1, 'theorem_retrieval_gold_premise_coverage': 1.0, 'theorem_retrieval_gold_premises_in_train_index': 4, 'theorem_retrieval_gold_premises_missing_from_train_index': 0, 'theorem_retrieval_gold_premises_total': 4, 'theorem_retrieval_nDCG@1': 0.0, 'theorem_retrieval_nDCG@10': 0.0, 'theorem_retrieval_nDCG@100': 0.25566778949835484, 'theorem_retrieval_nDCG@5': 0.0, 'theorem_retrieval_nDCG@50': 0.19443208198687648}, 'subdomain_tags': ['AkraBazzi']}, {'domain_tag': 'Data', 'metrics': {'theorem_retrieval_MAP': 0.7555555555555555, 'theorem_retrieval_MRR': 1.0, 'theorem_retrieval_Recall@1': 0.3333333333333333, 'theorem_retrieval_Recall@10': 1.0, 'theorem_retrieval_Recall@100': 1.0, 'theorem_retrieval_Recall@5': 1.0, 'theorem_retrieval_Recall@50': 1.0, 'theorem_retrieval_evaluated_queries': 1, 'theorem_retrieval_evaluated_retrievable_queries': 1, 'theorem_retrieval_gold_premise_coverage': 1.0, 'theorem_retrieval_gold_premises_in_train_index': 3, 'theorem_retrieval_gold_premises_missing_from_train_index': 0, 'theorem_retrieval_gold_premises_total': 3, 'theorem_retrieval_nDCG@1': 1.0, 'theorem_retrieval_nDCG@10': 0.8854598815714874, 'theorem_retrieval_nDCG@100': 0.8854598815714874, 'theorem_retrieval_nDCG@5': 0.8854598815714874, 'theorem_retrieval_nDCG@50': 0.8854598815714874}, 'subdomain_tags': ['List']}, {'domain_tag': 'FieldTheory', 'metrics': {'theorem_retrieval_MAP': 0.02426916712630998, 'theorem_retrieval_MRR': 0.14285714285714285, 'theorem_retrieval_Recall@1': 0.0, 'theorem_retrieval_Recall@10': 0.14285714285714285, 'theorem_retrieval_Recall@100': 0.2857142857142857, 'theorem_retrieval_Recall@5': 0.0, 'theorem_retrieval_Recall@50': 0.14285714285714285, 'theorem_retrieval_evaluated_queries': 1, 'theorem_retrieval_evaluated_retrievable_queries': 1, 'theorem_retrieval_gold_premise_coverage': 0.875, 'theorem_retrieval_gold_premises_in_train_index': 7, 'theorem_retrieval_gold_premises_missing_from_train_index': 1, 'theorem_retrieval_gold_premises_total': 8, 'theorem_retrieval_nDCG@1': 0.0, 'theorem_retrieval_nDCG@10': 0.09162544430476362, 'theorem_retrieval_nDCG@100': 0.13575521377994604, 'theorem_retrieval_nDCG@5': 0.0, 'theorem_retrieval_nDCG@50': 0.09162544430476362}, 'subdomain_tags': ['Normal']}, {'domain_tag': 'Geometry', 'metrics': {'theorem_retrieval_MAP': 0.4444444444444444, 'theorem_retrieval_MRR': 1.0, 'theorem_retrieval_Recall@1': 0.3333333333333333, 'theorem_retrieval_Recall@10': 0.6666666666666666, 'theorem_retrieval_Recall@100': 0.6666666666666666, 'theorem_retrieval_Recall@5': 0.3333333333333333, 'theorem_retrieval_Recall@50': 0.6666666666666666, 'theorem_retrieval_evaluated_queries': 1, 'theorem_retrieval_evaluated_retrievable_queries': 1, 'theorem_retrieval_gold_premise_coverage': 0.75, 'theorem_retrieval_gold_premises_in_train_index': 3, 'theorem_retrieval_gold_premises_missing_from_train_index': 1, 'theorem_retrieval_gold_premises_total': 4, 'theorem_retrieval_nDCG@1': 1.0, 'theorem_retrieval_nDCG@10': 0.6364391809889587, 'theorem_retrieval_nDCG@100': 0.6364391809889587, 'theorem_retrieval_nDCG@5': 0.46927872602275644, 'theorem_retrieval_nDCG@50': 0.6364391809889587}, 'subdomain_tags': ['Euclidean']}, {'domain_tag': 'MeasureTheory', 'metrics': {'theorem_retrieval_MAP': 0.0625, 'theorem_retrieval_MRR': 0.25, 'theorem_retrieval_Recall@1': 0.0, 'theorem_retrieval_Recall@10': 0.25, 'theorem_retrieval_Recall@100': 0.25, 'theorem_retrieval_Recall@5': 0.25, 'theorem_retrieval_Recall@50': 0.25, 'theorem_retrieval_evaluated_queries': 1, 'theorem_retrieval_evaluated_retrievable_queries': 1, 'theorem_retrieval_gold_premise_coverage': 1.0, 'theorem_retrieval_gold_premises_in_train_index': 4, 'theorem_retrieval_gold_premises_missing_from_train_index': 0, 'theorem_retrieval_gold_premises_total': 4, 'theorem_retrieval_nDCG@1': 0.0, 'theorem_retrieval_nDCG@10': 0.16812753627111746, 'theorem_retrieval_nDCG@100': 0.16812753627111746, 'theorem_retrieval_nDCG@5': 0.16812753627111746, 'theorem_retrieval_nDCG@50': 0.16812753627111746}, 'subdomain_tags': ['Covering']}, {'domain_tag': 'Order', 'metrics': {'theorem_retrieval_MAP': 1.0, 'theorem_retrieval_MRR': 1.0, 'theorem_retrieval_Recall@1': 1.0, 'theorem_retrieval_Recall@10': 1.0, 'theorem_retrieval_Recall@100': 1.0, 'theorem_retrieval_Recall@5': 1.0, 'theorem_retrieval_Recall@50': 1.0, 'theorem_retrieval_evaluated_queries': 1, 'theorem_retrieval_evaluated_retrievable_queries': 1, 'theorem_retrieval_gold_premise_coverage': 1.0, 'theorem_retrieval_gold_premises_in_train_index': 1, 'theorem_retrieval_gold_premises_missing_from_train_index': 0, 'theorem_retrieval_gold_premises_total': 1, 'theorem_retrieval_nDCG@1': 1.0, 'theorem_retrieval_nDCG@10': 1.0, 'theorem_retrieval_nDCG@100': 1.0, 'theorem_retrieval_nDCG@5': 1.0, 'theorem_retrieval_nDCG@50': 1.0}, 'subdomain_tags': ['Lattice.lean']}, {'domain_tag': 'Topology', 'metrics': {'theorem_retrieval_MAP': 0.1408163265306122, 'theorem_retrieval_MRR': 0.5, 'theorem_retrieval_Recall@1': 0.0, 'theorem_retrieval_Recall@10': 0.2, 'theorem_retrieval_Recall@100': 0.6, 'theorem_retrieval_Recall@5': 0.2, 'theorem_retrieval_Recall@50': 0.6, 'theorem_retrieval_evaluated_queries': 1, 'theorem_retrieval_evaluated_retrievable_queries': 1, 'theorem_retrieval_gold_premise_coverage': 0.8333333333333334, 'theorem_retrieval_gold_premises_in_train_index': 5, 'theorem_retrieval_gold_premises_missing_from_train_index': 1, 'theorem_retrieval_gold_premises_total': 6, 'theorem_retrieval_nDCG@1': 0.0, 'theorem_retrieval_nDCG@10': 0.21398626473452756, 'theorem_retrieval_nDCG@100': 0.3608907417787932, 'theorem_retrieval_nDCG@5': 0.21398626473452756, 'theorem_retrieval_nDCG@50': 0.3608907417787932}, 'subdomain_tags': ['Instances']}], 'proof_state_worst_cases': [{'Recall@100': 0.0, 'average_precision': 0.0, 'domain_tag': 'RingTheory', 'gold_in_train_index_count': 7, 'gold_missing_from_train_index_count': 0, 'gold_total_count': 7, 'nDCG@100': 0.0, 'proof_state_id': 'ps:Algebra.trace_trace_of_basis:6:41dd1d089d19', 'rank_of_first_gold': None, 'reciprocal_rank': 0.0, 'subdomain_tag': 'Trace'}, {'Recall@100': 0.0, 'average_precision': 0.0, 'domain_tag': 'LinearAlgebra', 'gold_in_train_index_count': 6, 'gold_missing_from_train_index_count': 0, 'gold_total_count': 6, 'nDCG@100': 0.0, 'proof_state_id': 'ps:AffineBasis.surjective_coord:0:4a0c7c385303', 'rank_of_first_gold': None, 'reciprocal_rank': 0.0, 'subdomain_tag': 'AffineSpace'}, {'Recall@100': 0.0, 'average_precision': 0.0, 'domain_tag': 'RingTheory', 'gold_in_train_index_count': 5, 'gold_missing_from_train_index_count': 0, 'gold_total_count': 5, 'nDCG@100': 0.0, 'proof_state_id': 'ps:Algebra.Etale.iff_exists_algEquiv_prod:4:7f4836d51cf7', 'rank_of_first_gold': None, 'reciprocal_rank': 0.0, 'subdomain_tag': 'Etale'}, {'Recall@100': 0.0, 'average_precision': 0.0, 'domain_tag': 'LinearAlgebra', 'gold_in_train_index_count': 4, 'gold_missing_from_train_index_count': 0, 'gold_total_count': 4, 'nDCG@100': 0.0, 'proof_state_id': 'ps:AffineBasis.surjective_coord:10:9f704bb84c46', 'rank_of_first_gold': None, 'reciprocal_rank': 0.0, 'subdomain_tag': 'AffineSpace'}, {'Recall@100': 0.0, 'average_precision': 0.0, 'domain_tag': 'LinearAlgebra', 'gold_in_train_index_count': 4, 'gold_missing_from_train_index_count': 0, 'gold_total_count': 4, 'nDCG@100': 0.0, 'proof_state_id': 'ps:AffineBasis.surjective_coord:6:8c422bb1b7a4', 'rank_of_first_gold': None, 'reciprocal_rank': 0.0, 'subdomain_tag': 'AffineSpace'}, {'Recall@100': 0.0, 'average_precision': 0.0, 'domain_tag': 'Computability', 'gold_in_train_index_count': 4, 'gold_missing_from_train_index_count': 0, 'gold_total_count': 4, 'nDCG@100': 0.0, 'proof_state_id': 'ps:AkraBazziRecurrence.growsPolynomially_id:4:7c914e3bc2e5', 'rank_of_first_gold': None, 'reciprocal_rank': 0.0, 'subdomain_tag': 'AkraBazzi'}, {'Recall@100': 0.0, 'average_precision': 0.0, 'domain_tag': 'Topology', 'gold_in_train_index_count': 3, 'gold_missing_from_train_index_count': 1, 'gold_total_count': 4, 'nDCG@100': 0.0, 'proof_state_id': 'ps:AddCircle.continuousAt_equivIoc:1:8e4f460e0671', 'rank_of_first_gold': None, 'reciprocal_rank': 0.0, 'subdomain_tag': 'Instances'}, {'Recall@100': 0.0, 'average_precision': 0.0, 'domain_tag': 'Geometry', 'gold_in_train_index_count': 3, 'gold_missing_from_train_index_count': 1, 'gold_total_count': 4, 'nDCG@100': 0.0, 'proof_state_id': 'ps:Affine.Simplex.ne_altitudeFoot:1:2761c2382797', 'rank_of_first_gold': None, 'reciprocal_rank': 0.0, 'subdomain_tag': 'Euclidean'}, {'Recall@100': 0.0, 'average_precision': 0.0, 'domain_tag': 'Algebra', 'gold_in_train_index_count': 2, 'gold_missing_from_train_index_count': 0, 'gold_total_count': 2, 'nDCG@100': 0.0, 'proof_state_id': 'ps:AddLECancellable.lt_add_of_tsub_lt_left:0:a8fa4afcd330', 'rank_of_first_gold': None, 'reciprocal_rank': 0.0, 'subdomain_tag': 'Order'}, {'Recall@100': 0.0, 'average_precision': 0.0, 'domain_tag': 'Analysis', 'gold_in_train_index_count': 2, 'gold_missing_from_train_index_count': 0, 'gold_total_count': 2, 'nDCG@100': 0.0, 'proof_state_id': 'ps:AffineSubspace.isClosed_direction_iff:1:4fe62edbe790', 'rank_of_first_gold': None, 'reciprocal_rank': 0.0, 'subdomain_tag': 'Normed'}], 'theorem_worst_cases': [{'Recall@100': 0.0, 'average_precision': 0.0, 'domain_tag': 'NumberTheory', 'full_name': 'ArithmeticFunction.vonMangoldt.abscissaOfAbsConv_residueClass_le_one', 'gold_in_train_index_count': 15, 'gold_missing_from_train_index_count': 0, 'gold_total_count': 15, 'nDCG@100': 0.0, 'rank_of_first_gold': None, 'reciprocal_rank': 0.0, 'subdomain_tag': 'LSeries', 'theorem_id': 'thm:ArithmeticFunction.vonMangoldt.abscissaOfAbsConv_residueClass_le_one'}, {'Recall@100': 0.0, 'average_precision': 0.0, 'domain_tag': 'RingTheory', 'full_name': 'Algebra.Etale.iff_exists_algEquiv_prod', 'gold_in_train_index_count': 7, 'gold_missing_from_train_index_count': 2, 'gold_total_count': 9, 'nDCG@100': 0.0, 'rank_of_first_gold': None, 'reciprocal_rank': 0.0, 'subdomain_tag': 'Etale', 'theorem_id': 'thm:Algebra.Etale.iff_exists_algEquiv_prod'}, {'Recall@100': 0.0, 'average_precision': 0.0, 'domain_tag': '.lake', 'full_name': 'Array.pairwise_extract', 'gold_in_train_index_count': 1, 'gold_missing_from_train_index_count': 3, 'gold_total_count': 4, 'nDCG@100': 0.0, 'rank_of_first_gold': None, 'reciprocal_rank': 0.0, 'subdomain_tag': 'packages', 'theorem_id': 'thm:Array.pairwise_extract'}, {'Recall@100': 0.15789473684210525, 'average_precision': 0.050626566416040096, 'domain_tag': 'AlgebraicGeometry', 'full_name': 'AlgebraicGeometry.isFinite_iff_locallyOfFiniteType_of_jacobsonSpace', 'gold_in_train_index_count': 19, 'gold_missing_from_train_index_count': 7, 'gold_total_count': 26, 'nDCG@100': 0.1580004143244685, 'rank_of_first_gold': 5, 'reciprocal_rank': 0.2, 'subdomain_tag': 'Morphisms', 'theorem_id': 'thm:AlgebraicGeometry.isFinite_iff_locallyOfFiniteType_of_jacobsonSpace'}, {'Recall@100': 0.2, 'average_precision': 0.032199546485260765, 'domain_tag': 'RingTheory', 'full_name': 'Algebra.trace_trace_of_basis', 'gold_in_train_index_count': 15, 'gold_missing_from_train_index_count': 0, 'gold_total_count': 15, 'nDCG@100': 0.14337738031405492, 'rank_of_first_gold': 6, 'reciprocal_rank': 0.16666666666666666, 'subdomain_tag': 'Trace', 'theorem_id': 'thm:Algebra.trace_trace_of_basis'}, {'Recall@100': 0.25, 'average_precision': 0.0625, 'domain_tag': 'MeasureTheory', 'full_name': \"Besicovitch.SatelliteConfig.inter'\", 'gold_in_train_index_count': 4, 'gold_missing_from_train_index_count': 0, 'gold_total_count': 4, 'nDCG@100': 0.16812753627111746, 'rank_of_first_gold': 4, 'reciprocal_rank': 0.25, 'subdomain_tag': 'Covering', 'theorem_id': \"thm:Besicovitch.SatelliteConfig.inter'\"}, {'Recall@100': 0.2857142857142857, 'average_precision': 0.02426916712630998, 'domain_tag': 'FieldTheory', 'full_name': 'AlgEquiv.restrictNormalHom_id', 'gold_in_train_index_count': 7, 'gold_missing_from_train_index_count': 1, 'gold_total_count': 8, 'nDCG@100': 0.13575521377994604, 'rank_of_first_gold': 7, 'reciprocal_rank': 0.14285714285714285, 'subdomain_tag': 'Normal', 'theorem_id': 'thm:AlgEquiv.restrictNormalHom_id'}, {'Recall@100': 0.3333333333333333, 'average_precision': 0.0057683215130023635, 'domain_tag': 'LinearAlgebra', 'full_name': 'AffineBasis.surjective_coord', 'gold_in_train_index_count': 6, 'gold_missing_from_train_index_count': 0, 'gold_total_count': 6, 'nDCG@100': 0.09449166452972996, 'rank_of_first_gold': 75, 'reciprocal_rank': 0.013333333333333334, 'subdomain_tag': 'AffineSpace', 'theorem_id': 'thm:AffineBasis.surjective_coord'}, {'Recall@100': 0.3333333333333333, 'average_precision': 0.016666666666666666, 'domain_tag': 'Analysis', 'full_name': 'Asymptotics.IsBigOWith.add', 'gold_in_train_index_count': 3, 'gold_missing_from_train_index_count': 0, 'gold_total_count': 3, 'nDCG@100': 0.10684080426179023, 'rank_of_first_gold': 20, 'reciprocal_rank': 0.05, 'subdomain_tag': 'Asymptotics', 'theorem_id': 'thm:Asymptotics.IsBigOWith.add'}, {'Recall@100': 0.3333333333333333, 'average_precision': 0.0196078431372549, 'domain_tag': 'AlgebraicGeometry', 'full_name': 'AlgebraicGeometry.HasRingHomProperty.stalkwise', 'gold_in_train_index_count': 3, 'gold_missing_from_train_index_count': 4, 'gold_total_count': 7, 'nDCG@100': 0.1125388887954676, 'rank_of_first_gold': 17, 'reciprocal_rank': 0.058823529411764705, 'subdomain_tag': 'Morphisms', 'theorem_id': 'thm:AlgebraicGeometry.HasRingHomProperty.stalkwise'}]}",
+      "passed": true,
+      "path": "outputs/reports/test_set_evaluation.json"
+    },
+    "validation:theorem_case_studies": {
+      "detail": "case_studies=3",
+      "passed": true,
+      "path": "outputs/reports/theorem_retrieval_case_studies.json"
+    },
+    "validation:theorem_query_parse_coverage": {
+      "detail": "theorem_query_parse={'demo': {'parse_coverage': 1.0, 'avg_operator_symbol_count': 1.4828767123287672, 'failure_count': 0}, 'test': {'parse_coverage': 1.0, 'avg_operator_symbol_count': 1.643, 'failure_count': 0}, 'train': {'parse_coverage': 1.0, 'avg_operator_symbol_count': 1.666, 'failure_count': 0}, 'val': {'parse_coverage': 1.0, 'avg_operator_symbol_count': 1.686, 'failure_count': 0}}",
+      "passed": true,
+      "path": "outputs/reports/theorem_query_parse_coverage.json"
+    },
+    "validation:theorem_retrieval_metrics": {
+      "detail": "theorem_retrieval={'evaluated': 50, 'total_gold': 265}",
+      "passed": true,
+      "path": "outputs/reports/metrics.json"
+    }
+  },
+  "failed_checks": [],
+  "passed": true,
+  "total_checks": 167
+}
