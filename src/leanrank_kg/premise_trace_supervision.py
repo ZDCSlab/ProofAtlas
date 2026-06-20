@@ -114,6 +114,56 @@ def _proof_state_trace_examples(
     return examples
 
 
+def _hard_negative_quality_profile(features: pd.DataFrame, negative_counts: pd.Series) -> dict[str, Any]:
+    if features.empty or "negative_candidate_hardness" not in features:
+        return {
+            "bucket_method": "negative_candidate_hardness",
+            "bucket_counts": [],
+            "high_hardness_threshold": 0.75,
+            "high_hardness_proof_state_count": 0,
+            "high_hardness_negative_candidate_rows": 0,
+            "high_hardness_negative_candidate_share": 0.0,
+        }
+    rows = features[["id", "negative_candidate_hardness"]].copy()
+    rows["negative_candidate_hardness"] = rows["negative_candidate_hardness"].fillna(0.0).astype(float).clip(0.0, 1.0)
+    rows = rows.join(negative_counts.rename("negative_candidate_rows"), on="id").fillna({"negative_candidate_rows": 0})
+
+    def bucket(value: float) -> str:
+        if value >= 0.75:
+            return "high"
+        if value >= 0.5:
+            return "medium"
+        if value > 0.0:
+            return "low"
+        return "none"
+
+    rows["hardness_bucket"] = rows["negative_candidate_hardness"].map(bucket)
+    total_negative_rows = int(rows["negative_candidate_rows"].sum())
+    bucket_counts = []
+    for label in ["none", "low", "medium", "high"]:
+        part = rows[rows["hardness_bucket"] == label]
+        negative_rows = int(part["negative_candidate_rows"].sum())
+        bucket_counts.append(
+            {
+                "bucket": label,
+                "proof_state_count": int(len(part)),
+                "negative_candidate_rows": negative_rows,
+                "negative_candidate_row_share": float(negative_rows / max(1, total_negative_rows)),
+                "mean_hardness": float(part["negative_candidate_hardness"].mean()) if not part.empty else 0.0,
+            }
+        )
+    high = rows[rows["hardness_bucket"] == "high"]
+    high_negative_rows = int(high["negative_candidate_rows"].sum())
+    return {
+        "bucket_method": "negative_candidate_hardness",
+        "bucket_counts": bucket_counts,
+        "high_hardness_threshold": 0.75,
+        "high_hardness_proof_state_count": int(len(high)),
+        "high_hardness_negative_candidate_rows": high_negative_rows,
+        "high_hardness_negative_candidate_share": float(high_negative_rows / max(1, total_negative_rows)),
+    }
+
+
 def _split_report(split: str) -> dict[str, Any]:
     try:
         proof_states = pd.read_parquet(f"data/processed/{split}/proof_states.parquet")
@@ -184,6 +234,7 @@ def _split_report(split: str) -> dict[str, Any]:
         "max_positive_edges_per_proof_state": int(positive_counts.max()) if not positive_counts.empty else 0,
         "max_negative_edges_per_proof_state": int(negative_counts.max()) if not negative_counts.empty else 0,
         "negative_candidate_hardness": _quantiles(hardness),
+        "hard_negative_quality_profile": _hard_negative_quality_profile(features, negative_counts),
         "trace_profile": {
             "proof_state_rows": int(len(proof_states)),
             "positive_trace_rows": positive_edge_count,

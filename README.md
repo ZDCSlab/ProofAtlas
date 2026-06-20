@@ -275,6 +275,8 @@ Current LeanRank-data premise supervision snapshot:
 | Train premise traces | hard negative rows | 530413 |
 | Train premise traces | example traces | 3 |
 | Train hard negatives | hardness mean | 0.6030 |
+| Train hard negatives | high-hardness rows | 128855 |
+| Train hard negatives | high-hardness row share | 0.2429 |
 
 To refresh the production evaluation artifacts after changing retrieval code or config:
 

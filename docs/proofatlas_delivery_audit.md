@@ -30,7 +30,7 @@ Out of current production scope:
 | Experiment report | `outputs/reports/experiment_report.md` | Delivered |
 | Held-out quantitative evaluation | `outputs/reports/test_set_evaluation.json`, `outputs/reports/metrics.json` | Delivered |
 | LeanRank-data source provenance | `outputs/reports/corpus_manifest.json`, `outputs/reports/premise_trace_supervision_report.json` | Delivered |
-| Premise positive/negative supervision | 69,461 positive edges, 663,198 negative edges, positive/negative overlap removed: 4,088; train trace profile includes 54,897 positive trace rows, 530,413 hard-negative rows, and 3 example proof-state traces | Delivered |
+| Premise positive/negative supervision | 69,461 positive edges, 663,198 negative edges, positive/negative overlap removed: 4,088; train trace profile includes 54,897 positive trace rows, 530,413 hard-negative rows, 128,855 high-hardness rows, and 3 example proof-state traces | Delivered |
 | Larger real-data pipeline | `configs/proofatlas.yaml`, 292,012 current split rows, 10,000 requested theorems, 350,000 source rows | Delivered |
 | GPU BGE embeddings | `outputs/embeddings/embedding_config.json`: `BAAI/bge-base-en-v1.5`, devices `cuda:0` to `cuda:6`, proof-state template `full_name + goal_text` | Delivered |
 | ANN performance | `outputs/reports/index_benchmark.json`: hnswlib premise retrieval 19.0x faster than exact cosine at Recall@10 vs exact 0.994 | Delivered |

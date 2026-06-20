@@ -206,6 +206,43 @@
         }
       ],
       "exists": true,
+      "hard_negative_quality_profile": {
+        "bucket_counts": [
+          {
+            "bucket": "none",
+            "mean_hardness": 0.0,
+            "negative_candidate_row_share": 0.0,
+            "negative_candidate_rows": 0,
+            "proof_state_count": 857
+          },
+          {
+            "bucket": "low",
+            "mean_hardness": 0.36230117033029896,
+            "negative_candidate_row_share": 0.24333333333333335,
+            "negative_candidate_rows": 219,
+            "proof_state_count": 12
+          },
+          {
+            "bucket": "medium",
+            "mean_hardness": 0.6211148150545737,
+            "negative_candidate_row_share": 0.6244444444444445,
+            "negative_candidate_rows": 562,
+            "proof_state_count": 21
+          },
+          {
+            "bucket": "high",
+            "mean_hardness": 0.8437770411803577,
+            "negative_candidate_row_share": 0.1322222222222222,
+            "negative_candidate_rows": 119,
+            "proof_state_count": 10
+          }
+        ],
+        "bucket_method": "negative_candidate_hardness",
+        "high_hardness_negative_candidate_rows": 119,
+        "high_hardness_negative_candidate_share": 0.1322222222222222,
+        "high_hardness_proof_state_count": 10,
+        "high_hardness_threshold": 0.75
+      },
       "max_negative_edges_per_proof_state": 75,
       "max_positive_edges_per_proof_state": 27,
       "negative_candidate_hardness": {
@@ -455,6 +492,43 @@
         }
       ],
       "exists": true,
+      "hard_negative_quality_profile": {
+        "bucket_counts": [
+          {
+            "bucket": "none",
+            "mean_hardness": 0.0,
+            "negative_candidate_row_share": 0.0,
+            "negative_candidate_rows": 0,
+            "proof_state_count": 0
+          },
+          {
+            "bucket": "low",
+            "mean_hardness": 0.3738819282934456,
+            "negative_candidate_row_share": 0.29227088592731754,
+            "negative_candidate_rows": 19913,
+            "proof_state_count": 1095
+          },
+          {
+            "bucket": "medium",
+            "mean_hardness": 0.6262956684104763,
+            "negative_candidate_row_share": 0.4776023014149005,
+            "negative_candidate_rows": 32540,
+            "proof_state_count": 1078
+          },
+          {
+            "bucket": "high",
+            "mean_hardness": 0.8495863364214262,
+            "negative_candidate_row_share": 0.23012681265778195,
+            "negative_candidate_rows": 15679,
+            "proof_state_count": 880
+          }
+        ],
+        "bucket_method": "negative_candidate_hardness",
+        "high_hardness_negative_candidate_rows": 15679,
+        "high_hardness_negative_candidate_share": 0.23012681265778195,
+        "high_hardness_proof_state_count": 880,
+        "high_hardness_threshold": 0.75
+      },
       "max_negative_edges_per_proof_state": 219,
       "max_positive_edges_per_proof_state": 27,
       "negative_candidate_hardness": {
@@ -719,6 +793,43 @@
         }
       ],
       "exists": true,
+      "hard_negative_quality_profile": {
+        "bucket_counts": [
+          {
+            "bucket": "none",
+            "mean_hardness": 0.0,
+            "negative_candidate_row_share": 0.0,
+            "negative_candidate_rows": 0,
+            "proof_state_count": 0
+          },
+          {
+            "bucket": "low",
+            "mean_hardness": 0.3730637993708993,
+            "negative_candidate_row_share": 0.27513465921838265,
+            "negative_candidate_rows": 145935,
+            "proof_state_count": 8251
+          },
+          {
+            "bucket": "medium",
+            "mean_hardness": 0.6249258074952655,
+            "negative_candidate_row_share": 0.4819320039290138,
+            "negative_candidate_rows": 255623,
+            "proof_state_count": 8470
+          },
+          {
+            "bucket": "high",
+            "mean_hardness": 0.8474355637374673,
+            "negative_candidate_row_share": 0.24293333685260354,
+            "negative_candidate_rows": 128855,
+            "proof_state_count": 7002
+          }
+        ],
+        "bucket_method": "negative_candidate_hardness",
+        "high_hardness_negative_candidate_rows": 128855,
+        "high_hardness_negative_candidate_share": 0.24293333685260354,
+        "high_hardness_proof_state_count": 7002,
+        "high_hardness_threshold": 0.75
+      },
       "max_negative_edges_per_proof_state": 421,
       "max_positive_edges_per_proof_state": 46,
       "negative_candidate_hardness": {
@@ -973,6 +1084,43 @@
         }
       ],
       "exists": true,
+      "hard_negative_quality_profile": {
+        "bucket_counts": [
+          {
+            "bucket": "none",
+            "mean_hardness": 0.0,
+            "negative_candidate_row_share": 0.0,
+            "negative_candidate_rows": 0,
+            "proof_state_count": 0
+          },
+          {
+            "bucket": "low",
+            "mean_hardness": 0.3704057257203695,
+            "negative_candidate_row_share": 0.269665741220021,
+            "negative_candidate_rows": 17192,
+            "proof_state_count": 980
+          },
+          {
+            "bucket": "medium",
+            "mean_hardness": 0.6252698551806484,
+            "negative_candidate_row_share": 0.47647953821780936,
+            "negative_candidate_rows": 30377,
+            "proof_state_count": 975
+          },
+          {
+            "bucket": "high",
+            "mean_hardness": 0.8479277970442856,
+            "negative_candidate_row_share": 0.2538547205621696,
+            "negative_candidate_rows": 16184,
+            "proof_state_count": 867
+          }
+        ],
+        "bucket_method": "negative_candidate_hardness",
+        "high_hardness_negative_candidate_rows": 16184,
+        "high_hardness_negative_candidate_share": 0.2538547205621696,
+        "high_hardness_proof_state_count": 867,
+        "high_hardness_threshold": 0.75
+      },
       "max_negative_edges_per_proof_state": 286,
       "max_positive_edges_per_proof_state": 30,
       "negative_candidate_hardness": {

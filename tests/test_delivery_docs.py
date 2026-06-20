@@ -324,6 +324,9 @@ def test_readme_premise_supervision_snapshot_matches_committed_artifacts() -> No
     assert _readme_artifact_field(readme, "Train proof-state supervision", "positive coverage") == f"{float(train['positive_proof_state_coverage']):.4f}"
     assert _readme_artifact_field(readme, "Train proof-state supervision", "negative coverage") == f"{float(train['negative_proof_state_coverage']):.4f}"
     assert _readme_artifact_field(readme, "Train hard negatives", "hardness mean") == f"{float(train['negative_candidate_hardness']['mean']):.4f}"
+    quality = train["hard_negative_quality_profile"]
+    assert _readme_artifact_field(readme, "Train hard negatives", "high-hardness rows") == str(quality["high_hardness_negative_candidate_rows"])
+    assert _readme_artifact_field(readme, "Train hard negatives", "high-hardness row share") == f"{float(quality['high_hardness_negative_candidate_share']):.4f}"
 
 
 def test_delivery_audit_premise_supervision_snapshot_matches_committed_artifacts() -> None:
@@ -337,6 +340,8 @@ def test_delivery_audit_premise_supervision_snapshot_matches_committed_artifacts
     assert f"{int(current['total_positive_edges']):,} positive edges" in cells[1]
     assert f"{int(current['total_negative_edges']):,} negative edges" in cells[1]
     assert f"positive/negative overlap removed: {int(conflicts['total_positive_negative_overlap_removed']):,}" in cells[1]
+    quality = supervision["splits"]["train"]["hard_negative_quality_profile"]
+    assert f"{int(quality['high_hardness_negative_candidate_rows']):,} high-hardness rows" in cells[1]
     assert cells[2] == "Delivered"
 
 

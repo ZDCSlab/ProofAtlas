@@ -29,6 +29,12 @@ def test_premise_trace_supervision_report_uses_leanrank_labels_without_custom_ex
     assert "normalization_label_conflicts" in report
     assert "total_positive_negative_overlap_removed" in report["normalization_label_conflicts"]
     assert "negative_candidate_hardness" in report["splits"]["train"]
+    assert "hard_negative_quality_profile" in report["splits"]["train"]
+    quality = report["splits"]["train"]["hard_negative_quality_profile"]
+    assert quality["bucket_method"] == "negative_candidate_hardness"
+    assert {row["bucket"] for row in quality["bucket_counts"]} == {"none", "low", "medium", "high"}
+    assert sum(row["proof_state_count"] for row in quality["bucket_counts"]) == report["splits"]["train"]["proof_states"]
+    assert quality["high_hardness_threshold"] == 0.75
     assert "trace_profile" in report["splits"]["train"]
     assert report["splits"]["train"]["trace_profile"]["positive_trace_rows"] > 0
     assert report["splits"]["train"]["trace_profile"]["negative_candidate_rows"] > 0
