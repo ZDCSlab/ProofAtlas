@@ -84,12 +84,11 @@ Most recent verified checks:
 
 ```bash
 make refresh-production-report
-conda run -n leanrank_kg pytest -q
-conda run -n leanrank_kg leanrank-kg audit --config configs/proofatlas.yaml
-git diff --check
+make verify-delivery
 ```
 
 `make refresh-production-report` is the standard production artifact refresh entrypoint. It runs evaluation, pipeline profiling, experiment-report generation, homepage generation, and audit with `configs/proofatlas.yaml`.
+`make verify-delivery` runs the unit tests, production audit, and `git diff --check`. By default it executes Python commands through `conda run -n leanrank_kg`; override `VERIFY_RUN` if the environment is already activated.
 
 Recent passing result:
 

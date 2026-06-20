@@ -1,8 +1,9 @@
-.PHONY: help install sample process build-graph label difficulty premise-trace-supervision train-difficulty embed build-index benchmark-index profile-pipeline security-review augment-graph train-ranker evaluate validate report experiment-report homepage audit refresh-production-report demo test smoke clean
+.PHONY: help install sample process build-graph label difficulty premise-trace-supervision train-difficulty embed build-index benchmark-index profile-pipeline security-review augment-graph train-ranker evaluate validate report experiment-report homepage audit refresh-production-report verify-delivery demo test smoke clean
 
 CONFIG ?= configs/sample.yaml
 PRODUCTION_CONFIG ?= configs/proofatlas.yaml
 SECURITY_REVIEW_HOST ?= 127.0.0.1
+VERIFY_RUN ?= conda run -n leanrank_kg
 
 help:
 	@echo "Main commands:"
@@ -22,6 +23,7 @@ help:
 	@echo "  make homepage       Generate static homepage"
 	@echo "  make audit          Run MVP completion audit"
 	@echo "  make refresh-production-report Refresh proofatlas evaluation/report/homepage/audit"
+	@echo "  make verify-delivery Run tests, production audit, and diff whitespace check"
 	@echo "  make demo           Run full demo pipeline"
 	@echo "  make test           Run unit tests"
 	@echo "  make smoke          Run tiny end-to-end smoke test"
@@ -95,6 +97,11 @@ refresh-production-report:
 	leanrank-kg build-experiment-report --config $(PRODUCTION_CONFIG)
 	leanrank-kg build-homepage --config $(PRODUCTION_CONFIG)
 	leanrank-kg audit --config $(PRODUCTION_CONFIG)
+
+verify-delivery:
+	$(VERIFY_RUN) pytest -q
+	$(VERIFY_RUN) leanrank-kg audit --config $(PRODUCTION_CONFIG)
+	git diff --check
 
 demo:
 	leanrank-kg full-pipeline --config $(CONFIG)
