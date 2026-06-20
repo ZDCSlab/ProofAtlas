@@ -327,6 +327,17 @@ def test_text_query_retrieval_and_theorem_guidance_are_json_serializable(tmp_pat
                 },
                 "bottleneck_profile": {"primary_stage": "evaluate", "primary_stage_share_of_total": 0.4, "top3_stage_share_of_total": 0.6},
                 "evaluation_timing_delta": {"current_evaluation_seconds": 1.0, "timed_pipeline_evaluate_seconds": 1.2},
+                "refresh_reuse_profile": {
+                    "reuse_by_default": True,
+                    "training_repeat_policy": "Do not retrain by default. Reuse embeddings, indexes, and trained models for report/homepage refreshes.",
+                    "artifact_cache": {
+                        "embedding_rows": 123,
+                        "embedding_model": "bge-test",
+                        "indexed_entity_count": 3,
+                        "index_backend": "hnswlib",
+                        "premise_ranker_exists": True,
+                    },
+                },
             },
             "stages": {"evaluation": {"evaluation_timing": {"slowest_substages": []}}},
             "scale_profile": {},
@@ -354,6 +365,9 @@ def test_text_query_retrieval_and_theorem_guidance_are_json_serializable(tmp_pat
     assert "supervision" in homepage_summary["production_evidence"]
     assert "timing" in homepage_summary["production_evidence"]
     assert "rapid_convergence" in homepage_summary["production_evidence"]
+    assert "refresh_reuse" in homepage_summary["production_evidence"]
+    assert homepage_summary["production_evidence"]["refresh_reuse"]["reuse_by_default"] is True
+    assert homepage_summary["production_evidence"]["refresh_reuse"]["artifact_cache"]["embedding_rows"] == 123
     assert homepage_summary["production_evidence"]["rapid_convergence"]["recommended_sequence"]
     assert "bottleneck_profile" in homepage_summary["production_evidence"]["timing"]
     assert "evaluation_timing" in homepage_summary["production_evidence"]["timing"]
@@ -418,6 +432,12 @@ def test_text_query_retrieval_and_theorem_guidance_are_json_serializable(tmp_pat
     assert "Pipeline eval timing" in html
     assert "Timing freshness" in html
     assert "Pipeline bottleneck" in html
+    assert "Refresh And Retraining Policy" in html
+    assert "Reuse by default" in html
+    assert "Cached embeddings" in html
+    assert "Indexed manifests" in html
+    assert "Premise ranker" in html
+    assert "Do not retrain by default" in html
     assert "Rapid Convergence Priorities" in html
     assert "proof_state_query_and_embedding" in html
     assert "Proof-state top-100 miss" in html

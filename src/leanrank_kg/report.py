@@ -291,6 +291,7 @@ def _production_evidence(
     bottleneck_profile = throughput.get("bottleneck_profile", {}) if isinstance(throughput, dict) else {}
     evaluation_timing_delta = throughput.get("evaluation_timing_delta", {}) if isinstance(throughput, dict) else {}
     rapid_convergence = throughput.get("rapid_convergence_profile", {}) if isinstance(throughput, dict) else {}
+    refresh_reuse = throughput.get("refresh_reuse_profile", {}) if isinstance(throughput, dict) else {}
     evaluation_timing = (
         pipeline_performance.get("stages", {}).get("evaluation", {}).get("evaluation_timing", {})
         if isinstance(pipeline_performance, dict)
@@ -342,6 +343,7 @@ def _production_evidence(
             "reranked_proof_state": reranked_failure,
         },
         "rapid_convergence": rapid_convergence,
+        "refresh_reuse": refresh_reuse,
     }
 
 

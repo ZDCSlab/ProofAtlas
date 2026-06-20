@@ -318,6 +318,16 @@ HTML = """<!doctype html>
     {% set rapid = production_evidence.rapid_convergence|default({}) %}
     {% set rapid_headroom = rapid.headroom|default({}) %}
     {% set rapid_steps = rapid.recommended_sequence|default([]) %}
+    {% set refresh_reuse = production_evidence.refresh_reuse|default({}) %}
+    {% set artifact_cache = refresh_reuse.artifact_cache|default({}) %}
+    <h3 style="margin-top:16px">Refresh And Retraining Policy</h3>
+    <div class="status-row">
+      <div class="status ok"><div class="label">Reuse by default</div><div class="value">{{ refresh_reuse.reuse_by_default|default(false) }}</div><div class="note">report/homepage refreshes reuse existing artifacts</div></div>
+      <div class="status"><div class="label">Cached embeddings</div><div class="value">{{ "{:,}".format(artifact_cache.embedding_rows|default(0) or 0) }}</div><div class="note">{{ artifact_cache.embedding_model|default("unknown") }}</div></div>
+      <div class="status"><div class="label">Indexed manifests</div><div class="value">{{ artifact_cache.indexed_entity_count|default(0) }}</div><div class="note">{{ artifact_cache.index_backend|default("unknown") }} retrieval artifacts</div></div>
+      <div class="status {{ 'ok' if artifact_cache.premise_ranker_exists else 'warn' }}"><div class="label">Premise ranker</div><div class="value">{{ artifact_cache.premise_ranker_exists|default(false) }}</div><div class="note">retrain only after feature, label, split, or config changes</div></div>
+    </div>
+    <p class="muted">{{ refresh_reuse.training_repeat_policy|default("Training policy unavailable.") }}</p>
     {% if rapid_steps %}
     <h3 style="margin-top:16px">Rapid Convergence Priorities</h3>
     <div class="status-row">

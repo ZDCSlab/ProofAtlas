@@ -372,6 +372,16 @@
 
 
 
+
+    <h3 style="margin-top:16px">Refresh And Retraining Policy</h3>
+    <div class="status-row">
+      <div class="status ok"><div class="label">Reuse by default</div><div class="value">True</div><div class="note">report/homepage refreshes reuse existing artifacts</div></div>
+      <div class="status"><div class="label">Cached embeddings</div><div class="value">244,391</div><div class="note">BAAI/bge-base-en-v1.5</div></div>
+      <div class="status"><div class="label">Indexed manifests</div><div class="value">12</div><div class="note">hnswlib retrieval artifacts</div></div>
+      <div class="status ok"><div class="label">Premise ranker</div><div class="value">True</div><div class="note">retrain only after feature, label, split, or config changes</div></div>
+    </div>
+    <p class="muted">Do not retrain by default. Reuse embeddings, indexes, and trained models for report/homepage refreshes; rerun ranker training only after ranker feature, label, split, or relevant config changes.</p>
+
     <h3 style="margin-top:16px">Rapid Convergence Priorities</h3>
     <div class="status-row">
       <div class="status warn"><div class="label">Proof-state top-100 miss</div><div class="value">0.764</div><div class="note">candidate-generation headroom</div></div>
