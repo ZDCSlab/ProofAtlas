@@ -130,6 +130,19 @@ def test_readme_production_snapshot_matches_committed_artifacts() -> None:
     assert _readme_artifact_field(readme, "Pipeline timing", "timed/current evaluation ratio") == (
         f"{float(evaluation_delta['timed_to_current_ratio']):.4f}"
     )
+    rerank_cost = throughput["rerank_evaluation_cost_profile"]
+    assert _readme_artifact_field(readme, "Rerank diagnostic cost", "sampled/full proof-state queries") == (
+        f"{int(rerank_cost['sampled_rerank_queries'])} / {int(rerank_cost['full_proof_state_queries'])}"
+    )
+    assert _readme_artifact_field(readme, "Rerank diagnostic cost", "sampled fraction") == (
+        f"{float(rerank_cost['sampled_fraction_of_full_proof_state_eval']):.4f}"
+    )
+    assert _readme_artifact_field(readme, "Rerank diagnostic cost", "projected full rerank seconds") == (
+        f"{float(rerank_cost['projected_full_rerank_seconds']):.4f}"
+    )
+    assert _readme_artifact_field(readme, "Rerank diagnostic cost", "rerank/batched seconds per query") == (
+        f"{float(rerank_cost['rerank_to_batched_seconds_per_query_ratio']):.4f}"
+    )
 
 
 def test_readme_performance_snapshot_matches_committed_artifacts() -> None:
@@ -287,6 +300,13 @@ def test_delivery_audit_performance_snapshot_matches_committed_artifacts() -> No
         assert cells[3] == f"{float(row['estimated_embed_seconds']):.4f}"
         assert cells[4] == f"{float(row['estimated_index_build_seconds']):.4f}"
     assert f"Total seconds: {float(timing['total_seconds']):.4f}" in audit
+    rerank_cost = profile["throughput_profile"]["rerank_evaluation_cost_profile"]
+    assert (
+        f"Reranked proof-state diagnostic: {int(rerank_cost['sampled_rerank_queries'])} / "
+        f"{int(rerank_cost['full_proof_state_queries'])} sampled queries"
+    ) in audit
+    assert f"projected full rerank {float(rerank_cost['projected_full_rerank_seconds']):.4f} seconds" in audit
+    assert f"{float(rerank_cost['rerank_to_batched_seconds_per_query_ratio']):.4f}x batched seconds/query" in audit
 
 
 def test_delivery_audit_artifact_reuse_policy_matches_committed_profile() -> None:

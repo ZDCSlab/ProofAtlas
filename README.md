@@ -200,6 +200,10 @@ Current production run coverage and timing:
 | Pipeline timing | saved evaluate seconds | 19.1237 |
 | Pipeline timing | current standalone evaluation seconds | 23.8288 |
 | Pipeline timing | timed/current evaluation ratio | 0.8025 |
+| Rerank diagnostic cost | sampled/full proof-state queries | 20 / 3053 |
+| Rerank diagnostic cost | sampled fraction | 0.0066 |
+| Rerank diagnostic cost | projected full rerank seconds | 2180.9495 |
+| Rerank diagnostic cost | rerank/batched seconds per query | 2350.9921 |
 
 Current production performance snapshot:
 

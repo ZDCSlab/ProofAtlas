@@ -577,6 +577,44 @@
           ]
         },
         "train_pairs": 2000,
+        "training_pair_utilization": {
+          "feature_nonzero_rates": {
+            "cosine_similarity": 1.0,
+            "graph_premise_degree": 0.376,
+            "negative_candidate_hardness": 1.0,
+            "premise_frequency": 0.472,
+            "proof_state_difficulty": 1.0,
+            "proof_technique_overlap": 0.4605,
+            "same_domain": 0.3925,
+            "same_namespace": 0.179,
+            "symbol_context_overlap": 0.6075,
+            "symbol_name_overlap": 0.502,
+            "theorem_neighborhood_premise_score": 0.2295
+          },
+          "hardness_feature": {
+            "all_pair_nonzero_count": 2000,
+            "all_pair_nonzero_share": 1.0,
+            "column": "negative_candidate_hardness",
+            "negative_pair_mean_hardness": 0.5864086124738412,
+            "negative_pair_nonzero_count": 1000,
+            "negative_pair_nonzero_share": 1.0
+          },
+          "label_source": {
+            "hard_negative_pairs": "data/processed/train/negative_edges.parquet label=0",
+            "positive_pairs": "data/processed/train/positive_edges.parquet label=1"
+          },
+          "raw_pair_counts": {
+            "hard_negative": 530413,
+            "positive": 54897,
+            "total": 585310
+          },
+          "training_sample_counts": {
+            "hard_negative": 1000,
+            "hard_negative_to_positive_ratio": 1.0,
+            "positive": 1000,
+            "total": 2000
+          }
+        },
         "validation_auc": 0.825379,
         "validation_pairs": 2000
       },
@@ -3616,6 +3654,30 @@
       "training_repeat_policy": "Do not retrain by default. Reuse embeddings, indexes, and trained models for report/homepage refreshes; rerun ranker training only after ranker feature, label, split, or relevant config changes."
     },
     "requested_source_rows": 350000,
+    "rerank_evaluation_cost_profile": {
+      "batched_embedding_recall_at_10": 0.11624918291584951,
+      "batched_embedding_seconds": 0.9276719810441136,
+      "batched_embedding_seconds_per_query": 0.0003038558732538859,
+      "candidate_k": 50,
+      "candidate_k_values": [
+        50,
+        100
+      ],
+      "full_proof_state_queries": 3053,
+      "method": "project_full_rerank_cost_from_user_facing_sampled_rerank_diagnostic",
+      "policy": "keep reranked proof-state evaluation sampled for development and use full batched embedding evaluation for final held-out coverage",
+      "projected_full_rerank_minutes": 36.34915794420522,
+      "projected_full_rerank_seconds": 2180.949476652313,
+      "rerank_backend": "batched_torch_cuda_then_rerank",
+      "rerank_seconds": 14.287255005910993,
+      "rerank_seconds_per_query": 0.7143627502955496,
+      "rerank_stage_name": "test_reranked_proof_state_retrieval",
+      "rerank_to_batched_seconds_per_query_ratio": 2350.9920760974264,
+      "reranked_recall_at_10": 0.1513157894736842,
+      "sampled_fraction_of_full_proof_state_eval": 0.006550933508024894,
+      "sampled_rerank_queries": 20,
+      "sampled_rerank_recall_at_10_delta": 0.035066606557834695
+    },
     "resource_parallelism_profile": {
       "cpu_or_io_heavy_stages": [
         {

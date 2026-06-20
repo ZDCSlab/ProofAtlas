@@ -78,6 +78,17 @@ def _resource_parallelism_condition(data: dict[str, Any]) -> tuple[bool, dict[st
     return passed, profile
 
 
+def _rerank_cost_condition(data: dict[str, Any]) -> tuple[bool, dict[str, Any]]:
+    profile = data.get("throughput_profile", {}).get("rerank_evaluation_cost_profile", {})
+    passed = (
+        profile.get("method") == "project_full_rerank_cost_from_user_facing_sampled_rerank_diagnostic"
+        and profile.get("sampled_rerank_queries", 0) >= 0
+        and profile.get("full_proof_state_queries", 0) >= 0
+        and "sampled" in profile.get("policy", "")
+    )
+    return passed, profile
+
+
 def build_audit() -> dict[str, Any]:
     checks: dict[str, dict[str, Any]] = {}
     required_root = ["README.md", "pyproject.toml", "Makefile", "configs/sample.yaml", "homepage/index.html"]
@@ -506,6 +517,11 @@ def build_audit() -> dict[str, Any]:
             data.get("throughput_profile", {}).get("scale_projection_profile", {}),
         ),
         "scale_projection_profile={detail}",
+    )
+    checks["validation:rerank_evaluation_cost_profile"] = _json_condition(
+        "outputs/reports/pipeline_performance_report.json",
+        _rerank_cost_condition,
+        "rerank_evaluation_cost_profile={detail}",
     )
     checks["validation:refresh_dashboard"] = _json_condition(
         "outputs/reports/refresh_dashboard.json",

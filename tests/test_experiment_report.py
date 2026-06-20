@@ -170,6 +170,21 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                         "theorem_retrieval_nDCG@10": {"value": 0.55, "n": 8, "ci95_low": 0.2050, "ci95_high": 0.8950, "ci95_half_width": 0.3450},
                     },
                 },
+                "rerank_evaluation_cost_profile": {
+                    "method": "project_full_rerank_cost_from_user_facing_sampled_rerank_diagnostic",
+                    "rerank_backend": "batched_torch_cuda_then_rerank",
+                    "candidate_k": 50,
+                    "sampled_rerank_queries": 20,
+                    "full_proof_state_queries": 1000,
+                    "sampled_fraction_of_full_proof_state_eval": 0.02,
+                    "rerank_seconds_per_query": 0.5,
+                    "batched_embedding_seconds_per_query": 0.001,
+                    "rerank_to_batched_seconds_per_query_ratio": 500.0,
+                    "projected_full_rerank_seconds": 500.0,
+                    "projected_full_rerank_minutes": 8.333333333333334,
+                    "sampled_rerank_recall_at_10_delta": 0.05,
+                    "policy": "keep reranked proof-state evaluation sampled for development and use full batched embedding evaluation for final held-out coverage",
+                },
                 "refresh_reuse_profile": {
                     "reuse_by_default": True,
                     "training_repeat_policy": "Do not retrain by default. Reuse embeddings, indexes, and trained models for report/homepage refreshes.",
@@ -481,6 +496,10 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "Timing config matches current report config" in text
     assert "Timing config matches current report config: `True`" in text
     assert "Evaluation Substage Timing" in text
+    assert "Rerank Evaluation Cost Profile" in text
+    assert "project_full_rerank_cost_from_user_facing_sampled_rerank_diagnostic" in text
+    assert "Rerank/batched seconds per query: `500.0`" in text
+    assert "keep reranked proof-state evaluation sampled" in text
     assert "test_theorem_retrieval" in text
     assert "Evaluation internal total seconds" in text
     assert "Proof-state test coverage" in text

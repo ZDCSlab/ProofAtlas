@@ -538,6 +538,24 @@ These timings split the `evaluate` pipeline stage into proof-state retrieval, th
 | `test_theorem_retrieval` | 0.4232 | 1000 | torch_cuda |
 | `val_theorem_retrieval` | 0.3153 | 1000 | torch_cuda |
 
+### Rerank Evaluation Cost Profile
+
+The reranked proof-state diagnostic follows the slower homepage/API-style path. This profile projects what full held-out reranking would cost and explains why the report keeps full coverage on batched embedding retrieval while sampling the reranked diagnostic.
+
+- Method: `project_full_rerank_cost_from_user_facing_sampled_rerank_diagnostic`
+- Backend: `batched_torch_cuda_then_rerank`
+- Candidate k: `50`
+- Sampled rerank queries: `20`
+- Full proof-state queries: `3053`
+- Sampled fraction of full proof-state eval: `0.006550933508024894`
+- Rerank seconds/query: `0.7143627502955496`
+- Batched embedding seconds/query: `0.0003038558732538859`
+- Rerank/batched seconds per query: `2350.9920760974264`
+- Projected full rerank seconds: `2180.949476652313`
+- Projected full rerank minutes: `36.34915794420522`
+- Sampled rerank Recall@10 delta: `0.035066606557834695`
+- Policy: keep reranked proof-state evaluation sampled for development and use full batched embedding evaluation for final held-out coverage
+
 ## Resource And Parallelism Profile
 
 This profile records the resource choices used by the committed LeanRank-data run. It is intended to explain which stages use GPU/vectorized paths and which stages remain CPU/IO-heavy.

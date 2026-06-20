@@ -145,6 +145,7 @@ Pipeline timing:
 - Total seconds: 551.6511
 - Saved full-pipeline evaluate stage: 19.1237 seconds
 - Current standalone full-heldout evaluation: 23.8288 seconds
+- Reranked proof-state diagnostic: 20 / 3053 sampled queries; projected full rerank 2180.9495 seconds; 2350.9921x batched seconds/query
 - Timing freshness: current; full-pipeline evaluate timing and standalone evaluation timing are aligned.
 
 Pipeline scale profile:
@@ -176,8 +177,8 @@ make verify-delivery
 Recent passing result:
 
 ```text
-pytest: 89 passed, 4 skipped
-audit: 176/176 checks passed
+pytest: 91 passed, 4 skipped
+audit: 177/177 checks passed
 git diff --check: passed
 ```
 

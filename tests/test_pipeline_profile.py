@@ -189,6 +189,10 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
     assert rapid["strongest_ranker_feature_groups"][0]["group"] == "symbol_overlap"
     assert rapid["label_supervision"]["negative_to_positive_edge_ratio"] == 9.0
     assert rapid["recommended_sequence"][0]["area"] == "proof_state_query_and_embedding"
+    rerank_cost = report["throughput_profile"]["rerank_evaluation_cost_profile"]
+    assert rerank_cost["sampled_rerank_queries"] == 0
+    assert rerank_cost["full_proof_state_queries"] == 10
+    assert rerank_cost["policy"].startswith("keep reranked proof-state evaluation sampled")
     uncertainty = report["throughput_profile"]["metric_uncertainty_profile"]
     assert uncertainty["confidence_level"] == 0.95
     assert uncertainty["proof_state"]["Recall@10"]["n"] == 10

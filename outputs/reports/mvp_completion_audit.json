@@ -835,6 +835,11 @@
       "passed": true,
       "path": "outputs/reports/refresh_trend.json"
     },
+    "validation:rerank_evaluation_cost_profile": {
+      "detail": "rerank_evaluation_cost_profile={'batched_embedding_recall_at_10': 0.11624918291584951, 'batched_embedding_seconds': 0.9276719810441136, 'batched_embedding_seconds_per_query': 0.0003038558732538859, 'candidate_k': 50, 'candidate_k_values': [50, 100], 'full_proof_state_queries': 3053, 'method': 'project_full_rerank_cost_from_user_facing_sampled_rerank_diagnostic', 'policy': 'keep reranked proof-state evaluation sampled for development and use full batched embedding evaluation for final held-out coverage', 'projected_full_rerank_minutes': 36.34915794420522, 'projected_full_rerank_seconds': 2180.949476652313, 'rerank_backend': 'batched_torch_cuda_then_rerank', 'rerank_seconds': 14.287255005910993, 'rerank_seconds_per_query': 0.7143627502955496, 'rerank_stage_name': 'test_reranked_proof_state_retrieval', 'rerank_to_batched_seconds_per_query_ratio': 2350.9920760974264, 'reranked_recall_at_10': 0.1513157894736842, 'sampled_fraction_of_full_proof_state_eval': 0.006550933508024894, 'sampled_rerank_queries': 20, 'sampled_rerank_recall_at_10_delta': 0.035066606557834695}",
+      "passed": true,
+      "path": "outputs/reports/pipeline_performance_report.json"
+    },
     "validation:resource_parallelism_profile": {
       "detail": "resource_parallelism_profile={'cpu_or_io_heavy_stages': [{'name': 'sample', 'seconds': 82.1005248860456, 'share_of_total': 0.14882691328748682}, {'name': 'train_ranker', 'seconds': 55.312271517002955, 'share_of_total': 0.1002667723284445}, {'name': 'augment_graph', 'seconds': 50.915316165890545, 'share_of_total': 0.09229623506723654}, {'name': 'compute_difficulty', 'seconds': 48.56320890900679, 'share_of_total': 0.0880324759347708}], 'embedding_parallelism': {'backend': 'sentence_transformers', 'batch_size': 512, 'device_count': 7, 'devices': ['cuda:0', 'cuda:1', 'cuda:2', 'cuda:3', 'cuda:4', 'cuda:5', 'cuda:6'], 'embed_stage_seconds': 149.16317718615755, 'embedding_rows_per_embed_second': 1638.4137466782227, 'model_name': 'BAAI/bge-base-en-v1.5', 'multi_process': True, 'requested_device': 'cuda', 'total_embedding_rows': 244391}, 'evaluation_parallelism': {'actual_backends': ['torch_cuda'], 'batch_size': 256, 'candidate_count': 127561, 'fallback_reasons': [], 'ranking_backend': 'batched_embedding_topk', 'requested_gpu_device': 'cuda:0', 'requested_use_gpu': True, 'test_proof_state_backend': 'torch_cuda', 'test_proof_state_queries': 3053, 'test_theorem_backend': 'torch_cuda', 'test_theorem_queries': 1000}, 'index_parallelism': {'backend': 'hnswlib', 'hnsw_M': 16, 'hnsw_ef_construction': 200, 'hnsw_ef_search': 100, 'indexed_entities': ['premise', 'proof_state', 'theorem'], 'mean_speedup_vs_exact': 17.376305276865946, 'metric': 'cosine', 'min_recall_vs_exact': 0.9580000000000001, 'requested_backend': 'auto'}}",
       "passed": true,
@@ -883,5 +888,5 @@
   },
   "failed_checks": [],
   "passed": true,
-  "total_checks": 176
+  "total_checks": 177
 }

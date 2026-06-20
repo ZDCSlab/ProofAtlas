@@ -455,6 +455,7 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     retrieval_bottleneck = throughput.get("retrieval_bottleneck_profile", {}) if isinstance(throughput, dict) else {}
     rapid_convergence = throughput.get("rapid_convergence_profile", {}) if isinstance(throughput, dict) else {}
     metric_uncertainty = throughput.get("metric_uncertainty_profile", {}) if isinstance(throughput, dict) else {}
+    rerank_cost = throughput.get("rerank_evaluation_cost_profile", {}) if isinstance(throughput, dict) else {}
     refresh_reuse = throughput.get("refresh_reuse_profile", {}) if isinstance(throughput, dict) else {}
     refresh_cache = refresh_reuse.get("artifact_cache", {}) if isinstance(refresh_reuse, dict) else {}
     resource_parallelism = throughput.get("resource_parallelism_profile", {}) if isinstance(throughput, dict) else {}
@@ -862,6 +863,24 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
             "These timings split the `evaluate` pipeline stage into proof-state retrieval, theorem retrieval, reranked retrieval, and query-representation diagnostics so scaling work can target the slowest internal path.",
             "",
             _evaluation_substage_table(evaluation_substages),
+            "",
+            "### Rerank Evaluation Cost Profile",
+            "",
+            "The reranked proof-state diagnostic follows the slower homepage/API-style path. This profile projects what full held-out reranking would cost and explains why the report keeps full coverage on batched embedding retrieval while sampling the reranked diagnostic.",
+            "",
+            f"- Method: `{rerank_cost.get('method', 'n/a')}`",
+            f"- Backend: `{rerank_cost.get('rerank_backend', 'n/a')}`",
+            f"- Candidate k: `{rerank_cost.get('candidate_k', 'n/a')}`",
+            f"- Sampled rerank queries: `{rerank_cost.get('sampled_rerank_queries', 'n/a')}`",
+            f"- Full proof-state queries: `{rerank_cost.get('full_proof_state_queries', 'n/a')}`",
+            f"- Sampled fraction of full proof-state eval: `{rerank_cost.get('sampled_fraction_of_full_proof_state_eval', 'n/a')}`",
+            f"- Rerank seconds/query: `{rerank_cost.get('rerank_seconds_per_query', 'n/a')}`",
+            f"- Batched embedding seconds/query: `{rerank_cost.get('batched_embedding_seconds_per_query', 'n/a')}`",
+            f"- Rerank/batched seconds per query: `{rerank_cost.get('rerank_to_batched_seconds_per_query_ratio', 'n/a')}`",
+            f"- Projected full rerank seconds: `{rerank_cost.get('projected_full_rerank_seconds', 'n/a')}`",
+            f"- Projected full rerank minutes: `{rerank_cost.get('projected_full_rerank_minutes', 'n/a')}`",
+            f"- Sampled rerank Recall@10 delta: `{rerank_cost.get('sampled_rerank_recall_at_10_delta', 'n/a')}`",
+            f"- Policy: {rerank_cost.get('policy', 'n/a')}",
         ]
     )
     lines.extend(

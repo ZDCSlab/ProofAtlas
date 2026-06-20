@@ -719,6 +719,73 @@ def _metric_uncertainty_profile(evaluation: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _rerank_evaluation_cost_profile(evaluation: dict[str, Any]) -> dict[str, Any]:
+    test_eval = evaluation.get("test_set_evaluation", {}) if isinstance(evaluation, dict) else {}
+    scope = test_eval.get("evaluation_scope", {}) if isinstance(test_eval, dict) else {}
+    substage_timings = scope.get("substage_timings", []) if isinstance(scope, dict) else []
+    if not isinstance(substage_timings, list):
+        substage_timings = []
+    rerank_stage = next(
+        (
+            row
+            for row in substage_timings
+            if isinstance(row, dict) and row.get("name") == "test_reranked_proof_state_retrieval"
+        ),
+        {},
+    )
+    batched_stage = next(
+        (
+            row
+            for row in substage_timings
+            if isinstance(row, dict) and row.get("name") == "test_proof_state_retrieval"
+        ),
+        {},
+    )
+    proof_metrics = ((test_eval.get("test_metrics") or {}).get("proof_state_retrieval") or {}) if isinstance(test_eval, dict) else {}
+    reranked = (((test_eval.get("test") or {}).get("proof_state_reranked_retrieval") or {}) if isinstance(test_eval, dict) else {})
+    rerank_metrics = reranked.get("metrics", {}) if isinstance(reranked, dict) else {}
+    backend_info = reranked.get("backend_info", {}) if isinstance(reranked, dict) else {}
+
+    rerank_queries = int(rerank_stage.get("evaluated_queries") or backend_info.get("evaluated_queries") or rerank_metrics.get("evaluated_queries") or 0)
+    full_queries = int(proof_metrics.get("evaluated_queries") or 0)
+    rerank_seconds = float(rerank_stage.get("seconds") or 0.0)
+    batched_seconds = float(batched_stage.get("seconds") or 0.0)
+    batched_queries = int(batched_stage.get("evaluated_queries") or proof_metrics.get("evaluated_queries") or 0)
+    rerank_seconds_per_query = (rerank_seconds / rerank_queries) if rerank_queries > 0 else None
+    batched_seconds_per_query = (batched_seconds / batched_queries) if batched_queries > 0 else None
+    projected_full_seconds = (rerank_seconds_per_query * full_queries) if rerank_seconds_per_query is not None and full_queries > 0 else None
+    relative_cost = (
+        rerank_seconds_per_query / batched_seconds_per_query
+        if rerank_seconds_per_query is not None and batched_seconds_per_query not in (None, 0.0)
+        else None
+    )
+    sampled_fraction = (rerank_queries / full_queries) if full_queries > 0 else None
+    recall_delta = None
+    if rerank_metrics.get("Recall@10") is not None and proof_metrics.get("Recall@10") is not None:
+        recall_delta = float(rerank_metrics.get("Recall@10")) - float(proof_metrics.get("Recall@10"))
+    return {
+        "method": "project_full_rerank_cost_from_user_facing_sampled_rerank_diagnostic",
+        "rerank_stage_name": rerank_stage.get("name"),
+        "rerank_backend": backend_info.get("actual_backend") or rerank_stage.get("actual_backend"),
+        "candidate_k": backend_info.get("candidate_k") or rerank_stage.get("candidate_k"),
+        "candidate_k_values": backend_info.get("candidate_k_values"),
+        "sampled_rerank_queries": rerank_queries,
+        "full_proof_state_queries": full_queries,
+        "sampled_fraction_of_full_proof_state_eval": sampled_fraction,
+        "rerank_seconds": rerank_seconds,
+        "rerank_seconds_per_query": rerank_seconds_per_query,
+        "batched_embedding_seconds": batched_seconds,
+        "batched_embedding_seconds_per_query": batched_seconds_per_query,
+        "rerank_to_batched_seconds_per_query_ratio": relative_cost,
+        "projected_full_rerank_seconds": projected_full_seconds,
+        "projected_full_rerank_minutes": (projected_full_seconds / 60.0) if projected_full_seconds is not None else None,
+        "reranked_recall_at_10": rerank_metrics.get("Recall@10"),
+        "batched_embedding_recall_at_10": proof_metrics.get("Recall@10"),
+        "sampled_rerank_recall_at_10_delta": recall_delta,
+        "policy": "keep reranked proof-state evaluation sampled for development and use full batched embedding evaluation for final held-out coverage",
+    }
+
+
 def _refresh_reuse_profile(
     config: dict[str, Any],
     sample: dict[str, Any],
@@ -1293,6 +1360,7 @@ def build_report(config_path: str = "configs/proofatlas.yaml") -> dict[str, Any]
     throughput["retrieval_bottleneck_profile"] = _retrieval_bottleneck_profile(evaluation)
     throughput["rapid_convergence_profile"] = _rapid_convergence_profile(evaluation, readiness, throughput)
     throughput["metric_uncertainty_profile"] = _metric_uncertainty_profile(evaluation)
+    throughput["rerank_evaluation_cost_profile"] = _rerank_evaluation_cost_profile(evaluation)
     throughput["refresh_reuse_profile"] = _refresh_reuse_profile(config, sample, embeddings, index)
     throughput["resource_parallelism_profile"] = _resource_parallelism_profile(config, embeddings, index, benchmark, evaluation, throughput)
     throughput["execution_mode_summary"] = _execution_mode_summary(throughput)
