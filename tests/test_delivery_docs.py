@@ -195,6 +195,20 @@ def test_readme_performance_acceptance_gates_match_committed_profile() -> None:
     )
 
 
+def test_readme_scale_projection_matches_committed_profile() -> None:
+    repo = Path(__file__).resolve().parents[1]
+    readme = (repo / "README.md").read_text(encoding="utf-8")
+    profile = json.loads((repo / "outputs/reports/pipeline_performance_report.json").read_text(encoding="utf-8"))
+    projections = profile["throughput_profile"]["scale_projection_profile"]["projections"]
+
+    for row in projections:
+        cells = _readme_table_row(readme, row["label"])
+        assert cells[1] == str(int(row["target_processed_rows"]))
+        assert cells[2] == f"{float(row['estimated_total_seconds']):.4f}"
+        assert cells[3] == f"{float(row['estimated_embed_seconds']):.4f}"
+        assert cells[4] == f"{float(row['estimated_index_build_seconds']):.4f}"
+
+
 def test_readme_artifact_reuse_policy_matches_committed_profile() -> None:
     repo = Path(__file__).resolve().parents[1]
     readme = (repo / "README.md").read_text(encoding="utf-8")
@@ -238,6 +252,12 @@ def test_delivery_audit_performance_snapshot_matches_committed_artifacts() -> No
     assert _readme_table_row(audit, "All gates", "passed / total")[2] == (
         f"{acceptance['passed_gate_count']} / {acceptance['total_gate_count']}"
     )
+    for row in profile["throughput_profile"]["scale_projection_profile"]["projections"]:
+        cells = _readme_table_row(audit, row["label"])
+        assert cells[1] == str(int(row["target_processed_rows"]))
+        assert cells[2] == f"{float(row['estimated_total_seconds']):.4f}"
+        assert cells[3] == f"{float(row['estimated_embed_seconds']):.4f}"
+        assert cells[4] == f"{float(row['estimated_index_build_seconds']):.4f}"
     assert f"Total seconds: {float(timing['total_seconds']):.4f}" in audit
 
 

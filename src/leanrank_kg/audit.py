@@ -484,6 +484,21 @@ def build_audit() -> dict[str, Any]:
         ),
         "performance_acceptance_profile={detail}",
     )
+    checks["validation:scale_projection_profile"] = _json_condition(
+        "outputs/reports/pipeline_performance_report.json",
+        lambda data: (
+            data.get("throughput_profile", {}).get("scale_projection_profile", {}).get("method")
+            == "linear_projection_from_current_timed_pipeline"
+            and data.get("throughput_profile", {}).get("scale_projection_profile", {}).get("current_processed_rows", 0) > 0
+            and len(data.get("throughput_profile", {}).get("scale_projection_profile", {}).get("projections", [])) >= 3
+            and all(
+                row.get("estimated_total_seconds") is not None
+                for row in data.get("throughput_profile", {}).get("scale_projection_profile", {}).get("projections", [])
+            ),
+            data.get("throughput_profile", {}).get("scale_projection_profile", {}),
+        ),
+        "scale_projection_profile={detail}",
+    )
     checks["validation:refresh_dashboard"] = _json_condition(
         "outputs/reports/refresh_dashboard.json",
         lambda data: (

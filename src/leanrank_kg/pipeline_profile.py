@@ -1008,6 +1008,60 @@ def _performance_acceptance_profile(
     }
 
 
+def _scale_projection_profile(scale: dict[str, Any], throughput: dict[str, Any]) -> dict[str, Any]:
+    current_rows = int(scale.get("current_total_split_rows") or 0)
+    requested_source_rows = int(scale.get("source_rows") or throughput.get("requested_source_rows") or current_rows or 0)
+    timed_stage_seconds = throughput.get("timed_stage_seconds", {}) if isinstance(throughput, dict) else {}
+    total_seconds = throughput.get("total_pipeline_seconds")
+    embed_seconds = timed_stage_seconds.get("embed")
+    index_seconds = throughput.get("index_build_seconds_total")
+
+    def _projection(label: str, target_rows: int) -> dict[str, Any]:
+        factor = (float(target_rows) / float(current_rows)) if current_rows > 0 else None
+
+        def scaled(value: Any) -> float | None:
+            if value is None or factor is None:
+                return None
+            return float(value) * factor
+
+        return {
+            "label": label,
+            "target_processed_rows": int(target_rows),
+            "scale_factor_vs_current": factor,
+            "estimated_total_seconds": scaled(total_seconds),
+            "estimated_embed_seconds": scaled(embed_seconds),
+            "estimated_index_build_seconds": scaled(index_seconds),
+        }
+
+    target_rows = []
+    if current_rows > 0:
+        target_rows.extend(
+            [
+                ("current_1x", current_rows),
+                ("current_2x", current_rows * 2),
+                ("current_5x", current_rows * 5),
+            ]
+        )
+    if requested_source_rows > 0 and requested_source_rows not in {row_count for _, row_count in target_rows}:
+        target_rows.append(("configured_source_rows", requested_source_rows))
+    projections = [_projection(label, row_count) for label, row_count in target_rows]
+    return {
+        "method": "linear_projection_from_current_timed_pipeline",
+        "assumptions": [
+            "Projection scales current timed pipeline seconds linearly with processed row count.",
+            "Embedding and index-build estimates scale their timed stage seconds linearly.",
+            "This is for capacity planning and should be replaced by a fresh timing run after changing hardware, embedding model, index backend, or sample shape.",
+        ],
+        "current_processed_rows": current_rows,
+        "configured_source_rows": requested_source_rows,
+        "scale_estimate_reliable": throughput.get("scale_estimate_reliable"),
+        "basis_total_seconds": total_seconds,
+        "basis_embed_seconds": embed_seconds,
+        "basis_index_build_seconds": index_seconds,
+        "projections": projections,
+    }
+
+
 def _recommendations(
     config: dict[str, Any],
     sample: dict[str, Any],
@@ -1174,6 +1228,7 @@ def build_report(config_path: str = "configs/proofatlas.yaml") -> dict[str, Any]
     throughput["refresh_reuse_profile"] = _refresh_reuse_profile(config, sample, embeddings, index)
     throughput["resource_parallelism_profile"] = _resource_parallelism_profile(config, embeddings, index, benchmark, evaluation, throughput)
     throughput["performance_acceptance_profile"] = _performance_acceptance_profile(scale, throughput, evaluation)
+    throughput["scale_projection_profile"] = _scale_projection_profile(scale, throughput)
     recommendations = _recommendations(config, sample, benchmark, readiness, scale, throughput, evaluation)
     return {
         "config_path": config_path,

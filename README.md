@@ -241,6 +241,15 @@ Current performance acceptance gates:
 | Advisory gates | passed | True |
 | All gates | passed / total | 10 / 10 |
 
+Current scale projection:
+
+| Projection | Target rows | Total seconds | Embed seconds | Index build seconds |
+| --- | ---: | ---: | ---: | ---: |
+| current_1x | 292012 | 551.6511 | 149.1632 | 6.7194 |
+| current_2x | 584024 | 1103.3021 | 298.3264 | 13.4389 |
+| current_5x | 1460060 | 2758.2553 | 745.8159 | 33.5972 |
+| configured_source_rows | 350000 | 661.1984 | 178.7841 | 8.0538 |
+
 Current artifact reuse and retraining policy:
 
 | Artifact | Field | Value |

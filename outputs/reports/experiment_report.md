@@ -614,6 +614,22 @@ These gates summarize whether the committed performance evidence is strong enoug
 | `augment_graph` | 50.9153 | 0.0923 |
 | `compute_difficulty` | 48.5632 | 0.0880 |
 
+### Scale Projection
+
+These linear projections use the current timed pipeline as a capacity-planning baseline. They are not substitutes for fresh timing runs after changing the sample shape, hardware, embedding model, or index backend.
+
+- Projection method: `linear_projection_from_current_timed_pipeline`
+- Projection reliable: `True`
+- Current processed rows: `292012`
+- Configured source rows: `350000`
+
+| Projection | Target rows | Scale factor | Total seconds | Embed seconds | Index build seconds |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| `current_1x` | 292012 | 1.0000 | 551.6511 | 149.1632 | 6.7194 |
+| `current_2x` | 584024 | 2.0000 | 1103.3021 | 298.3264 | 13.4389 |
+| `current_5x` | 1460060 | 5.0000 | 2758.2553 | 745.8159 | 33.5972 |
+| `configured_source_rows` | 350000 | 1.1986 | 661.1984 | 178.7841 | 8.0538 |
+
 ## Refresh And Retraining Policy
 
 Training is not repeated for every report or homepage refresh. The default workflow reuses LeanRank-data artifacts unless the data split, embedding representation, labels, or ranker features changed.

@@ -221,6 +221,12 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
     assert acceptance["summary"]["required_gates_passed"] is False
     assert next(row for row in acceptance["gates"] if row["name"] == "ann_speedup")["passed"] is False
     assert next(row for row in acceptance["gates"] if row["name"] == "full_heldout_evaluation")["passed"] is True
+    projection = report["throughput_profile"]["scale_projection_profile"]
+    assert projection["method"] == "linear_projection_from_current_timed_pipeline"
+    assert projection["current_processed_rows"] == 100
+    assert projection["configured_source_rows"] == 60000
+    assert len(projection["projections"]) >= 4
+    assert next(row for row in projection["projections"] if row["label"] == "current_2x")["scale_factor_vs_current"] == 2.0
     assert report["stages"]["evaluation"]["evaluation_timing"]["total_seconds"] == 2.5
     assert report["stages"]["evaluation"]["evaluation_timing"]["substage_count"] == 2
     assert report["stages"]["evaluation"]["evaluation_timing"]["slowest_substages"][0]["name"] == "test_theorem_retrieval"

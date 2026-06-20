@@ -3685,6 +3685,54 @@
     },
     "scale_estimate_reliable": true,
     "scale_factor_from_current_to_requested_source_rows": 1.1985808802377984,
+    "scale_projection_profile": {
+      "assumptions": [
+        "Projection scales current timed pipeline seconds linearly with processed row count.",
+        "Embedding and index-build estimates scale their timed stage seconds linearly.",
+        "This is for capacity planning and should be replaced by a fresh timing run after changing hardware, embedding model, index backend, or sample shape."
+      ],
+      "basis_embed_seconds": 149.16317718615755,
+      "basis_index_build_seconds": 6.719438847154379,
+      "basis_total_seconds": 551.6510627849493,
+      "configured_source_rows": 350000,
+      "current_processed_rows": 292012,
+      "method": "linear_projection_from_current_timed_pipeline",
+      "projections": [
+        {
+          "estimated_embed_seconds": 149.16317718615755,
+          "estimated_index_build_seconds": 6.719438847154379,
+          "estimated_total_seconds": 551.6510627849493,
+          "label": "current_1x",
+          "scale_factor_vs_current": 1.0,
+          "target_processed_rows": 292012
+        },
+        {
+          "estimated_embed_seconds": 298.3263543723151,
+          "estimated_index_build_seconds": 13.438877694308758,
+          "estimated_total_seconds": 1103.3021255698986,
+          "label": "current_2x",
+          "scale_factor_vs_current": 2.0,
+          "target_processed_rows": 584024
+        },
+        {
+          "estimated_embed_seconds": 745.8158859307878,
+          "estimated_index_build_seconds": 33.597194235771894,
+          "estimated_total_seconds": 2758.2553139247466,
+          "label": "current_5x",
+          "scale_factor_vs_current": 5.0,
+          "target_processed_rows": 1460060
+        },
+        {
+          "estimated_embed_seconds": 178.78413221085142,
+          "estimated_index_build_seconds": 8.053790928126352,
+          "estimated_total_seconds": 661.1984164169015,
+          "label": "configured_source_rows",
+          "scale_factor_vs_current": 1.1985808802377984,
+          "target_processed_rows": 350000
+        }
+      ],
+      "scale_estimate_reliable": true
+    },
     "slowest_stage": "embed",
     "throughput_basis": "executed_pipeline_run",
     "timed_stage_seconds": {

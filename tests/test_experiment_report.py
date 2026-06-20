@@ -288,6 +288,30 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                         },
                     ],
                 },
+                "scale_projection_profile": {
+                    "method": "linear_projection_from_current_timed_pipeline",
+                    "scale_estimate_reliable": True,
+                    "current_processed_rows": 1000,
+                    "configured_source_rows": 3500,
+                    "projections": [
+                        {
+                            "label": "current_1x",
+                            "target_processed_rows": 1000,
+                            "scale_factor_vs_current": 1.0,
+                            "estimated_total_seconds": 100.0,
+                            "estimated_embed_seconds": 40.0,
+                            "estimated_index_build_seconds": 5.0,
+                        },
+                        {
+                            "label": "current_2x",
+                            "target_processed_rows": 2000,
+                            "scale_factor_vs_current": 2.0,
+                            "estimated_total_seconds": 200.0,
+                            "estimated_embed_seconds": 80.0,
+                            "estimated_index_build_seconds": 10.0,
+                        },
+                    ],
+                },
             },
             "stages": {
                 "evaluation": {
@@ -430,3 +454,6 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "Required gates passed" in text
     assert "target_dataset" in text
     assert "ann_speedup" in text
+    assert "Scale Projection" in text
+    assert "linear_projection_from_current_timed_pipeline" in text
+    assert "current_2x" in text

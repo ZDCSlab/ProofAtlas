@@ -349,6 +349,32 @@ def _performance_gate_table(profile: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def _scale_projection_table(profile: dict[str, Any]) -> str:
+    rows = profile.get("projections", []) if isinstance(profile, dict) else []
+    lines = [
+        "| Projection | Target rows | Scale factor | Total seconds | Embed seconds | Index build seconds |",
+        "| --- | ---: | ---: | ---: | ---: | ---: |",
+    ]
+    for row in rows:
+        lines.append(
+            "| "
+            + " | ".join(
+                [
+                    f"`{row.get('label', 'n/a')}`",
+                    _fmt(row.get("target_processed_rows")),
+                    _fmt(row.get("scale_factor_vs_current")),
+                    _fmt(row.get("estimated_total_seconds")),
+                    _fmt(row.get("estimated_embed_seconds")),
+                    _fmt(row.get("estimated_index_build_seconds")),
+                ]
+            )
+            + " |"
+        )
+    if len(lines) == 2:
+        lines.append("| n/a | n/a | n/a | n/a | n/a | n/a |")
+    return "\n".join(lines)
+
+
 def _split_counts(manifest: dict[str, Any]) -> str:
     counts = manifest.get("split_counts", {}) if isinstance(manifest, dict) else {}
     if not counts:
@@ -408,6 +434,7 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     resource_parallelism = throughput.get("resource_parallelism_profile", {}) if isinstance(throughput, dict) else {}
     performance_acceptance = throughput.get("performance_acceptance_profile", {}) if isinstance(throughput, dict) else {}
     performance_acceptance_summary = performance_acceptance.get("summary", {}) if isinstance(performance_acceptance, dict) else {}
+    scale_projection = throughput.get("scale_projection_profile", {}) if isinstance(throughput, dict) else {}
     embedding_parallel = resource_parallelism.get("embedding_parallelism", {}) if isinstance(resource_parallelism, dict) else {}
     evaluation_parallel = resource_parallelism.get("evaluation_parallelism", {}) if isinstance(resource_parallelism, dict) else {}
     index_parallel = resource_parallelism.get("index_parallelism", {}) if isinstance(resource_parallelism, dict) else {}
@@ -876,6 +903,21 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
         lines.append(f"| `{row.get('name')}` | {_fmt(row.get('seconds'))} | {_fmt(row.get('share_of_total'))} |")
     if not bottleneck_profile.get("top_stages"):
         lines.append("| n/a | n/a | n/a |")
+    lines.extend(
+        [
+            "",
+            "### Scale Projection",
+            "",
+            "These linear projections use the current timed pipeline as a capacity-planning baseline. They are not substitutes for fresh timing runs after changing the sample shape, hardware, embedding model, or index backend.",
+            "",
+            f"- Projection method: `{scale_projection.get('method', 'n/a')}`",
+            f"- Projection reliable: `{scale_projection.get('scale_estimate_reliable', 'n/a')}`",
+            f"- Current processed rows: `{scale_projection.get('current_processed_rows', 'n/a')}`",
+            f"- Configured source rows: `{scale_projection.get('configured_source_rows', 'n/a')}`",
+            "",
+            _scale_projection_table(scale_projection),
+        ]
+    )
     lines.extend(
         [
             "",
