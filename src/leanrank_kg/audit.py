@@ -430,6 +430,18 @@ def build_audit() -> dict[str, Any]:
         ),
         "refresh_dashboard={detail}",
     )
+    checks["validation:homepage_summary_supervision"] = _json_condition(
+        "outputs/reports/homepage_summary.json",
+        lambda data: (
+            (data.get("production_evidence", {}).get("supervision", {}).get("total_positive_edges", 0) > 0)
+            and (data.get("production_evidence", {}).get("supervision", {}).get("total_negative_edges", 0) > 0)
+            and data.get("production_evidence", {}).get("supervision", {}).get("all_positive_negative_pairs_disjoint") is True
+            and data.get("production_evidence", {}).get("supervision", {}).get("total_positive_negative_overlap_removed", 0) > 0
+            and data.get("production_evidence", {}).get("supervision", {}).get("train_positive_negative_pair_overlap_count") == 0,
+            data.get("production_evidence", {}).get("supervision", {}),
+        ),
+        "homepage_supervision={detail}",
+    )
     checks["validation:refresh_trend"] = _json_condition(
         "outputs/reports/refresh_trend.json",
         lambda data: (

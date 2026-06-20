@@ -760,6 +760,11 @@
       "passed": true,
       "path": "homepage/index.html"
     },
+    "validation:homepage_summary_supervision": {
+      "detail": "homepage_supervision={'all_positive_negative_pairs_disjoint': True, 'negative_to_positive_edge_ratio': 9.547775010437512, 'total_negative_edges': 663198, 'total_positive_edges': 69461, 'total_positive_negative_overlap_removed': 4088, 'train_negative_hardness_mean': 0.6030019312643399, 'train_negative_proof_state_coverage': 1.0, 'train_positive_negative_pair_overlap_count': 0, 'train_positive_proof_state_coverage': 1.0}",
+      "passed": true,
+      "path": "outputs/reports/homepage_summary.json"
+    },
     "validation:index_benchmark": {
       "detail": "index_benchmark={'premise': {'backend': 'hnswlib', 'indexed_available': True, 'exact_ms_per_query': 69.03993914835155, 'indexed_ms_per_query': 3.6328387609682977}, 'proof_state': {'backend': 'hnswlib', 'indexed_available': True, 'exact_ms_per_query': 12.766833261121064, 'indexed_ms_per_query': 0.8265445893630385}, 'theorem': {'backend': 'hnswlib', 'indexed_available': True, 'exact_ms_per_query': 4.097250408958644, 'indexed_ms_per_query': 0.2317648590542376}}",
       "passed": true,
@@ -853,5 +858,5 @@
   },
   "failed_checks": [],
   "passed": true,
-  "total_checks": 170
+  "total_checks": 171
 }
