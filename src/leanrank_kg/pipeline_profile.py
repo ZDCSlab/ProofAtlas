@@ -890,6 +890,124 @@ def _resource_parallelism_profile(
     }
 
 
+def _performance_acceptance_profile(
+    scale: dict[str, Any],
+    throughput: dict[str, Any],
+    evaluation: dict[str, Any],
+) -> dict[str, Any]:
+    resources = throughput.get("resource_parallelism_profile", {}) if isinstance(throughput, dict) else {}
+    embedding = resources.get("embedding_parallelism", {}) if isinstance(resources, dict) else {}
+    evaluation_parallel = resources.get("evaluation_parallelism", {}) if isinstance(resources, dict) else {}
+    refresh_reuse = throughput.get("refresh_reuse_profile", {}) if isinstance(throughput, dict) else {}
+    heldout = evaluation.get("held_out_test_coverage", {}) if isinstance(evaluation, dict) else {}
+    embedding_rows_per_second = embedding.get("embedding_rows_per_embed_second")
+    gates = [
+        {
+            "name": "target_dataset",
+            "severity": "required",
+            "passed": scale.get("target_dataset_confirmed") is True,
+            "value": scale.get("dataset_name"),
+            "threshold": "erbacher/LeanRank-data",
+            "evidence": "Production performance profile must use the configured LeanRank-data source.",
+        },
+        {
+            "name": "large_scale_slice",
+            "severity": "required",
+            "passed": scale.get("scale_bucket") == "large" and int(scale.get("current_total_split_rows") or 0) >= 60000,
+            "value": scale.get("current_total_split_rows"),
+            "threshold": ">=60000 processed split rows and scale_bucket=large",
+            "evidence": "Performance numbers should describe a non-demo LeanRank-data run.",
+        },
+        {
+            "name": "full_heldout_evaluation",
+            "severity": "required",
+            "passed": heldout.get("proof_state_coverage_fraction") == 1.0 and heldout.get("theorem_coverage_fraction") == 1.0,
+            "value": {
+                "proof_state_coverage_fraction": heldout.get("proof_state_coverage_fraction"),
+                "theorem_coverage_fraction": heldout.get("theorem_coverage_fraction"),
+            },
+            "threshold": "both coverage fractions == 1.0",
+            "evidence": "Final retrieval claims should use full held-out proof-state and theorem evaluation.",
+        },
+        {
+            "name": "fresh_pipeline_timing",
+            "severity": "required",
+            "passed": throughput.get("scale_estimate_reliable") is True and throughput.get("throughput_basis") == "executed_pipeline_run",
+            "value": {
+                "scale_estimate_reliable": throughput.get("scale_estimate_reliable"),
+                "throughput_basis": throughput.get("throughput_basis"),
+            },
+            "threshold": "scale_estimate_reliable=true and throughput_basis=executed_pipeline_run",
+            "evidence": "Bottleneck shares and throughput estimates must come from a non-cached production timing run.",
+        },
+        {
+            "name": "ann_speedup",
+            "severity": "required",
+            "passed": (throughput.get("mean_index_speedup_vs_exact") or 0.0) >= 5.0,
+            "value": throughput.get("mean_index_speedup_vs_exact"),
+            "threshold": ">=5x mean indexed speedup vs exact cosine",
+            "evidence": "Large-scale retrieval should use indexed candidate generation with measurable speedup.",
+        },
+        {
+            "name": "ann_recall",
+            "severity": "required",
+            "passed": (throughput.get("min_index_recall_vs_exact") or 0.0) >= 0.95,
+            "value": throughput.get("min_index_recall_vs_exact"),
+            "threshold": ">=0.95 minimum Recall@10 vs exact cosine across indexed entities",
+            "evidence": "ANN speedup should not substantially change nearest-neighbor candidate quality.",
+        },
+        {
+            "name": "gpu_embedding_parallelism",
+            "severity": "advisory",
+            "passed": bool(embedding.get("requested_device") == "cuda" and int(embedding.get("device_count") or 0) >= 1),
+            "value": {
+                "requested_device": embedding.get("requested_device"),
+                "device_count": embedding.get("device_count"),
+                "multi_process": embedding.get("multi_process"),
+            },
+            "threshold": "cuda requested with at least one device",
+            "evidence": "Embedding remains the primary bottleneck, so GPU encoding should stay enabled for production refreshes.",
+        },
+        {
+            "name": "gpu_evaluation_backend",
+            "severity": "advisory",
+            "passed": "torch_cuda" in set(evaluation_parallel.get("actual_backends") or []),
+            "value": evaluation_parallel.get("actual_backends"),
+            "threshold": "actual_backends includes torch_cuda",
+            "evidence": "Held-out ranking evaluation should use the batched GPU path when available.",
+        },
+        {
+            "name": "artifact_reuse_ready",
+            "severity": "advisory",
+            "passed": refresh_reuse.get("reuse_by_default") is True,
+            "value": refresh_reuse.get("reuse_by_default"),
+            "threshold": "reuse_by_default=true",
+            "evidence": "Report and homepage refreshes should reuse embeddings, indexes, and trained models unless inputs change.",
+        },
+        {
+            "name": "embedding_throughput_recorded",
+            "severity": "advisory",
+            "passed": embedding_rows_per_second is not None and float(embedding_rows_per_second) > 0.0,
+            "value": embedding_rows_per_second,
+            "threshold": ">0 embedding rows/sec",
+            "evidence": "The report should expose enough throughput data to compare future embedding optimizations.",
+        },
+    ]
+    required = [gate for gate in gates if gate["severity"] == "required"]
+    advisory = [gate for gate in gates if gate["severity"] == "advisory"]
+    return {
+        "summary": {
+            "required_gates_passed": all(gate["passed"] for gate in required),
+            "advisory_gates_passed": all(gate["passed"] for gate in advisory),
+            "passed_gate_count": sum(1 for gate in gates if gate["passed"]),
+            "total_gate_count": len(gates),
+            "required_gate_count": len(required),
+            "advisory_gate_count": len(advisory),
+        },
+        "gates": gates,
+    }
+
+
 def _recommendations(
     config: dict[str, Any],
     sample: dict[str, Any],
@@ -1055,6 +1173,7 @@ def build_report(config_path: str = "configs/proofatlas.yaml") -> dict[str, Any]
     throughput["metric_uncertainty_profile"] = _metric_uncertainty_profile(evaluation)
     throughput["refresh_reuse_profile"] = _refresh_reuse_profile(config, sample, embeddings, index)
     throughput["resource_parallelism_profile"] = _resource_parallelism_profile(config, embeddings, index, benchmark, evaluation, throughput)
+    throughput["performance_acceptance_profile"] = _performance_acceptance_profile(scale, throughput, evaluation)
     recommendations = _recommendations(config, sample, benchmark, readiness, scale, throughput, evaluation)
     return {
         "config_path": config_path,

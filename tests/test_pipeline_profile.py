@@ -216,6 +216,11 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
     assert resources["evaluation_parallelism"]["test_proof_state_backend"] == "torch_cuda"
     assert resources["index_parallelism"]["backend"] == "sklearn"
     assert resources["index_parallelism"]["indexed_entities"] == ["premise"]
+    acceptance = report["throughput_profile"]["performance_acceptance_profile"]
+    assert acceptance["summary"]["total_gate_count"] >= 8
+    assert acceptance["summary"]["required_gates_passed"] is False
+    assert next(row for row in acceptance["gates"] if row["name"] == "ann_speedup")["passed"] is False
+    assert next(row for row in acceptance["gates"] if row["name"] == "full_heldout_evaluation")["passed"] is True
     assert report["stages"]["evaluation"]["evaluation_timing"]["total_seconds"] == 2.5
     assert report["stages"]["evaluation"]["evaluation_timing"]["substage_count"] == 2
     assert report["stages"]["evaluation"]["evaluation_timing"]["slowest_substages"][0]["name"] == "test_theorem_retrieval"

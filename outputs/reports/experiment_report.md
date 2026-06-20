@@ -552,6 +552,27 @@ This profile records the resource choices used by the committed LeanRank-data ru
 | `augment_graph` | 50.9153 | 0.0923 |
 | `compute_difficulty` | 48.5632 | 0.0880 |
 
+### Performance Acceptance Gates
+
+These gates summarize whether the committed performance evidence is strong enough for the current LeanRank-data retrieval report. Required gates cover data scale, held-out evaluation scope, timing freshness, and ANN quality; advisory gates cover GPU/resource usage and artifact reuse.
+
+- Required gates passed: `True`
+- Advisory gates passed: `True`
+- Passed gates: `10` / `10`
+
+| Gate | Severity | Passed | Value | Threshold |
+| --- | --- | ---: | --- | --- |
+| `target_dataset` | required | True | erbacher/LeanRank-data | erbacher/LeanRank-data |
+| `large_scale_slice` | required | True | 292012 | >=60000 processed split rows and scale_bucket=large |
+| `full_heldout_evaluation` | required | True | {'proof_state_coverage_fraction': 1.0, 'theorem_coverage_fraction': 1.0} | both coverage fractions == 1.0 |
+| `fresh_pipeline_timing` | required | True | {'scale_estimate_reliable': True, 'throughput_basis': 'executed_pipeline_run'} | scale_estimate_reliable=true and throughput_basis=executed_pipeline_run |
+| `ann_speedup` | required | True | 17.3763 | >=5x mean indexed speedup vs exact cosine |
+| `ann_recall` | required | True | 0.9580 | >=0.95 minimum Recall@10 vs exact cosine across indexed entities |
+| `gpu_embedding_parallelism` | advisory | True | {'device_count': 7, 'multi_process': True, 'requested_device': 'cuda'} | cuda requested with at least one device |
+| `gpu_evaluation_backend` | advisory | True | ['torch_cuda'] | actual_backends includes torch_cuda |
+| `artifact_reuse_ready` | advisory | True | True | reuse_by_default=true |
+| `embedding_throughput_recorded` | advisory | True | 1638.4137 | >0 embedding rows/sec |
+
 ## Pipeline Performance And Scale-Up Notes
 
 - Pipeline profile: `outputs/reports/pipeline_performance_report.json`

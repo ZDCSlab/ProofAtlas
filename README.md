@@ -233,6 +233,14 @@ Current resource and parallelism profile:
 | Indexing | hnswlib parameters | M=16, ef_construction=200, ef_search=100 |
 | Indexing | min recall vs exact | 0.9580 |
 
+Current performance acceptance gates:
+
+| Gate group | Field | Value |
+| --- | --- | ---: |
+| Required gates | passed | True |
+| Advisory gates | passed | True |
+| All gates | passed / total | 10 / 10 |
+
 Current artifact reuse and retraining policy:
 
 | Artifact | Field | Value |

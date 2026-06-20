@@ -324,6 +324,31 @@ def _cpu_stage_table(rows: list[dict[str, Any]]) -> str:
     return "\n".join(lines)
 
 
+def _performance_gate_table(profile: dict[str, Any]) -> str:
+    rows = profile.get("gates", []) if isinstance(profile, dict) else []
+    lines = [
+        "| Gate | Severity | Passed | Value | Threshold |",
+        "| --- | --- | ---: | --- | --- |",
+    ]
+    for row in rows:
+        lines.append(
+            "| "
+            + " | ".join(
+                [
+                    f"`{row.get('name', 'n/a')}`",
+                    _fmt(row.get("severity")),
+                    _fmt(row.get("passed")),
+                    _fmt(row.get("value")),
+                    _fmt(row.get("threshold")),
+                ]
+            )
+            + " |"
+        )
+    if len(lines) == 2:
+        lines.append("| n/a | n/a | n/a | n/a | n/a |")
+    return "\n".join(lines)
+
+
 def _split_counts(manifest: dict[str, Any]) -> str:
     counts = manifest.get("split_counts", {}) if isinstance(manifest, dict) else {}
     if not counts:
@@ -381,6 +406,8 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     refresh_reuse = throughput.get("refresh_reuse_profile", {}) if isinstance(throughput, dict) else {}
     refresh_cache = refresh_reuse.get("artifact_cache", {}) if isinstance(refresh_reuse, dict) else {}
     resource_parallelism = throughput.get("resource_parallelism_profile", {}) if isinstance(throughput, dict) else {}
+    performance_acceptance = throughput.get("performance_acceptance_profile", {}) if isinstance(throughput, dict) else {}
+    performance_acceptance_summary = performance_acceptance.get("summary", {}) if isinstance(performance_acceptance, dict) else {}
     embedding_parallel = resource_parallelism.get("embedding_parallelism", {}) if isinstance(resource_parallelism, dict) else {}
     evaluation_parallel = resource_parallelism.get("evaluation_parallelism", {}) if isinstance(resource_parallelism, dict) else {}
     index_parallel = resource_parallelism.get("index_parallelism", {}) if isinstance(resource_parallelism, dict) else {}
@@ -793,6 +820,16 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
             "### CPU/IO-Heavy Stages",
             "",
             _cpu_stage_table(resource_parallelism.get("cpu_or_io_heavy_stages", []) if isinstance(resource_parallelism, dict) else []),
+            "",
+            "### Performance Acceptance Gates",
+            "",
+            "These gates summarize whether the committed performance evidence is strong enough for the current LeanRank-data retrieval report. Required gates cover data scale, held-out evaluation scope, timing freshness, and ANN quality; advisory gates cover GPU/resource usage and artifact reuse.",
+            "",
+            f"- Required gates passed: `{performance_acceptance_summary.get('required_gates_passed', 'n/a')}`",
+            f"- Advisory gates passed: `{performance_acceptance_summary.get('advisory_gates_passed', 'n/a')}`",
+            f"- Passed gates: `{performance_acceptance_summary.get('passed_gate_count', 'n/a')}` / `{performance_acceptance_summary.get('total_gate_count', 'n/a')}`",
+            "",
+            _performance_gate_table(performance_acceptance),
         ]
     )
     lines.extend(

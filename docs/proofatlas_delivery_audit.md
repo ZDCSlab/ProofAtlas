@@ -95,6 +95,14 @@ Pipeline bottleneck profile:
 | Primary bottleneck | share of total | 0.2704 |
 | Top-3 timed stages | share of total | 0.5195 |
 
+Performance acceptance gates:
+
+| Gate group | Field | Value |
+| --- | --- | ---: |
+| Required gates | passed | True |
+| Advisory gates | passed | True |
+| All gates | passed / total | 10 / 10 |
+
 Artifact reuse and retraining policy:
 
 | Artifact | Field | Value |
@@ -143,8 +151,8 @@ make verify-delivery
 Recent passing result:
 
 ```text
-pytest: 86 passed, 4 skipped
-audit: 174/174 checks passed
+pytest: 87 passed, 4 skipped
+audit: 175/175 checks passed
 git diff --check: passed
 ```
 

@@ -182,6 +182,19 @@ def test_readme_resource_parallelism_profile_matches_committed_profile() -> None
     assert _readme_table_row(readme, "Indexing", "min recall vs exact")[2] == f"{float(indexing['min_recall_vs_exact']):.4f}"
 
 
+def test_readme_performance_acceptance_gates_match_committed_profile() -> None:
+    repo = Path(__file__).resolve().parents[1]
+    readme = (repo / "README.md").read_text(encoding="utf-8")
+    profile = json.loads((repo / "outputs/reports/pipeline_performance_report.json").read_text(encoding="utf-8"))
+    summary = profile["throughput_profile"]["performance_acceptance_profile"]["summary"]
+
+    assert _readme_table_row(readme, "Required gates", "passed")[2] == str(summary["required_gates_passed"])
+    assert _readme_table_row(readme, "Advisory gates", "passed")[2] == str(summary["advisory_gates_passed"])
+    assert _readme_table_row(readme, "All gates", "passed / total")[2] == (
+        f"{summary['passed_gate_count']} / {summary['total_gate_count']}"
+    )
+
+
 def test_readme_artifact_reuse_policy_matches_committed_profile() -> None:
     repo = Path(__file__).resolve().parents[1]
     readme = (repo / "README.md").read_text(encoding="utf-8")
@@ -219,6 +232,12 @@ def test_delivery_audit_performance_snapshot_matches_committed_artifacts() -> No
     assert _readme_table_row(audit, "Primary bottleneck", "seconds")[2] == f"{float(bottleneck['primary_stage_seconds']):.4f}"
     assert _readme_table_row(audit, "Primary bottleneck", "share of total")[2] == f"{float(bottleneck['primary_stage_share_of_total']):.4f}"
     assert _readme_table_row(audit, "Top-3 timed stages", "share of total")[2] == f"{float(bottleneck['top3_stage_share_of_total']):.4f}"
+    acceptance = profile["throughput_profile"]["performance_acceptance_profile"]["summary"]
+    assert _readme_table_row(audit, "Required gates", "passed")[2] == str(acceptance["required_gates_passed"])
+    assert _readme_table_row(audit, "Advisory gates", "passed")[2] == str(acceptance["advisory_gates_passed"])
+    assert _readme_table_row(audit, "All gates", "passed / total")[2] == (
+        f"{acceptance['passed_gate_count']} / {acceptance['total_gate_count']}"
+    )
     assert f"Total seconds: {float(timing['total_seconds']):.4f}" in audit
 
 

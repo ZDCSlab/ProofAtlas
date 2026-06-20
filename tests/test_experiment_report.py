@@ -257,6 +257,37 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                 "mean_index_speedup_vs_exact": 12.5,
                 "min_index_recall_vs_exact": 0.98,
                 "estimated_seconds_at_requested_source_rows": 350.0,
+                "performance_acceptance_profile": {
+                    "summary": {
+                        "required_gates_passed": True,
+                        "advisory_gates_passed": True,
+                        "passed_gate_count": 3,
+                        "total_gate_count": 3,
+                    },
+                    "gates": [
+                        {
+                            "name": "target_dataset",
+                            "severity": "required",
+                            "passed": True,
+                            "value": "erbacher/LeanRank-data",
+                            "threshold": "erbacher/LeanRank-data",
+                        },
+                        {
+                            "name": "ann_speedup",
+                            "severity": "required",
+                            "passed": True,
+                            "value": 12.5,
+                            "threshold": ">=5x mean indexed speedup vs exact cosine",
+                        },
+                        {
+                            "name": "gpu_evaluation_backend",
+                            "severity": "advisory",
+                            "passed": True,
+                            "value": ["torch_cuda"],
+                            "threshold": "actual_backends includes torch_cuda",
+                        },
+                    ],
+                },
             },
             "stages": {
                 "evaluation": {
@@ -395,3 +426,7 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "torch_cuda" in text
     assert "hnswlib parameters" in text
     assert "CPU/IO-Heavy Stages" in text
+    assert "Performance Acceptance Gates" in text
+    assert "Required gates passed" in text
+    assert "target_dataset" in text
+    assert "ann_speedup" in text

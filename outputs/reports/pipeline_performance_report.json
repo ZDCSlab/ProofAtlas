@@ -3293,6 +3293,110 @@
       }
     },
     "min_index_recall_vs_exact": 0.9580000000000001,
+    "performance_acceptance_profile": {
+      "gates": [
+        {
+          "evidence": "Production performance profile must use the configured LeanRank-data source.",
+          "name": "target_dataset",
+          "passed": true,
+          "severity": "required",
+          "threshold": "erbacher/LeanRank-data",
+          "value": "erbacher/LeanRank-data"
+        },
+        {
+          "evidence": "Performance numbers should describe a non-demo LeanRank-data run.",
+          "name": "large_scale_slice",
+          "passed": true,
+          "severity": "required",
+          "threshold": ">=60000 processed split rows and scale_bucket=large",
+          "value": 292012
+        },
+        {
+          "evidence": "Final retrieval claims should use full held-out proof-state and theorem evaluation.",
+          "name": "full_heldout_evaluation",
+          "passed": true,
+          "severity": "required",
+          "threshold": "both coverage fractions == 1.0",
+          "value": {
+            "proof_state_coverage_fraction": 1.0,
+            "theorem_coverage_fraction": 1.0
+          }
+        },
+        {
+          "evidence": "Bottleneck shares and throughput estimates must come from a non-cached production timing run.",
+          "name": "fresh_pipeline_timing",
+          "passed": true,
+          "severity": "required",
+          "threshold": "scale_estimate_reliable=true and throughput_basis=executed_pipeline_run",
+          "value": {
+            "scale_estimate_reliable": true,
+            "throughput_basis": "executed_pipeline_run"
+          }
+        },
+        {
+          "evidence": "Large-scale retrieval should use indexed candidate generation with measurable speedup.",
+          "name": "ann_speedup",
+          "passed": true,
+          "severity": "required",
+          "threshold": ">=5x mean indexed speedup vs exact cosine",
+          "value": 17.376305276865946
+        },
+        {
+          "evidence": "ANN speedup should not substantially change nearest-neighbor candidate quality.",
+          "name": "ann_recall",
+          "passed": true,
+          "severity": "required",
+          "threshold": ">=0.95 minimum Recall@10 vs exact cosine across indexed entities",
+          "value": 0.9580000000000001
+        },
+        {
+          "evidence": "Embedding remains the primary bottleneck, so GPU encoding should stay enabled for production refreshes.",
+          "name": "gpu_embedding_parallelism",
+          "passed": true,
+          "severity": "advisory",
+          "threshold": "cuda requested with at least one device",
+          "value": {
+            "device_count": 7,
+            "multi_process": true,
+            "requested_device": "cuda"
+          }
+        },
+        {
+          "evidence": "Held-out ranking evaluation should use the batched GPU path when available.",
+          "name": "gpu_evaluation_backend",
+          "passed": true,
+          "severity": "advisory",
+          "threshold": "actual_backends includes torch_cuda",
+          "value": [
+            "torch_cuda"
+          ]
+        },
+        {
+          "evidence": "Report and homepage refreshes should reuse embeddings, indexes, and trained models unless inputs change.",
+          "name": "artifact_reuse_ready",
+          "passed": true,
+          "severity": "advisory",
+          "threshold": "reuse_by_default=true",
+          "value": true
+        },
+        {
+          "evidence": "The report should expose enough throughput data to compare future embedding optimizations.",
+          "name": "embedding_throughput_recorded",
+          "passed": true,
+          "severity": "advisory",
+          "threshold": ">0 embedding rows/sec",
+          "value": 1638.4137466782227
+        }
+      ],
+      "summary": {
+        "advisory_gate_count": 4,
+        "advisory_gates_passed": true,
+        "passed_gate_count": 10,
+        "required_gate_count": 6,
+        "required_gates_passed": true,
+        "total_gate_count": 10
+      }
+    },
     "pipeline_seconds_per_100k_embedding_rows": 225.724786422147,
     "pipeline_seconds_per_100k_processed_rows": 188.91383326197186,
     "processed_rows_per_second": 529.3418606425042,

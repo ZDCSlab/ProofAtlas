@@ -460,6 +460,30 @@ def build_audit() -> dict[str, Any]:
         _resource_parallelism_condition,
         "resource_parallelism_profile={detail}",
     )
+    checks["validation:performance_acceptance_profile"] = _json_condition(
+        "outputs/reports/pipeline_performance_report.json",
+        lambda data: (
+            bool(data.get("throughput_profile", {}).get("performance_acceptance_profile", {}).get("gates"))
+            and data.get("throughput_profile", {})
+            .get("performance_acceptance_profile", {})
+            .get("summary", {})
+            .get("total_gate_count", 0)
+            > 0
+            and (
+                data.get("scale_profile", {}).get("scale_bucket") != "large"
+                or data.get("throughput_profile", {})
+                .get("performance_acceptance_profile", {})
+                .get("summary", {})
+                .get("required_gates_passed")
+                is True
+            ),
+            {
+                "scale_bucket": data.get("scale_profile", {}).get("scale_bucket"),
+                "profile": data.get("throughput_profile", {}).get("performance_acceptance_profile", {}),
+            },
+        ),
+        "performance_acceptance_profile={detail}",
+    )
     checks["validation:refresh_dashboard"] = _json_condition(
         "outputs/reports/refresh_dashboard.json",
         lambda data: (
