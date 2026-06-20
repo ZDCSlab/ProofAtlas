@@ -136,6 +136,29 @@ def _index_benchmark_table(bench_entities: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def _evaluation_substage_table(rows: list[dict[str, Any]]) -> str:
+    lines = [
+        "| Evaluation substage | Seconds | Queries | Backend |",
+        "| --- | ---: | ---: | --- |",
+    ]
+    for row in rows[:8]:
+        lines.append(
+            "| "
+            + " | ".join(
+                [
+                    f"`{row.get('name', 'n/a')}`",
+                    _fmt(row.get("seconds")),
+                    _fmt(row.get("evaluated_queries")),
+                    _fmt(row.get("actual_backend")),
+                ]
+            )
+            + " |"
+        )
+    if len(lines) == 2:
+        lines.append("| n/a | n/a | n/a | n/a |")
+    return "\n".join(lines)
+
+
 def _split_counts(manifest: dict[str, Any]) -> str:
     counts = manifest.get("split_counts", {}) if isinstance(manifest, dict) else {}
     if not counts:
@@ -180,6 +203,8 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     evaluation_scope = test_eval.get("evaluation_scope", {}) if isinstance(test_eval, dict) else {}
     evaluation_profile = pipeline.get("stages", {}).get("evaluation", {}) if isinstance(pipeline, dict) else {}
     held_out_test_coverage = evaluation_profile.get("held_out_test_coverage", {}) if isinstance(evaluation_profile, dict) else {}
+    evaluation_timing = evaluation_profile.get("evaluation_timing", {}) if isinstance(evaluation_profile, dict) else {}
+    evaluation_substages = evaluation_timing.get("slowest_substages", []) if isinstance(evaluation_timing, dict) else []
     recommendations = pipeline.get("recommendations", [])
     throughput = pipeline.get("throughput_profile", {}) if isinstance(pipeline, dict) else {}
     bottleneck_profile = throughput.get("bottleneck_profile", {}) if isinstance(throughput, dict) else {}
@@ -457,6 +482,8 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
             f"- Timing config matches current report config: `{timing_config_matches if timing_config_matches is not None else 'n/a'}`",
             f"- Timing generated at: `{timings.get('generated_at', 'n/a')}`",
             f"- Timing report: `outputs/reports/pipeline_run_timings.json`",
+            f"- Evaluation internal total seconds: `{evaluation_timing.get('total_seconds', 'n/a')}`",
+            f"- Evaluation timed substages: `{evaluation_timing.get('substage_count', 'n/a')}`",
             "",
             "| Stage | Seconds |",
             "| --- | ---: |",
@@ -466,6 +493,16 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
         lines.append(f"| `{row.get('name')}` | {_fmt(row.get('seconds'))} |")
     if not timings.get("slowest_stages"):
         lines.append("| n/a | n/a |")
+    lines.extend(
+        [
+            "",
+            "### Evaluation Substage Timing",
+            "",
+            "These timings split the `evaluate` pipeline stage into proof-state retrieval, theorem retrieval, reranked retrieval, and query-representation diagnostics so scaling work can target the slowest internal path.",
+            "",
+            _evaluation_substage_table(evaluation_substages),
+        ]
+    )
     lines.extend(
         [
             "",

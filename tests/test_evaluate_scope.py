@@ -68,6 +68,15 @@ def test_full_heldout_override_removes_core_evaluation_limits(tmp_path, monkeypa
     assert theorem_limits == {"val": None, "test": None}
     assert data["evaluation_scope"]["full_heldout_override"] is True
     assert data["evaluation_scope"]["is_sampled"] is False
+    assert data["evaluation_scope"]["total_seconds"] >= 0
+    assert [row["name"] for row in data["evaluation_scope"]["substage_timings"]] == [
+        "val_proof_state_retrieval",
+        "test_proof_state_retrieval",
+        "val_theorem_retrieval",
+        "test_theorem_retrieval",
+        "test_reranked_proof_state_retrieval",
+        "test_proof_state_query_representation_diagnostic",
+    ]
 
 
 def test_theorem_evaluation_skips_case_study_query_text_when_disabled(tmp_path, monkeypatch):

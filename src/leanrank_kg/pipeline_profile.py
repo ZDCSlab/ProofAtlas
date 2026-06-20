@@ -216,6 +216,15 @@ def _evaluation_stage() -> dict[str, Any]:
         if key.lower().startswith(("recall", "mrr", "map", "ndcg", "theorem_retrieval"))
     ]
     evaluation_scope = test_set_evaluation.get("evaluation_scope", {}) if isinstance(test_set_evaluation, dict) else {}
+    substage_timings = evaluation_scope.get("substage_timings", []) if isinstance(evaluation_scope, dict) else []
+    if not isinstance(substage_timings, list):
+        substage_timings = []
+    timed_substages = [
+        row
+        for row in substage_timings
+        if isinstance(row, dict) and row.get("name") and row.get("seconds") is not None
+    ]
+    total_substage_seconds = sum(float(row.get("seconds") or 0.0) for row in timed_substages)
     proof_test_metrics = test_set_evaluation.get("test", {}).get("proof_state_retrieval", {}).get("metrics", {})
     theorem_test_metrics = test_set_evaluation.get("test", {}).get("theorem_retrieval", {}).get("metrics", {})
     proof_state_test_total = int(_parquet_rows("data/processed/test/proof_states.parquet").get("rows") or 0)
@@ -231,10 +240,22 @@ def _evaluation_stage() -> dict[str, Any]:
             return None
         return min(float(numerator) / float(total), 1.0)
 
+    evaluation_timing = {
+        "total_seconds": evaluation_scope.get("total_seconds"),
+        "substage_count": len(timed_substages),
+        "substage_seconds_total": total_substage_seconds,
+        "slowest_substages": sorted(
+            timed_substages,
+            key=lambda row: float(row.get("seconds") or 0.0),
+            reverse=True,
+        )[:8],
+    }
+
     return {
         "metrics_path": "outputs/reports/metrics.json",
         "metrics_exists": Path("outputs/reports/metrics.json").exists(),
         "selected_metrics": {key: metrics.get(key) for key in selected_keys},
+        "evaluation_timing": evaluation_timing,
         "test_set_evaluation_path": "outputs/reports/test_set_evaluation.json",
         "test_set_evaluation_exists": Path("outputs/reports/test_set_evaluation.json").exists(),
         "test_set_evaluation": {

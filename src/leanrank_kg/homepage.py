@@ -275,9 +275,15 @@ HTML = """<!doctype html>
     </div>
     {% set bottleneck = production_evidence.timing.bottleneck_profile|default({}) %}
     {% set bottleneck_stages = bottleneck.top_stages|default([]) %}
+    {% set evaluation_timing = production_evidence.timing.evaluation_timing|default({}) %}
+    {% set evaluation_substages = evaluation_timing.slowest_substages|default([]) %}
     <div class="status-row" style="margin-top:12px">
       <div class="status warn"><div class="label">Pipeline bottleneck</div><div class="value">{{ bottleneck.primary_stage|default(production_evidence.timing.slowest_stage|default("unknown")) }}</div><div class="note">{{ "%.1f"|format((bottleneck.primary_stage_share_of_total|default(0) or 0) * 100) }}% of timed production run</div></div>
       <div class="status"><div class="label">Top-3 timed stages</div><div class="value">{{ "%.1f"|format((bottleneck.top3_stage_share_of_total|default(0) or 0) * 100) }}%</div><div class="note">combined share of pipeline wall time</div></div>
+      {% if evaluation_substages %}
+      <div class="status warn"><div class="label">Evaluation bottleneck</div><div class="value">{{ evaluation_substages[0].name }}</div><div class="note">{{ "%.1f"|format(evaluation_substages[0].seconds|default(0) or 0) }}s inside evaluation</div></div>
+      <div class="status"><div class="label">Eval timed substages</div><div class="value">{{ evaluation_timing.substage_count|default(0) }}</div><div class="note">{{ "%.1f"|format(evaluation_timing.total_seconds|default(0) or 0) }}s measured evaluation total</div></div>
+      {% endif %}
       {% for row in bottleneck_stages[:2] %}
       <div class="status"><div class="label">{{ row.name }}</div><div class="value">{{ "%.1f"|format(row.seconds|default(0) or 0) }}s</div><div class="note">{{ "%.1f"|format((row.share_of_total|default(0) or 0) * 100) }}% of timed run</div></div>
       {% endfor %}

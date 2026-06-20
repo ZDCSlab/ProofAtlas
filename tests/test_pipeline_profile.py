@@ -63,6 +63,11 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
                 "is_sampled": False,
                 "proof_state_limits": {"test": None, "val": None},
                 "theorem_limits": {"test": None, "val": None},
+                "total_seconds": 2.5,
+                "substage_timings": [
+                    {"name": "test_theorem_retrieval", "seconds": 1.5, "evaluated_queries": 5, "actual_backend": "torch_cuda"},
+                    {"name": "test_proof_state_retrieval", "seconds": 1.0, "evaluated_queries": 10, "actual_backend": "torch_cuda"},
+                ],
             }
         },
     )
@@ -99,6 +104,9 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
     assert report["throughput_profile"]["bottleneck_profile"]["primary_stage"] == "evaluate"
     assert report["throughput_profile"]["bottleneck_profile"]["primary_stage_share_of_total"] == 0.3
     assert report["throughput_profile"]["bottleneck_profile"]["top3_stage_share_of_total"] == 0.3
+    assert report["stages"]["evaluation"]["evaluation_timing"]["total_seconds"] == 2.5
+    assert report["stages"]["evaluation"]["evaluation_timing"]["substage_count"] == 2
+    assert report["stages"]["evaluation"]["evaluation_timing"]["slowest_substages"][0]["name"] == "test_theorem_retrieval"
     assert any(row["area"] == "indexing" for row in report["recommendations"])
     assert any(row["area"] == "pipeline_bottleneck" for row in report["recommendations"])
     assert (tmp_path / "outputs/reports/pipeline_performance_report.json").exists()

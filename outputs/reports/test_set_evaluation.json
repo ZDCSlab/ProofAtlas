@@ -68,10 +68,58 @@
       100
     ],
     "rerank_max_test_proof_states": 20,
+    "substage_timings": [
+      {
+        "actual_backend": "torch_cuda",
+        "evaluated_queries": 2822,
+        "name": "val_proof_state_retrieval",
+        "seconds": 6.8559439338278025,
+        "split": "val"
+      },
+      {
+        "actual_backend": "torch_cuda",
+        "evaluated_queries": 3053,
+        "name": "test_proof_state_retrieval",
+        "seconds": 0.9748802660033107,
+        "split": "test"
+      },
+      {
+        "actual_backend": "torch_cuda",
+        "case_study_limit": 0,
+        "evaluated_queries": 1000,
+        "name": "val_theorem_retrieval",
+        "seconds": 0.326199535978958,
+        "split": "val"
+      },
+      {
+        "actual_backend": "torch_cuda",
+        "case_study_limit": 0,
+        "evaluated_queries": 1000,
+        "name": "test_theorem_retrieval",
+        "seconds": 0.4314452628605068,
+        "split": "test"
+      },
+      {
+        "actual_backend": "batched_torch_cuda_then_rerank",
+        "candidate_k": 50,
+        "evaluated_queries": 20,
+        "name": "test_reranked_proof_state_retrieval",
+        "seconds": 205.7923765280284,
+        "split": "test"
+      },
+      {
+        "best_variant_by_recall": "full_name_goal",
+        "evaluated_queries": 50,
+        "name": "test_proof_state_query_representation_diagnostic",
+        "seconds": 0.5522066890262067,
+        "split": "test"
+      }
+    ],
     "theorem_limits": {
       "test": null,
       "val": null
     },
+    "total_seconds": 215.39269813196734,
     "use_gpu": true
   },
   "label_policy": "held-out test positive_edges are used only for evaluation",

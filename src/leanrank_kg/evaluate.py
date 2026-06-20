@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import math
+import time
 from functools import lru_cache
 from typing import Any
 
@@ -661,6 +662,18 @@ def _evaluate_proof_state_query_representations(
 
 
 def run(config_path: str, full_heldout: bool = False) -> None:
+    evaluation_started = time.perf_counter()
+    substage_timings: list[dict[str, Any]] = []
+
+    def _record_substage(name: str, started: float, **extra: Any) -> None:
+        substage_timings.append(
+            {
+                "name": name,
+                "seconds": time.perf_counter() - started,
+                **extra,
+            }
+        )
+
     _embedding_ids.cache_clear()
     _load_embedding.cache_clear()
     _load_diagnostic_sentence_transformer.cache_clear()
@@ -699,8 +712,10 @@ def run(config_path: str, full_heldout: bool = False) -> None:
         "val": int(max_val_theorems) if max_val_theorems is not None else None,
         "test": int(max_test_theorems) if max_test_theorems is not None else None,
     }
-    proof_state_by_split = {
-        split: _evaluate_proof_state_retrieval_split(
+    proof_state_by_split = {}
+    for split in ["val", "test"]:
+        stage_started = time.perf_counter()
+        proof_state_by_split[split] = _evaluate_proof_state_retrieval_split(
             split,
             top_ks,
             train_premises,
@@ -709,8 +724,13 @@ def run(config_path: str, full_heldout: bool = False) -> None:
             use_gpu=use_gpu,
             gpu_device=gpu_device,
         )
-        for split in ["val", "test"]
-    }
+        _record_substage(
+            f"{split}_proof_state_retrieval",
+            stage_started,
+            split=split,
+            evaluated_queries=proof_state_by_split[split].get("metrics", {}).get("evaluated_queries"),
+            actual_backend=proof_state_by_split[split].get("backend_info", {}).get("actual_backend"),
+        )
     examples = list(proof_state_by_split.get("test", {}).get("examples", []))
     if len(examples) < 20:
         examples.extend(proof_state_by_split.get("val", {}).get("examples", [])[: 20 - len(examples)])
@@ -756,8 +776,10 @@ def run(config_path: str, full_heldout: bool = False) -> None:
         if len(ps):
             label_coverages.append(float(ps["id"].isin(set(tech["proof_state_id"])).mean()))
     metrics["proof_technique_label_coverage"] = float(sum(label_coverages) / len(label_coverages)) if label_coverages else 0.0
-    theorem_by_split = {
-        split: _evaluate_theorem_retrieval_split(
+    theorem_by_split = {}
+    for split in ["val", "test"]:
+        stage_started = time.perf_counter()
+        theorem_by_split[split] = _evaluate_theorem_retrieval_split(
             split,
             top_ks=top_ks,
             train_premises=train_premises,
@@ -767,10 +789,17 @@ def run(config_path: str, full_heldout: bool = False) -> None:
             gpu_device=gpu_device,
             case_study_limit=case_study_limit if split == "test" else 0,
         )
-        for split in ["val", "test"]
-    }
+        _record_substage(
+            f"{split}_theorem_retrieval",
+            stage_started,
+            split=split,
+            evaluated_queries=theorem_by_split[split].get("metrics", {}).get("theorem_retrieval_evaluated_theorems"),
+            actual_backend=theorem_by_split[split].get("backend_info", {}).get("actual_backend"),
+            case_study_limit=case_study_limit if split == "test" else 0,
+        )
     theorem_eval = theorem_by_split["test"]
     metrics.update(theorem_eval["metrics"])
+    stage_started = time.perf_counter()
     reranked_proof_state_eval = _evaluate_reranked_proof_state_retrieval_split(
         "test",
         report_top_ks,
@@ -782,6 +811,15 @@ def run(config_path: str, full_heldout: bool = False) -> None:
         use_gpu=use_gpu,
         gpu_device=gpu_device,
     )
+    _record_substage(
+        "test_reranked_proof_state_retrieval",
+        stage_started,
+        split="test",
+        evaluated_queries=reranked_proof_state_eval.get("metrics", {}).get("evaluated_queries"),
+        actual_backend=reranked_proof_state_eval.get("backend_info", {}).get("actual_backend"),
+        candidate_k=reranked_proof_state_eval.get("backend_info", {}).get("candidate_k"),
+    )
+    stage_started = time.perf_counter()
     query_representation_diagnostic = _evaluate_proof_state_query_representations(
         "test",
         diagnostic_top_ks,
@@ -790,6 +828,13 @@ def run(config_path: str, full_heldout: bool = False) -> None:
         batch_size=batch_size,
         use_gpu=use_gpu,
         gpu_device=gpu_device,
+    )
+    _record_substage(
+        "test_proof_state_query_representation_diagnostic",
+        stage_started,
+        split="test",
+        evaluated_queries=query_representation_diagnostic.get("evaluated_queries"),
+        best_variant_by_recall=query_representation_diagnostic.get("best_variant_by_recall"),
     )
     for key, value in reranked_proof_state_eval.get("metrics", {}).items():
         metrics[f"reranked_proof_state_{key}"] = value
@@ -826,6 +871,8 @@ def run(config_path: str, full_heldout: bool = False) -> None:
             "rerank_candidate_k": rerank_candidate_k,
             "rerank_candidate_k_values": rerank_candidate_k_values,
             "query_representation_diagnostic_examples": query_representation_diagnostic_examples,
+            "total_seconds": time.perf_counter() - evaluation_started,
+            "substage_timings": substage_timings,
         },
         "top_k": top_ks,
         "reported_top_k": report_top_ks,

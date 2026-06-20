@@ -110,6 +110,14 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
             },
             "stages": {
                 "evaluation": {
+                    "evaluation_timing": {
+                        "total_seconds": 4.0,
+                        "substage_count": 2,
+                        "slowest_substages": [
+                            {"name": "test_theorem_retrieval", "seconds": 2.5, "evaluated_queries": 2, "actual_backend": "torch_cuda"},
+                            {"name": "test_proof_state_retrieval", "seconds": 1.5, "evaluated_queries": 3, "actual_backend": "torch_cuda"},
+                        ],
+                    },
                     "held_out_test_coverage": {
                         "proof_state_evaluated_queries": 3,
                         "proof_state_total": 30,
@@ -183,6 +191,9 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "Pipeline Timing" in text
     assert "Timing config matches current report config" in text
     assert "Timing config matches current report config: `True`" in text
+    assert "Evaluation Substage Timing" in text
+    assert "test_theorem_retrieval" in text
+    assert "Evaluation internal total seconds" in text
     assert "Proof-state test coverage" in text
     assert "Theorem test coverage" in text
     assert "Throughput timing basis" in text
