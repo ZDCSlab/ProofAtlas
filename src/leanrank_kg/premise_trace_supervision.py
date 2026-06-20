@@ -22,6 +22,98 @@ def _quantiles(series: pd.Series) -> dict[str, float]:
     }
 
 
+def _edge_premise_names(edges: pd.DataFrame, premises: pd.DataFrame) -> pd.DataFrame:
+    if edges.empty:
+        return edges.assign(premise_full_name=pd.Series(dtype=str))
+    premise_names = premises[["id", "full_name", "domain_tag", "subdomain_tag"]].rename(
+        columns={
+            "id": "premise_id",
+            "full_name": "premise_full_name",
+            "domain_tag": "premise_domain_tag",
+            "subdomain_tag": "premise_subdomain_tag",
+        }
+    )
+    return edges.merge(premise_names, on="premise_id", how="left")
+
+
+def _list_like_len(value: Any) -> int:
+    if value is None:
+        return 0
+    if isinstance(value, float) and pd.isna(value):
+        return 0
+    try:
+        return len(value)
+    except TypeError:
+        return 0
+
+
+def _proof_state_trace_examples(
+    proof_states: pd.DataFrame,
+    positives: pd.DataFrame,
+    negatives: pd.DataFrame,
+    premises: pd.DataFrame,
+    features: pd.DataFrame,
+    limit: int = 3,
+) -> list[dict[str, Any]]:
+    if proof_states.empty or positives.empty or negatives.empty:
+        return []
+    positive_names = _edge_premise_names(positives, premises)
+    negative_names = _edge_premise_names(negatives, premises)
+    positive_counts = positives.groupby("proof_state_id").size().rename("positive_count")
+    negative_counts = negatives.groupby("proof_state_id").size().rename("negative_count")
+    hardness = (
+        features.set_index("id")["negative_candidate_hardness"].rename("negative_candidate_hardness")
+        if not features.empty and {"id", "negative_candidate_hardness"} <= set(features.columns)
+        else pd.Series(dtype=float, name="negative_candidate_hardness")
+    )
+    scored = (
+        proof_states.set_index("id")
+        .join(positive_counts)
+        .join(negative_counts)
+        .join(hardness)
+        .fillna({"positive_count": 0, "negative_count": 0, "negative_candidate_hardness": 0.0})
+    )
+    scored = scored[(scored["positive_count"] > 0) & (scored["negative_count"] > 0)]
+    if scored.empty:
+        return []
+    scored = scored.sort_values(["negative_candidate_hardness", "negative_count", "positive_count"], ascending=False).head(limit)
+    examples = []
+    for proof_state_id, row in scored.iterrows():
+        pos_rows = positive_names[positive_names["proof_state_id"] == proof_state_id].head(5)
+        neg_rows = negative_names[negative_names["proof_state_id"] == proof_state_id].head(5)
+        examples.append(
+            {
+                "proof_state_id": str(proof_state_id),
+                "theorem_id": str(row.get("theorem_id", "")),
+                "full_name": str(row.get("full_name", "")),
+                "tactic_idx": int(row.get("tactic_idx", 0)),
+                "goal_text": str(row.get("goal_text", "")),
+                "local_hypothesis_count": _list_like_len(row.get("local_hypotheses")),
+                "symbol_count": _list_like_len(row.get("symbols")),
+                "positive_count": int(row.get("positive_count", 0)),
+                "negative_count": int(row.get("negative_count", 0)),
+                "negative_candidate_hardness": float(row.get("negative_candidate_hardness", 0.0)),
+                "positive_premises": [
+                    {
+                        "premise_id": str(premise.get("premise_id", "")),
+                        "full_name": str(premise.get("premise_full_name", "")),
+                        "source": str(premise.get("source", "")),
+                    }
+                    for premise in pos_rows.to_dict(orient="records")
+                ],
+                "hard_negative_candidates": [
+                    {
+                        "premise_id": str(premise.get("premise_id", "")),
+                        "full_name": str(premise.get("premise_full_name", "")),
+                        "source": str(premise.get("source", "")),
+                    }
+                    for premise in neg_rows.to_dict(orient="records")
+                ],
+            }
+        )
+    return examples
+
+
 def _split_report(split: str) -> dict[str, Any]:
     try:
         proof_states = pd.read_parquet(f"data/processed/{split}/proof_states.parquet")
@@ -51,6 +143,11 @@ def _split_report(split: str) -> dict[str, Any]:
     proof_state_count = max(1, len(proof_states))
     positive_edge_count = int(len(positives))
     negative_edge_count = int(len(negatives))
+    difficulty_sources = (
+        sorted(map(str, features["difficulty_target_source"].dropna().unique().tolist()))
+        if not features.empty and "difficulty_target_source" in features
+        else []
+    )
     return {
         "split": split,
         "exists": True,
@@ -87,6 +184,17 @@ def _split_report(split: str) -> dict[str, Any]:
         "max_positive_edges_per_proof_state": int(positive_counts.max()) if not positive_counts.empty else 0,
         "max_negative_edges_per_proof_state": int(negative_counts.max()) if not negative_counts.empty else 0,
         "negative_candidate_hardness": _quantiles(hardness),
+        "trace_profile": {
+            "proof_state_rows": int(len(proof_states)),
+            "positive_trace_rows": positive_edge_count,
+            "negative_candidate_rows": negative_edge_count,
+            "proof_states_with_complete_positive_negative_trace": int(len(proof_states_with_both)),
+            "positive_trace_source": "LeanRank-data pos_premise and all_pos_premises normalized to positive_edges",
+            "hard_negative_trace_source": "LeanRank-data neg_premises normalized to negative_edges",
+            "negative_candidate_hardness_source": "computed from normalized positive and negative premise namespace/domain overlap",
+            "difficulty_target_sources": difficulty_sources,
+        },
+        "example_traces": _proof_state_trace_examples(proof_states, positives, negatives, premises, features),
         "top_positive_premises": [
             {"premise_id": str(premise_id), "count": int(count)}
             for premise_id, count in premise_positive_frequency.sort_values(ascending=False).head(10).items()

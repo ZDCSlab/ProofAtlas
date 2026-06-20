@@ -303,10 +303,15 @@ def build_audit() -> dict[str, Any]:
             and data.get("current_artifact_supervision", {}).get("has_negative_candidates") is True
             and data.get("current_artifact_supervision", {}).get("total_positive_edges", 0) > 0
             and data.get("current_artifact_supervision", {}).get("total_negative_edges", 0) > 0
+            and data.get("splits", {}).get("train", {}).get("trace_profile", {}).get("positive_trace_rows", 0) > 0
+            and data.get("splits", {}).get("train", {}).get("trace_profile", {}).get("negative_candidate_rows", 0) > 0
+            and bool(data.get("splits", {}).get("train", {}).get("example_traces"))
             and data.get("scope") == "erbacher/LeanRank-data normalized positive/negative premise supervision",
             {
                 "dataset_name": data.get("dataset_name"),
                 "current": data.get("current_artifact_supervision"),
+                "train_trace_profile": data.get("splits", {}).get("train", {}).get("trace_profile"),
+                "train_example_trace_count": len(data.get("splits", {}).get("train", {}).get("example_traces", [])),
                 "scope": data.get("scope"),
             },
         ),

@@ -139,7 +139,7 @@ The text-query commands reuse the saved embedding artifacts in `outputs/embeddin
 
 `leanrank-kg profile-pipeline --config configs/proofatlas.yaml` writes `outputs/reports/pipeline_performance_report.json`. This is the scale-up baseline for the default `erbacher/LeanRank-data` run: it summarizes sample size, processed tables, graph rows, embedding matrix shapes, index manifests/build times, index benchmark latency/recall, pipeline timings, test-set retrieval metrics, artifact compatibility, LeanRank-data premise supervision, and concrete recommendations for larger runs.
 
-`leanrank-kg premise-trace-supervision-report` writes `outputs/reports/premise_trace_supervision_report.json`. It summarizes positive premise edges, negative candidates, negative-candidate hardness, and split-level supervision coverage from the normalized LeanRank-data artifacts.
+`leanrank-kg premise-trace-supervision-report` writes `outputs/reports/premise_trace_supervision_report.json`. It summarizes positive premise edges, negative candidates, negative-candidate hardness, split-level supervision coverage, and example proof-state traces with positive premises and hard negative candidates from the normalized LeanRank-data artifacts.
 
 `leanrank-kg build-experiment-report --config configs/proofatlas.yaml` writes `outputs/reports/experiment_report.md`. This is the quantitative ML report deliverable: it treats ProofAtlas as a ranking/retrieval task on `erbacher/LeanRank-data`, uses the held-out test split for final metrics, and reports proof-state-level and theorem-level Recall@k, MRR, MAP, nDCG, gold-premise coverage, domain-level metric breakdowns, index benchmark results, pipeline timings, and scale-up notes.
 
@@ -252,6 +252,9 @@ Current LeanRank-data premise supervision snapshot:
 | Premise supervision | negative/positive ratio | 9.5478 |
 | Train proof-state supervision | positive coverage | 1.0000 |
 | Train proof-state supervision | negative coverage | 1.0000 |
+| Train premise traces | positive trace rows | 54897 |
+| Train premise traces | hard negative rows | 530413 |
+| Train premise traces | example traces | 3 |
 | Train hard negatives | hardness mean | 0.6030 |
 
 To refresh the production evaluation artifacts after changing retrieval code or config:

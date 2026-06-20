@@ -29,6 +29,16 @@ def test_premise_trace_supervision_report_uses_leanrank_labels_without_custom_ex
     assert "normalization_label_conflicts" in report
     assert "total_positive_negative_overlap_removed" in report["normalization_label_conflicts"]
     assert "negative_candidate_hardness" in report["splits"]["train"]
+    assert "trace_profile" in report["splits"]["train"]
+    assert report["splits"]["train"]["trace_profile"]["positive_trace_rows"] > 0
+    assert report["splits"]["train"]["trace_profile"]["negative_candidate_rows"] > 0
+    assert report["splits"]["train"]["trace_profile"]["positive_trace_source"].startswith("LeanRank-data")
+    assert "example_traces" in report["splits"]["train"]
+    assert report["splits"]["train"]["example_traces"]
+    first_trace = report["splits"]["train"]["example_traces"][0]
+    assert first_trace["positive_premises"]
+    assert first_trace["hard_negative_candidates"]
+    assert first_trace["negative_candidate_hardness"] >= 0
     assert "positive_proof_state_coverage" in report["splits"]["train"]
     assert "negative_proof_state_coverage" in report["splits"]["train"]
     assert "positive_negative_pair_overlap_count" in report["splits"]["train"]

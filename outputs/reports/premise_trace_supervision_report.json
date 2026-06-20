@@ -65,6 +65,146 @@
           "positive"
         ]
       },
+      "example_traces": [
+        {
+          "full_name": "ADEInequality.lt_four",
+          "goal_text": "sumInv {2, q, r} \u2264 1",
+          "hard_negative_candidates": [
+            {
+              "full_name": "ADEInequality.admissible_E8",
+              "premise_id": "premise:ADEInequality.admissible_E8",
+              "source": "negative"
+            },
+            {
+              "full_name": "ADEInequality.Admissible",
+              "premise_id": "premise:ADEInequality.Admissible",
+              "source": "negative"
+            },
+            {
+              "full_name": "ADEInequality.E7",
+              "premise_id": "premise:ADEInequality.E7",
+              "source": "negative"
+            },
+            {
+              "full_name": "ADEInequality.admissible_E'3",
+              "premise_id": "premise:ADEInequality.admissible_E'3",
+              "source": "negative"
+            },
+            {
+              "full_name": "ADEInequality.A",
+              "premise_id": "premise:ADEInequality.A",
+              "source": "negative"
+            }
+          ],
+          "local_hypothesis_count": 4,
+          "negative_candidate_hardness": 0.8945056561085973,
+          "negative_count": 10,
+          "positive_count": 1,
+          "positive_premises": [
+            {
+              "full_name": "ADEInequality.sumInv_pqr",
+              "premise_id": "premise:ADEInequality.sumInv_pqr",
+              "source": "positive"
+            }
+          ],
+          "proof_state_id": "ps:ADEInequality.lt_four:2:565396ff3bd2",
+          "symbol_count": 9,
+          "tactic_idx": 2,
+          "theorem_id": "thm:ADEInequality.lt_four"
+        },
+        {
+          "full_name": "AddCircle.continuousAt_equivIoc",
+          "goal_text": "ContinuousAt (\u21d1(equivIoc p a)) x",
+          "hard_negative_candidates": [
+            {
+              "full_name": "QuotientGroup.forall_mk",
+              "premise_id": "premise:QuotientGroup.forall_mk",
+              "source": "negative"
+            },
+            {
+              "full_name": "QuotientGroup.preimage_image_mk_eq_mul",
+              "premise_id": "premise:QuotientGroup.preimage_image_mk_eq_mul",
+              "source": "negative"
+            },
+            {
+              "full_name": "QuotientGroup.leftRel_apply",
+              "premise_id": "premise:QuotientGroup.leftRel_apply",
+              "source": "negative"
+            },
+            {
+              "full_name": "QuotientGroup.rightRel",
+              "premise_id": "premise:QuotientGroup.rightRel",
+              "source": "negative"
+            },
+            {
+              "full_name": "QuotientGroup.mk_surjective",
+              "premise_id": "premise:QuotientGroup.mk_surjective",
+              "source": "negative"
+            }
+          ],
+          "local_hypothesis_count": 12,
+          "negative_candidate_hardness": 0.8939794336317286,
+          "negative_count": 10,
+          "positive_count": 1,
+          "positive_premises": [
+            {
+              "full_name": "QuotientGroup.induction_on",
+              "premise_id": "premise:QuotientGroup.induction_on",
+              "source": "positive"
+            }
+          ],
+          "proof_state_id": "ps:AddCircle.continuousAt_equivIoc:0:dffa12740580",
+          "symbol_count": 19,
+          "tactic_idx": 0,
+          "theorem_id": "thm:AddCircle.continuousAt_equivIoc"
+        },
+        {
+          "full_name": "AddChar.sum_eq_zero_of_ne_one",
+          "goal_text": "\u2211 a, \u03c8 a = 0",
+          "hard_negative_candidates": [
+            {
+              "full_name": "AddChar.toMonoidHomEquiv_add",
+              "premise_id": "premise:AddChar.toMonoidHomEquiv_add",
+              "source": "negative"
+            },
+            {
+              "full_name": "AddChar.toMonoidHomEquiv_symm_one",
+              "premise_id": "premise:AddChar.toMonoidHomEquiv_symm_one",
+              "source": "negative"
+            },
+            {
+              "full_name": "AddChar.ne_one_iff",
+              "premise_id": "premise:AddChar.ne_one_iff",
+              "source": "negative"
+            },
+            {
+              "full_name": "AddChar.instZero",
+              "premise_id": "premise:AddChar.instZero",
+              "source": "negative"
+            },
+            {
+              "full_name": "AddChar.sum_eq_ite",
+              "premise_id": "premise:AddChar.sum_eq_ite",
+              "source": "negative"
+            }
+          ],
+          "local_hypothesis_count": 12,
+          "negative_candidate_hardness": 0.8587113867397566,
+          "negative_count": 10,
+          "positive_count": 1,
+          "positive_premises": [
+            {
+              "full_name": "AddChar.map_add_eq_mul",
+              "premise_id": "premise:AddChar.map_add_eq_mul",
+              "source": "positive"
+            }
+          ],
+          "proof_state_id": "ps:AddChar.sum_eq_zero_of_ne_one:2:44c5e35df7ad",
+          "symbol_count": 19,
+          "tactic_idx": 2,
+          "theorem_id": "thm:AddChar.sum_eq_zero_of_ne_one"
+        }
+      ],
       "exists": true,
       "max_negative_edges_per_proof_state": 75,
       "max_positive_edges_per_proof_state": 27,
@@ -141,6 +281,18 @@
           "premise_id": "premise:MeasurableSet.nullMeasurableSet"
         }
       ],
+      "trace_profile": {
+        "difficulty_target_sources": [
+          "proof_length_tactic_count_premise_count_negative_candidates"
+        ],
+        "hard_negative_trace_source": "LeanRank-data neg_premises normalized to negative_edges",
+        "negative_candidate_hardness_source": "computed from normalized positive and negative premise namespace/domain overlap",
+        "negative_candidate_rows": 900,
+        "positive_trace_rows": 900,
+        "positive_trace_source": "LeanRank-data pos_premise and all_pos_premises normalized to positive_edges",
+        "proof_state_rows": 900,
+        "proof_states_with_complete_positive_negative_trace": 43
+      },
       "unique_negative_premises": 838,
       "unique_negative_to_positive_premise_ratio": 1.3828382838283828,
       "unique_positive_premises": 606
@@ -157,6 +309,151 @@
           "positive"
         ]
       },
+      "example_traces": [
+        {
+          "full_name": "MeasureTheory.Measure.restrict_restrict_of_subset",
+          "goal_text": "((\u03bc.restrict t).restrict s) u = (\u03bc.restrict s) u",
+          "hard_negative_candidates": [
+            {
+              "full_name": "MeasureTheory.Measure.restrict_smul",
+              "premise_id": "premise:MeasureTheory.Measure.restrict_smul",
+              "source": "negative"
+            },
+            {
+              "full_name": "MeasureTheory.Measure.restrict_apply\u2080'",
+              "premise_id": "premise:MeasureTheory.Measure.restrict_apply\u2080'",
+              "source": "negative"
+            },
+            {
+              "full_name": "MeasureTheory.Measure.restrict_apply\u2080",
+              "premise_id": "premise:MeasureTheory.Measure.restrict_apply\u2080",
+              "source": "negative"
+            },
+            {
+              "full_name": "MeasureTheory.Measure.restrict_le_self",
+              "premise_id": "premise:MeasureTheory.Measure.restrict_le_self",
+              "source": "negative"
+            },
+            {
+              "full_name": "MeasureTheory.Measure.restrict_add",
+              "premise_id": "premise:MeasureTheory.Measure.restrict_add",
+              "source": "negative"
+            }
+          ],
+          "local_hypothesis_count": 8,
+          "negative_candidate_hardness": 0.9767624120321922,
+          "negative_count": 15,
+          "positive_count": 2,
+          "positive_premises": [
+            {
+              "full_name": "MeasureTheory.Measure.restrict_apply",
+              "premise_id": "premise:MeasureTheory.Measure.restrict_apply",
+              "source": "positive"
+            },
+            {
+              "full_name": "MeasureTheory.Measure.restrict_eq_self",
+              "premise_id": "premise:MeasureTheory.Measure.restrict_eq_self",
+              "source": "positive"
+            }
+          ],
+          "proof_state_id": "ps:MeasureTheory.Measure.restrict_restrict_of_subset:1:de42ed5cf00b",
+          "symbol_count": 15,
+          "tactic_idx": 1,
+          "theorem_id": "thm:MeasureTheory.Measure.restrict_restrict_of_subset"
+        },
+        {
+          "full_name": "HomologicalComplex.homotopyCofiber.inrX_d",
+          "goal_text": "(inrX \u03c6 i \u226b d \u03c6 i j) \u226b sndX \u03c6 j = (G.d i j \u226b inrX \u03c6 j) \u226b sndX \u03c6 j",
+          "hard_negative_candidates": [
+            {
+              "full_name": "HomologicalComplex.homotopyCofiber.XIsoBiprod",
+              "premise_id": "premise:HomologicalComplex.homotopyCofiber.XIsoBiprod",
+              "source": "negative"
+            },
+            {
+              "full_name": "HomologicalComplex.homotopyCofiber.inlX_d",
+              "premise_id": "premise:HomologicalComplex.homotopyCofiber.inlX_d",
+              "source": "negative"
+            },
+            {
+              "full_name": "HomologicalComplex.homotopyCofiber.X",
+              "premise_id": "premise:HomologicalComplex.homotopyCofiber.X",
+              "source": "negative"
+            },
+            {
+              "full_name": "HomologicalComplex.homotopyCofiber.ext_to_X'",
+              "premise_id": "premise:HomologicalComplex.homotopyCofiber.ext_to_X'",
+              "source": "negative"
+            },
+            {
+              "full_name": "HomologicalComplex.homotopyCofiber.inlX",
+              "premise_id": "premise:HomologicalComplex.homotopyCofiber.inlX",
+              "source": "negative"
+            }
+          ],
+          "local_hypothesis_count": 13,
+          "negative_candidate_hardness": 0.9725198984102719,
+          "negative_count": 10,
+          "positive_count": 1,
+          "positive_premises": [
+            {
+              "full_name": "HomologicalComplex.homotopyCofiber.d_sndX",
+              "premise_id": "premise:HomologicalComplex.homotopyCofiber.d_sndX",
+              "source": "positive"
+            }
+          ],
+          "proof_state_id": "ps:HomologicalComplex.homotopyCofiber.inrX_d:6:fd32e03173fc",
+          "symbol_count": 28,
+          "tactic_idx": 6,
+          "theorem_id": "thm:HomologicalComplex.homotopyCofiber.inrX_d"
+        },
+        {
+          "full_name": "HomologicalComplex.homotopyCofiber.inrX_d",
+          "goal_text": "(inrX \u03c6 i \u226b d \u03c6 i j) \u226b fstX \u03c6 j (c.next j) hj = (G.d i j \u226b inrX \u03c6 j) \u226b fstX \u03c6 j (c.next j) hj",
+          "hard_negative_candidates": [
+            {
+              "full_name": "HomologicalComplex.homotopyCofiber.inlX",
+              "premise_id": "premise:HomologicalComplex.homotopyCofiber.inlX",
+              "source": "negative"
+            },
+            {
+              "full_name": "HomologicalComplex.homotopyCofiber.inlX_fstX",
+              "premise_id": "premise:HomologicalComplex.homotopyCofiber.inlX_fstX",
+              "source": "negative"
+            },
+            {
+              "full_name": "HomologicalComplex.homotopyCofiber.ext_to_X",
+              "premise_id": "premise:HomologicalComplex.homotopyCofiber.ext_to_X",
+              "source": "negative"
+            },
+            {
+              "full_name": "HomologicalComplex.homotopyCofiber.inrX_fstX",
+              "premise_id": "premise:HomologicalComplex.homotopyCofiber.inrX_fstX",
+              "source": "negative"
+            },
+            {
+              "full_name": "HomologicalComplex.homotopyCofiber.ext_from_X",
+              "premise_id": "premise:HomologicalComplex.homotopyCofiber.ext_from_X",
+              "source": "negative"
+            }
+          ],
+          "local_hypothesis_count": 13,
+          "negative_candidate_hardness": 0.9724659637433067,
+          "negative_count": 10,
+          "positive_count": 1,
+          "positive_premises": [
+            {
+              "full_name": "HomologicalComplex.homotopyCofiber.d_fstX",
+              "premise_id": "premise:HomologicalComplex.homotopyCofiber.d_fstX",
+              "source": "positive"
+            }
+          ],
+          "proof_state_id": "ps:HomologicalComplex.homotopyCofiber.inrX_d:3:23fb6d8ea0e8",
+          "symbol_count": 28,
+          "tactic_idx": 3,
+          "theorem_id": "thm:HomologicalComplex.homotopyCofiber.inrX_d"
+        }
+      ],
       "exists": true,
       "max_negative_edges_per_proof_state": 219,
       "max_positive_edges_per_proof_state": 27,
@@ -233,6 +530,18 @@
           "premise_id": "premise:Iff"
         }
       ],
+      "trace_profile": {
+        "difficulty_target_sources": [
+          "proof_length_tactic_count_premise_count_negative_candidates"
+        ],
+        "hard_negative_trace_source": "LeanRank-data neg_premises normalized to negative_edges",
+        "negative_candidate_hardness_source": "computed from normalized positive and negative premise namespace/domain overlap",
+        "negative_candidate_rows": 68132,
+        "positive_trace_rows": 7054,
+        "positive_trace_source": "LeanRank-data pos_premise and all_pos_premises normalized to positive_edges",
+        "proof_state_rows": 3053,
+        "proof_states_with_complete_positive_negative_trace": 3053
+      },
       "unique_negative_premises": 36316,
       "unique_negative_to_positive_premise_ratio": 9.110888108379328,
       "unique_positive_premises": 3986
@@ -249,6 +558,166 @@
           "positive"
         ]
       },
+      "example_traces": [
+        {
+          "full_name": "CategoryTheory.Functor.relativelyRepresentable.lift'_snd",
+          "goal_text": "hf'.lift' i h hi \u226b hf'.snd g = h",
+          "hard_negative_candidates": [
+            {
+              "full_name": "CategoryTheory.Functor.relativelyRepresentable.w",
+              "premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.w",
+              "source": "negative"
+            },
+            {
+              "full_name": "CategoryTheory.Functor.relativelyRepresentable.lift",
+              "premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.lift",
+              "source": "negative"
+            },
+            {
+              "full_name": "CategoryTheory.Functor.relativelyRepresentable.fst",
+              "premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.fst",
+              "source": "negative"
+            },
+            {
+              "full_name": "CategoryTheory.Functor.relativelyRepresentable.isPullback'",
+              "premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.isPullback'",
+              "source": "negative"
+            },
+            {
+              "full_name": "CategoryTheory.Functor.relativelyRepresentable.hom_ext",
+              "premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.hom_ext",
+              "source": "negative"
+            }
+          ],
+          "local_hypothesis_count": 17,
+          "negative_candidate_hardness": 0.9788105780287333,
+          "negative_count": 10,
+          "positive_count": 1,
+          "positive_premises": [
+            {
+              "full_name": "CategoryTheory.Functor.relativelyRepresentable.lift'",
+              "premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.lift'",
+              "source": "positive"
+            }
+          ],
+          "proof_state_id": "ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625",
+          "symbol_count": 26,
+          "tactic_idx": 0,
+          "theorem_id": "thm:CategoryTheory.Functor.relativelyRepresentable.lift'_snd"
+        },
+        {
+          "full_name": "CategoryTheory.SmallObject.SuccStruct.ofCocone_map_to_top",
+          "goal_text": "(ofCocone c).map (homOfLE \u22ef) = (ofCoconeObjIso c i hi).hom \u226b c.\u03b9.app \u27e8i, hi\u27e9 \u226b (ofCoconeObjIsoPt c).inv",
+          "hard_negative_candidates": [
+            {
+              "full_name": "CategoryTheory.SmallObject.SuccStruct.ofCocone.map_comp",
+              "premise_id": "premise:CategoryTheory.SmallObject.SuccStruct.ofCocone.map_comp",
+              "source": "negative"
+            },
+            {
+              "full_name": "CategoryTheory.SmallObject.SuccStruct.ofCocone.obj",
+              "premise_id": "premise:CategoryTheory.SmallObject.SuccStruct.ofCocone.obj",
+              "source": "negative"
+            },
+            {
+              "full_name": "CategoryTheory.SmallObject.SuccStruct.ofCocone_obj_eq",
+              "premise_id": "premise:CategoryTheory.SmallObject.SuccStruct.ofCocone_obj_eq",
+              "source": "negative"
+            },
+            {
+              "full_name": "CategoryTheory.SmallObject.SuccStruct.ofCocone.objIsoPt",
+              "premise_id": "premise:CategoryTheory.SmallObject.SuccStruct.ofCocone.objIsoPt",
+              "source": "negative"
+            },
+            {
+              "full_name": "CategoryTheory.SmallObject.SuccStruct.ofCocone_obj_eq_pt",
+              "premise_id": "premise:CategoryTheory.SmallObject.SuccStruct.ofCocone_obj_eq_pt",
+              "source": "negative"
+            }
+          ],
+          "local_hypothesis_count": 9,
+          "negative_candidate_hardness": 0.9786729102938615,
+          "negative_count": 7,
+          "positive_count": 4,
+          "positive_premises": [
+            {
+              "full_name": "CategoryTheory.SmallObject.SuccStruct.ofCoconeObjIso",
+              "premise_id": "premise:CategoryTheory.SmallObject.SuccStruct.ofCoconeObjIso",
+              "source": "positive"
+            },
+            {
+              "full_name": "CategoryTheory.SmallObject.SuccStruct.ofCoconeObjIsoPt",
+              "premise_id": "premise:CategoryTheory.SmallObject.SuccStruct.ofCoconeObjIsoPt",
+              "source": "positive"
+            },
+            {
+              "full_name": "CategoryTheory.SmallObject.SuccStruct.ofCocone",
+              "premise_id": "premise:CategoryTheory.SmallObject.SuccStruct.ofCocone",
+              "source": "positive"
+            },
+            {
+              "full_name": "CategoryTheory.SmallObject.SuccStruct.ofCocone.map",
+              "premise_id": "premise:CategoryTheory.SmallObject.SuccStruct.ofCocone.map",
+              "source": "positive"
+            }
+          ],
+          "proof_state_id": "ps:CategoryTheory.SmallObject.SuccStruct.ofCocone_map_to_top:0:455d08b83e53",
+          "symbol_count": 27,
+          "tactic_idx": 0,
+          "theorem_id": "thm:CategoryTheory.SmallObject.SuccStruct.ofCocone_map_to_top"
+        },
+        {
+          "full_name": "EReal.preimage_coe_Ioi",
+          "goal_text": "WithTop.some \u207b\u00b9' (WithBot.some \u207b\u00b9' Ioi \u2191\u2191x) = Ioi x",
+          "hard_negative_candidates": [
+            {
+              "full_name": "WithBot.preimage_coe_bot",
+              "premise_id": "premise:WithBot.preimage_coe_bot",
+              "source": "negative"
+            },
+            {
+              "full_name": "WithBot.range_coe",
+              "premise_id": "premise:WithBot.range_coe",
+              "source": "negative"
+            },
+            {
+              "full_name": "WithTop.preimage_coe_Ico",
+              "premise_id": "premise:WithTop.preimage_coe_Ico",
+              "source": "negative"
+            },
+            {
+              "full_name": "WithTop.preimage_coe_Iio_top",
+              "premise_id": "premise:WithTop.preimage_coe_Iio_top",
+              "source": "negative"
+            },
+            {
+              "full_name": "WithTop.image_coe_Ioo",
+              "premise_id": "premise:WithTop.image_coe_Ioo",
+              "source": "negative"
+            }
+          ],
+          "local_hypothesis_count": 1,
+          "negative_candidate_hardness": 0.9739564201310029,
+          "negative_count": 19,
+          "positive_count": 2,
+          "positive_premises": [
+            {
+              "full_name": "WithTop.preimage_coe_Ioi",
+              "premise_id": "premise:WithTop.preimage_coe_Ioi",
+              "source": "positive"
+            },
+            {
+              "full_name": "WithBot.preimage_coe_Ioi",
+              "premise_id": "premise:WithBot.preimage_coe_Ioi",
+              "source": "positive"
+            }
+          ],
+          "proof_state_id": "ps:EReal.preimage_coe_Ioi:2:d085ae73086d",
+          "symbol_count": 5,
+          "tactic_idx": 2,
+          "theorem_id": "thm:EReal.preimage_coe_Ioi"
+        }
+      ],
       "exists": true,
       "max_negative_edges_per_proof_state": 421,
       "max_positive_edges_per_proof_state": 46,
@@ -325,6 +794,18 @@
           "premise_id": "premise:div_eq_mul_inv"
         }
       ],
+      "trace_profile": {
+        "difficulty_target_sources": [
+          "proof_length_tactic_count_premise_count_negative_candidates"
+        ],
+        "hard_negative_trace_source": "LeanRank-data neg_premises normalized to negative_edges",
+        "negative_candidate_hardness_source": "computed from normalized positive and negative premise namespace/domain overlap",
+        "negative_candidate_rows": 530413,
+        "positive_trace_rows": 54897,
+        "positive_trace_source": "LeanRank-data pos_premise and all_pos_premises normalized to positive_edges",
+        "proof_state_rows": 23723,
+        "proof_states_with_complete_positive_negative_trace": 23723
+      },
       "unique_negative_premises": 123451,
       "unique_negative_to_positive_premise_ratio": 5.944861793315997,
       "unique_positive_premises": 20766
@@ -341,6 +822,156 @@
           "positive"
         ]
       },
+      "example_traces": [
+        {
+          "full_name": "AlgebraicGeometry.Scheme.Pullback.cocycle_fst_snd",
+          "goal_text": "t' \ud835\udcb0 f g i j k \u226b\n      t' \ud835\udcb0 f g j k i \u226b\n        t' \ud835\udcb0 f g k i j \u226b\n          pullback.fst (fV \ud835\udcb0 f g i j) (fV \ud835\udcb0 f g i k) \u226b pullback.snd (pullback.fst (\ud835\udcb0.map i \u226b f) g \u226b \ud835\udcb0.map i) (\ud835\udcb0.map j) =\n    pullback.fst (fV \ud835\udcb0 f g i j) (fV \ud835\udcb0 f g i k) \u226b pullback.snd (pullback.fst (\ud835\udcb0.map i \u226b f) g \u226b \ud835\udcb0.map i) (\ud835\udcb0.map j)",
+          "hard_negative_candidates": [
+            {
+              "full_name": "AlgebraicGeometry.Scheme.Pullback.v",
+              "premise_id": "premise:AlgebraicGeometry.Scheme.Pullback.v",
+              "source": "negative"
+            },
+            {
+              "full_name": "AlgebraicGeometry.Scheme.Pullback.t_fst_fst",
+              "premise_id": "premise:AlgebraicGeometry.Scheme.Pullback.t_fst_fst",
+              "source": "negative"
+            },
+            {
+              "full_name": "AlgebraicGeometry.Scheme.Pullback.t_snd",
+              "premise_id": "premise:AlgebraicGeometry.Scheme.Pullback.t_snd",
+              "source": "negative"
+            },
+            {
+              "full_name": "AlgebraicGeometry.Scheme.Pullback.t",
+              "premise_id": "premise:AlgebraicGeometry.Scheme.Pullback.t",
+              "source": "negative"
+            },
+            {
+              "full_name": "AlgebraicGeometry.Scheme.Pullback.cocycle_fst_fst_fst",
+              "premise_id": "premise:AlgebraicGeometry.Scheme.Pullback.cocycle_fst_fst_fst",
+              "source": "negative"
+            }
+          ],
+          "local_hypothesis_count": 6,
+          "negative_candidate_hardness": 0.9761908837416429,
+          "negative_count": 13,
+          "positive_count": 3,
+          "positive_premises": [
+            {
+              "full_name": "AlgebraicGeometry.Scheme.Pullback.t'_fst_fst_fst",
+              "premise_id": "premise:AlgebraicGeometry.Scheme.Pullback.t'_fst_fst_fst",
+              "source": "positive"
+            },
+            {
+              "full_name": "AlgebraicGeometry.Scheme.Pullback.t'_fst_snd",
+              "premise_id": "premise:AlgebraicGeometry.Scheme.Pullback.t'_fst_snd",
+              "source": "positive"
+            },
+            {
+              "full_name": "AlgebraicGeometry.Scheme.Pullback.t'_snd_snd",
+              "premise_id": "premise:AlgebraicGeometry.Scheme.Pullback.t'_snd_snd",
+              "source": "positive"
+            }
+          ],
+          "proof_state_id": "ps:AlgebraicGeometry.Scheme.Pullback.cocycle_fst_snd:0:f0b8c6df9586",
+          "symbol_count": 20,
+          "tactic_idx": 0,
+          "theorem_id": "thm:AlgebraicGeometry.Scheme.Pullback.cocycle_fst_snd"
+        },
+        {
+          "full_name": "AlgebraicGeometry.Scheme.IdealSheafData.map_id",
+          "goal_text": "I.map (\ud835\udfd9 Z) = I",
+          "hard_negative_candidates": [
+            {
+              "full_name": "AlgebraicGeometry.Scheme.IdealSheafData.map_comp",
+              "premise_id": "premise:AlgebraicGeometry.Scheme.IdealSheafData.map_comp",
+              "source": "negative"
+            },
+            {
+              "full_name": "AlgebraicGeometry.Scheme.IdealSheafData.comap_mono",
+              "premise_id": "premise:AlgebraicGeometry.Scheme.IdealSheafData.comap_mono",
+              "source": "negative"
+            },
+            {
+              "full_name": "AlgebraicGeometry.Scheme.IdealSheafData.le_map_iff_comap_le",
+              "premise_id": "premise:AlgebraicGeometry.Scheme.IdealSheafData.le_map_iff_comap_le",
+              "source": "negative"
+            },
+            {
+              "full_name": "AlgebraicGeometry.Scheme.IdealSheafData.support_comap",
+              "premise_id": "premise:AlgebraicGeometry.Scheme.IdealSheafData.support_comap",
+              "source": "negative"
+            },
+            {
+              "full_name": "AlgebraicGeometry.Scheme.IdealSheafData.comapIso_inv_subscheme\u03b9",
+              "premise_id": "premise:AlgebraicGeometry.Scheme.IdealSheafData.comapIso_inv_subscheme\u03b9",
+              "source": "negative"
+            }
+          ],
+          "local_hypothesis_count": 2,
+          "negative_candidate_hardness": 0.9715128856697761,
+          "negative_count": 10,
+          "positive_count": 1,
+          "positive_premises": [
+            {
+              "full_name": "AlgebraicGeometry.Scheme.IdealSheafData.map",
+              "premise_id": "premise:AlgebraicGeometry.Scheme.IdealSheafData.map",
+              "source": "positive"
+            }
+          ],
+          "proof_state_id": "ps:AlgebraicGeometry.Scheme.IdealSheafData.map_id:0:94c28733cfe3",
+          "symbol_count": 6,
+          "tactic_idx": 0,
+          "theorem_id": "thm:AlgebraicGeometry.Scheme.IdealSheafData.map_id"
+        },
+        {
+          "full_name": "CategoryTheory.GrothendieckTopology.yonedaULiftEquiv_yonedaULift_map",
+          "goal_text": "J.yonedaULiftEquiv ((yonedaULift.{v', v, u} J).map f) = { down := f }",
+          "hard_negative_candidates": [
+            {
+              "full_name": "CategoryTheory.GrothendieckTopology.map_yonedaEquiv'",
+              "premise_id": "premise:CategoryTheory.GrothendieckTopology.map_yonedaEquiv'",
+              "source": "negative"
+            },
+            {
+              "full_name": "CategoryTheory.GrothendieckTopology.yonedaEquiv_naturality'",
+              "premise_id": "premise:CategoryTheory.GrothendieckTopology.yonedaEquiv_naturality'",
+              "source": "negative"
+            },
+            {
+              "full_name": "CategoryTheory.GrothendieckTopology.yonedaULiftEquiv_symm_app_apply",
+              "premise_id": "premise:CategoryTheory.GrothendieckTopology.yonedaULiftEquiv_symm_app_apply",
+              "source": "negative"
+            },
+            {
+              "full_name": "CategoryTheory.GrothendieckTopology.yonedaULiftEquiv",
+              "premise_id": "premise:CategoryTheory.GrothendieckTopology.yonedaULiftEquiv",
+              "source": "negative"
+            },
+            {
+              "full_name": "CategoryTheory.GrothendieckTopology.yonedaULiftEquiv_comp",
+              "premise_id": "premise:CategoryTheory.GrothendieckTopology.yonedaULiftEquiv_comp",
+              "source": "negative"
+            }
+          ],
+          "local_hypothesis_count": 6,
+          "negative_candidate_hardness": 0.9675393736687077,
+          "negative_count": 10,
+          "positive_count": 1,
+          "positive_premises": [
+            {
+              "full_name": "CategoryTheory.GrothendieckTopology.yonedaULiftEquiv_apply",
+              "premise_id": "premise:CategoryTheory.GrothendieckTopology.yonedaULiftEquiv_apply",
+              "source": "positive"
+            }
+          ],
+          "proof_state_id": "ps:CategoryTheory.GrothendieckTopology.yonedaULiftEquiv_yonedaULift_map:0:bdfb22081332",
+          "symbol_count": 18,
+          "tactic_idx": 0,
+          "theorem_id": "thm:CategoryTheory.GrothendieckTopology.yonedaULiftEquiv_yonedaULift_map"
+        }
+      ],
       "exists": true,
       "max_negative_edges_per_proof_state": 286,
       "max_positive_edges_per_proof_state": 30,
@@ -417,6 +1048,18 @@
           "premise_id": "premise:Set.mem_setOf_eq"
         }
       ],
+      "trace_profile": {
+        "difficulty_target_sources": [
+          "proof_length_tactic_count_premise_count_negative_candidates"
+        ],
+        "hard_negative_trace_source": "LeanRank-data neg_premises normalized to negative_edges",
+        "negative_candidate_hardness_source": "computed from normalized positive and negative premise namespace/domain overlap",
+        "negative_candidate_rows": 63753,
+        "positive_trace_rows": 6610,
+        "positive_trace_source": "LeanRank-data pos_premise and all_pos_premises normalized to positive_edges",
+        "proof_state_rows": 2822,
+        "proof_states_with_complete_positive_negative_trace": 2822
+      },
       "unique_negative_premises": 34319,
       "unique_negative_to_positive_premise_ratio": 9.110432705070348,
       "unique_positive_premises": 3767
