@@ -33,7 +33,7 @@ Out of current production scope:
 | Premise positive/negative supervision | 69,461 positive edges, 663,198 negative edges, positive/negative overlap removed: 4,088 | Delivered |
 | Larger real-data pipeline | `configs/proofatlas.yaml`, 292,012 current split rows, 10,000 requested theorems, 350,000 source rows | Delivered |
 | GPU BGE embeddings | `outputs/embeddings/embedding_config.json`: `BAAI/bge-base-en-v1.5`, devices `cuda:0` to `cuda:6`, proof-state template `full_name + goal_text` | Delivered |
-| ANN performance | `outputs/reports/index_benchmark.json`: hnswlib premise retrieval 18.3x faster than exact cosine at Recall@10 vs exact 0.989 | Delivered |
+| ANN performance | `outputs/reports/index_benchmark.json`: hnswlib premise retrieval 20.0x faster than exact cosine at Recall@10 vs exact 0.993 | Delivered |
 | API readiness/security review | `outputs/reports/deployment_security_review.json`, `docs/proofatlas_deployment_guide.md` | MVP delivered |
 | Real Lean proof-state extraction for new queries | `src/leanrank_kg/lean_check.py` extracts proof states from Lean unsolved-goal diagnostics when validation is requested | Partial |
 | Full Lean server/session extraction | Explicitly out of current LeanRank-data production scope | Out of scope |
@@ -64,9 +64,18 @@ From `outputs/reports/index_benchmark.json` and `outputs/reports/pipeline_perfor
 
 | Entity | Backend | Rows | Exact ms/query | Indexed ms/query | Speedup | Recall@10 vs exact |
 | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| Premise | hnswlib | 127,561 | 69.1207 | 3.7731 | 18.3195 | 0.9890 |
-| ProofState | hnswlib | 23,723 | 12.7723 | 0.8401 | 15.2030 | 0.9910 |
-| Theorem | hnswlib | 8,000 | 4.0895 | 0.3204 | 12.7647 | 0.9940 |
+| Premise | hnswlib | 127,561 | 69.2717 | 3.4585 | 20.0292 | 0.9930 |
+| ProofState | hnswlib | 23,723 | 12.7351 | 0.8292 | 15.3578 | 0.9640 |
+| Theorem | hnswlib | 8,000 | 4.2275 | 0.2369 | 17.8457 | 0.9930 |
+
+Pipeline bottleneck profile:
+
+| Stage group | Field | Value |
+| --- | --- | ---: |
+| Primary bottleneck | stage | evaluate |
+| Primary bottleneck | seconds | 211.3259 |
+| Primary bottleneck | share of total | 0.2855 |
+| Top-3 timed stages | share of total | 0.5962 |
 
 Pipeline scale profile:
 

@@ -178,6 +178,23 @@ Current production run coverage and timing:
 | Pipeline timing | throughput basis | executed_pipeline_run |
 | Pipeline timing | scale estimate reliable | True |
 
+Current production performance snapshot:
+
+| Entity | Backend | Rows | Exact ms/query | Indexed ms/query | Speedup | Recall@10 vs exact |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| Premise | hnswlib | 127,561 | 69.2717 | 3.4585 | 20.0292 | 0.9930 |
+| ProofState | hnswlib | 23,723 | 12.7351 | 0.8292 | 15.3578 | 0.9640 |
+| Theorem | hnswlib | 8,000 | 4.2275 | 0.2369 | 17.8457 | 0.9930 |
+
+Current pipeline bottleneck profile:
+
+| Stage group | Field | Value |
+| --- | --- | ---: |
+| Primary bottleneck | stage | evaluate |
+| Primary bottleneck | seconds | 211.3259 |
+| Primary bottleneck | share of total | 0.2855 |
+| Top-3 timed stages | share of total | 0.5962 |
+
 Current LeanRank-data premise supervision snapshot:
 
 | Artifact | Field | Value |

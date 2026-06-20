@@ -20,6 +20,18 @@ def _readme_artifact_field(readme: str, artifact: str, field: str) -> str:
     raise AssertionError(f"Missing README artifact row: {artifact} / {field}")
 
 
+def _readme_table_row(readme: str, first_col: str, second_col: str | None = None) -> list[str]:
+    prefix = f"| {first_col} |"
+    for line in readme.splitlines():
+        if not line.startswith(prefix):
+            continue
+        cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+        if second_col is None or (len(cells) > 1 and cells[1] == second_col):
+            return cells
+    suffix = f" / {second_col}" if second_col is not None else ""
+    raise AssertionError(f"Missing README row: {first_col}{suffix}")
+
+
 def test_readme_results_snapshot_matches_committed_metrics() -> None:
     repo = Path(__file__).resolve().parents[1]
     readme = (repo / "README.md").read_text(encoding="utf-8")
@@ -58,6 +70,29 @@ def test_readme_production_snapshot_matches_committed_artifacts() -> None:
     )
     assert _readme_artifact_field(readme, "Pipeline timing", "throughput basis") == throughput["throughput_basis"]
     assert _readme_artifact_field(readme, "Pipeline timing", "scale estimate reliable") == str(throughput["scale_estimate_reliable"])
+
+
+def test_readme_performance_snapshot_matches_committed_artifacts() -> None:
+    repo = Path(__file__).resolve().parents[1]
+    readme = (repo / "README.md").read_text(encoding="utf-8")
+    benchmark = json.loads((repo / "outputs/reports/index_benchmark.json").read_text(encoding="utf-8"))
+    profile = json.loads((repo / "outputs/reports/pipeline_performance_report.json").read_text(encoding="utf-8"))
+
+    display_names = {"premise": "Premise", "proof_state": "ProofState", "theorem": "Theorem"}
+    for key, label in display_names.items():
+        row = benchmark["entities"][key]
+        cells = _readme_table_row(readme, label)
+        assert cells[2] == f"{int(row['rows']):,}"
+        assert cells[3] == f"{float(row['exact_ms_per_query']):.4f}"
+        assert cells[4] == f"{float(row['indexed_ms_per_query']):.4f}"
+        assert cells[5] == f"{float(row['speedup_vs_exact']):.4f}"
+        assert cells[6] == f"{float(row['recall_at_10_vs_exact']):.4f}"
+
+    bottleneck = profile["throughput_profile"]["bottleneck_profile"]
+    assert _readme_table_row(readme, "Primary bottleneck", "stage")[2] == bottleneck["primary_stage"]
+    assert _readme_table_row(readme, "Primary bottleneck", "seconds")[2] == f"{float(bottleneck['primary_stage_seconds']):.4f}"
+    assert _readme_table_row(readme, "Primary bottleneck", "share of total")[2] == f"{float(bottleneck['primary_stage_share_of_total']):.4f}"
+    assert _readme_table_row(readme, "Top-3 timed stages", "share of total")[2] == f"{float(bottleneck['top3_stage_share_of_total']):.4f}"
 
 
 def test_readme_premise_supervision_snapshot_matches_committed_artifacts() -> None:
