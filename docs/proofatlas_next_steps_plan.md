@@ -93,16 +93,16 @@ Given a new theorem statement or proof goal
 
 The current production experiment uses `configs/proofatlas.yaml` over `erbacher/LeanRank-data`, BGE embeddings, and hnswlib ANN indexes. The detailed artifact/evidence audit is in `docs/proofatlas_delivery_audit.md`.
 
-Sampled held-out test metrics:
+Full held-out test metrics:
 
 | Task | Metric | Value |
 | --- | --- | ---: |
-| Proof-state premise retrieval | Recall@10 | 0.1279 |
-| Proof-state premise retrieval | Recall@100 | 0.3090 |
+| Proof-state premise retrieval | Recall@10 | 0.1162 |
+| Proof-state premise retrieval | Recall@100 | 0.2362 |
 | Reranked proof-state diagnostic | Recall@10 | 0.1513 |
-| Theorem-level premise retrieval | Recall@10 | 0.4233 |
-| Theorem-level premise retrieval | Recall@100 | 0.6642 |
-| Theorem-level premise retrieval | MRR | 0.5473 |
+| Theorem-level premise retrieval | Recall@10 | 0.4940 |
+| Theorem-level premise retrieval | Recall@100 | 0.6889 |
+| Theorem-level premise retrieval | MRR | 0.5609 |
 | Learned premise ranker | validation AUC | 0.8254 |
 
 Performance snapshot:
