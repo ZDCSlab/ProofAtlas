@@ -600,6 +600,46 @@ def _rapid_convergence_profile(
                 best = {"candidate_k": row.get("candidate_k"), "Recall@10": score_f, "MRR": metrics.get("MRR"), "MAP": metrics.get("MAP")}
         return best
 
+    def _query_representation_split_summary(diagnostic: dict[str, Any]) -> dict[str, Any]:
+        variants = diagnostic.get("variants", {}) if isinstance(diagnostic, dict) else {}
+        selection_metric = diagnostic.get("selection_metric") or "Recall@100"
+        baseline = variants.get("stored_embedding", {}) if isinstance(variants, dict) else {}
+        baseline_metrics = baseline.get("metrics", {}) if isinstance(baseline, dict) else {}
+        best_name = diagnostic.get("best_variant_by_recall")
+        best = variants.get(best_name, {}) if isinstance(variants, dict) and best_name else {}
+        best_metrics = best.get("metrics", {}) if isinstance(best, dict) else {}
+        baseline_value = _float(baseline_metrics.get(selection_metric))
+        best_value = _float(best_metrics.get(selection_metric))
+        return {
+            "evaluated_queries": diagnostic.get("evaluated_queries"),
+            "selection_metric": selection_metric,
+            "baseline_variant": "stored_embedding",
+            "baseline_value": baseline_value,
+            "best_variant": best_name,
+            "best_value": best_value,
+            "best_minus_baseline": (best_value - baseline_value) if best_value is not None and baseline_value is not None else None,
+            "variant_count": len(variants) if isinstance(variants, dict) else 0,
+            "fused_variant_count": sum(1 for name in variants if str(name).startswith("stored_plus_")) if isinstance(variants, dict) else 0,
+        }
+
+    validation_query_summary = _query_representation_split_summary(validation_query_representation)
+    test_query_summary = _query_representation_split_summary(test_query_representation)
+    query_best_match = (
+        validation_query_summary.get("best_variant") == test_query_summary.get("best_variant")
+        if validation_query_summary.get("best_variant") and test_query_summary.get("best_variant")
+        else None
+    )
+    validation_delta = validation_query_summary.get("best_minus_baseline")
+    test_delta = test_query_summary.get("best_minus_baseline")
+    if query_best_match and validation_delta is not None and validation_delta > 0 and test_delta is not None and test_delta >= 0:
+        query_recommendation = "candidate_for_full_heldout_evaluation"
+    elif query_best_match is False:
+        query_recommendation = "do_not_switch_default_yet_best_variant_unstable"
+    elif validation_delta is not None and validation_delta <= 0:
+        query_recommendation = "keep_stored_embedding_baseline"
+    else:
+        query_recommendation = "collect_more_query_representation_evidence"
+
     ranked_feature_groups = []
     for name, row in feature_groups.items():
         if not isinstance(row, dict):
@@ -692,21 +732,26 @@ def _rapid_convergence_profile(
         },
         "query_representation_diagnostic": {
             "validation": {
-                "evaluated_queries": validation_query_representation.get("evaluated_queries"),
-                "selection_metric": validation_query_representation.get("selection_metric"),
-                "best_variant_by_recall": validation_query_representation.get("best_variant_by_recall"),
+                "evaluated_queries": validation_query_summary.get("evaluated_queries"),
+                "selection_metric": validation_query_summary.get("selection_metric"),
+                "best_variant_by_recall": validation_query_summary.get("best_variant"),
             },
             "test": {
-                "evaluated_queries": test_query_representation.get("evaluated_queries"),
-                "selection_metric": test_query_representation.get("selection_metric"),
-                "best_variant_by_recall": test_query_representation.get("best_variant_by_recall"),
+                "evaluated_queries": test_query_summary.get("evaluated_queries"),
+                "selection_metric": test_query_summary.get("selection_metric"),
+                "best_variant_by_recall": test_query_summary.get("best_variant"),
             },
-            "validation_test_best_variant_match": (
-                validation_query_representation.get("best_variant_by_recall")
-                == test_query_representation.get("best_variant_by_recall")
-                if validation_query_representation.get("best_variant_by_recall") and test_query_representation.get("best_variant_by_recall")
-                else None
-            ),
+            "validation_test_best_variant_match": query_best_match,
+            "stability_profile": {
+                "method": "compare_best_query_representation_to_stored_embedding_on_validation_and_test_diagnostics",
+                "validation": validation_query_summary,
+                "test": test_query_summary,
+                "best_variant_match": query_best_match,
+                "recommendation": query_recommendation,
+                "interpretation": (
+                    "Use validation/test agreement and improvement over stored_embedding before changing the production proof_state_query_representation."
+                ),
+            },
         },
         "strongest_ranker_feature_groups": ranked_feature_groups[:5],
         "label_supervision": {

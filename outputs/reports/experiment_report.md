@@ -121,6 +121,17 @@ Query representation diagnostic summary:
 | `test` | {'best_variant_by_recall': 'stored_plus_full_name_context_goal', 'evaluated_queries': 50, 'selection_metric': 'Recall@100'} |
 | `validation_test_best_variant_match` | False |
 
+Query representation stability:
+
+- Method: `compare_best_query_representation_to_stored_embedding_on_validation_and_test_diagnostics`
+- Recommendation: `do_not_switch_default_yet_best_variant_unstable`
+- Best variant match: `False`
+
+| Split | Queries | Baseline | Baseline value | Best variant | Best value | Delta | Variants | Fused variants |
+| --- | ---: | --- | ---: | --- | ---: | ---: | ---: | ---: |
+| validation | 50 | `stored_embedding` | 0.2604 | `stored_plus_goal_only` | 0.2682 | 0.0078 | 11 | 5 |
+| test | 50 | `stored_embedding` | 0.2700 | `stored_plus_full_name_context_goal` | 0.2925 | 0.0226 | 11 | 5 |
+
 Strongest ranker feature groups:
 
 | Feature group | Delta without group | Group-only AUC | Columns |
@@ -134,6 +145,16 @@ Strongest ranker feature groups:
 ### Proof-State Query Representation Diagnostic
 
 Validation diagnostics are the safer signal for choosing proof-state query text variants; test diagnostics are reported to show whether that choice generalizes. The main proof-state retrieval metric remains the committed production evaluation path.
+
+Stability profile:
+
+- Recommendation: `do_not_switch_default_yet_best_variant_unstable`
+- Interpretation: Use validation/test agreement and improvement over stored_embedding before changing the production proof_state_query_representation.
+
+| Split | Queries | Baseline | Baseline value | Best variant | Best value | Delta | Variants | Fused variants |
+| --- | ---: | --- | ---: | --- | ---: | ---: | ---: | ---: |
+| validation | 50 | `stored_embedding` | 0.2604 | `stored_plus_goal_only` | 0.2682 | 0.0078 | 11 | 5 |
+| test | 50 | `stored_embedding` | 0.2700 | `stored_plus_full_name_context_goal` | 0.2925 | 0.0226 | 11 | 5 |
 
 Validation split:
 
@@ -777,17 +798,17 @@ These linear projections use the current timed pipeline as a capacity-planning b
 This profile records the local footprint of generated LeanRank-data artifacts. It is a practical scale-up signal because embeddings and ANN indexes can dominate disk usage before model training becomes the bottleneck.
 
 - Method: `filesystem_artifact_footprint_with_linear_scale_projection`
-- Total artifact bytes: `3052667030`
-- Total artifact GiB: `2.843017717823386`
-- Bytes per processed row: `10453.90953111516`
+- Total artifact bytes: `3052692678`
+- Total artifact GiB: `2.84304160438478`
+- Bytes per processed row: `10453.997363122064`
 - Unreferenced index artifact bytes: `1502501178`
 - Unreferenced index artifact count: `12`
 
 | Projection | Target rows | Scale factor | Artifact GiB |
 | --- | ---: | ---: | ---: |
 | `current_1x` | 292012 | 1.0000 | 2.8430 |
-| `current_2x` | 584024 | 2.0000 | 5.6860 |
-| `current_5x` | 1460060 | 5.0000 | 14.2151 |
+| `current_2x` | 584024 | 2.0000 | 5.6861 |
+| `current_5x` | 1460060 | 5.0000 | 14.2152 |
 | `configured_source_rows` | 350000 | 1.1986 | 3.4076 |
 
 Largest generated artifact files:

@@ -98,6 +98,10 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
                     "evaluated_queries": 4,
                     "selection_metric": "Recall@100",
                     "best_variant_by_recall": "full_name_goal",
+                    "variants": {
+                        "stored_embedding": {"metrics": {"Recall@100": 0.2}},
+                        "full_name_goal": {"metrics": {"Recall@100": 0.3}},
+                    },
                 },
                 "theorem_retrieval": {
                     "metrics": {
@@ -120,6 +124,10 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
                     "evaluated_queries": 4,
                     "selection_metric": "Recall@100",
                     "best_variant_by_recall": "goal_only",
+                    "variants": {
+                        "stored_embedding": {"metrics": {"Recall@100": 0.2}},
+                        "goal_only": {"metrics": {"Recall@100": 0.25}},
+                    },
                 }
             },
         },
@@ -204,6 +212,10 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
     assert rapid["query_representation_diagnostic"]["validation"]["best_variant_by_recall"] == "goal_only"
     assert rapid["query_representation_diagnostic"]["test"]["best_variant_by_recall"] == "full_name_goal"
     assert rapid["query_representation_diagnostic"]["validation_test_best_variant_match"] is False
+    stability = rapid["query_representation_diagnostic"]["stability_profile"]
+    assert stability["recommendation"] == "do_not_switch_default_yet_best_variant_unstable"
+    assert stability["validation"]["best_minus_baseline"] == 0.04999999999999999
+    assert stability["test"]["best_minus_baseline"] == 0.09999999999999998
     assert rapid["recommended_sequence"][0]["area"] == "proof_state_query_and_embedding"
     assert "Validation query diagnostic currently favors `goal_only`" in rapid["recommended_sequence"][0]["reason"]
     rerank_cost = report["throughput_profile"]["rerank_evaluation_cost_profile"]

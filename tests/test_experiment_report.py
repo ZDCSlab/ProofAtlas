@@ -158,6 +158,45 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                         "theorem_missing_from_top100": 0.3,
                         "theorem_top10_to_top100_gap": 0.2,
                     },
+                    "query_representation_diagnostic": {
+                        "validation": {
+                            "evaluated_queries": 50,
+                            "selection_metric": "Recall@100",
+                            "best_variant_by_recall": "stored_plus_goal_only",
+                        },
+                        "test": {
+                            "evaluated_queries": 50,
+                            "selection_metric": "Recall@100",
+                            "best_variant_by_recall": "stored_plus_full_name_context_goal",
+                        },
+                        "validation_test_best_variant_match": False,
+                        "stability_profile": {
+                            "method": "compare_best_query_representation_to_stored_embedding_on_validation_and_test_diagnostics",
+                            "recommendation": "do_not_switch_default_yet_best_variant_unstable",
+                            "best_variant_match": False,
+                            "validation": {
+                                "evaluated_queries": 50,
+                                "baseline_variant": "stored_embedding",
+                                "baseline_value": 0.26,
+                                "best_variant": "stored_plus_goal_only",
+                                "best_value": 0.27,
+                                "best_minus_baseline": 0.01,
+                                "variant_count": 11,
+                                "fused_variant_count": 5,
+                            },
+                            "test": {
+                                "evaluated_queries": 50,
+                                "baseline_variant": "stored_embedding",
+                                "baseline_value": 0.27,
+                                "best_variant": "stored_plus_full_name_context_goal",
+                                "best_value": 0.29,
+                                "best_minus_baseline": 0.02,
+                                "variant_count": 11,
+                                "fused_variant_count": 5,
+                            },
+                            "interpretation": "Use validation/test agreement before changing production settings.",
+                        },
+                    },
                     "strongest_ranker_feature_groups": [
                         {
                             "group": "symbol_overlap",
@@ -595,6 +634,10 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "proof_state_missing_from_top100" in text
     assert "symbol_overlap" in text
     assert "Proof-State Query Representation Diagnostic" in text
+    assert "Query representation stability" in text
+    assert "do_not_switch_default_yet_best_variant_unstable" in text
+    assert "stored_plus_full_name_context_goal" in text
+    assert "Fused variants" in text
     assert "Validation split" in text
     assert "Test split" in text
     assert "goal_only" in text

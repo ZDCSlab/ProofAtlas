@@ -4017,7 +4017,7 @@
         "outputs/reports",
         "homepage/assets"
       ],
-      "bytes_per_processed_row": 10453.90953111516,
+      "bytes_per_processed_row": 10453.997363122064,
       "directories": {
         "data/processed": {
           "bytes": 46533700,
@@ -4026,7 +4026,7 @@
           "path": "data/processed"
         },
         "homepage/assets": {
-          "bytes": 2053624,
+          "bytes": 2053656,
           "exists": true,
           "file_count": 11,
           "path": "homepage/assets"
@@ -4044,7 +4044,7 @@
           "path": "outputs/indexes"
         },
         "outputs/reports": {
-          "bytes": 19237467,
+          "bytes": 19263083,
           "exists": true,
           "file_count": 39,
           "path": "outputs/reports"
@@ -4100,36 +4100,36 @@
       ],
       "projections": [
         {
-          "estimated_artifact_bytes": 3052667030.0,
-          "estimated_artifact_gib": 2.843017717823386,
+          "estimated_artifact_bytes": 3052692678.0,
+          "estimated_artifact_gib": 2.84304160438478,
           "label": "current_1x",
           "scale_factor_vs_current": 1.0,
           "target_processed_rows": 292012
         },
         {
-          "estimated_artifact_bytes": 6105334060.0,
-          "estimated_artifact_gib": 5.686035435646772,
+          "estimated_artifact_bytes": 6105385356.0,
+          "estimated_artifact_gib": 5.68608320876956,
           "label": "current_2x",
           "scale_factor_vs_current": 2.0,
           "target_processed_rows": 584024
         },
         {
-          "estimated_artifact_bytes": 15263335150.0,
-          "estimated_artifact_gib": 14.215088589116931,
+          "estimated_artifact_bytes": 15263463390.0,
+          "estimated_artifact_gib": 14.2152080219239,
           "label": "current_5x",
           "scale_factor_vs_current": 5.0,
           "target_processed_rows": 1460060
         },
         {
-          "estimated_artifact_bytes": 3658868335.890306,
-          "estimated_artifact_gib": 3.407586678760411,
+          "estimated_artifact_bytes": 3658899077.092722,
+          "estimated_artifact_gib": 3.407615308736192,
           "label": "configured_source_rows",
           "scale_factor_vs_current": 1.1985808802377984,
           "target_processed_rows": 350000
         }
       ],
-      "total_artifact_bytes": 3052667030,
-      "total_artifact_gib": 2.843017717823386,
+      "total_artifact_bytes": 3052692678,
+      "total_artifact_gib": 2.84304160438478,
       "unreferenced_index_artifact_bytes": 1502501178,
       "unreferenced_index_artifact_count": 12,
       "unreferenced_index_artifact_gib": 1.3993132654577494,
@@ -4591,6 +4591,34 @@
         "negative_to_positive_edge_ratio": 9.547775010437512
       },
       "query_representation_diagnostic": {
+        "stability_profile": {
+          "best_variant_match": false,
+          "interpretation": "Use validation/test agreement and improvement over stored_embedding before changing the production proof_state_query_representation.",
+          "method": "compare_best_query_representation_to_stored_embedding_on_validation_and_test_diagnostics",
+          "recommendation": "do_not_switch_default_yet_best_variant_unstable",
+          "test": {
+            "baseline_value": 0.26996527777777773,
+            "baseline_variant": "stored_embedding",
+            "best_minus_baseline": 0.022569444444444475,
+            "best_value": 0.2925347222222222,
+            "best_variant": "stored_plus_full_name_context_goal",
+            "evaluated_queries": 50,
+            "fused_variant_count": 5,
+            "selection_metric": "Recall@100",
+            "variant_count": 11
+          },
+          "validation": {
+            "baseline_value": 0.2604166666666667,
+            "baseline_variant": "stored_embedding",
+            "best_minus_baseline": 0.0078125,
+            "best_value": 0.2682291666666667,
+            "best_variant": "stored_plus_goal_only",
+            "evaluated_queries": 50,
+            "fused_variant_count": 5,
+            "selection_metric": "Recall@100",
+            "variant_count": 11
+          }
+        },
         "test": {
           "best_variant_by_recall": "stored_plus_full_name_context_goal",
           "evaluated_queries": 50,

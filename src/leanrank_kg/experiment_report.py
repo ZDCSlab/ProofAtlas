@@ -233,6 +233,40 @@ def _rapid_convergence_table(profile: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def _query_representation_stability_table(profile: dict[str, Any]) -> str:
+    rows = []
+    if isinstance(profile, dict):
+        for split in ["validation", "test"]:
+            row = profile.get(split, {})
+            if isinstance(row, dict):
+                rows.append((split, row))
+    lines = [
+        "| Split | Queries | Baseline | Baseline value | Best variant | Best value | Delta | Variants | Fused variants |",
+        "| --- | ---: | --- | ---: | --- | ---: | ---: | ---: | ---: |",
+    ]
+    for split, row in rows:
+        lines.append(
+            "| "
+            + " | ".join(
+                [
+                    split,
+                    _fmt(row.get("evaluated_queries")),
+                    f"`{row.get('baseline_variant', 'n/a')}`",
+                    _fmt(row.get("baseline_value")),
+                    f"`{row.get('best_variant', 'n/a')}`",
+                    _fmt(row.get("best_value")),
+                    _fmt(row.get("best_minus_baseline")),
+                    _fmt(row.get("variant_count")),
+                    _fmt(row.get("fused_variant_count")),
+                ]
+            )
+            + " |"
+        )
+    if len(lines) == 2:
+        lines.append("| n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |")
+    return "\n".join(lines)
+
+
 def _ranker_feature_group_table(rows: list[dict[str, Any]]) -> str:
     lines = [
         "| Feature group | Delta without group | Group-only AUC | Columns |",
@@ -557,6 +591,11 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     embedding_bottleneck = throughput.get("embedding_bottleneck_profile", {}) if isinstance(throughput, dict) else {}
     retrieval_bottleneck = throughput.get("retrieval_bottleneck_profile", {}) if isinstance(throughput, dict) else {}
     rapid_convergence = throughput.get("rapid_convergence_profile", {}) if isinstance(throughput, dict) else {}
+    query_representation_stability = (
+        rapid_convergence.get("query_representation_diagnostic", {}).get("stability_profile", {})
+        if isinstance(rapid_convergence, dict)
+        else {}
+    )
     metric_uncertainty = throughput.get("metric_uncertainty_profile", {}) if isinstance(throughput, dict) else {}
     rerank_cost = throughput.get("rerank_evaluation_cost_profile", {}) if isinstance(throughput, dict) else {}
     refresh_reuse = throughput.get("refresh_reuse_profile", {}) if isinstance(throughput, dict) else {}
@@ -750,6 +789,14 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
             ],
         ),
         "",
+        "Query representation stability:",
+        "",
+        f"- Method: `{query_representation_stability.get('method', 'n/a')}`",
+        f"- Recommendation: `{query_representation_stability.get('recommendation', 'n/a')}`",
+        f"- Best variant match: `{query_representation_stability.get('best_variant_match', 'n/a')}`",
+        "",
+        _query_representation_stability_table(query_representation_stability),
+        "",
         "Strongest ranker feature groups:",
         "",
         _ranker_feature_group_table(rapid_convergence.get("strongest_ranker_feature_groups", []) if isinstance(rapid_convergence, dict) else []),
@@ -757,6 +804,13 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
         "### Proof-State Query Representation Diagnostic",
         "",
         "Validation diagnostics are the safer signal for choosing proof-state query text variants; test diagnostics are reported to show whether that choice generalizes. The main proof-state retrieval metric remains the committed production evaluation path.",
+        "",
+        "Stability profile:",
+        "",
+        f"- Recommendation: `{query_representation_stability.get('recommendation', 'n/a')}`",
+        f"- Interpretation: {query_representation_stability.get('interpretation', 'n/a')}",
+        "",
+        _query_representation_stability_table(query_representation_stability),
         "",
         "Validation split:",
         "",
