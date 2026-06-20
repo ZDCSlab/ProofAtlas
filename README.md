@@ -173,30 +173,30 @@ Current production run coverage and timing:
 | --- | --- | ---: |
 | Held-out proof-state evaluation | coverage | 3053 / 3053 |
 | Held-out theorem evaluation | coverage | 1000 / 1000 |
-| Pipeline timing | total seconds | 740.1228 |
+| Pipeline timing | total seconds | 551.6511 |
 | Pipeline timing | executed/skipped stages | 19 / 0 |
 | Pipeline timing | throughput basis | executed_pipeline_run |
 | Pipeline timing | scale estimate reliable | True |
-| Pipeline timing | saved evaluate seconds | 211.3259 |
-| Pipeline timing | current standalone evaluation seconds | 24.2234 |
-| Pipeline timing | timed/current evaluation ratio | 8.7241 |
+| Pipeline timing | saved evaluate seconds | 19.1237 |
+| Pipeline timing | current standalone evaluation seconds | 23.8288 |
+| Pipeline timing | timed/current evaluation ratio | 0.8025 |
 
 Current production performance snapshot:
 
 | Entity | Backend | Rows | Exact ms/query | Indexed ms/query | Speedup | Recall@10 vs exact |
 | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| Premise | hnswlib | 127,561 | 69.2717 | 3.4585 | 20.0292 | 0.9930 |
-| ProofState | hnswlib | 23,723 | 12.7351 | 0.8292 | 15.3578 | 0.9640 |
-| Theorem | hnswlib | 8,000 | 4.2275 | 0.2369 | 17.8457 | 0.9930 |
+| Premise | hnswlib | 127,561 | 69.0399 | 3.6328 | 19.0044 | 0.9940 |
+| ProofState | hnswlib | 23,723 | 12.7668 | 0.8265 | 15.4460 | 0.9580 |
+| Theorem | hnswlib | 8,000 | 4.0973 | 0.2318 | 17.6785 | 0.9910 |
 
 Current pipeline bottleneck profile:
 
 | Stage group | Field | Value |
 | --- | --- | ---: |
-| Primary bottleneck | stage | evaluate |
-| Primary bottleneck | seconds | 211.3259 |
-| Primary bottleneck | share of total | 0.2855 |
-| Top-3 timed stages | share of total | 0.5962 |
+| Primary bottleneck | stage | embed |
+| Primary bottleneck | seconds | 149.1632 |
+| Primary bottleneck | share of total | 0.2704 |
+| Top-3 timed stages | share of total | 0.5195 |
 
 Current LeanRank-data premise supervision snapshot:
 

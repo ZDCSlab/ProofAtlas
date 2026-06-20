@@ -5,7 +5,7 @@
     "edges": 1385416,
     "minimum_context_coverage": 1.0,
     "nodes": 280422,
-    "premise_index_recall_vs_exact": 0.993,
+    "premise_index_recall_vs_exact": 0.9940000000000001,
     "premise_recall_at_10": 0.11624918291584951,
     "premises": 202185,
     "proof_states": 29598,
@@ -66,8 +66,8 @@
       "relative": 0.0
     },
     "premise_recall_at_10": {
-      "absolute": 0.0,
-      "relative": 0.0
+      "absolute": -0.0116763489990441,
+      "relative": -0.09127457845406615
     },
     "premises": {
       "absolute": 0.0,
@@ -82,12 +82,12 @@
       "relative": 0.0
     },
     "theorem_mrr": {
-      "absolute": 0.0,
-      "relative": 0.0
+      "absolute": 0.013541170169129035,
+      "relative": 0.024741209499357045
     },
     "theorem_recall_at_10": {
-      "absolute": 0.0,
-      "relative": 0.0
+      "absolute": 0.07074268670025691,
+      "relative": 0.16712636366777486
     },
     "theorems": {
       "absolute": 0.0,
@@ -101,13 +101,13 @@
     "edges": 1385416,
     "minimum_context_coverage": 1.0,
     "nodes": 280422,
-    "premise_index_recall_vs_exact": 0.993,
-    "premise_recall_at_10": 0.11624918291584951,
+    "premise_index_recall_vs_exact": 0.9940000000000001,
+    "premise_recall_at_10": 0.12792553191489361,
     "premises": 202185,
     "proof_states": 29598,
     "ready_for_refresh_comparison": true,
-    "theorem_mrr": 0.5608535466914221,
-    "theorem_recall_at_10": 0.49403129986534694,
+    "theorem_mrr": 0.547312376522293,
+    "theorem_recall_at_10": 0.42328861316509003,
     "theorems": 10000
   },
   "previous_corpus": {

@@ -308,18 +308,18 @@
       <div class="kpi"><div class="label">Proof-state Recall@100</div><div class="value">0.236</div><div class="note">premise retrieval from proof states</div></div>
       <div class="kpi"><div class="label">Positive premise edges</div><div class="value">69,461</div><div class="note">LeanRank positive supervision</div></div>
       <div class="kpi"><div class="label">Negative candidates</div><div class="value">663,198</div><div class="note">hard-negative ranking pool</div></div>
-      <div class="kpi"><div class="label">Pipeline timing</div><div class="value">740.1s</div><div class="note">19 executed / 0 skipped stages</div></div>
+      <div class="kpi"><div class="label">Pipeline timing</div><div class="value">551.7s</div><div class="note">19 executed / 0 skipped stages</div></div>
       <div class="kpi"><div class="label">Scale estimate reliable</div><div class="value">True</div><div class="note">executed_pipeline_run on cuda</div></div>
-      <div class="kpi"><div class="label">Current eval timing</div><div class="value">24.2s</div><div class="note">standalone held-out evaluation</div></div>
-      <div class="kpi"><div class="label">Pipeline eval timing</div><div class="value">211.3s</div><div class="note">saved full-pipeline evaluate stage</div></div>
+      <div class="kpi"><div class="label">Current eval timing</div><div class="value">23.8s</div><div class="note">standalone held-out evaluation</div></div>
+      <div class="kpi"><div class="label">Pipeline eval timing</div><div class="value">19.1s</div><div class="note">saved full-pipeline evaluate stage</div></div>
     </div>
     <div class="status-row" style="margin-top:12px">
       <div class="status ok"><div class="label">Train positive coverage</div><div class="value">1.000</div><div class="note">proof states with positive premise edges</div></div>
       <div class="status ok"><div class="label">Train negative coverage</div><div class="value">1.000</div><div class="note">proof states with negative candidates</div></div>
       <div class="status"><div class="label">Hardness mean</div><div class="value">0.603</div><div class="note">train negative candidate hardness</div></div>
-      <div class="status"><div class="label">Embedding throughput</div><div class="value">330.2</div><div class="note">embedding rows per second</div></div>
+      <div class="status"><div class="label">Embedding throughput</div><div class="value">443.0</div><div class="note">embedding rows per second</div></div>
 
-      <div class="status warn"><div class="label">Timing freshness</div><div class="value">8.7x</div><div class="note">rerun production timing before final bottleneck claims</div></div>
+      <div class="status ok"><div class="label">Timing freshness</div><div class="value">current</div><div class="note">pipeline and standalone evaluation timings align</div></div>
 
     </div>
 
@@ -327,16 +327,16 @@
 
 
     <div class="status-row" style="margin-top:12px">
-      <div class="status warn"><div class="label">Pipeline bottleneck</div><div class="value">evaluate</div><div class="note">28.6% of timed production run</div></div>
-      <div class="status"><div class="label">Top-3 timed stages</div><div class="value">59.6%</div><div class="note">combined share of pipeline wall time</div></div>
+      <div class="status warn"><div class="label">Pipeline bottleneck</div><div class="value">embed</div><div class="note">27.0% of timed production run</div></div>
+      <div class="status"><div class="label">Top-3 timed stages</div><div class="value">51.9%</div><div class="note">combined share of pipeline wall time</div></div>
 
-      <div class="status warn"><div class="label">Evaluation bottleneck</div><div class="value">test_reranked_proof_state_retrieval</div><div class="note">14.6s inside evaluation</div></div>
-      <div class="status"><div class="label">Eval timed substages</div><div class="value">6</div><div class="note">24.2s measured evaluation total</div></div>
+      <div class="status warn"><div class="label">Evaluation bottleneck</div><div class="value">test_reranked_proof_state_retrieval</div><div class="note">14.3s inside evaluation</div></div>
+      <div class="status"><div class="label">Eval timed substages</div><div class="value">6</div><div class="note">23.8s measured evaluation total</div></div>
 
 
-      <div class="status"><div class="label">evaluate</div><div class="value">211.3s</div><div class="note">28.6% of timed run</div></div>
+      <div class="status"><div class="label">embed</div><div class="value">149.2s</div><div class="note">27.0% of timed run</div></div>
 
-      <div class="status"><div class="label">embed</div><div class="value">148.8s</div><div class="note">20.1% of timed run</div></div>
+      <div class="status"><div class="label">sample</div><div class="value">82.1s</div><div class="note">14.9% of timed run</div></div>
 
     </div>
 
@@ -396,11 +396,11 @@
       <div class="kpi"><div class="label">Refresh ready</div><div class="value">True</div><div class="note">all dashboard gates passing</div></div>
       <div class="kpi"><div class="label">Supervision</div><div class="value">leanrank_proof_state_rows</div><div class="note">proof traces: True</div></div>
       <div class="kpi"><div class="label">Min parse coverage</div><div class="value">1.000</div><div class="note">context_parse_coverage</div></div>
-      <div class="kpi"><div class="label">Index recall</div><div class="value">0.993</div><div class="note">premise index vs exact cosine</div></div>
+      <div class="kpi"><div class="label">Index recall</div><div class="value">0.994</div><div class="note">premise index vs exact cosine</div></div>
       <div class="kpi"><div class="label">Difficulty MAE</div><div class="value">0.039</div><div class="note">train estimator calibration</div></div>
       <div class="kpi"><div class="label">Trend baseline</div><div class="value">yes</div><div class="note">previous refresh snapshot</div></div>
       <div class="kpi"><div class="label">Theorem delta</div><div class="value">0</div><div class="note">change from previous dashboard</div></div>
-      <div class="kpi"><div class="label">Recall delta</div><div class="value">0.000</div><div class="note">theorem Recall@10 change</div></div>
+      <div class="kpi"><div class="label">Recall delta</div><div class="value">0.071</div><div class="note">theorem Recall@10 change</div></div>
       <div class="kpi"><div class="label">Gate changes</div><div class="value">0</div><div class="note">quality gates changed</div></div>
       <div class="kpi"><div class="label">History entries</div><div class="value">20</div><div class="note">bounded refresh trend history</div></div>
     </div>

@@ -355,9 +355,9 @@ This benchmark compares the saved nearest-neighbor index against exact cosine se
 
 | Entity | Backend | Rows | Exact ms/query | Indexed ms/query | Speedup | Recall@1 vs exact | Recall@5 vs exact | Recall@10 vs exact | Top1 match@10 | Build seconds | Indexed total seconds |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| premise | hnswlib | 127561 | 69.2717 | 3.4585 | 20.0292 | 0.9900 | 0.9960 | 0.9930 | 0.9900 | 3.7882 | 0.3459 |
-| proof_state | hnswlib | 23723 | 12.7351 | 0.8292 | 15.3578 | 0.7900 | 0.9600 | 0.9640 | 0.7900 | 0.4042 | 0.0829 |
-| theorem | hnswlib | 8000 | 4.2275 | 0.2369 | 17.8457 | 0.9900 | 0.9900 | 0.9930 | 0.9900 | 0.1338 | 0.0237 |
+| premise | hnswlib | 127561 | 69.0399 | 3.6328 | 19.0044 | 1.0000 | 0.9960 | 0.9940 | 1.0000 | 4.0248 | 0.3633 |
+| proof_state | hnswlib | 23723 | 12.7668 | 0.8265 | 15.4460 | 0.7900 | 0.9500 | 0.9580 | 0.7900 | 0.4202 | 0.0827 |
+| theorem | hnswlib | 8000 | 4.0973 | 0.2318 | 17.6785 | 0.9900 | 0.9900 | 0.9910 | 0.9900 | 0.1330 | 0.0232 |
 
 ## Premise Trace Supervision
 
@@ -378,27 +378,27 @@ The current ranking labels come from normalized LeanRank-data premise supervisio
 
 ## Pipeline Timing
 
-- Total seconds: `740.1227513239719`
+- Total seconds: `551.6510627849493`
 - Stage count: `19`
 - Executed/skipped stages: `19` / `0`
 - Timing config matches current report config: `True`
-- Timing generated at: `2026-06-20T17:20:52.729952+00:00`
+- Timing generated at: `2026-06-20T18:53:38.545222+00:00`
 - Timing report: `outputs/reports/pipeline_run_timings.json`
-- Evaluation internal total seconds: `24.223363942001015`
+- Evaluation internal total seconds: `23.828760851873085`
 - Evaluation timed substages: `6`
 
 | Stage | Seconds |
 | --- | ---: |
-| `evaluate` | 211.3259 |
-| `embed` | 148.8000 |
-| `sample` | 81.1717 |
-| `train_ranker` | 56.3446 |
-| `augment_graph` | 50.8757 |
-| `compute_difficulty` | 48.2069 |
-| `normalize` | 43.3543 |
-| `validate` | 37.5526 |
-| `build_graph` | 17.3007 |
-| `benchmark_index` | 11.3732 |
+| `embed` | 149.1632 |
+| `sample` | 82.1005 |
+| `train_ranker` | 55.3123 |
+| `augment_graph` | 50.9153 |
+| `compute_difficulty` | 48.5632 |
+| `normalize` | 43.3906 |
+| `validate` | 38.5018 |
+| `evaluate` | 19.1237 |
+| `build_graph` | 17.5704 |
+| `benchmark_index` | 11.3469 |
 
 ### Evaluation Substage Timing
 
@@ -406,12 +406,12 @@ These timings split the `evaluate` pipeline stage into proof-state retrieval, th
 
 | Evaluation substage | Seconds | Queries | Backend |
 | --- | ---: | ---: | --- |
-| `test_reranked_proof_state_retrieval` | 14.5914 | 20 | batched_torch_cuda_then_rerank |
-| `val_proof_state_retrieval` | 6.9131 | 2822 | torch_cuda |
-| `test_proof_state_retrieval` | 0.9482 | 3053 | torch_cuda |
-| `test_proof_state_query_representation_diagnostic` | 0.5439 | 50 | n/a |
-| `test_theorem_retrieval` | 0.4424 | 1000 | torch_cuda |
-| `val_theorem_retrieval` | 0.3381 | 1000 | torch_cuda |
+| `test_reranked_proof_state_retrieval` | 14.2873 | 20 | batched_torch_cuda_then_rerank |
+| `val_proof_state_retrieval` | 6.8903 | 2822 | torch_cuda |
+| `test_proof_state_retrieval` | 0.9277 | 3053 | torch_cuda |
+| `test_proof_state_query_representation_diagnostic` | 0.5394 | 50 | n/a |
+| `test_theorem_retrieval` | 0.4232 | 1000 | torch_cuda |
+| `val_theorem_retrieval` | 0.3153 | 1000 | torch_cuda |
 
 ## Pipeline Performance And Scale-Up Notes
 
@@ -429,30 +429,29 @@ These timings split the `evaluate` pipeline stage into proof-state retrieval, th
 - Throughput timing basis: `executed_pipeline_run`
 - Scale estimate reliable: `True`
 - Embedding rows by entity: `{'premise': 203601, 'proof_state': 30498, 'theorem': 10292}`
-- Processed rows/sec: `394.5453635598055`
-- Pipeline seconds per 100k processed rows: `253.45627964740214`
-- Slowest timed stage: `evaluate`
-- Saved pipeline evaluate seconds: `211.32586570014246`
-- Current standalone evaluation seconds: `24.223363942001015`
-- Timed/current evaluation ratio: `8.724051135347203`
-- Primary bottleneck share: `0.28552813073522093`
-- Top-3 timed-stage share: `0.5962491304310673`
-- Mean index speedup vs exact: `17.744239287034144`
-- Minimum index recall vs exact: `0.9640000000000002`
-- Estimated seconds at requested source rows: `887.0969787659075`
+- Processed rows/sec: `529.3418606425042`
+- Pipeline seconds per 100k processed rows: `188.91383326197186`
+- Slowest timed stage: `embed`
+- Saved pipeline evaluate seconds: `19.123737015994266`
+- Current standalone evaluation seconds: `23.828760851873085`
+- Timed/current evaluation ratio: `0.8025485309485165`
+- Primary bottleneck share: `0.2703940719938502`
+- Top-3 timed-stage share: `0.5194877576097815`
+- Mean index speedup vs exact: `17.376305276865946`
+- Minimum index recall vs exact: `0.9580000000000001`
+- Estimated seconds at requested source rows: `661.1984164169015`
 
 | Bottleneck stage | Seconds | Share of total |
 | --- | ---: | ---: |
-| `evaluate` | 211.3259 | 0.2855 |
-| `embed` | 148.8000 | 0.2010 |
-| `sample` | 81.1717 | 0.1097 |
-| `train_ranker` | 56.3446 | 0.0761 |
-| `augment_graph` | 50.8757 | 0.0687 |
+| `embed` | 149.1632 | 0.2704 |
+| `sample` | 82.1005 | 0.1488 |
+| `train_ranker` | 55.3123 | 0.1003 |
+| `augment_graph` | 50.9153 | 0.0923 |
+| `compute_difficulty` | 48.5632 | 0.0880 |
 
 ## Recommendations
 
-- `medium` `performance_timing`: The current standalone evaluation is materially faster than the saved full-pipeline timing. Saved pipeline evaluate seconds: 211.32586570014246; current evaluation seconds: 24.223363942001015. Rerun `make refresh-production-timing` before using full-pipeline bottleneck shares as final throughput evidence.
-- `medium` `pipeline_bottleneck`: Evaluation is the current largest timed bottleneck. Keep full held-out metrics for final claims, but use sampled evaluation during development and prioritize batched/vectorized scoring or parallel domain shards before scaling evaluation further.
+- `medium` `pipeline_bottleneck`: Embedding is the current largest timed bottleneck. Reuse cached embeddings when training/reranking only, and keep multi-GPU sentence-transformer encoding enabled for larger LeanRank-data refreshes.
 
 ## Interpretation
 

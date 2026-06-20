@@ -236,24 +236,24 @@
   "index_benchmark": {
     "premise": {
       "backend": "hnswlib",
-      "exact_ms_per_query": 69.27173835923895,
+      "exact_ms_per_query": 69.03993914835155,
       "indexed_available": true,
-      "indexed_ms_per_query": 3.4585403418168426,
-      "recall_vs_exact": 0.993
+      "indexed_ms_per_query": 3.6328387609682977,
+      "recall_vs_exact": 0.9940000000000001
     },
     "proof_state": {
       "backend": "hnswlib",
-      "exact_ms_per_query": 12.735097410622984,
+      "exact_ms_per_query": 12.766833261121064,
       "indexed_available": true,
-      "indexed_ms_per_query": 0.8292262186296284,
-      "recall_vs_exact": 0.9640000000000002
+      "indexed_ms_per_query": 0.8265445893630385,
+      "recall_vs_exact": 0.9580000000000001
     },
     "theorem": {
       "backend": "hnswlib",
-      "exact_ms_per_query": 4.227494958322495,
+      "exact_ms_per_query": 4.097250408958644,
       "indexed_available": true,
-      "indexed_ms_per_query": 0.2368911704979837,
-      "recall_vs_exact": 0.993
+      "indexed_ms_per_query": 0.2317648590542376,
+      "recall_vs_exact": 0.9910000000000001
     }
   },
   "parsing": {
@@ -440,8 +440,8 @@
         "relative": 0.0
       },
       "premise_recall_at_10": {
-        "absolute": 0.0,
-        "relative": 0.0
+        "absolute": -0.0116763489990441,
+        "relative": -0.09127457845406615
       },
       "premises": {
         "absolute": 0.0,
@@ -456,12 +456,12 @@
         "relative": 0.0
       },
       "theorem_mrr": {
-        "absolute": 0.0,
-        "relative": 0.0
+        "absolute": 0.013541170169129035,
+        "relative": 0.024741209499357045
       },
       "theorem_recall_at_10": {
-        "absolute": 0.0,
-        "relative": 0.0
+        "absolute": 0.07074268670025691,
+        "relative": 0.16712636366777486
       },
       "theorems": {
         "absolute": 0.0,

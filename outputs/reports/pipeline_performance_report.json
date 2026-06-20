@@ -5,14 +5,9 @@
   "project_name": "ProofAtlas",
   "recommendations": [
     {
-      "area": "performance_timing",
-      "priority": "medium",
-      "recommendation": "The current standalone evaluation is materially faster than the saved full-pipeline timing. Saved pipeline evaluate seconds: 211.32586570014246; current evaluation seconds: 24.223363942001015. Rerun `make refresh-production-timing` before using full-pipeline bottleneck shares as final throughput evidence."
-    },
-    {
       "area": "pipeline_bottleneck",
       "priority": "medium",
-      "recommendation": "Evaluation is the current largest timed bottleneck. Keep full held-out metrics for final claims, but use sampled evaluation during development and prioritize batched/vectorized scoring or parallel domain shards before scaling evaluation further."
+      "recommendation": "Embedding is the current largest timed bottleneck. Reuse cached embeddings when training/reranking only, and keep multi-GPU sentence-transformer encoding enabled for larger LeanRank-data refreshes."
     }
   ],
   "scale_profile": {
@@ -49,41 +44,41 @@
         "premise": {
           "backend": "hnswlib",
           "dimensions": 768,
-          "exact_ms_per_query": 69.27173835923895,
-          "index_build_seconds": 3.7882019449025393,
+          "exact_ms_per_query": 69.03993914835155,
+          "index_build_seconds": 4.024782327003777,
           "indexed_available": true,
           "indexed_error": null,
-          "indexed_ms_per_query": 3.4585403418168426,
+          "indexed_ms_per_query": 3.6328387609682977,
           "query_count": 100,
-          "recall_vs_exact": 0.993,
+          "recall_vs_exact": 0.9940000000000001,
           "rows": 127561,
-          "speedup_vs_exact": 20.029183271821857
+          "speedup_vs_exact": 19.004405009692647
         },
         "proof_state": {
           "backend": "hnswlib",
           "dimensions": 768,
-          "exact_ms_per_query": 12.735097410622984,
-          "index_build_seconds": 0.4042325969785452,
+          "exact_ms_per_query": 12.766833261121064,
+          "index_build_seconds": 0.4201808220241219,
           "indexed_available": true,
           "indexed_error": null,
-          "indexed_ms_per_query": 0.8292262186296284,
+          "indexed_ms_per_query": 0.8265445893630385,
           "query_count": 100,
-          "recall_vs_exact": 0.9640000000000002,
+          "recall_vs_exact": 0.9580000000000001,
           "rows": 23723,
-          "speedup_vs_exact": 15.357808429729692
+          "speedup_vs_exact": 15.446030892246952
         },
         "theorem": {
           "backend": "hnswlib",
           "dimensions": 768,
-          "exact_ms_per_query": 4.227494958322495,
-          "index_build_seconds": 0.1337511648889631,
+          "exact_ms_per_query": 4.097250408958644,
+          "index_build_seconds": 0.1329822049010545,
           "indexed_available": true,
           "indexed_error": null,
-          "indexed_ms_per_query": 0.2368911704979837,
+          "indexed_ms_per_query": 0.2317648590542376,
           "query_count": 100,
-          "recall_vs_exact": 0.993,
+          "recall_vs_exact": 0.9910000000000001,
           "rows": 8000,
-          "speedup_vs_exact": 17.84572615955088
+          "speedup_vs_exact": 17.67847992865823
         }
       },
       "exists": true,
@@ -391,28 +386,28 @@
             "candidate_k": 50,
             "evaluated_queries": 20,
             "name": "test_reranked_proof_state_retrieval",
-            "seconds": 14.591356419026852,
+            "seconds": 14.287255005910993,
             "split": "test"
           },
           {
             "actual_backend": "torch_cuda",
             "evaluated_queries": 2822,
             "name": "val_proof_state_retrieval",
-            "seconds": 6.91309367492795,
+            "seconds": 6.8903439049609005,
             "split": "val"
           },
           {
             "actual_backend": "torch_cuda",
             "evaluated_queries": 3053,
             "name": "test_proof_state_retrieval",
-            "seconds": 0.9482294640038162,
+            "seconds": 0.9276719810441136,
             "split": "test"
           },
           {
             "best_variant_by_recall": "full_name_goal",
             "evaluated_queries": 50,
             "name": "test_proof_state_query_representation_diagnostic",
-            "seconds": 0.5439353899564594,
+            "seconds": 0.5394067950546741,
             "split": "test"
           },
           {
@@ -420,7 +415,7 @@
             "case_study_limit": 0,
             "evaluated_queries": 1000,
             "name": "test_theorem_retrieval",
-            "seconds": 0.4424276161007583,
+            "seconds": 0.42323223501443863,
             "split": "test"
           },
           {
@@ -428,13 +423,13 @@
             "case_study_limit": 0,
             "evaluated_queries": 1000,
             "name": "val_theorem_retrieval",
-            "seconds": 0.3380729982163757,
+            "seconds": 0.3152722199447453,
             "split": "val"
           }
         ],
         "substage_count": 6,
-        "substage_seconds_total": 23.77711556223221,
-        "total_seconds": 24.223363942001015
+        "substage_seconds_total": 23.383182141929865,
+        "total_seconds": 23.828760851873085
       },
       "held_out_test_coverage": {
         "proof_state_configured_limit": null,
@@ -683,14 +678,14 @@
               "actual_backend": "torch_cuda",
               "evaluated_queries": 2822,
               "name": "val_proof_state_retrieval",
-              "seconds": 6.91309367492795,
+              "seconds": 6.8903439049609005,
               "split": "val"
             },
             {
               "actual_backend": "torch_cuda",
               "evaluated_queries": 3053,
               "name": "test_proof_state_retrieval",
-              "seconds": 0.9482294640038162,
+              "seconds": 0.9276719810441136,
               "split": "test"
             },
             {
@@ -698,7 +693,7 @@
               "case_study_limit": 0,
               "evaluated_queries": 1000,
               "name": "val_theorem_retrieval",
-              "seconds": 0.3380729982163757,
+              "seconds": 0.3152722199447453,
               "split": "val"
             },
             {
@@ -706,7 +701,7 @@
               "case_study_limit": 0,
               "evaluated_queries": 1000,
               "name": "test_theorem_retrieval",
-              "seconds": 0.4424276161007583,
+              "seconds": 0.42323223501443863,
               "split": "test"
             },
             {
@@ -714,14 +709,14 @@
               "candidate_k": 50,
               "evaluated_queries": 20,
               "name": "test_reranked_proof_state_retrieval",
-              "seconds": 14.591356419026852,
+              "seconds": 14.287255005910993,
               "split": "test"
             },
             {
               "best_variant_by_recall": "full_name_goal",
               "evaluated_queries": 50,
               "name": "test_proof_state_query_representation_diagnostic",
-              "seconds": 0.5439353899564594,
+              "seconds": 0.5394067950546741,
               "split": "test"
             }
           ],
@@ -729,7 +724,7 @@
             "test": null,
             "val": null
           },
-          "total_seconds": 24.223363942001015,
+          "total_seconds": 23.828760851873085,
           "use_gpu": true
         },
         "label_policy": "held-out test positive_edges are used only for evaluation",
@@ -968,12 +963,12 @@
         "demo": {
           "premise": {
             "backend": "hnswlib",
-            "build_seconds": 0.023276258958503604,
-            "bytes": 705,
+            "build_seconds": 0.0228940739762038,
+            "bytes": 703,
             "dimensions": 768,
             "exists": true,
             "index_artifact": {
-              "bytes": 4560752,
+              "bytes": 4560888,
               "exists": true,
               "path": "outputs/indexes/demo_premise_neighbors.bin"
             },
@@ -1006,8 +1001,8 @@
           },
           "proof_state": {
             "backend": "hnswlib",
-            "build_seconds": 0.0884882090613246,
-            "bytes": 709,
+            "build_seconds": 0.08701493102125823,
+            "bytes": 710,
             "dimensions": 768,
             "exists": true,
             "index_artifact": {
@@ -1044,7 +1039,7 @@
           },
           "theorem": {
             "backend": "hnswlib",
-            "build_seconds": 0.015230056131258607,
+            "build_seconds": 0.015020659193396568,
             "bytes": 704,
             "dimensions": 768,
             "exists": true,
@@ -1084,12 +1079,12 @@
         "test": {
           "premise": {
             "backend": "hnswlib",
-            "build_seconds": 0.820566161070019,
-            "bytes": 703,
+            "build_seconds": 0.9342909730039537,
+            "bytes": 704,
             "dimensions": 768,
             "exists": true,
             "index_artifact": {
-              "bytes": 123456620,
+              "bytes": 123456212,
               "exists": true,
               "path": "outputs/indexes/test_premise_neighbors.bin"
             },
@@ -1122,12 +1117,12 @@
           },
           "proof_state": {
             "backend": "hnswlib",
-            "build_seconds": 0.04799045203253627,
-            "bytes": 711,
+            "build_seconds": 0.052330706967040896,
+            "bytes": 712,
             "dimensions": 768,
             "exists": true,
             "index_artifact": {
-              "bytes": 9833096,
+              "bytes": 9833368,
               "exists": true,
               "path": "outputs/indexes/test_proof_state_neighbors.bin"
             },
@@ -1160,7 +1155,7 @@
           },
           "theorem": {
             "backend": "hnswlib",
-            "build_seconds": 0.08974525216035545,
+            "build_seconds": 0.09176083886995912,
             "bytes": 704,
             "dimensions": 768,
             "exists": true,
@@ -1200,12 +1195,12 @@
         "train": {
           "premise": {
             "backend": "hnswlib",
-            "build_seconds": 3.7882019449025393,
-            "bytes": 707,
+            "build_seconds": 4.024782327003777,
+            "bytes": 706,
             "dimensions": 768,
             "exists": true,
             "index_artifact": {
-              "bytes": 410816176,
+              "bytes": 410816652,
               "exists": true,
               "path": "outputs/indexes/train_premise_neighbors.bin"
             },
@@ -1238,12 +1233,12 @@
           },
           "proof_state": {
             "backend": "hnswlib",
-            "build_seconds": 0.4042325969785452,
+            "build_seconds": 0.4201808220241219,
             "bytes": 713,
             "dimensions": 768,
             "exists": true,
             "index_artifact": {
-              "bytes": 76404580,
+              "bytes": 76404172,
               "exists": true,
               "path": "outputs/indexes/train_proof_state_neighbors.bin"
             },
@@ -1276,12 +1271,12 @@
           },
           "theorem": {
             "backend": "hnswlib",
-            "build_seconds": 0.1337511648889631,
+            "build_seconds": 0.1329822049010545,
             "bytes": 705,
             "dimensions": 768,
             "exists": true,
             "index_artifact": {
-              "bytes": 25765768,
+              "bytes": 25765904,
               "exists": true,
               "path": "outputs/indexes/train_theorem_neighbors.bin"
             },
@@ -1316,12 +1311,12 @@
         "val": {
           "premise": {
             "backend": "hnswlib",
-            "build_seconds": 0.8773755449801683,
+            "build_seconds": 0.7981190900318325,
             "bytes": 702,
             "dimensions": 768,
             "exists": true,
             "index_artifact": {
-              "bytes": 116887684,
+              "bytes": 116887072,
               "exists": true,
               "path": "outputs/indexes/val_premise_neighbors.bin"
             },
@@ -1354,12 +1349,12 @@
           },
           "proof_state": {
             "backend": "hnswlib",
-            "build_seconds": 0.05334093701094389,
-            "bytes": 709,
+            "build_seconds": 0.0491990961600095,
+            "bytes": 708,
             "dimensions": 768,
             "exists": true,
             "index_artifact": {
-              "bytes": 9089180,
+              "bytes": 9089316,
               "exists": true,
               "path": "outputs/indexes/val_proof_state_neighbors.bin"
             },
@@ -1392,7 +1387,7 @@
           },
           "theorem": {
             "backend": "hnswlib",
-            "build_seconds": 0.09489275398664176,
+            "build_seconds": 0.09086312400177121,
             "bytes": 702,
             "dimensions": 768,
             "exists": true,
@@ -1432,7 +1427,7 @@
       },
       "summary": {
         "backend": "hnswlib",
-        "build_seconds": 9.994829822098836,
+        "build_seconds": 10.31162934191525,
         "corpus": {
           "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
           "extraction_config_hash": "3e8f863899afdf6c",
@@ -1466,12 +1461,12 @@
         "splits": {
           "demo": {
             "backend": "hnswlib",
-            "build_seconds": 0.1370015749707818,
+            "build_seconds": 0.13493415899574757,
             "indexes": [
               {
                 "M": 16,
                 "backend": "hnswlib",
-                "build_seconds": 0.0884882090613246,
+                "build_seconds": 0.08701493102125823,
                 "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
                 "dimensions": 768,
                 "ef_construction": 200,
@@ -1496,7 +1491,7 @@
               {
                 "M": 16,
                 "backend": "hnswlib",
-                "build_seconds": 0.023276258958503604,
+                "build_seconds": 0.0228940739762038,
                 "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
                 "dimensions": 768,
                 "ef_construction": 200,
@@ -1521,7 +1516,7 @@
               {
                 "M": 16,
                 "backend": "hnswlib",
-                "build_seconds": 0.015230056131258607,
+                "build_seconds": 0.015020659193396568,
                 "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
                 "dimensions": 768,
                 "ef_construction": 200,
@@ -1551,12 +1546,12 @@
           },
           "test": {
             "backend": "hnswlib",
-            "build_seconds": 0.9846792090684175,
+            "build_seconds": 1.1056684711948037,
             "indexes": [
               {
                 "M": 16,
                 "backend": "hnswlib",
-                "build_seconds": 0.04799045203253627,
+                "build_seconds": 0.052330706967040896,
                 "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
                 "dimensions": 768,
                 "ef_construction": 200,
@@ -1581,7 +1576,7 @@
               {
                 "M": 16,
                 "backend": "hnswlib",
-                "build_seconds": 0.820566161070019,
+                "build_seconds": 0.9342909730039537,
                 "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
                 "dimensions": 768,
                 "ef_construction": 200,
@@ -1606,7 +1601,7 @@
               {
                 "M": 16,
                 "backend": "hnswlib",
-                "build_seconds": 0.08974525216035545,
+                "build_seconds": 0.09176083886995912,
                 "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
                 "dimensions": 768,
                 "ef_construction": 200,
@@ -1636,12 +1631,12 @@
           },
           "train": {
             "backend": "hnswlib",
-            "build_seconds": 4.400994784897193,
+            "build_seconds": 4.647400522138923,
             "indexes": [
               {
                 "M": 16,
                 "backend": "hnswlib",
-                "build_seconds": 0.4042325969785452,
+                "build_seconds": 0.4201808220241219,
                 "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
                 "dimensions": 768,
                 "ef_construction": 200,
@@ -1666,7 +1661,7 @@
               {
                 "M": 16,
                 "backend": "hnswlib",
-                "build_seconds": 3.7882019449025393,
+                "build_seconds": 4.024782327003777,
                 "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
                 "dimensions": 768,
                 "ef_construction": 200,
@@ -1691,7 +1686,7 @@
               {
                 "M": 16,
                 "backend": "hnswlib",
-                "build_seconds": 0.1337511648889631,
+                "build_seconds": 0.1329822049010545,
                 "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
                 "dimensions": 768,
                 "ef_construction": 200,
@@ -1721,12 +1716,12 @@
           },
           "val": {
             "backend": "hnswlib",
-            "build_seconds": 1.0517661289777607,
+            "build_seconds": 0.9664325171615928,
             "indexes": [
               {
                 "M": 16,
                 "backend": "hnswlib",
-                "build_seconds": 0.05334093701094389,
+                "build_seconds": 0.0491990961600095,
                 "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
                 "dimensions": 768,
                 "ef_construction": 200,
@@ -1751,7 +1746,7 @@
               {
                 "M": 16,
                 "backend": "hnswlib",
-                "build_seconds": 0.8773755449801683,
+                "build_seconds": 0.7981190900318325,
                 "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
                 "dimensions": 768,
                 "ef_construction": 200,
@@ -1776,7 +1771,7 @@
               {
                 "M": 16,
                 "backend": "hnswlib",
-                "build_seconds": 0.09489275398664176,
+                "build_seconds": 0.09086312400177121,
                 "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
                 "dimensions": 768,
                 "ef_construction": 200,
@@ -2108,110 +2103,110 @@
       "executed_stage_count": 19,
       "exists": true,
       "expected_config_hash": "375be84aecb4e7d9",
-      "generated_at": "2026-06-20T17:20:52.729952+00:00",
+      "generated_at": "2026-06-20T18:53:38.545222+00:00",
       "has_skipped_stages": false,
       "passed": true,
       "path": "outputs/reports/pipeline_run_timings.json",
       "skipped_stage_count": 0,
       "slowest_stages": [
         {
-          "name": "evaluate",
-          "seconds": 211.32586570014246
-        },
-        {
           "name": "embed",
-          "seconds": 148.7999888889026
+          "seconds": 149.16317718615755
         },
         {
           "name": "sample",
-          "seconds": 81.17169230012223
+          "seconds": 82.1005248860456
         },
         {
           "name": "train_ranker",
-          "seconds": 56.34464834118262
+          "seconds": 55.312271517002955
         },
         {
           "name": "augment_graph",
-          "seconds": 50.875686620827764
+          "seconds": 50.915316165890545
         },
         {
           "name": "compute_difficulty",
-          "seconds": 48.20692810206674
+          "seconds": 48.56320890900679
         },
         {
           "name": "normalize",
-          "seconds": 43.35425694216974
+          "seconds": 43.39064241107553
         },
         {
           "name": "validate",
-          "seconds": 37.552581324009225
+          "seconds": 38.50176171306521
+        },
+        {
+          "name": "evaluate",
+          "seconds": 19.123737015994266
         },
         {
           "name": "build_graph",
-          "seconds": 17.300741476006806
+          "seconds": 17.570353848859668
         },
         {
           "name": "benchmark_index",
-          "seconds": 11.373193778796121
+          "seconds": 11.346926914993674
         }
       ],
       "stage_count": 19,
       "stage_seconds": {
-        "audit": 0.19079405604861677,
-        "augment_graph": 50.875686620827764,
-        "benchmark_index": 11.373193778796121,
-        "build_graph": 17.300741476006806,
-        "build_index": 10.000261679058895,
-        "compute_difficulty": 48.20692810206674,
-        "deployment_security": 0.0006397690158337355,
-        "embed": 148.7999888889026,
-        "evaluate": 211.32586570014246,
-        "experiment_report": 0.007404000964015722,
-        "homepage": 4.932497973088175,
-        "label_techniques": 4.9532018061727285,
-        "normalize": 43.35425694216974,
-        "pipeline_profile": 8.815354706952348,
-        "premise_trace_supervision": 2.381029340205714,
-        "sample": 81.17169230012223,
-        "train_difficulty": 2.5315597800072283,
-        "train_ranker": 56.34464834118262,
-        "validate": 37.552581324009225
+        "audit": 0.30817900504916906,
+        "augment_graph": 50.915316165890545,
+        "benchmark_index": 11.346926914993674,
+        "build_graph": 17.570353848859668,
+        "build_index": 10.322077491786331,
+        "compute_difficulty": 48.56320890900679,
+        "deployment_security": 0.0006838750559836626,
+        "embed": 149.16317718615755,
+        "evaluate": 19.123737015994266,
+        "experiment_report": 0.0074956880416721106,
+        "homepage": 5.923967564012855,
+        "label_techniques": 4.922904911916703,
+        "normalize": 43.39064241107553,
+        "pipeline_profile": 9.218928289134055,
+        "premise_trace_supervision": 2.4199871229939163,
+        "sample": 82.1005248860456,
+        "train_difficulty": 2.5335127129219472,
+        "train_ranker": 55.312271517002955,
+        "validate": 38.50176171306521
       },
-      "total_seconds": 740.1227513239719
+      "total_seconds": 551.6510627849493
     }
   },
   "throughput_profile": {
     "bottleneck_profile": {
-      "primary_stage": "evaluate",
-      "primary_stage_seconds": 211.32586570014246,
-      "primary_stage_share_of_total": 0.28552813073522093,
-      "top3_stage_seconds": 441.2975468891673,
-      "top3_stage_share_of_total": 0.5962491304310673,
+      "primary_stage": "embed",
+      "primary_stage_seconds": 149.16317718615755,
+      "primary_stage_share_of_total": 0.2703940719938502,
+      "top3_stage_seconds": 286.5759735892061,
+      "top3_stage_share_of_total": 0.5194877576097815,
       "top_stages": [
         {
-          "name": "evaluate",
-          "seconds": 211.32586570014246,
-          "share_of_total": 0.28552813073522093
-        },
-        {
           "name": "embed",
-          "seconds": 148.7999888889026,
-          "share_of_total": 0.20104771623723372
+          "seconds": 149.16317718615755,
+          "share_of_total": 0.2703940719938502
         },
         {
           "name": "sample",
-          "seconds": 81.17169230012223,
-          "share_of_total": 0.10967328345861262
+          "seconds": 82.1005248860456,
+          "share_of_total": 0.14882691328748682
         },
         {
           "name": "train_ranker",
-          "seconds": 56.34464834118262,
-          "share_of_total": 0.07612878842109669
+          "seconds": 55.312271517002955,
+          "share_of_total": 0.1002667723284445
         },
         {
           "name": "augment_graph",
-          "seconds": 50.875686620827764,
-          "share_of_total": 0.06873952534200382
+          "seconds": 50.915316165890545,
+          "share_of_total": 0.09229623506723654
+        },
+        {
+          "name": "compute_difficulty",
+          "seconds": 48.56320890900679,
+          "share_of_total": 0.0880324759347708
         }
       ]
     },
@@ -2227,53 +2222,53 @@
       "train": 159284,
       "val": 40114
     },
-    "embedding_rows_per_second": 330.203333923758,
-    "estimated_seconds_at_requested_source_rows": 887.0969787659075,
+    "embedding_rows_per_second": 443.01736457502517,
+    "estimated_seconds_at_requested_source_rows": 661.1984164169015,
     "evaluation_timing_delta": {
-      "current_evaluation_seconds": 24.223363942001015,
-      "current_faster_than_pipeline_timing": true,
-      "timed_pipeline_evaluate_seconds": 211.32586570014246,
-      "timed_to_current_ratio": 8.724051135347203
+      "current_evaluation_seconds": 23.828760851873085,
+      "current_faster_than_pipeline_timing": false,
+      "timed_pipeline_evaluate_seconds": 19.123737015994266,
+      "timed_to_current_ratio": 0.8025485309485165
     },
-    "index_build_seconds_total": 6.437091332161799,
-    "mean_index_speedup_vs_exact": 17.744239287034144,
-    "min_index_recall_vs_exact": 0.9640000000000002,
-    "pipeline_seconds_per_100k_embedding_rows": 302.8437018237054,
-    "pipeline_seconds_per_100k_processed_rows": 253.45627964740214,
-    "processed_rows_per_second": 394.5453635598055,
+    "index_build_seconds_total": 6.719438847154379,
+    "mean_index_speedup_vs_exact": 17.376305276865946,
+    "min_index_recall_vs_exact": 0.9580000000000001,
+    "pipeline_seconds_per_100k_embedding_rows": 225.724786422147,
+    "pipeline_seconds_per_100k_processed_rows": 188.91383326197186,
+    "processed_rows_per_second": 529.3418606425042,
     "requested_source_rows": 350000,
     "scale_estimate_reliable": true,
     "scale_factor_from_current_to_requested_source_rows": 1.1985808802377984,
-    "slowest_stage": "evaluate",
+    "slowest_stage": "embed",
     "throughput_basis": "executed_pipeline_run",
     "timed_stage_seconds": {
-      "audit": 0.19079405604861677,
-      "augment_graph": 50.875686620827764,
-      "benchmark_index": 11.373193778796121,
-      "build_graph": 17.300741476006806,
-      "build_index": 10.000261679058895,
-      "compute_difficulty": 48.20692810206674,
-      "deployment_security": 0.0006397690158337355,
-      "embed": 148.7999888889026,
-      "evaluate": 211.32586570014246,
-      "experiment_report": 0.007404000964015722,
-      "homepage": 4.932497973088175,
-      "label_techniques": 4.9532018061727285,
-      "normalize": 43.35425694216974,
-      "pipeline_profile": 8.815354706952348,
-      "premise_trace_supervision": 2.381029340205714,
-      "sample": 81.17169230012223,
-      "train_difficulty": 2.5315597800072283,
-      "train_ranker": 56.34464834118262,
-      "validate": 37.552581324009225
+      "audit": 0.30817900504916906,
+      "augment_graph": 50.915316165890545,
+      "benchmark_index": 11.346926914993674,
+      "build_graph": 17.570353848859668,
+      "build_index": 10.322077491786331,
+      "compute_difficulty": 48.56320890900679,
+      "deployment_security": 0.0006838750559836626,
+      "embed": 149.16317718615755,
+      "evaluate": 19.123737015994266,
+      "experiment_report": 0.0074956880416721106,
+      "homepage": 5.923967564012855,
+      "label_techniques": 4.922904911916703,
+      "normalize": 43.39064241107553,
+      "pipeline_profile": 9.218928289134055,
+      "premise_trace_supervision": 2.4199871229939163,
+      "sample": 82.1005248860456,
+      "train_difficulty": 2.5335127129219472,
+      "train_ranker": 55.312271517002955,
+      "validate": 38.50176171306521
     },
     "timing_config_hash": "375be84aecb4e7d9",
     "timing_config_matches_current": true,
     "timing_executed_stage_count": 19,
-    "timing_generated_at": "2026-06-20T17:20:52.729952+00:00",
+    "timing_generated_at": "2026-06-20T18:53:38.545222+00:00",
     "timing_has_skipped_stages": false,
     "timing_skipped_stage_count": 0,
     "total_embedding_rows": 244391,
-    "total_pipeline_seconds": 740.1227513239719
+    "total_pipeline_seconds": 551.6510627849493
   }
 }

@@ -296,62 +296,62 @@
       "path": "outputs/graph/val/nodes_enriched.parquet"
     },
     "index:demo:premise": {
-      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.023276258958503604",
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.0228940739762038",
       "passed": true,
       "path": "outputs/indexes/demo_premise_neighbors.bin"
     },
     "index:demo:proof_state": {
-      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.0884882090613246",
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.08701493102125823",
       "passed": true,
       "path": "outputs/indexes/demo_proof_state_neighbors.bin"
     },
     "index:demo:theorem": {
-      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.015230056131258607",
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.015020659193396568",
       "passed": true,
       "path": "outputs/indexes/demo_theorem_neighbors.bin"
     },
     "index:test:premise": {
-      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.820566161070019",
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.9342909730039537",
       "passed": true,
       "path": "outputs/indexes/test_premise_neighbors.bin"
     },
     "index:test:proof_state": {
-      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.04799045203253627",
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.052330706967040896",
       "passed": true,
       "path": "outputs/indexes/test_proof_state_neighbors.bin"
     },
     "index:test:theorem": {
-      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.08974525216035545",
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.09176083886995912",
       "passed": true,
       "path": "outputs/indexes/test_theorem_neighbors.bin"
     },
     "index:train:premise": {
-      "detail": "backend=hnswlib; format=hnswlib; build_seconds=3.7882019449025393",
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=4.024782327003777",
       "passed": true,
       "path": "outputs/indexes/train_premise_neighbors.bin"
     },
     "index:train:proof_state": {
-      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.4042325969785452",
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.4201808220241219",
       "passed": true,
       "path": "outputs/indexes/train_proof_state_neighbors.bin"
     },
     "index:train:theorem": {
-      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.1337511648889631",
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.1329822049010545",
       "passed": true,
       "path": "outputs/indexes/train_theorem_neighbors.bin"
     },
     "index:val:premise": {
-      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.8773755449801683",
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.7981190900318325",
       "passed": true,
       "path": "outputs/indexes/val_premise_neighbors.bin"
     },
     "index:val:proof_state": {
-      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.05334093701094389",
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.0491990961600095",
       "passed": true,
       "path": "outputs/indexes/val_proof_state_neighbors.bin"
     },
     "index:val:theorem": {
-      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.09489275398664176",
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.09086312400177121",
       "passed": true,
       "path": "outputs/indexes/val_theorem_neighbors.bin"
     },
@@ -756,7 +756,7 @@
       "path": "homepage/index.html"
     },
     "validation:index_benchmark": {
-      "detail": "index_benchmark={'premise': {'backend': 'hnswlib', 'indexed_available': True, 'exact_ms_per_query': 69.27173835923895, 'indexed_ms_per_query': 3.4585403418168426}, 'proof_state': {'backend': 'hnswlib', 'indexed_available': True, 'exact_ms_per_query': 12.735097410622984, 'indexed_ms_per_query': 0.8292262186296284}, 'theorem': {'backend': 'hnswlib', 'indexed_available': True, 'exact_ms_per_query': 4.227494958322495, 'indexed_ms_per_query': 0.2368911704979837}}",
+      "detail": "index_benchmark={'premise': {'backend': 'hnswlib', 'indexed_available': True, 'exact_ms_per_query': 69.03993914835155, 'indexed_ms_per_query': 3.6328387609682977}, 'proof_state': {'backend': 'hnswlib', 'indexed_available': True, 'exact_ms_per_query': 12.766833261121064, 'indexed_ms_per_query': 0.8265445893630385}, 'theorem': {'backend': 'hnswlib', 'indexed_available': True, 'exact_ms_per_query': 4.097250408958644, 'indexed_ms_per_query': 0.2317648590542376}}",
       "passed": true,
       "path": "outputs/reports/index_benchmark.json"
     },
@@ -766,12 +766,12 @@
       "path": "outputs/indexes/index_summary.json"
     },
     "validation:pipeline_performance_report": {
-      "detail": "pipeline_performance={'dataset_name': 'erbacher/LeanRank-data', 'scale_profile': {'ann_backend_availability': {'faiss': False, 'hnswlib': True, 'lancedb': False}, 'current_total_split_rows': 292012, 'dataset_name': 'erbacher/LeanRank-data', 'embedding_backend': 'sentence_transformers', 'embedding_device': 'cuda', 'embedding_devices': ['cuda:0', 'cuda:1', 'cuda:2', 'cuda:3', 'cuda:4', 'cuda:5', 'cuda:6'], 'index_backend': 'hnswlib', 'leanrank_premise_supervision_ready': True, 'requested_rows': 60000, 'requested_theorems': 10000, 'scale_bucket': 'large', 'source_rows': 350000, 'target_dataset_confirmed': True}, 'recommendations': [{'area': 'performance_timing', 'priority': 'medium', 'recommendation': 'The current standalone evaluation is materially faster than the saved full-pipeline timing. Saved pipeline evaluate seconds: 211.32586570014246; current evaluation seconds: 24.223363942001015. Rerun `make refresh-production-timing` before using full-pipeline bottleneck shares as final throughput evidence.'}, {'area': 'pipeline_bottleneck', 'priority': 'medium', 'recommendation': 'Evaluation is the current largest timed bottleneck. Keep full held-out metrics for final claims, but use sampled evaluation during development and prioritize batched/vectorized scoring or parallel domain shards before scaling evaluation further.'}], 'stage_keys': ['benchmark', 'embeddings', 'evaluation', 'graph', 'indexes', 'processed', 'readiness', 'sample', 'timings']}",
+      "detail": "pipeline_performance={'dataset_name': 'erbacher/LeanRank-data', 'scale_profile': {'ann_backend_availability': {'faiss': False, 'hnswlib': True, 'lancedb': False}, 'current_total_split_rows': 292012, 'dataset_name': 'erbacher/LeanRank-data', 'embedding_backend': 'sentence_transformers', 'embedding_device': 'cuda', 'embedding_devices': ['cuda:0', 'cuda:1', 'cuda:2', 'cuda:3', 'cuda:4', 'cuda:5', 'cuda:6'], 'index_backend': 'hnswlib', 'leanrank_premise_supervision_ready': True, 'requested_rows': 60000, 'requested_theorems': 10000, 'scale_bucket': 'large', 'source_rows': 350000, 'target_dataset_confirmed': True}, 'recommendations': [{'area': 'pipeline_bottleneck', 'priority': 'medium', 'recommendation': 'Embedding is the current largest timed bottleneck. Reuse cached embeddings when training/reranking only, and keep multi-GPU sentence-transformer encoding enabled for larger LeanRank-data refreshes.'}], 'stage_keys': ['benchmark', 'embeddings', 'evaluation', 'graph', 'indexes', 'processed', 'readiness', 'sample', 'timings']}",
       "passed": true,
       "path": "outputs/reports/pipeline_performance_report.json"
     },
     "validation:pipeline_run_timings": {
-      "detail": "pipeline_run_timings={'passed': True, 'total_seconds': 740.1227513239719, 'stage_count': 19, 'stages': ['sample', 'normalize', 'build_graph', 'label_techniques', 'compute_difficulty', 'premise_trace_supervision', 'train_difficulty', 'embed', 'build_index', 'benchmark_index', 'augment_graph', 'train_ranker', 'evaluate', 'validate', 'homepage', 'deployment_security', 'pipeline_profile', 'experiment_report', 'audit']}",
+      "detail": "pipeline_run_timings={'passed': True, 'total_seconds': 551.6510627849493, 'stage_count': 19, 'stages': ['sample', 'normalize', 'build_graph', 'label_techniques', 'compute_difficulty', 'premise_trace_supervision', 'train_difficulty', 'embed', 'build_index', 'benchmark_index', 'augment_graph', 'train_ranker', 'evaluate', 'validate', 'homepage', 'deployment_security', 'pipeline_profile', 'experiment_report', 'audit']}",
       "passed": true,
       "path": "outputs/reports/pipeline_run_timings.json"
     },
