@@ -71,6 +71,7 @@ outputs/reports/*
 !outputs/reports/context_parse_coverage.json
 !outputs/reports/corpus_manifest.json
 !outputs/reports/deployment_security_review.json
+!outputs/reports/difficulty_distribution.csv
 !outputs/reports/difficulty_estimator_metrics.json
 !outputs/reports/difficulty_target_report.json
 !outputs/reports/domain_coverage.json
@@ -89,6 +90,7 @@ outputs/reports/*
 !outputs/reports/proof_technique_candidate_pool.json
 !outputs/reports/proof_technique_distribution.csv
 !outputs/reports/ranker_validation_metrics.json
+!outputs/reports/raw_schema.json
 !outputs/reports/refresh_dashboard.json
 !outputs/reports/refresh_history.json
 !outputs/reports/refresh_trend.json

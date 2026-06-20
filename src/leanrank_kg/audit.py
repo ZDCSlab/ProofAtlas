@@ -95,6 +95,9 @@ def _artifact_storage_condition(data: dict[str, Any]) -> tuple[bool, dict[str, A
     passed = (
         profile.get("method") == "filesystem_artifact_footprint_with_linear_scale_projection"
         and profile.get("total_artifact_bytes", 0) >= 0
+        and "unreferenced_index_artifact_bytes" in profile
+        and "unreferenced_index_artifact_count" in profile
+        and "unreferenced_index_artifacts" in profile
         and "outputs/embeddings" in directories
         and "outputs/indexes" in directories
         and len(profile.get("projections", [])) >= 3

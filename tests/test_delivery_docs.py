@@ -147,6 +147,12 @@ def test_readme_production_snapshot_matches_committed_artifacts() -> None:
     assert _readme_artifact_field(readme, "Artifact storage", "total GiB") == f"{float(storage['total_artifact_gib']):.4f}"
     assert _readme_artifact_field(readme, "Artifact storage", "bytes per processed row") == f"{float(storage['bytes_per_processed_row']):.4f}"
     assert _readme_artifact_field(readme, "Artifact storage", "index bytes") == str(storage["directories"]["outputs/indexes"]["bytes"])
+    assert _readme_artifact_field(readme, "Artifact storage", "unreferenced index bytes") == str(
+        storage["unreferenced_index_artifact_bytes"]
+    )
+    assert _readme_artifact_field(readme, "Artifact storage", "unreferenced index GiB") == (
+        f"{float(storage['unreferenced_index_artifact_gib']):.4f}"
+    )
     current_5x = next(row for row in storage["projections"] if row["label"] == "current_5x")
     assert _readme_artifact_field(readme, "Artifact storage", "current_5x projected GiB") == f"{float(current_5x['estimated_artifact_gib']):.4f}"
 
@@ -317,6 +323,10 @@ def test_delivery_audit_performance_snapshot_matches_committed_artifacts() -> No
     assert f"Artifact storage: {float(storage['total_artifact_gib']):.4f} GiB total" in audit
     assert f"{float(storage['bytes_per_processed_row']):,.4f} bytes per processed row" in audit
     assert f"Largest storage component: `outputs/indexes`, {int(storage['directories']['outputs/indexes']['bytes']):,} bytes" in audit
+    assert (
+        f"Unreferenced index artifacts: {int(storage['unreferenced_index_artifact_bytes']):,} bytes "
+        f"({float(storage['unreferenced_index_artifact_gib']):.4f} GiB) not pointed to by current manifests"
+    ) in audit
     current_5x = next(row for row in storage["projections"] if row["label"] == "current_5x")
     assert f"Projected storage at current_5x: {float(current_5x['estimated_artifact_gib']):.4f} GiB" in audit
 

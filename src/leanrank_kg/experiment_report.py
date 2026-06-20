@@ -412,6 +412,19 @@ def _largest_files_table(profile: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def _unreferenced_index_artifacts_table(profile: dict[str, Any]) -> str:
+    rows = profile.get("unreferenced_index_artifacts", []) if isinstance(profile, dict) else []
+    lines = [
+        "| File | Bytes |",
+        "| --- | ---: |",
+    ]
+    for row in rows[:8]:
+        lines.append(f"| `{row.get('path', 'n/a')}` | {_fmt(row.get('bytes'))} |")
+    if len(lines) == 2:
+        lines.append("| n/a | n/a |")
+    return "\n".join(lines)
+
+
 def _hard_negative_quality_table(profile: dict[str, Any]) -> str:
     rows = profile.get("bucket_counts", []) if isinstance(profile, dict) else []
     lines = [
@@ -1052,12 +1065,18 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
             f"- Total artifact bytes: `{artifact_storage.get('total_artifact_bytes', 'n/a')}`",
             f"- Total artifact GiB: `{artifact_storage.get('total_artifact_gib', 'n/a')}`",
             f"- Bytes per processed row: `{artifact_storage.get('bytes_per_processed_row', 'n/a')}`",
+            f"- Unreferenced index artifact bytes: `{artifact_storage.get('unreferenced_index_artifact_bytes', 'n/a')}`",
+            f"- Unreferenced index artifact count: `{artifact_storage.get('unreferenced_index_artifact_count', 'n/a')}`",
             "",
             _storage_projection_table(artifact_storage),
             "",
             "Largest generated artifact files:",
             "",
             _largest_files_table(artifact_storage),
+            "",
+            "Unreferenced index artifacts not pointed to by current manifests:",
+            "",
+            _unreferenced_index_artifacts_table(artifact_storage),
         ]
     )
     lines.extend(

@@ -1231,6 +1231,24 @@ def _artifact_storage_profile(scale: dict[str, Any], throughput: dict[str, Any])
             if file_path.is_file():
                 largest_files.append({"path": str(file_path), "bytes": int(file_path.stat().st_size)})
     largest_files.sort(key=lambda row: int(row["bytes"]), reverse=True)
+    referenced_index_paths = {str(Path("outputs/indexes/index_summary.json"))}
+    index_root = Path("outputs/indexes")
+    if index_root.exists():
+        for manifest_path in index_root.glob("*_index_manifest.json"):
+            manifest = read_json(manifest_path, {}) or {}
+            referenced_index_paths.add(str(manifest_path))
+            index_path = manifest.get("index_path")
+            if index_path:
+                referenced_index_paths.add(str(Path(index_path)))
+            metadata_path = str(manifest_path).replace("_index_manifest.json", "_index_metadata.parquet")
+            referenced_index_paths.add(metadata_path)
+    unreferenced_index_artifacts = []
+    if index_root.exists():
+        for file_path in index_root.glob("*"):
+            if file_path.is_file() and str(file_path) not in referenced_index_paths:
+                unreferenced_index_artifacts.append({"path": str(file_path), "bytes": int(file_path.stat().st_size)})
+    unreferenced_index_artifacts.sort(key=lambda row: int(row["bytes"]), reverse=True)
+    unreferenced_index_bytes = sum(int(row["bytes"]) for row in unreferenced_index_artifacts)
 
     scale_projection = throughput.get("scale_projection_profile", {}) if isinstance(throughput, dict) else {}
     projections = []
@@ -1256,10 +1274,15 @@ def _artifact_storage_profile(scale: dict[str, Any], throughput: dict[str, Any])
         "total_artifact_gib": total_bytes / (1024**3),
         "bytes_per_processed_row": bytes_per_processed_row,
         "largest_files": largest_files[:10],
+        "unreferenced_index_artifacts": unreferenced_index_artifacts[:20],
+        "unreferenced_index_artifact_count": len(unreferenced_index_artifacts),
+        "unreferenced_index_artifact_bytes": unreferenced_index_bytes,
+        "unreferenced_index_artifact_gib": unreferenced_index_bytes / (1024**3),
         "projections": projections,
         "notes": [
             "Storage projection scales current artifact bytes linearly with processed row count.",
             "Index artifacts dominate current storage and should be monitored when scaling LeanRank-data runs.",
+            "Unreferenced index artifacts are files under outputs/indexes that are not referenced by the current index manifests.",
         ],
     }
 

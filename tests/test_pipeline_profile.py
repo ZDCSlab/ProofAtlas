@@ -244,6 +244,9 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
     assert storage["method"] == "filesystem_artifact_footprint_with_linear_scale_projection"
     assert "outputs/reports" in storage["directories"]
     assert storage["total_artifact_bytes"] >= 0
+    assert "unreferenced_index_artifact_count" in storage
+    assert "unreferenced_index_artifact_bytes" in storage
+    assert "unreferenced_index_artifacts" in storage
     assert len(storage["projections"]) >= 4
     assert next(row for row in storage["projections"] if row["label"] == "current_2x")["scale_factor_vs_current"] == 2.0
     assert report["stages"]["evaluation"]["evaluation_timing"]["total_seconds"] == 2.5

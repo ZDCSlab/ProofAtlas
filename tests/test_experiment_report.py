@@ -345,6 +345,8 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                     "total_artifact_bytes": 2048,
                     "total_artifact_gib": 1.9073486328125e-06,
                     "bytes_per_processed_row": 2.048,
+                    "unreferenced_index_artifact_bytes": 512,
+                    "unreferenced_index_artifact_count": 1,
                     "projections": [
                         {
                             "label": "current_1x",
@@ -360,6 +362,7 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                         },
                     ],
                     "largest_files": [{"path": "outputs/indexes/train_premise_neighbors.bin", "bytes": 1024}],
+                    "unreferenced_index_artifacts": [{"path": "outputs/indexes/train_premise_neighbors.joblib", "bytes": 512}],
                 },
             },
             "stages": {
@@ -574,6 +577,8 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "filesystem_artifact_footprint_with_linear_scale_projection" in text
     assert "Largest generated artifact files" in text
     assert "outputs/indexes/train_premise_neighbors.bin" in text
+    assert "Unreferenced index artifacts not pointed to by current manifests" in text
+    assert "outputs/indexes/train_premise_neighbors.joblib" in text
     assert "Hard-Negative Quality Profile" in text
     assert "Ranker Training Pair Utilization" in text
     assert "data/processed/train/negative_edges.parquet label=0" in text

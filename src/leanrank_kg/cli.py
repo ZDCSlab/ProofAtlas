@@ -56,7 +56,10 @@ def _stage_artifacts() -> dict[str, list[str]]:
             *[f"outputs/embeddings/{split}_embedding_metadata.parquet" for split in SPLIT_NAMES],
             "outputs/embeddings/embedding_config.json",
         ],
-        "build_index": ["outputs/indexes/index_summary.json", "outputs/indexes/train_premise_neighbors.joblib"],
+        "build_index": [
+            "outputs/indexes/index_summary.json",
+            *[f"outputs/indexes/{split}_{kind}_index_manifest.json" for split in SPLIT_NAMES for kind in ["proof_state", "premise", "theorem"]],
+        ],
         "benchmark_index": ["outputs/reports/index_benchmark.json"],
         "augment_graph": [f"outputs/graph/{split}/{name}_enriched.parquet" for split in SPLIT_NAMES for name in ["nodes", "edges"]],
         "train_ranker": ["outputs/models/premise_ranker.joblib", "outputs/reports/ranker_validation_metrics.json"],

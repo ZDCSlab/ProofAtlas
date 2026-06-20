@@ -695,15 +695,17 @@ These linear projections use the current timed pipeline as a capacity-planning b
 This profile records the local footprint of generated LeanRank-data artifacts. It is a practical scale-up signal because embeddings and ANN indexes can dominate disk usage before model training becomes the bottleneck.
 
 - Method: `filesystem_artifact_footprint_with_linear_scale_projection`
-- Total artifact bytes: `3052567000`
-- Total artifact GiB: `2.8429245576262474`
-- Bytes per processed row: `10453.566976699587`
+- Total artifact bytes: `3052577299`
+- Total artifact GiB: `2.8429341493174434`
+- Bytes per processed row: `10453.602245798118`
+- Unreferenced index artifact bytes: `1502501178`
+- Unreferenced index artifact count: `12`
 
 | Projection | Target rows | Scale factor | Artifact GiB |
 | --- | ---: | ---: | ---: |
 | `current_1x` | 292012 | 1.0000 | 2.8429 |
-| `current_2x` | 584024 | 2.0000 | 5.6858 |
-| `current_5x` | 1460060 | 5.0000 | 14.2146 |
+| `current_2x` | 584024 | 2.0000 | 5.6859 |
+| `current_5x` | 1460060 | 5.0000 | 14.2147 |
 | `configured_source_rows` | 350000 | 1.1986 | 3.4075 |
 
 Largest generated artifact files:
@@ -718,6 +720,19 @@ Largest generated artifact files:
 | `outputs/indexes/train_proof_state_neighbors.joblib` | 145849830 |
 | `outputs/indexes/test_premise_neighbors.bin` | 123456212 |
 | `outputs/indexes/val_premise_neighbors.bin` | 116887072 |
+
+Unreferenced index artifacts not pointed to by current manifests:
+
+| File | Bytes |
+| --- | ---: |
+| `outputs/indexes/train_premise_neighbors.joblib` | 784245864 |
+| `outputs/indexes/test_premise_neighbors.joblib` | 235665958 |
+| `outputs/indexes/val_premise_neighbors.joblib` | 223124038 |
+| `outputs/indexes/train_proof_state_neighbors.joblib` | 145849830 |
+| `outputs/indexes/train_theorem_neighbors.joblib` | 49184822 |
+| `outputs/indexes/test_proof_state_neighbors.joblib` | 18770678 |
+| `outputs/indexes/val_proof_state_neighbors.joblib` | 17350486 |
+| `outputs/indexes/demo_premise_neighbors.joblib` | 8681798 |
 
 ## Refresh And Retraining Policy
 

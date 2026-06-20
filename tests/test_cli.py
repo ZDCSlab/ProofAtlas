@@ -1,7 +1,7 @@
 from typer.testing import CliRunner
 from pathlib import Path
 
-from leanrank_kg.cli import app
+from leanrank_kg.cli import _stage_artifacts, app
 
 
 def test_show_neighborhood_uses_entity_id_option():
@@ -58,6 +58,15 @@ def test_query_retrieval_commands_are_registered():
     assert "--host" in result.output
     assert "--require-ready" in result.output
     assert "--startup-index-split" in result.output
+
+
+def test_build_index_stage_artifacts_are_backend_neutral():
+    artifacts = _stage_artifacts()["build_index"]
+    assert "outputs/indexes/index_summary.json" in artifacts
+    assert "outputs/indexes/train_premise_index_manifest.json" in artifacts
+    assert "outputs/indexes/train_proof_state_index_manifest.json" in artifacts
+    assert "outputs/indexes/train_theorem_index_manifest.json" in artifacts
+    assert not any(path.endswith("_neighbors.joblib") for path in artifacts)
 
 
 def test_deployment_guide_documents_demo_modes():
