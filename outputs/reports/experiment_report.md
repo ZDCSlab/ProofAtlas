@@ -246,9 +246,9 @@ Validation metrics are reported for model selection and sanity checking; final c
 
 | Entity | Backend | Rows | Exact ms/query | Indexed ms/query | Speedup | Recall vs exact |
 | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| premise | hnswlib | 127561 | 69.1207 | 3.7731 | 18.3195 | 0.9890 |
-| proof_state | hnswlib | 23723 | 12.7723 | 0.8401 | 15.2030 | 0.9910 |
-| theorem | hnswlib | 8000 | 4.0895 | 0.3204 | 12.7647 | 0.9940 |
+| premise | hnswlib | 127561 | 69.2717 | 3.4585 | 20.0292 | 0.9930 |
+| proof_state | hnswlib | 23723 | 12.7351 | 0.8292 | 15.3578 | 0.9640 |
+| theorem | hnswlib | 8000 | 4.2275 | 0.2369 | 17.8457 | 0.9930 |
 
 ## Premise Trace Supervision
 
@@ -269,25 +269,25 @@ The current ranking labels come from normalized LeanRank-data premise supervisio
 
 ## Pipeline Timing
 
-- Total seconds: `15.690514276968315`
+- Total seconds: `740.1227513239719`
 - Stage count: `19`
-- Executed/skipped stages: `4` / `15`
+- Executed/skipped stages: `19` / `0`
 - Timing config matches current report config: `True`
-- Timing generated at: `2026-06-20T16:45:55.593158+00:00`
+- Timing generated at: `2026-06-20T17:20:52.729952+00:00`
 - Timing report: `outputs/reports/pipeline_run_timings.json`
 
 | Stage | Seconds |
 | --- | ---: |
-| `pipeline_profile` | 9.9439 |
-| `homepage` | 5.4678 |
-| `audit` | 0.2671 |
-| `experiment_report` | 0.0072 |
-| `sample` | 0.0000 |
-| `normalize` | 0.0000 |
-| `build_graph` | 0.0000 |
-| `label_techniques` | 0.0000 |
-| `compute_difficulty` | 0.0000 |
-| `premise_trace_supervision` | 0.0000 |
+| `evaluate` | 211.3259 |
+| `embed` | 148.8000 |
+| `sample` | 81.1717 |
+| `train_ranker` | 56.3446 |
+| `augment_graph` | 50.8757 |
+| `compute_difficulty` | 48.2069 |
+| `normalize` | 43.3543 |
+| `validate` | 37.5526 |
+| `build_graph` | 17.3007 |
+| `benchmark_index` | 11.3732 |
 
 ## Pipeline Performance And Scale-Up Notes
 
@@ -302,19 +302,19 @@ The current ranking labels come from normalized LeanRank-data premise supervisio
 - ANN backend availability: `{'faiss': False, 'hnswlib': True, 'lancedb': False}`
 - Total embedding rows: `244391`
 - Timing config matches current report config: `True`
-- Throughput timing basis: `cached_or_partial_pipeline_run`
-- Scale estimate reliable: `False`
+- Throughput timing basis: `executed_pipeline_run`
+- Scale estimate reliable: `True`
 - Embedding rows by entity: `{'premise': 203601, 'proof_state': 30498, 'theorem': 10292}`
-- Processed rows/sec: `18610.73479462917`
-- Pipeline seconds per 100k processed rows: `5.373242975277836`
-- Slowest timed stage: `pipeline_profile`
-- Mean index speedup vs exact: `15.42905823807312`
-- Minimum index recall vs exact: `0.9890000000000001`
-- Estimated seconds at requested source rows: `18.806350413472426`
+- Processed rows/sec: `394.5453635598055`
+- Pipeline seconds per 100k processed rows: `253.45627964740214`
+- Slowest timed stage: `evaluate`
+- Mean index speedup vs exact: `17.744239287034144`
+- Minimum index recall vs exact: `0.9640000000000002`
+- Estimated seconds at requested source rows: `887.0969787659075`
 
 ## Recommendations
 
-- `high` `performance_timing`: Refresh pipeline timings with a non-cached production run before using throughput numbers for scale-up planning. Run `make refresh-production-report` after a full `leanrank-kg full-pipeline --config configs/proofatlas.yaml --force` timing pass, or keep the current throughput fields marked as cached/partial diagnostics only.
+- `low` `monitoring`: Keep this profile report as the baseline and compare it after every larger LeanRank-data refresh.
 
 ## Interpretation
 

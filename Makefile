@@ -103,7 +103,7 @@ refresh-production-report:
 
 refresh-production-timing:
 	$(PIPELINE_RUN) leanrank-kg full-pipeline --config $(PRODUCTION_CONFIG) --force
-	$(MAKE) refresh-production-report PRODUCTION_CONFIG=$(PRODUCTION_CONFIG) PIPELINE_RUN="$(PIPELINE_RUN)"
+	$(MAKE) refresh-production-full-eval PRODUCTION_CONFIG=$(PRODUCTION_CONFIG) PIPELINE_RUN="$(PIPELINE_RUN)"
 
 refresh-production-full-eval:
 	$(PIPELINE_RUN) leanrank-kg evaluate --config $(PRODUCTION_CONFIG) --full-heldout

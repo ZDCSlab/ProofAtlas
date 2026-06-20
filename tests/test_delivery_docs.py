@@ -41,7 +41,7 @@ def test_production_refresh_uses_configurable_pipeline_runner() -> None:
     assert "$(PIPELINE_RUN) leanrank-kg audit --config $(PRODUCTION_CONFIG)" in makefile
     assert "refresh-production-timing:" in makefile
     assert "$(PIPELINE_RUN) leanrank-kg full-pipeline --config $(PRODUCTION_CONFIG) --force" in makefile
-    assert '$(MAKE) refresh-production-report PRODUCTION_CONFIG=$(PRODUCTION_CONFIG) PIPELINE_RUN="$(PIPELINE_RUN)"' in makefile
+    assert '$(MAKE) refresh-production-full-eval PRODUCTION_CONFIG=$(PRODUCTION_CONFIG) PIPELINE_RUN="$(PIPELINE_RUN)"' in makefile
     assert "refresh-production-full-eval:" in makefile
     assert "$(PIPELINE_RUN) leanrank-kg evaluate --config $(PRODUCTION_CONFIG) --full-heldout" in makefile
     assert "make refresh-production-timing" in readme

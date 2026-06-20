@@ -183,7 +183,7 @@ To refresh a reliable end-to-end production timing baseline for scale-up plannin
 make refresh-production-timing
 ```
 
-This runs `leanrank-kg full-pipeline --config configs/proofatlas.yaml --force`, then refreshes the evaluation report, homepage, and audit against the newly written timing artifact.
+This runs `leanrank-kg full-pipeline --config configs/proofatlas.yaml --force`, then refreshes the full held-out evaluation report, homepage, and audit against the newly written timing artifact.
 
 To refresh full held-out production evaluation metrics instead of the sampled test-set metrics:
 

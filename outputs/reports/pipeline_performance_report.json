@@ -5,9 +5,9 @@
   "project_name": "ProofAtlas",
   "recommendations": [
     {
-      "area": "performance_timing",
-      "priority": "high",
-      "recommendation": "Refresh pipeline timings with a non-cached production run before using throughput numbers for scale-up planning. Run `make refresh-production-report` after a full `leanrank-kg full-pipeline --config configs/proofatlas.yaml --force` timing pass, or keep the current throughput fields marked as cached/partial diagnostics only."
+      "area": "monitoring",
+      "priority": "low",
+      "recommendation": "Keep this profile report as the baseline and compare it after every larger LeanRank-data refresh."
     }
   ],
   "scale_profile": {
@@ -44,41 +44,41 @@
         "premise": {
           "backend": "hnswlib",
           "dimensions": 768,
-          "exact_ms_per_query": 69.12065093871206,
-          "index_build_seconds": 3.8239554238971323,
+          "exact_ms_per_query": 69.27173835923895,
+          "index_build_seconds": 3.7882019449025393,
           "indexed_available": true,
           "indexed_error": null,
-          "indexed_ms_per_query": 3.773068960290402,
+          "indexed_ms_per_query": 3.4585403418168426,
           "query_count": 100,
-          "recall_vs_exact": 0.9890000000000001,
+          "recall_vs_exact": 0.993,
           "rows": 127561,
-          "speedup_vs_exact": 18.319477238866064
+          "speedup_vs_exact": 20.029183271821857
         },
         "proof_state": {
           "backend": "hnswlib",
           "dimensions": 768,
-          "exact_ms_per_query": 12.772339859511703,
-          "index_build_seconds": 0.422079891897738,
+          "exact_ms_per_query": 12.735097410622984,
+          "index_build_seconds": 0.4042325969785452,
           "indexed_available": true,
           "indexed_error": null,
-          "indexed_ms_per_query": 0.840118310879916,
+          "indexed_ms_per_query": 0.8292262186296284,
           "query_count": 100,
-          "recall_vs_exact": 0.991,
+          "recall_vs_exact": 0.9640000000000002,
           "rows": 23723,
-          "speedup_vs_exact": 15.203025209787796
+          "speedup_vs_exact": 15.357808429729692
         },
         "theorem": {
           "backend": "hnswlib",
           "dimensions": 768,
-          "exact_ms_per_query": 4.08946119947359,
-          "index_build_seconds": 0.10972229321487248,
+          "exact_ms_per_query": 4.227494958322495,
+          "index_build_seconds": 0.1337511648889631,
           "indexed_available": true,
           "indexed_error": null,
-          "indexed_ms_per_query": 0.3203733800910413,
+          "indexed_ms_per_query": 0.2368911704979837,
           "query_count": 100,
-          "recall_vs_exact": 0.9940000000000001,
+          "recall_vs_exact": 0.993,
           "rows": 8000,
-          "speedup_vs_exact": 12.764672265565501
+          "speedup_vs_exact": 17.84572615955088
         }
       },
       "exists": true,
@@ -727,7 +727,7 @@
     "graph": {
       "demo": {
         "edges": {
-          "bytes": 211436,
+          "bytes": 211967,
           "exists": true,
           "path": "outputs/graph/demo/edges_enriched.parquet",
           "rows": 13802
@@ -760,7 +760,7 @@
       },
       "test": {
         "edges": {
-          "bytes": 2762050,
+          "bytes": 2768429,
           "exists": true,
           "path": "outputs/graph/test/edges_enriched.parquet",
           "rows": 159705
@@ -793,7 +793,7 @@
       },
       "train": {
         "edges": {
-          "bytes": 19680620,
+          "bytes": 19673791,
           "exists": true,
           "path": "outputs/graph/train/edges_enriched.parquet",
           "rows": 1073855
@@ -826,7 +826,7 @@
       },
       "val": {
         "edges": {
-          "bytes": 2606849,
+          "bytes": 2612221,
           "exists": true,
           "path": "outputs/graph/val/edges_enriched.parquet",
           "rows": 151856
@@ -863,12 +863,12 @@
         "demo": {
           "premise": {
             "backend": "hnswlib",
-            "build_seconds": 0.028483940055593848,
+            "build_seconds": 0.023276258958503604,
             "bytes": 705,
             "dimensions": 768,
             "exists": true,
             "index_artifact": {
-              "bytes": 4560820,
+              "bytes": 4560752,
               "exists": true,
               "path": "outputs/indexes/demo_premise_neighbors.bin"
             },
@@ -901,7 +901,7 @@
           },
           "proof_state": {
             "backend": "hnswlib",
-            "build_seconds": 0.0885496421251446,
+            "build_seconds": 0.0884882090613246,
             "bytes": 709,
             "dimensions": 768,
             "exists": true,
@@ -939,8 +939,8 @@
           },
           "theorem": {
             "backend": "hnswlib",
-            "build_seconds": 0.01577346003614366,
-            "bytes": 703,
+            "build_seconds": 0.015230056131258607,
+            "bytes": 704,
             "dimensions": 768,
             "exists": true,
             "index_artifact": {
@@ -979,8 +979,8 @@
         "test": {
           "premise": {
             "backend": "hnswlib",
-            "build_seconds": 0.9094658591784537,
-            "bytes": 704,
+            "build_seconds": 0.820566161070019,
+            "bytes": 703,
             "dimensions": 768,
             "exists": true,
             "index_artifact": {
@@ -1017,12 +1017,12 @@
           },
           "proof_state": {
             "backend": "hnswlib",
-            "build_seconds": 0.04700329294428229,
+            "build_seconds": 0.04799045203253627,
             "bytes": 711,
             "dimensions": 768,
             "exists": true,
             "index_artifact": {
-              "bytes": 9833164,
+              "bytes": 9833096,
               "exists": true,
               "path": "outputs/indexes/test_proof_state_neighbors.bin"
             },
@@ -1055,7 +1055,7 @@
           },
           "theorem": {
             "backend": "hnswlib",
-            "build_seconds": 0.08902867999859154,
+            "build_seconds": 0.08974525216035545,
             "bytes": 704,
             "dimensions": 768,
             "exists": true,
@@ -1095,12 +1095,12 @@
         "train": {
           "premise": {
             "backend": "hnswlib",
-            "build_seconds": 4.374131576856598,
-            "bytes": 706,
+            "build_seconds": 3.7882019449025393,
+            "bytes": 707,
             "dimensions": 768,
             "exists": true,
             "index_artifact": {
-              "bytes": 410815972,
+              "bytes": 410816176,
               "exists": true,
               "path": "outputs/indexes/train_premise_neighbors.bin"
             },
@@ -1133,12 +1133,12 @@
           },
           "proof_state": {
             "backend": "hnswlib",
-            "build_seconds": 0.5842231891583651,
+            "build_seconds": 0.4042325969785452,
             "bytes": 713,
             "dimensions": 768,
             "exists": true,
             "index_artifact": {
-              "bytes": 76404036,
+              "bytes": 76404580,
               "exists": true,
               "path": "outputs/indexes/train_proof_state_neighbors.bin"
             },
@@ -1171,12 +1171,12 @@
           },
           "theorem": {
             "backend": "hnswlib",
-            "build_seconds": 0.14043334708549082,
-            "bytes": 706,
+            "build_seconds": 0.1337511648889631,
+            "bytes": 705,
             "dimensions": 768,
             "exists": true,
             "index_artifact": {
-              "bytes": 25765972,
+              "bytes": 25765768,
               "exists": true,
               "path": "outputs/indexes/train_theorem_neighbors.bin"
             },
@@ -1211,12 +1211,12 @@
         "val": {
           "premise": {
             "backend": "hnswlib",
-            "build_seconds": 0.8127631039824337,
+            "build_seconds": 0.8773755449801683,
             "bytes": 702,
             "dimensions": 768,
             "exists": true,
             "index_artifact": {
-              "bytes": 116886936,
+              "bytes": 116887684,
               "exists": true,
               "path": "outputs/indexes/val_premise_neighbors.bin"
             },
@@ -1249,12 +1249,12 @@
           },
           "proof_state": {
             "backend": "hnswlib",
-            "build_seconds": 0.05399951501749456,
+            "build_seconds": 0.05334093701094389,
             "bytes": 709,
             "dimensions": 768,
             "exists": true,
             "index_artifact": {
-              "bytes": 9089044,
+              "bytes": 9089180,
               "exists": true,
               "path": "outputs/indexes/val_proof_state_neighbors.bin"
             },
@@ -1287,7 +1287,7 @@
           },
           "theorem": {
             "backend": "hnswlib",
-            "build_seconds": 0.09088857611641288,
+            "build_seconds": 0.09489275398664176,
             "bytes": 702,
             "dimensions": 768,
             "exists": true,
@@ -1327,10 +1327,10 @@
       },
       "summary": {
         "backend": "hnswlib",
-        "build_seconds": 10.844467442017049,
+        "build_seconds": 9.994829822098836,
         "corpus": {
           "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
-          "extraction_config_hash": "3dd7ecf53cc1215c",
+          "extraction_config_hash": "3e8f863899afdf6c",
           "mathlib_commit": "unknown",
           "source_revision": "erbacher/LeanRank-data"
         },
@@ -1361,12 +1361,12 @@
         "splits": {
           "demo": {
             "backend": "hnswlib",
-            "build_seconds": 0.14342036214657128,
+            "build_seconds": 0.1370015749707818,
             "indexes": [
               {
                 "M": 16,
                 "backend": "hnswlib",
-                "build_seconds": 0.0885496421251446,
+                "build_seconds": 0.0884882090613246,
                 "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
                 "dimensions": 768,
                 "ef_construction": 200,
@@ -1375,7 +1375,7 @@
                 "embedding_config_hash": "508c36101a363506",
                 "embedding_model_name": "BAAI/bge-base-en-v1.5",
                 "entity_type": "ProofState",
-                "extraction_config_hash": "3dd7ecf53cc1215c",
+                "extraction_config_hash": "3e8f863899afdf6c",
                 "index_built": true,
                 "index_format": "hnswlib",
                 "index_path": "outputs/indexes/demo_proof_state_neighbors.bin",
@@ -1391,7 +1391,7 @@
               {
                 "M": 16,
                 "backend": "hnswlib",
-                "build_seconds": 0.028483940055593848,
+                "build_seconds": 0.023276258958503604,
                 "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
                 "dimensions": 768,
                 "ef_construction": 200,
@@ -1400,7 +1400,7 @@
                 "embedding_config_hash": "508c36101a363506",
                 "embedding_model_name": "BAAI/bge-base-en-v1.5",
                 "entity_type": "Premise",
-                "extraction_config_hash": "3dd7ecf53cc1215c",
+                "extraction_config_hash": "3e8f863899afdf6c",
                 "index_built": true,
                 "index_format": "hnswlib",
                 "index_path": "outputs/indexes/demo_premise_neighbors.bin",
@@ -1416,7 +1416,7 @@
               {
                 "M": 16,
                 "backend": "hnswlib",
-                "build_seconds": 0.01577346003614366,
+                "build_seconds": 0.015230056131258607,
                 "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
                 "dimensions": 768,
                 "ef_construction": 200,
@@ -1425,7 +1425,7 @@
                 "embedding_config_hash": "508c36101a363506",
                 "embedding_model_name": "BAAI/bge-base-en-v1.5",
                 "entity_type": "Theorem",
-                "extraction_config_hash": "3dd7ecf53cc1215c",
+                "extraction_config_hash": "3e8f863899afdf6c",
                 "index_built": true,
                 "index_format": "hnswlib",
                 "index_path": "outputs/indexes/demo_theorem_neighbors.bin",
@@ -1446,12 +1446,12 @@
           },
           "test": {
             "backend": "hnswlib",
-            "build_seconds": 1.0811793259344995,
+            "build_seconds": 0.9846792090684175,
             "indexes": [
               {
                 "M": 16,
                 "backend": "hnswlib",
-                "build_seconds": 0.04700329294428229,
+                "build_seconds": 0.04799045203253627,
                 "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
                 "dimensions": 768,
                 "ef_construction": 200,
@@ -1460,7 +1460,7 @@
                 "embedding_config_hash": "508c36101a363506",
                 "embedding_model_name": "BAAI/bge-base-en-v1.5",
                 "entity_type": "ProofState",
-                "extraction_config_hash": "3dd7ecf53cc1215c",
+                "extraction_config_hash": "3e8f863899afdf6c",
                 "index_built": true,
                 "index_format": "hnswlib",
                 "index_path": "outputs/indexes/test_proof_state_neighbors.bin",
@@ -1476,7 +1476,7 @@
               {
                 "M": 16,
                 "backend": "hnswlib",
-                "build_seconds": 0.9094658591784537,
+                "build_seconds": 0.820566161070019,
                 "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
                 "dimensions": 768,
                 "ef_construction": 200,
@@ -1485,7 +1485,7 @@
                 "embedding_config_hash": "508c36101a363506",
                 "embedding_model_name": "BAAI/bge-base-en-v1.5",
                 "entity_type": "Premise",
-                "extraction_config_hash": "3dd7ecf53cc1215c",
+                "extraction_config_hash": "3e8f863899afdf6c",
                 "index_built": true,
                 "index_format": "hnswlib",
                 "index_path": "outputs/indexes/test_premise_neighbors.bin",
@@ -1501,7 +1501,7 @@
               {
                 "M": 16,
                 "backend": "hnswlib",
-                "build_seconds": 0.08902867999859154,
+                "build_seconds": 0.08974525216035545,
                 "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
                 "dimensions": 768,
                 "ef_construction": 200,
@@ -1510,7 +1510,7 @@
                 "embedding_config_hash": "508c36101a363506",
                 "embedding_model_name": "BAAI/bge-base-en-v1.5",
                 "entity_type": "Theorem",
-                "extraction_config_hash": "3dd7ecf53cc1215c",
+                "extraction_config_hash": "3e8f863899afdf6c",
                 "index_built": true,
                 "index_format": "hnswlib",
                 "index_path": "outputs/indexes/test_theorem_neighbors.bin",
@@ -1531,12 +1531,12 @@
           },
           "train": {
             "backend": "hnswlib",
-            "build_seconds": 5.193319445941597,
+            "build_seconds": 4.400994784897193,
             "indexes": [
               {
                 "M": 16,
                 "backend": "hnswlib",
-                "build_seconds": 0.5842231891583651,
+                "build_seconds": 0.4042325969785452,
                 "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
                 "dimensions": 768,
                 "ef_construction": 200,
@@ -1545,7 +1545,7 @@
                 "embedding_config_hash": "508c36101a363506",
                 "embedding_model_name": "BAAI/bge-base-en-v1.5",
                 "entity_type": "ProofState",
-                "extraction_config_hash": "3dd7ecf53cc1215c",
+                "extraction_config_hash": "3e8f863899afdf6c",
                 "index_built": true,
                 "index_format": "hnswlib",
                 "index_path": "outputs/indexes/train_proof_state_neighbors.bin",
@@ -1561,7 +1561,7 @@
               {
                 "M": 16,
                 "backend": "hnswlib",
-                "build_seconds": 4.374131576856598,
+                "build_seconds": 3.7882019449025393,
                 "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
                 "dimensions": 768,
                 "ef_construction": 200,
@@ -1570,7 +1570,7 @@
                 "embedding_config_hash": "508c36101a363506",
                 "embedding_model_name": "BAAI/bge-base-en-v1.5",
                 "entity_type": "Premise",
-                "extraction_config_hash": "3dd7ecf53cc1215c",
+                "extraction_config_hash": "3e8f863899afdf6c",
                 "index_built": true,
                 "index_format": "hnswlib",
                 "index_path": "outputs/indexes/train_premise_neighbors.bin",
@@ -1586,7 +1586,7 @@
               {
                 "M": 16,
                 "backend": "hnswlib",
-                "build_seconds": 0.14043334708549082,
+                "build_seconds": 0.1337511648889631,
                 "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
                 "dimensions": 768,
                 "ef_construction": 200,
@@ -1595,7 +1595,7 @@
                 "embedding_config_hash": "508c36101a363506",
                 "embedding_model_name": "BAAI/bge-base-en-v1.5",
                 "entity_type": "Theorem",
-                "extraction_config_hash": "3dd7ecf53cc1215c",
+                "extraction_config_hash": "3e8f863899afdf6c",
                 "index_built": true,
                 "index_format": "hnswlib",
                 "index_path": "outputs/indexes/train_theorem_neighbors.bin",
@@ -1616,12 +1616,12 @@
           },
           "val": {
             "backend": "hnswlib",
-            "build_seconds": 0.9896481670439243,
+            "build_seconds": 1.0517661289777607,
             "indexes": [
               {
                 "M": 16,
                 "backend": "hnswlib",
-                "build_seconds": 0.05399951501749456,
+                "build_seconds": 0.05334093701094389,
                 "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
                 "dimensions": 768,
                 "ef_construction": 200,
@@ -1630,7 +1630,7 @@
                 "embedding_config_hash": "508c36101a363506",
                 "embedding_model_name": "BAAI/bge-base-en-v1.5",
                 "entity_type": "ProofState",
-                "extraction_config_hash": "3dd7ecf53cc1215c",
+                "extraction_config_hash": "3e8f863899afdf6c",
                 "index_built": true,
                 "index_format": "hnswlib",
                 "index_path": "outputs/indexes/val_proof_state_neighbors.bin",
@@ -1646,7 +1646,7 @@
               {
                 "M": 16,
                 "backend": "hnswlib",
-                "build_seconds": 0.8127631039824337,
+                "build_seconds": 0.8773755449801683,
                 "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
                 "dimensions": 768,
                 "ef_construction": 200,
@@ -1655,7 +1655,7 @@
                 "embedding_config_hash": "508c36101a363506",
                 "embedding_model_name": "BAAI/bge-base-en-v1.5",
                 "entity_type": "Premise",
-                "extraction_config_hash": "3dd7ecf53cc1215c",
+                "extraction_config_hash": "3e8f863899afdf6c",
                 "index_built": true,
                 "index_format": "hnswlib",
                 "index_path": "outputs/indexes/val_premise_neighbors.bin",
@@ -1671,7 +1671,7 @@
               {
                 "M": 16,
                 "backend": "hnswlib",
-                "build_seconds": 0.09088857611641288,
+                "build_seconds": 0.09489275398664176,
                 "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
                 "dimensions": 768,
                 "ef_construction": 200,
@@ -1680,7 +1680,7 @@
                 "embedding_config_hash": "508c36101a363506",
                 "embedding_model_name": "BAAI/bge-base-en-v1.5",
                 "entity_type": "Theorem",
-                "extraction_config_hash": "3dd7ecf53cc1215c",
+                "extraction_config_hash": "3e8f863899afdf6c",
                 "index_built": true,
                 "index_format": "hnswlib",
                 "index_path": "outputs/indexes/val_theorem_neighbors.bin",
@@ -2000,79 +2000,79 @@
       "config_hash": "375be84aecb4e7d9",
       "config_matches_current": true,
       "config_path": "configs/proofatlas.yaml",
-      "executed_stage_count": 4,
+      "executed_stage_count": 19,
       "exists": true,
       "expected_config_hash": "375be84aecb4e7d9",
-      "generated_at": "2026-06-20T16:45:55.593158+00:00",
-      "has_skipped_stages": true,
+      "generated_at": "2026-06-20T17:20:52.729952+00:00",
+      "has_skipped_stages": false,
       "passed": true,
       "path": "outputs/reports/pipeline_run_timings.json",
-      "skipped_stage_count": 15,
+      "skipped_stage_count": 0,
       "slowest_stages": [
         {
-          "name": "pipeline_profile",
-          "seconds": 9.943877021083608
+          "name": "evaluate",
+          "seconds": 211.32586570014246
         },
         {
-          "name": "homepage",
-          "seconds": 5.467826904961839
-        },
-        {
-          "name": "audit",
-          "seconds": 0.2670641641598195
-        },
-        {
-          "name": "experiment_report",
-          "seconds": 0.007166214985772967
+          "name": "embed",
+          "seconds": 148.7999888889026
         },
         {
           "name": "sample",
-          "seconds": 0.0
+          "seconds": 81.17169230012223
         },
         {
-          "name": "normalize",
-          "seconds": 0.0
+          "name": "train_ranker",
+          "seconds": 56.34464834118262
         },
         {
-          "name": "build_graph",
-          "seconds": 0.0
-        },
-        {
-          "name": "label_techniques",
-          "seconds": 0.0
+          "name": "augment_graph",
+          "seconds": 50.875686620827764
         },
         {
           "name": "compute_difficulty",
-          "seconds": 0.0
+          "seconds": 48.20692810206674
         },
         {
-          "name": "premise_trace_supervision",
-          "seconds": 0.0
+          "name": "normalize",
+          "seconds": 43.35425694216974
+        },
+        {
+          "name": "validate",
+          "seconds": 37.552581324009225
+        },
+        {
+          "name": "build_graph",
+          "seconds": 17.300741476006806
+        },
+        {
+          "name": "benchmark_index",
+          "seconds": 11.373193778796121
         }
       ],
       "stage_count": 19,
       "stage_seconds": {
-        "audit": 0.2670641641598195,
-        "augment_graph": 0.0,
-        "benchmark_index": 0.0,
-        "build_graph": 0.0,
-        "build_index": 0.0,
-        "compute_difficulty": 0.0,
-        "deployment_security": 0.0,
-        "embed": 0.0,
-        "evaluate": 0.0,
-        "experiment_report": 0.007166214985772967,
-        "homepage": 5.467826904961839,
-        "label_techniques": 0.0,
-        "normalize": 0.0,
-        "pipeline_profile": 9.943877021083608,
-        "premise_trace_supervision": 0.0,
-        "sample": 0.0,
-        "train_difficulty": 0.0,
-        "train_ranker": 0.0,
-        "validate": 0.0
+        "audit": 0.19079405604861677,
+        "augment_graph": 50.875686620827764,
+        "benchmark_index": 11.373193778796121,
+        "build_graph": 17.300741476006806,
+        "build_index": 10.000261679058895,
+        "compute_difficulty": 48.20692810206674,
+        "deployment_security": 0.0006397690158337355,
+        "embed": 148.7999888889026,
+        "evaluate": 211.32586570014246,
+        "experiment_report": 0.007404000964015722,
+        "homepage": 4.932497973088175,
+        "label_techniques": 4.9532018061727285,
+        "normalize": 43.35425694216974,
+        "pipeline_profile": 8.815354706952348,
+        "premise_trace_supervision": 2.381029340205714,
+        "sample": 81.17169230012223,
+        "train_difficulty": 2.5315597800072283,
+        "train_ranker": 56.34464834118262,
+        "validate": 37.552581324009225
       },
-      "total_seconds": 15.690514276968315
+      "total_seconds": 740.1227513239719
     }
   },
   "throughput_profile": {
@@ -2088,47 +2088,47 @@
       "train": 159284,
       "val": 40114
     },
-    "embedding_rows_per_second": 15575.716365061086,
-    "estimated_seconds_at_requested_source_rows": 18.806350413472426,
-    "index_build_seconds_total": 7.234744182555005,
-    "mean_index_speedup_vs_exact": 15.42905823807312,
-    "min_index_recall_vs_exact": 0.9890000000000001,
-    "pipeline_seconds_per_100k_embedding_rows": 6.420250449880853,
-    "pipeline_seconds_per_100k_processed_rows": 5.373242975277836,
-    "processed_rows_per_second": 18610.73479462917,
+    "embedding_rows_per_second": 330.203333923758,
+    "estimated_seconds_at_requested_source_rows": 887.0969787659075,
+    "index_build_seconds_total": 6.437091332161799,
+    "mean_index_speedup_vs_exact": 17.744239287034144,
+    "min_index_recall_vs_exact": 0.9640000000000002,
+    "pipeline_seconds_per_100k_embedding_rows": 302.8437018237054,
+    "pipeline_seconds_per_100k_processed_rows": 253.45627964740214,
+    "processed_rows_per_second": 394.5453635598055,
     "requested_source_rows": 350000,
-    "scale_estimate_reliable": false,
+    "scale_estimate_reliable": true,
     "scale_factor_from_current_to_requested_source_rows": 1.1985808802377984,
-    "slowest_stage": "pipeline_profile",
-    "throughput_basis": "cached_or_partial_pipeline_run",
+    "slowest_stage": "evaluate",
+    "throughput_basis": "executed_pipeline_run",
     "timed_stage_seconds": {
-      "audit": 0.2670641641598195,
-      "augment_graph": 0.0,
-      "benchmark_index": 0.0,
-      "build_graph": 0.0,
-      "build_index": 0.0,
-      "compute_difficulty": 0.0,
-      "deployment_security": 0.0,
-      "embed": 0.0,
-      "evaluate": 0.0,
-      "experiment_report": 0.007166214985772967,
-      "homepage": 5.467826904961839,
-      "label_techniques": 0.0,
-      "normalize": 0.0,
-      "pipeline_profile": 9.943877021083608,
-      "premise_trace_supervision": 0.0,
-      "sample": 0.0,
-      "train_difficulty": 0.0,
-      "train_ranker": 0.0,
-      "validate": 0.0
+      "audit": 0.19079405604861677,
+      "augment_graph": 50.875686620827764,
+      "benchmark_index": 11.373193778796121,
+      "build_graph": 17.300741476006806,
+      "build_index": 10.000261679058895,
+      "compute_difficulty": 48.20692810206674,
+      "deployment_security": 0.0006397690158337355,
+      "embed": 148.7999888889026,
+      "evaluate": 211.32586570014246,
+      "experiment_report": 0.007404000964015722,
+      "homepage": 4.932497973088175,
+      "label_techniques": 4.9532018061727285,
+      "normalize": 43.35425694216974,
+      "pipeline_profile": 8.815354706952348,
+      "premise_trace_supervision": 2.381029340205714,
+      "sample": 81.17169230012223,
+      "train_difficulty": 2.5315597800072283,
+      "train_ranker": 56.34464834118262,
+      "validate": 37.552581324009225
     },
     "timing_config_hash": "375be84aecb4e7d9",
     "timing_config_matches_current": true,
-    "timing_executed_stage_count": 4,
-    "timing_generated_at": "2026-06-20T16:45:55.593158+00:00",
-    "timing_has_skipped_stages": true,
-    "timing_skipped_stage_count": 15,
+    "timing_executed_stage_count": 19,
+    "timing_generated_at": "2026-06-20T17:20:52.729952+00:00",
+    "timing_has_skipped_stages": false,
+    "timing_skipped_stage_count": 0,
     "total_embedding_rows": 244391,
-    "total_pipeline_seconds": 15.690514276968315
+    "total_pipeline_seconds": 740.1227513239719
   }
 }

@@ -1,51 +1,51 @@
 {
   "config_hash": "375be84aecb4e7d9",
   "config_path": "configs/proofatlas.yaml",
-  "executed_stage_count": 4,
-  "generated_at": "2026-06-20T16:45:55.593158+00:00",
-  "has_skipped_stages": true,
+  "executed_stage_count": 19,
+  "generated_at": "2026-06-20T17:20:52.729952+00:00",
+  "has_skipped_stages": false,
   "passed": true,
-  "skipped_stage_count": 15,
+  "skipped_stage_count": 0,
   "slowest_stages": [
     {
-      "name": "pipeline_profile",
-      "seconds": 9.943877021083608
+      "name": "evaluate",
+      "seconds": 211.32586570014246
     },
     {
-      "name": "homepage",
-      "seconds": 5.467826904961839
-    },
-    {
-      "name": "audit",
-      "seconds": 0.2670641641598195
-    },
-    {
-      "name": "experiment_report",
-      "seconds": 0.007166214985772967
+      "name": "embed",
+      "seconds": 148.7999888889026
     },
     {
       "name": "sample",
-      "seconds": 0.0
+      "seconds": 81.17169230012223
     },
     {
-      "name": "normalize",
-      "seconds": 0.0
+      "name": "train_ranker",
+      "seconds": 56.34464834118262
     },
     {
-      "name": "build_graph",
-      "seconds": 0.0
-    },
-    {
-      "name": "label_techniques",
-      "seconds": 0.0
+      "name": "augment_graph",
+      "seconds": 50.875686620827764
     },
     {
       "name": "compute_difficulty",
-      "seconds": 0.0
+      "seconds": 48.20692810206674
     },
     {
-      "name": "premise_trace_supervision",
-      "seconds": 0.0
+      "name": "normalize",
+      "seconds": 43.35425694216974
+    },
+    {
+      "name": "validate",
+      "seconds": 37.552581324009225
+    },
+    {
+      "name": "build_graph",
+      "seconds": 17.300741476006806
+    },
+    {
+      "name": "benchmark_index",
+      "seconds": 11.373193778796121
     }
   ],
   "stage_count": 19,
@@ -54,150 +54,135 @@
       "error": null,
       "name": "sample",
       "order": 1,
-      "reason": "cached_artifacts_present",
-      "seconds": 0.0,
-      "status": "skipped"
+      "seconds": 81.17169230012223,
+      "status": "passed"
     },
     {
       "error": null,
       "name": "normalize",
       "order": 2,
-      "reason": "cached_artifacts_present",
-      "seconds": 0.0,
-      "status": "skipped"
+      "seconds": 43.35425694216974,
+      "status": "passed"
     },
     {
       "error": null,
       "name": "build_graph",
       "order": 3,
-      "reason": "cached_artifacts_present",
-      "seconds": 0.0,
-      "status": "skipped"
+      "seconds": 17.300741476006806,
+      "status": "passed"
     },
     {
       "error": null,
       "name": "label_techniques",
       "order": 4,
-      "reason": "cached_artifacts_present",
-      "seconds": 0.0,
-      "status": "skipped"
+      "seconds": 4.9532018061727285,
+      "status": "passed"
     },
     {
       "error": null,
       "name": "compute_difficulty",
       "order": 5,
-      "reason": "cached_artifacts_present",
-      "seconds": 0.0,
-      "status": "skipped"
+      "seconds": 48.20692810206674,
+      "status": "passed"
     },
     {
       "error": null,
       "name": "premise_trace_supervision",
       "order": 6,
-      "reason": "cached_artifacts_present",
-      "seconds": 0.0,
-      "status": "skipped"
+      "seconds": 2.381029340205714,
+      "status": "passed"
     },
     {
       "error": null,
       "name": "train_difficulty",
       "order": 7,
-      "reason": "cached_artifacts_present",
-      "seconds": 0.0,
-      "status": "skipped"
+      "seconds": 2.5315597800072283,
+      "status": "passed"
     },
     {
       "error": null,
       "name": "embed",
       "order": 8,
-      "reason": "cached_artifacts_present",
-      "seconds": 0.0,
-      "status": "skipped"
+      "seconds": 148.7999888889026,
+      "status": "passed"
     },
     {
       "error": null,
       "name": "build_index",
       "order": 9,
-      "reason": "cached_artifacts_present",
-      "seconds": 0.0,
-      "status": "skipped"
+      "seconds": 10.000261679058895,
+      "status": "passed"
     },
     {
       "error": null,
       "name": "benchmark_index",
       "order": 10,
-      "reason": "cached_artifacts_present",
-      "seconds": 0.0,
-      "status": "skipped"
+      "seconds": 11.373193778796121,
+      "status": "passed"
     },
     {
       "error": null,
       "name": "augment_graph",
       "order": 11,
-      "reason": "cached_artifacts_present",
-      "seconds": 0.0,
-      "status": "skipped"
+      "seconds": 50.875686620827764,
+      "status": "passed"
     },
     {
       "error": null,
       "name": "train_ranker",
       "order": 12,
-      "reason": "cached_artifacts_present",
-      "seconds": 0.0,
-      "status": "skipped"
+      "seconds": 56.34464834118262,
+      "status": "passed"
     },
     {
       "error": null,
       "name": "evaluate",
       "order": 13,
-      "reason": "cached_artifacts_present",
-      "seconds": 0.0,
-      "status": "skipped"
+      "seconds": 211.32586570014246,
+      "status": "passed"
     },
     {
       "error": null,
       "name": "validate",
       "order": 14,
-      "reason": "cached_artifacts_present",
-      "seconds": 0.0,
-      "status": "skipped"
+      "seconds": 37.552581324009225,
+      "status": "passed"
     },
     {
       "error": null,
       "name": "homepage",
       "order": 15,
-      "seconds": 5.467826904961839,
+      "seconds": 4.932497973088175,
       "status": "passed"
     },
     {
       "error": null,
       "name": "deployment_security",
       "order": 16,
-      "reason": "cached_artifacts_present",
-      "seconds": 0.0,
-      "status": "skipped"
+      "seconds": 0.0006397690158337355,
+      "status": "passed"
     },
     {
       "error": null,
       "name": "pipeline_profile",
       "order": 17,
-      "seconds": 9.943877021083608,
+      "seconds": 8.815354706952348,
       "status": "passed"
     },
     {
       "error": null,
       "name": "experiment_report",
       "order": 18,
-      "seconds": 0.007166214985772967,
+      "seconds": 0.007404000964015722,
       "status": "passed"
     },
     {
       "error": null,
       "name": "audit",
       "order": 19,
-      "seconds": 0.2670641641598195,
+      "seconds": 0.19079405604861677,
       "status": "passed"
     }
   ],
-  "total_seconds": 15.690514276968315
+  "total_seconds": 740.1227513239719
 }

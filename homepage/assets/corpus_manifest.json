@@ -1,9 +1,9 @@
 {
-  "config_hash": "30f1b8ab4273d20c",
+  "config_hash": "375be84aecb4e7d9",
   "config_path": "configs/proofatlas.yaml",
   "corpus": {
     "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
-    "extraction_config_hash": "3dd7ecf53cc1215c",
+    "extraction_config_hash": "3e8f863899afdf6c",
     "extraction_pipeline": "LeanRank Hugging Face dataset",
     "lean_version": "unknown",
     "mathlib_commit": "unknown",

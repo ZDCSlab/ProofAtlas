@@ -296,62 +296,62 @@
       "path": "outputs/graph/val/nodes_enriched.parquet"
     },
     "index:demo:premise": {
-      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.028483940055593848",
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.023276258958503604",
       "passed": true,
       "path": "outputs/indexes/demo_premise_neighbors.bin"
     },
     "index:demo:proof_state": {
-      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.0885496421251446",
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.0884882090613246",
       "passed": true,
       "path": "outputs/indexes/demo_proof_state_neighbors.bin"
     },
     "index:demo:theorem": {
-      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.01577346003614366",
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.015230056131258607",
       "passed": true,
       "path": "outputs/indexes/demo_theorem_neighbors.bin"
     },
     "index:test:premise": {
-      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.9094658591784537",
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.820566161070019",
       "passed": true,
       "path": "outputs/indexes/test_premise_neighbors.bin"
     },
     "index:test:proof_state": {
-      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.04700329294428229",
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.04799045203253627",
       "passed": true,
       "path": "outputs/indexes/test_proof_state_neighbors.bin"
     },
     "index:test:theorem": {
-      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.08902867999859154",
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.08974525216035545",
       "passed": true,
       "path": "outputs/indexes/test_theorem_neighbors.bin"
     },
     "index:train:premise": {
-      "detail": "backend=hnswlib; format=hnswlib; build_seconds=4.374131576856598",
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=3.7882019449025393",
       "passed": true,
       "path": "outputs/indexes/train_premise_neighbors.bin"
     },
     "index:train:proof_state": {
-      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.5842231891583651",
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.4042325969785452",
       "passed": true,
       "path": "outputs/indexes/train_proof_state_neighbors.bin"
     },
     "index:train:theorem": {
-      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.14043334708549082",
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.1337511648889631",
       "passed": true,
       "path": "outputs/indexes/train_theorem_neighbors.bin"
     },
     "index:val:premise": {
-      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.8127631039824337",
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.8773755449801683",
       "passed": true,
       "path": "outputs/indexes/val_premise_neighbors.bin"
     },
     "index:val:proof_state": {
-      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.05399951501749456",
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.05334093701094389",
       "passed": true,
       "path": "outputs/indexes/val_proof_state_neighbors.bin"
     },
     "index:val:theorem": {
-      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.09088857611641288",
+      "detail": "backend=hnswlib; format=hnswlib; build_seconds=0.09489275398664176",
       "passed": true,
       "path": "outputs/indexes/val_theorem_neighbors.bin"
     },
@@ -716,7 +716,7 @@
       "path": "outputs/reports/artifact_compatibility_report.json"
     },
     "validation:corpus_manifest": {
-      "detail": "corpus_manifest={'source_kind': 'huggingface', 'data_supervision': 'leanrank_proof_state_rows', 'config_hash': '30f1b8ab4273d20c', 'corpus_version': 'erbacher/LeanRank-data@erbacher/LeanRank-data', 'extraction_config_hash': '3dd7ecf53cc1215c', 'splits': ['test', 'train', 'val']}",
+      "detail": "corpus_manifest={'source_kind': 'huggingface', 'data_supervision': 'leanrank_proof_state_rows', 'config_hash': '375be84aecb4e7d9', 'corpus_version': 'erbacher/LeanRank-data@erbacher/LeanRank-data', 'extraction_config_hash': '3e8f863899afdf6c', 'splits': ['test', 'train', 'val']}",
       "passed": true,
       "path": "outputs/reports/corpus_manifest.json"
     },
@@ -726,7 +726,7 @@
       "path": "docs/proofatlas_deployment_guide.md"
     },
     "validation:deployment_security_review": {
-      "detail": "deployment_security={'passed': True, 'failures': [], 'warnings': ['readiness_gated_startup'], 'public_exposure_ready': False}",
+      "detail": "deployment_security={'passed': True, 'failures': [], 'warnings': ['readiness_gated_startup', 'retrieval_warmup_enabled'], 'public_exposure_ready': False}",
       "passed": true,
       "path": "outputs/reports/deployment_security_review.json"
     },
@@ -746,7 +746,7 @@
       "path": "outputs/reports/graph_validation_summary.json"
     },
     "validation:graph_visualization": {
-      "detail": "graph_sample={'nodes': 40, 'edges': 80}",
+      "detail": "graph_sample={'nodes': 40, 'edges': 78}",
       "passed": true,
       "path": "homepage/assets/graph_visualization.json"
     },
@@ -756,22 +756,22 @@
       "path": "homepage/index.html"
     },
     "validation:index_benchmark": {
-      "detail": "index_benchmark={'premise': {'backend': 'hnswlib', 'indexed_available': True, 'exact_ms_per_query': 69.12065093871206, 'indexed_ms_per_query': 3.773068960290402}, 'proof_state': {'backend': 'hnswlib', 'indexed_available': True, 'exact_ms_per_query': 12.772339859511703, 'indexed_ms_per_query': 0.840118310879916}, 'theorem': {'backend': 'hnswlib', 'indexed_available': True, 'exact_ms_per_query': 4.08946119947359, 'indexed_ms_per_query': 0.3203733800910413}}",
+      "detail": "index_benchmark={'premise': {'backend': 'hnswlib', 'indexed_available': True, 'exact_ms_per_query': 69.27173835923895, 'indexed_ms_per_query': 3.4585403418168426}, 'proof_state': {'backend': 'hnswlib', 'indexed_available': True, 'exact_ms_per_query': 12.735097410622984, 'indexed_ms_per_query': 0.8292262186296284}, 'theorem': {'backend': 'hnswlib', 'indexed_available': True, 'exact_ms_per_query': 4.227494958322495, 'indexed_ms_per_query': 0.2368911704979837}}",
       "passed": true,
       "path": "outputs/reports/index_benchmark.json"
     },
     "validation:index_summary": {
-      "detail": "index_summary={'backend': 'hnswlib', 'metric': 'cosine', 'corpus': {'corpus_version': 'erbacher/LeanRank-data@erbacher/LeanRank-data', 'extraction_config_hash': '3dd7ecf53cc1215c', 'mathlib_commit': 'unknown', 'source_revision': 'erbacher/LeanRank-data'}, 'splits': ['demo', 'test', 'train', 'val']}",
+      "detail": "index_summary={'backend': 'hnswlib', 'metric': 'cosine', 'corpus': {'corpus_version': 'erbacher/LeanRank-data@erbacher/LeanRank-data', 'extraction_config_hash': '3e8f863899afdf6c', 'mathlib_commit': 'unknown', 'source_revision': 'erbacher/LeanRank-data'}, 'splits': ['demo', 'test', 'train', 'val']}",
       "passed": true,
       "path": "outputs/indexes/index_summary.json"
     },
     "validation:pipeline_performance_report": {
-      "detail": "pipeline_performance={'dataset_name': 'erbacher/LeanRank-data', 'scale_profile': {'ann_backend_availability': {'faiss': False, 'hnswlib': True, 'lancedb': False}, 'current_total_split_rows': 292012, 'dataset_name': 'erbacher/LeanRank-data', 'embedding_backend': 'sentence_transformers', 'embedding_device': 'cuda', 'embedding_devices': ['cuda:0', 'cuda:1', 'cuda:2', 'cuda:3', 'cuda:4', 'cuda:5', 'cuda:6'], 'index_backend': 'hnswlib', 'leanrank_premise_supervision_ready': True, 'requested_rows': 60000, 'requested_theorems': 10000, 'scale_bucket': 'large', 'source_rows': 350000, 'target_dataset_confirmed': True}, 'recommendations': [{'area': 'performance_timing', 'priority': 'high', 'recommendation': 'Refresh pipeline timings with a non-cached production run before using throughput numbers for scale-up planning. Run `make refresh-production-report` after a full `leanrank-kg full-pipeline --config configs/proofatlas.yaml --force` timing pass, or keep the current throughput fields marked as cached/partial diagnostics only.'}], 'stage_keys': ['benchmark', 'embeddings', 'evaluation', 'graph', 'indexes', 'processed', 'readiness', 'sample', 'timings']}",
+      "detail": "pipeline_performance={'dataset_name': 'erbacher/LeanRank-data', 'scale_profile': {'ann_backend_availability': {'faiss': False, 'hnswlib': True, 'lancedb': False}, 'current_total_split_rows': 292012, 'dataset_name': 'erbacher/LeanRank-data', 'embedding_backend': 'sentence_transformers', 'embedding_device': 'cuda', 'embedding_devices': ['cuda:0', 'cuda:1', 'cuda:2', 'cuda:3', 'cuda:4', 'cuda:5', 'cuda:6'], 'index_backend': 'hnswlib', 'leanrank_premise_supervision_ready': True, 'requested_rows': 60000, 'requested_theorems': 10000, 'scale_bucket': 'large', 'source_rows': 350000, 'target_dataset_confirmed': True}, 'recommendations': [{'area': 'monitoring', 'priority': 'low', 'recommendation': 'Keep this profile report as the baseline and compare it after every larger LeanRank-data refresh.'}], 'stage_keys': ['benchmark', 'embeddings', 'evaluation', 'graph', 'indexes', 'processed', 'readiness', 'sample', 'timings']}",
       "passed": true,
       "path": "outputs/reports/pipeline_performance_report.json"
     },
     "validation:pipeline_run_timings": {
-      "detail": "pipeline_run_timings={'passed': True, 'total_seconds': 15.690514276968315, 'stage_count': 19, 'stages': ['sample', 'normalize', 'build_graph', 'label_techniques', 'compute_difficulty', 'premise_trace_supervision', 'train_difficulty', 'embed', 'build_index', 'benchmark_index', 'augment_graph', 'train_ranker', 'evaluate', 'validate', 'homepage', 'deployment_security', 'pipeline_profile', 'experiment_report', 'audit']}",
+      "detail": "pipeline_run_timings={'passed': True, 'total_seconds': 740.1227513239719, 'stage_count': 19, 'stages': ['sample', 'normalize', 'build_graph', 'label_techniques', 'compute_difficulty', 'premise_trace_supervision', 'train_difficulty', 'embed', 'build_index', 'benchmark_index', 'augment_graph', 'train_ranker', 'evaluate', 'validate', 'homepage', 'deployment_security', 'pipeline_profile', 'experiment_report', 'audit']}",
       "passed": true,
       "path": "outputs/reports/pipeline_run_timings.json"
     },
@@ -791,7 +791,7 @@
       "path": "outputs/reports/refresh_dashboard.json"
     },
     "validation:refresh_history": {
-      "detail": "refresh_history={'entry_count': 19, 'history_limit': 20}",
+      "detail": "refresh_history={'entry_count': 20, 'history_limit': 20}",
       "passed": true,
       "path": "outputs/reports/refresh_history.json"
     },
