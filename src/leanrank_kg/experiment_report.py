@@ -182,6 +182,7 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     held_out_test_coverage = evaluation_profile.get("held_out_test_coverage", {}) if isinstance(evaluation_profile, dict) else {}
     recommendations = pipeline.get("recommendations", [])
     throughput = pipeline.get("throughput_profile", {}) if isinstance(pipeline, dict) else {}
+    bottleneck_profile = throughput.get("bottleneck_profile", {}) if isinstance(throughput, dict) else {}
     bench_entities = benchmark.get("entities", {}) if isinstance(benchmark, dict) else {}
     actual_backend_info = evaluation_scope.get("actual_backend_info", {}) if isinstance(evaluation_scope, dict) else {}
     actual_proof_backend = actual_backend_info.get("proof_state", {}).get("test", {}).get("actual_backend", "n/a")
@@ -487,9 +488,22 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
             f"- Processed rows/sec: `{throughput.get('processed_rows_per_second', 'n/a')}`",
             f"- Pipeline seconds per 100k processed rows: `{throughput.get('pipeline_seconds_per_100k_processed_rows', 'n/a')}`",
             f"- Slowest timed stage: `{throughput.get('slowest_stage', 'n/a')}`",
+            f"- Primary bottleneck share: `{bottleneck_profile.get('primary_stage_share_of_total', 'n/a')}`",
+            f"- Top-3 timed-stage share: `{bottleneck_profile.get('top3_stage_share_of_total', 'n/a')}`",
             f"- Mean index speedup vs exact: `{throughput.get('mean_index_speedup_vs_exact', 'n/a')}`",
             f"- Minimum index recall vs exact: `{throughput.get('min_index_recall_vs_exact', 'n/a')}`",
             f"- Estimated seconds at requested source rows: `{throughput.get('estimated_seconds_at_requested_source_rows', 'n/a')}`",
+            "",
+            "| Bottleneck stage | Seconds | Share of total |",
+            "| --- | ---: | ---: |",
+        ]
+    )
+    for row in bottleneck_profile.get("top_stages", [])[:5]:
+        lines.append(f"| `{row.get('name')}` | {_fmt(row.get('seconds'))} | {_fmt(row.get('share_of_total'))} |")
+    if not bottleneck_profile.get("top_stages"):
+        lines.append("| n/a | n/a | n/a |")
+    lines.extend(
+        [
             "",
             "## Recommendations",
             "",

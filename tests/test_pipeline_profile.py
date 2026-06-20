@@ -96,7 +96,11 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
     assert report["throughput_profile"]["timing_config_matches_current"] is True
     assert report["throughput_profile"]["throughput_basis"] == "executed_pipeline_run"
     assert report["throughput_profile"]["scale_estimate_reliable"] is True
+    assert report["throughput_profile"]["bottleneck_profile"]["primary_stage"] == "evaluate"
+    assert report["throughput_profile"]["bottleneck_profile"]["primary_stage_share_of_total"] == 0.3
+    assert report["throughput_profile"]["bottleneck_profile"]["top3_stage_share_of_total"] == 0.3
     assert any(row["area"] == "indexing" for row in report["recommendations"])
+    assert any(row["area"] == "pipeline_bottleneck" for row in report["recommendations"])
     assert (tmp_path / "outputs/reports/pipeline_performance_report.json").exists()
 
 
@@ -188,6 +192,7 @@ def test_pipeline_profile_recommends_full_timing_for_cached_runs(tmp_path, monke
 
     assert report["throughput_profile"]["throughput_basis"] == "cached_or_partial_pipeline_run"
     assert report["throughput_profile"]["scale_estimate_reliable"] is False
+    assert report["throughput_profile"]["bottleneck_profile"]["primary_stage"] == "homepage"
     assert report["stages"]["evaluation"]["held_out_test_coverage"]["proof_state_coverage_fraction"] == 0.25
     assert report["stages"]["evaluation"]["held_out_test_coverage"]["theorem_coverage_fraction"] == 0.25
     assert any(row["area"] == "performance_timing" and row["priority"] == "high" for row in report["recommendations"])

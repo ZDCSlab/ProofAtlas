@@ -417,13 +417,23 @@ The current ranking labels come from normalized LeanRank-data premise supervisio
 - Processed rows/sec: `394.5453635598055`
 - Pipeline seconds per 100k processed rows: `253.45627964740214`
 - Slowest timed stage: `evaluate`
+- Primary bottleneck share: `0.28552813073522093`
+- Top-3 timed-stage share: `0.5962491304310673`
 - Mean index speedup vs exact: `17.744239287034144`
 - Minimum index recall vs exact: `0.9640000000000002`
 - Estimated seconds at requested source rows: `887.0969787659075`
 
+| Bottleneck stage | Seconds | Share of total |
+| --- | ---: | ---: |
+| `evaluate` | 211.3259 | 0.2855 |
+| `embed` | 148.8000 | 0.2010 |
+| `sample` | 81.1717 | 0.1097 |
+| `train_ranker` | 56.3446 | 0.0761 |
+| `augment_graph` | 50.8757 | 0.0687 |
+
 ## Recommendations
 
-- `low` `monitoring`: Keep this profile report as the baseline and compare it after every larger LeanRank-data refresh.
+- `medium` `pipeline_bottleneck`: Evaluation is the current largest timed bottleneck. Keep full held-out metrics for final claims, but use sampled evaluation during development and prioritize batched/vectorized scoring or parallel domain shards before scaling evaluation further.
 
 ## Interpretation
 

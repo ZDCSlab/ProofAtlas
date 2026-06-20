@@ -98,6 +98,12 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                 "processed_rows_per_second": 1000.0,
                 "pipeline_seconds_per_100k_processed_rows": 100.0,
                 "slowest_stage": "evaluate",
+                "bottleneck_profile": {
+                    "primary_stage": "evaluate",
+                    "primary_stage_share_of_total": 0.4,
+                    "top3_stage_share_of_total": 0.4,
+                    "top_stages": [{"name": "evaluate", "seconds": 5.0, "share_of_total": 0.4}],
+                },
                 "mean_index_speedup_vs_exact": 12.5,
                 "min_index_recall_vs_exact": 0.98,
                 "estimated_seconds_at_requested_source_rows": 350.0,
@@ -183,6 +189,9 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "Scale estimate reliable" in text
     assert "LeanRank premise supervision ready" in text
     assert "Total embedding rows" in text
+    assert "Primary bottleneck share" in text
+    assert "Top-3 timed-stage share" in text
+    assert "Bottleneck stage" in text
     assert "ANN Index Benchmark" in text
     assert "Recall@1 vs exact" in text
     assert "Top1 match@10" in text

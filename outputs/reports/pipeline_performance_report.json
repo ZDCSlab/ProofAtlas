@@ -5,9 +5,9 @@
   "project_name": "ProofAtlas",
   "recommendations": [
     {
-      "area": "monitoring",
-      "priority": "low",
-      "recommendation": "Keep this profile report as the baseline and compare it after every larger LeanRank-data refresh."
+      "area": "pipeline_bottleneck",
+      "priority": "medium",
+      "recommendation": "Evaluation is the current largest timed bottleneck. Keep full held-out metrics for final claims, but use sampled evaluation during development and prioritize batched/vectorized scoring or parallel domain shards before scaling evaluation further."
     }
   ],
   "scale_profile": {
@@ -2076,6 +2076,40 @@
     }
   },
   "throughput_profile": {
+    "bottleneck_profile": {
+      "primary_stage": "evaluate",
+      "primary_stage_seconds": 211.32586570014246,
+      "primary_stage_share_of_total": 0.28552813073522093,
+      "top3_stage_seconds": 441.2975468891673,
+      "top3_stage_share_of_total": 0.5962491304310673,
+      "top_stages": [
+        {
+          "name": "evaluate",
+          "seconds": 211.32586570014246,
+          "share_of_total": 0.28552813073522093
+        },
+        {
+          "name": "embed",
+          "seconds": 148.7999888889026,
+          "share_of_total": 0.20104771623723372
+        },
+        {
+          "name": "sample",
+          "seconds": 81.17169230012223,
+          "share_of_total": 0.10967328345861262
+        },
+        {
+          "name": "train_ranker",
+          "seconds": 56.34464834118262,
+          "share_of_total": 0.07612878842109669
+        },
+        {
+          "name": "augment_graph",
+          "seconds": 50.875686620827764,
+          "share_of_total": 0.06873952534200382
+        }
+      ]
+    },
     "embedding_matrix_bytes": 684695627,
     "embedding_rows_by_entity": {
       "premise": 203601,

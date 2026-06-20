@@ -376,6 +376,27 @@ def _throughput_profile(sample: dict[str, Any], embeddings: dict[str, Any], inde
     ]
     slowest = timings.get("slowest_stages", []) if isinstance(timings.get("slowest_stages"), list) else []
     bottleneck = slowest[0].get("name") if slowest and isinstance(slowest[0], dict) else None
+    bottleneck_rows = []
+    for row in slowest[:5]:
+        if not isinstance(row, dict):
+            continue
+        seconds = float(row.get("seconds") or 0.0)
+        bottleneck_rows.append(
+            {
+                "name": row.get("name"),
+                "seconds": seconds,
+                "share_of_total": (seconds / total_seconds) if total_seconds > 0 else None,
+            }
+        )
+    top3_seconds = sum(row["seconds"] for row in bottleneck_rows[:3])
+    bottleneck_profile = {
+        "primary_stage": bottleneck,
+        "primary_stage_seconds": bottleneck_rows[0]["seconds"] if bottleneck_rows else None,
+        "primary_stage_share_of_total": bottleneck_rows[0]["share_of_total"] if bottleneck_rows else None,
+        "top3_stage_seconds": top3_seconds if bottleneck_rows else None,
+        "top3_stage_share_of_total": (top3_seconds / total_seconds) if total_seconds > 0 and bottleneck_rows else None,
+        "top_stages": bottleneck_rows,
+    }
 
     def _per_100k(rows: int) -> float | None:
         if total_seconds <= 0 or rows <= 0:
@@ -404,6 +425,7 @@ def _throughput_profile(sample: dict[str, Any], embeddings: dict[str, Any], inde
         "pipeline_seconds_per_100k_embedding_rows": _per_100k(embedding_rows),
         "timed_stage_seconds": stage_seconds,
         "slowest_stage": bottleneck,
+        "bottleneck_profile": bottleneck_profile,
         "index_build_seconds_total": index_build_seconds,
         "mean_index_speedup_vs_exact": (sum(speedups) / len(speedups)) if speedups else None,
         "min_index_recall_vs_exact": min(recalls) if recalls else None,
@@ -480,6 +502,31 @@ def _recommendations(
                     "Run `make refresh-production-report` after a full `leanrank-kg full-pipeline --config configs/proofatlas.yaml --force` timing pass, "
                     "or keep the current throughput fields marked as cached/partial diagnostics only."
                 ),
+            }
+        )
+    bottleneck_profile = throughput.get("bottleneck_profile") or {}
+    primary_share = bottleneck_profile.get("primary_stage_share_of_total")
+    if primary_share is not None and primary_share >= 0.2:
+        primary_stage = bottleneck_profile.get("primary_stage")
+        if primary_stage == "evaluate":
+            recommendation = (
+                "Evaluation is the current largest timed bottleneck. Keep full held-out metrics for final claims, "
+                "but use sampled evaluation during development and prioritize batched/vectorized scoring or parallel domain shards before scaling evaluation further."
+            )
+        elif primary_stage == "embed":
+            recommendation = (
+                "Embedding is the current largest timed bottleneck. Reuse cached embeddings when training/reranking only, "
+                "and keep multi-GPU sentence-transformer encoding enabled for larger LeanRank-data refreshes."
+            )
+        else:
+            recommendation = (
+                f"`{primary_stage}` is the current largest timed bottleneck. Inspect this stage before scaling the LeanRank-data refresh further."
+            )
+        recommendations.append(
+            {
+                "priority": "medium",
+                "area": "pipeline_bottleneck",
+                "recommendation": recommendation,
             }
         )
     evaluation_scope = (evaluation.get("test_set_evaluation") or {}).get("evaluation_scope", {})
