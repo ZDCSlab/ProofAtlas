@@ -193,6 +193,7 @@ The two final presentation artifacts are:
 
 - `homepage/index.html` for the knowledge graph visualization and new-theorem proof guidance demo.
 - `outputs/reports/experiment_report.md` for the held-out test-set ML ranking/retrieval results.
+- `docs/proofatlas_delivery_audit.md` for the artifact/evidence audit and remaining gaps.
 
 For a local interactive retrieval endpoint:
 
