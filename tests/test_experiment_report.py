@@ -431,6 +431,33 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                         },
                     ],
                 },
+                "lean_diagnostic_acceptance_profile": {
+                    "scope": "query-time Lean unsolved-goals diagnostic proof-state extraction",
+                    "summary": {
+                        "required_gates_passed": True,
+                        "advisory_gates_passed": True,
+                        "passed_gate_count": 8,
+                        "total_gate_count": 8,
+                        "required_gate_count": 6,
+                        "advisory_gate_count": 2,
+                    },
+                    "gates": [
+                        {
+                            "name": "ordered_tactic_state_trace",
+                            "severity": "required",
+                            "passed": True,
+                            "value": {"has_multi_state_tactic_trace_case": True},
+                            "threshold": "trace counts match and at least one multi-state trace case exists",
+                        },
+                        {
+                            "name": "query_time_only_scope",
+                            "severity": "required",
+                            "passed": True,
+                            "value": "optional query diagnostics only; not a corpus extractor and not part of the default LeanRank-data pipeline",
+                            "threshold": "query-time diagnostics only; not a LeanRank-data corpus extractor",
+                        },
+                    ],
+                },
                 "scale_projection_profile": {
                     "method": "linear_projection_from_current_timed_pipeline",
                     "scale_estimate_reliable": True,
@@ -724,6 +751,9 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "Query-Time Lean Diagnostics" in text
     assert "ordered tactic-state trace" in text
     assert "Has ordered tactic-state trace case: `True`" in text
+    assert "Lean Diagnostic Acceptance Gates" in text
+    assert "ordered_tactic_state_trace" in text
+    assert "query_time_only_scope" in text
     assert "not a corpus extractor" in text
     assert "hnswlib parameters" in text
     assert "CPU/IO-Heavy Stages" in text

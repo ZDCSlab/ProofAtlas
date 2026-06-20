@@ -1,4 +1,79 @@
 {
+  "acceptance_profile": {
+    "gates": [
+      {
+        "name": "diagnostic_cases_passed",
+        "passed": true,
+        "severity": "required",
+        "threshold": "all fixture diagnostic extraction cases pass",
+        "value": {
+          "case_count": 7,
+          "passed_case_count": 7
+        }
+      },
+      {
+        "name": "proof_states_extracted",
+        "passed": true,
+        "severity": "required",
+        "threshold": ">0 extracted proof states",
+        "value": 8
+      },
+      {
+        "name": "retrieval_text_present",
+        "passed": true,
+        "severity": "required",
+        "threshold": "all extracted proof states have retrieval text",
+        "value": true
+      },
+      {
+        "name": "ordered_tactic_state_trace",
+        "passed": true,
+        "severity": "required",
+        "threshold": "trace counts match and at least one multi-state trace case exists",
+        "value": {
+          "all_tactic_trace_counts_match": true,
+          "has_multi_state_tactic_trace_case": true
+        }
+      },
+      {
+        "name": "initial_goal_skeleton",
+        "passed": true,
+        "severity": "required",
+        "threshold": "theorem/lemma/example statement can be checked as temporary := by skeleton",
+        "value": true
+      },
+      {
+        "name": "timeout_stderr_extraction",
+        "passed": true,
+        "severity": "advisory",
+        "threshold": "timeout stderr unsolved-goal diagnostics remain parseable",
+        "value": true
+      },
+      {
+        "name": "failure_explanation",
+        "passed": true,
+        "severity": "advisory",
+        "threshold": "malformed diagnostics report a failure reason",
+        "value": true
+      },
+      {
+        "name": "query_time_only_scope",
+        "passed": true,
+        "severity": "required",
+        "threshold": "query-time diagnostics only; not a LeanRank-data corpus extractor",
+        "value": "optional query diagnostics only; not a corpus extractor and not part of the default LeanRank-data pipeline"
+      }
+    ],
+    "scope": "query-time Lean unsolved-goals diagnostic proof-state extraction",
+    "summary": {
+      "advisory_gate_count": 2,
+      "advisory_gates_passed": true,
+      "passed_gate_count": 8,
+      "required_gate_count": 6,
+      "required_gates_passed": true,
+      "total_gate_count": 8
+    }
+  },
   "case_count": 7,
   "cases": [
     {

@@ -185,6 +185,27 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
             }
         },
     )
+    write_json(
+        "outputs/reports/lean_diagnostic_extraction_report.json",
+        {
+            "scope": "query-time Lean unsolved-goals diagnostic proof-state extraction",
+            "production_pipeline_role": "optional query diagnostics only; not a corpus extractor and not part of the default LeanRank-data pipeline",
+            "method": "lean_unsolved_goals_diagnostic",
+            "case_count": 7,
+            "passed_case_count": 7,
+            "total_extracted_proof_states": 8,
+            "quality_checks": {
+                "all_cases_passed": True,
+                "has_successful_extraction_case": True,
+                "has_failure_explanation_case": True,
+                "has_timeout_stderr_extraction_case": True,
+                "has_initial_goal_skeleton_case": True,
+                "all_extracted_states_have_retrieval_text": True,
+                "all_tactic_trace_counts_match": True,
+                "has_multi_state_tactic_trace_case": True,
+            },
+        },
+    )
     (tmp_path / "data/processed/test").mkdir(parents=True)
     write_parquet(pd.DataFrame({"proof_state_id": [f"ps{i}" for i in range(10)]}), "data/processed/test/proof_states.parquet")
     write_parquet(pd.DataFrame({"theorem_id": [f"thm{i}" for i in range(5)]}), "data/processed/test/theorems.parquet")
@@ -249,6 +270,10 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
     assert supervision_acceptance["summary"]["advisory_gates_passed"] is True
     assert supervision_acceptance["label_conflicts_removed"] == 1
     assert next(row for row in supervision_acceptance["gates"] if row["name"] == "hard_negative_pair_evidence")["passed"] is True
+    lean_acceptance = report["throughput_profile"]["lean_diagnostic_acceptance_profile"]
+    assert lean_acceptance["summary"]["required_gates_passed"] is True
+    assert lean_acceptance["summary"]["advisory_gates_passed"] is True
+    assert next(row for row in lean_acceptance["gates"] if row["name"] == "ordered_tactic_state_trace")["passed"] is True
     uncertainty = report["throughput_profile"]["metric_uncertainty_profile"]
     assert uncertainty["confidence_level"] == 0.95
     assert uncertainty["proof_state"]["Recall@10"]["n"] == 10

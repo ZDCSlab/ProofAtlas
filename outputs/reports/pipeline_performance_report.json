@@ -3860,6 +3860,102 @@
         "path": "outputs/reports/artifact_compatibility_report.json",
         "warnings": []
       },
+      "lean_diagnostic_extraction": {
+        "acceptance_profile": {
+          "gates": [
+            {
+              "name": "diagnostic_cases_passed",
+              "passed": true,
+              "severity": "required",
+              "threshold": "all fixture diagnostic extraction cases pass",
+              "value": {
+                "case_count": 7,
+                "passed_case_count": 7
+              }
+            },
+            {
+              "name": "proof_states_extracted",
+              "passed": true,
+              "severity": "required",
+              "threshold": ">0 extracted proof states",
+              "value": 8
+            },
+            {
+              "name": "retrieval_text_present",
+              "passed": true,
+              "severity": "required",
+              "threshold": "all extracted proof states have retrieval text",
+              "value": true
+            },
+            {
+              "name": "ordered_tactic_state_trace",
+              "passed": true,
+              "severity": "required",
+              "threshold": "trace counts match and at least one multi-state trace case exists",
+              "value": {
+                "all_tactic_trace_counts_match": true,
+                "has_multi_state_tactic_trace_case": true
+              }
+            },
+            {
+              "name": "initial_goal_skeleton",
+              "passed": true,
+              "severity": "required",
+              "threshold": "theorem/lemma/example statement can be checked as temporary := by skeleton",
+              "value": true
+            },
+            {
+              "name": "timeout_stderr_extraction",
+              "passed": true,
+              "severity": "advisory",
+              "threshold": "timeout stderr unsolved-goal diagnostics remain parseable",
+              "value": true
+            },
+            {
+              "name": "failure_explanation",
+              "passed": true,
+              "severity": "advisory",
+              "threshold": "malformed diagnostics report a failure reason",
+              "value": true
+            },
+            {
+              "name": "query_time_only_scope",
+              "passed": true,
+              "severity": "required",
+              "threshold": "query-time diagnostics only; not a LeanRank-data corpus extractor",
+              "value": "optional query diagnostics only; not a corpus extractor and not part of the default LeanRank-data pipeline"
+            }
+          ],
+          "scope": "query-time Lean unsolved-goals diagnostic proof-state extraction",
+          "summary": {
+            "advisory_gate_count": 2,
+            "advisory_gates_passed": true,
+            "passed_gate_count": 8,
+            "required_gate_count": 6,
+            "required_gates_passed": true,
+            "total_gate_count": 8
+          }
+        },
+        "case_count": 7,
+        "exists": true,
+        "method": "lean_unsolved_goals_diagnostic",
+        "passed_case_count": 7,
+        "path": "outputs/reports/lean_diagnostic_extraction_report.json",
+        "production_pipeline_role": "optional query diagnostics only; not a corpus extractor and not part of the default LeanRank-data pipeline",
+        "quality_checks": {
+          "all_cases_passed": true,
+          "all_extracted_states_have_retrieval_text": true,
+          "all_tactic_trace_counts_match": true,
+          "has_adjacent_goal_split_case": true,
+          "has_failure_explanation_case": true,
+          "has_initial_goal_skeleton_case": true,
+          "has_multi_state_tactic_trace_case": true,
+          "has_successful_extraction_case": true,
+          "has_timeout_stderr_extraction_case": true
+        },
+        "scope": "query-time Lean unsolved-goals diagnostic proof-state extraction",
+        "total_extracted_proof_states": 8
+      },
       "premise_trace_supervision": {
         "current_artifact_supervision": {
           "has_negative_candidate_hardness": true,
@@ -4446,7 +4542,7 @@
         "outputs/reports",
         "homepage/assets"
       ],
-      "bytes_per_processed_row": 10454.015119241674,
+      "bytes_per_processed_row": 10454.110070819008,
       "directories": {
         "data/processed": {
           "bytes": 46533700,
@@ -4455,7 +4551,7 @@
           "path": "data/processed"
         },
         "homepage/assets": {
-          "bytes": 2054962,
+          "bytes": 2054936,
           "exists": true,
           "file_count": 11,
           "path": "homepage/assets"
@@ -4473,7 +4569,7 @@
           "path": "outputs/indexes"
         },
         "outputs/reports": {
-          "bytes": 19266962,
+          "bytes": 19294715,
           "exists": true,
           "file_count": 39,
           "path": "outputs/reports"
@@ -4529,36 +4625,36 @@
       ],
       "projections": [
         {
-          "estimated_artifact_bytes": 3052697863.0,
-          "estimated_artifact_gib": 2.8430464332923293,
+          "estimated_artifact_bytes": 3052725590.0,
+          "estimated_artifact_gib": 2.8430722560733557,
           "label": "current_1x",
           "scale_factor_vs_current": 1.0,
           "target_processed_rows": 292012
         },
         {
-          "estimated_artifact_bytes": 6105395726.0,
-          "estimated_artifact_gib": 5.686092866584659,
+          "estimated_artifact_bytes": 6105451180.0,
+          "estimated_artifact_gib": 5.686144512146711,
           "label": "current_2x",
           "scale_factor_vs_current": 2.0,
           "target_processed_rows": 584024
         },
         {
-          "estimated_artifact_bytes": 15263489315.0,
-          "estimated_artifact_gib": 14.215232166461647,
+          "estimated_artifact_bytes": 15263627950.0,
+          "estimated_artifact_gib": 14.215361280366778,
           "label": "current_5x",
           "scale_factor_vs_current": 5.0,
           "target_processed_rows": 1460060
         },
         {
-          "estimated_artifact_bytes": 3658905291.7345862,
-          "estimated_artifact_gib": 3.4076210965724534,
+          "estimated_artifact_bytes": 3658938524.7866526,
+          "estimated_artifact_gib": 3.407652047264066,
           "label": "configured_source_rows",
           "scale_factor_vs_current": 1.1985808802377984,
           "target_processed_rows": 350000
         }
       ],
-      "total_artifact_bytes": 3052697863,
-      "total_artifact_gib": 2.8430464332923293,
+      "total_artifact_bytes": 3052725590,
+      "total_artifact_gib": 2.8430722560733557,
       "unreferenced_index_artifact_bytes": 1502501178,
       "unreferenced_index_artifact_count": 12,
       "unreferenced_index_artifact_gib": 1.3993132654577494,
@@ -4753,6 +4849,81 @@
       "ranker_retrain_policy": "Do not retrain by default. Reuse embeddings, indexes, and trained models for report/homepage refreshes; rerun ranker training only after ranker feature, label, split, or relevant config changes."
     },
     "index_build_seconds_total": 6.329337501898408,
+    "lean_diagnostic_acceptance_profile": {
+      "gates": [
+        {
+          "name": "diagnostic_cases_passed",
+          "passed": true,
+          "severity": "required",
+          "threshold": "all fixture diagnostic extraction cases pass",
+          "value": {
+            "case_count": 7,
+            "passed_case_count": 7
+          }
+        },
+        {
+          "name": "proof_states_extracted",
+          "passed": true,
+          "severity": "required",
+          "threshold": ">0 extracted proof states",
+          "value": 8
+        },
+        {
+          "name": "retrieval_text_present",
+          "passed": true,
+          "severity": "required",
+          "threshold": "all extracted proof states have retrieval text",
+          "value": true
+        },
+        {
+          "name": "ordered_tactic_state_trace",
+          "passed": true,
+          "severity": "required",
+          "threshold": "trace counts match and at least one multi-state trace case exists",
+          "value": {
+            "all_tactic_trace_counts_match": true,
+            "has_multi_state_tactic_trace_case": true
+          }
+        },
+        {
+          "name": "initial_goal_skeleton",
+          "passed": true,
+          "severity": "required",
+          "threshold": "theorem/lemma/example statement can be checked as temporary := by skeleton",
+          "value": true
+        },
+        {
+          "name": "timeout_stderr_extraction",
+          "passed": true,
+          "severity": "advisory",
+          "threshold": "timeout stderr unsolved-goal diagnostics remain parseable",
+          "value": true
+        },
+        {
+          "name": "failure_explanation",
+          "passed": true,
+          "severity": "advisory",
+          "threshold": "malformed diagnostics report a failure reason",
+          "value": true
+        },
+        {
+          "name": "query_time_only_scope",
+          "passed": true,
+          "severity": "required",
+          "threshold": "query-time diagnostics only; not a LeanRank-data corpus extractor",
+          "value": "optional query diagnostics only; not a corpus extractor and not part of the default LeanRank-data pipeline"
+        }
+      ],
+      "scope": "query-time Lean unsolved-goals diagnostic proof-state extraction",
+      "summary": {
+        "advisory_gate_count": 2,
+        "advisory_gates_passed": true,
+        "passed_gate_count": 8,
+        "required_gate_count": 6,
+        "required_gates_passed": true,
+        "total_gate_count": 8
+      }
+    },
     "mean_index_speedup_vs_exact": 17.07151721843473,
     "metric_uncertainty_profile": {
       "confidence_level": 0.95,

@@ -18,6 +18,11 @@ def test_lean_diagnostic_report_covers_success_dedup_and_failure_cases(tmp_path,
     assert report["quality_checks"]["all_tactic_trace_counts_match"] is True
     assert report["quality_checks"]["has_multi_state_tactic_trace_case"] is True
     assert report["total_extracted_proof_states"] > 0
+    acceptance = report["acceptance_profile"]
+    assert acceptance["summary"]["required_gates_passed"] is True
+    assert acceptance["summary"]["advisory_gates_passed"] is True
+    assert next(row for row in acceptance["gates"] if row["name"] == "ordered_tactic_state_trace")["passed"] is True
+    assert next(row for row in acceptance["gates"] if row["name"] == "query_time_only_scope")["passed"] is True
     duplicate_case = next(case for case in report["cases"] if case["name"] == "duplicate_goal_context")
     assert duplicate_case["rejected_count"] == 1
     adjacent_case = next(case for case in report["cases"] if case["name"] == "adjacent_goals_without_blank_lines")

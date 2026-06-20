@@ -319,6 +319,7 @@ def _evaluation_stage() -> dict[str, Any]:
 def _readiness_stage() -> dict[str, Any]:
     compatibility = read_json("outputs/reports/artifact_compatibility_report.json", {}) or {}
     premise_trace = read_json("outputs/reports/premise_trace_supervision_report.json", {}) or {}
+    lean_diagnostic = read_json("outputs/reports/lean_diagnostic_extraction_report.json", {}) or {}
     return {
         "artifact_compatibility": {
             "path": "outputs/reports/artifact_compatibility_report.json",
@@ -335,6 +336,18 @@ def _readiness_stage() -> dict[str, Any]:
             "normalization_label_conflicts": premise_trace.get("normalization_label_conflicts", {}),
             "train_split": (premise_trace.get("splits", {}) or {}).get("train", {}),
             "scope": premise_trace.get("scope"),
+        },
+        "lean_diagnostic_extraction": {
+            "path": "outputs/reports/lean_diagnostic_extraction_report.json",
+            "exists": Path("outputs/reports/lean_diagnostic_extraction_report.json").exists(),
+            "method": lean_diagnostic.get("method"),
+            "scope": lean_diagnostic.get("scope"),
+            "production_pipeline_role": lean_diagnostic.get("production_pipeline_role"),
+            "case_count": lean_diagnostic.get("case_count"),
+            "passed_case_count": lean_diagnostic.get("passed_case_count"),
+            "total_extracted_proof_states": lean_diagnostic.get("total_extracted_proof_states"),
+            "quality_checks": lean_diagnostic.get("quality_checks", {}),
+            "acceptance_profile": lean_diagnostic.get("acceptance_profile", {}),
         },
     }
 
@@ -1381,6 +1394,100 @@ def _supervision_acceptance_profile(readiness: dict[str, Any]) -> dict[str, Any]
     }
 
 
+def _lean_diagnostic_acceptance_profile(readiness: dict[str, Any]) -> dict[str, Any]:
+    diagnostic = readiness.get("lean_diagnostic_extraction", {}) if isinstance(readiness, dict) else {}
+    existing = diagnostic.get("acceptance_profile", {}) if isinstance(diagnostic, dict) else {}
+    if isinstance(existing, dict) and existing.get("gates"):
+        return existing
+    quality = diagnostic.get("quality_checks", {}) if isinstance(diagnostic, dict) else {}
+    gates = [
+        {
+            "name": "diagnostic_cases_passed",
+            "severity": "required",
+            "passed": quality.get("all_cases_passed") is True,
+            "value": {
+                "passed_case_count": diagnostic.get("passed_case_count"),
+                "case_count": diagnostic.get("case_count"),
+            },
+            "threshold": "all fixture diagnostic extraction cases pass",
+            "evidence": "Regression fixtures cover Lean unsolved-goal parsing behavior used for query-time retrieval.",
+        },
+        {
+            "name": "proof_states_extracted",
+            "severity": "required",
+            "passed": int(diagnostic.get("total_extracted_proof_states") or 0) > 0,
+            "value": diagnostic.get("total_extracted_proof_states"),
+            "threshold": ">0 extracted proof states",
+            "evidence": "Interactive theorem guidance needs extracted Lean goal/context blocks as retrieval queries.",
+        },
+        {
+            "name": "retrieval_text_present",
+            "severity": "required",
+            "passed": quality.get("all_extracted_states_have_retrieval_text") is True,
+            "value": quality.get("all_extracted_states_have_retrieval_text"),
+            "threshold": "all extracted proof states have retrieval text",
+            "evidence": "Every extracted proof state must be usable by the premise retrieval pipeline.",
+        },
+        {
+            "name": "ordered_tactic_state_trace",
+            "severity": "required",
+            "passed": quality.get("all_tactic_trace_counts_match") is True and quality.get("has_multi_state_tactic_trace_case") is True,
+            "value": {
+                "all_tactic_trace_counts_match": quality.get("all_tactic_trace_counts_match"),
+                "has_multi_state_tactic_trace_case": quality.get("has_multi_state_tactic_trace_case"),
+            },
+            "threshold": "trace counts match and at least one multi-state trace case exists",
+            "evidence": "The diagnostic stream should preserve tactic-state order for multi-goal retrieval context.",
+        },
+        {
+            "name": "initial_goal_skeleton",
+            "severity": "required",
+            "passed": quality.get("has_initial_goal_skeleton_case") is True,
+            "value": quality.get("has_initial_goal_skeleton_case"),
+            "threshold": "theorem/lemma/example statement can be checked as temporary := by skeleton",
+            "evidence": "A new theorem statement without a proof body can still produce an initial Lean goal query.",
+        },
+        {
+            "name": "timeout_stderr_extraction",
+            "severity": "advisory",
+            "passed": quality.get("has_timeout_stderr_extraction_case") is True,
+            "value": quality.get("has_timeout_stderr_extraction_case"),
+            "threshold": "timeout stderr unsolved-goal diagnostics remain parseable",
+            "evidence": "Lean timeouts should still preserve useful diagnostics when stderr contains goals.",
+        },
+        {
+            "name": "failure_explanation",
+            "severity": "advisory",
+            "passed": quality.get("has_failure_explanation_case") is True,
+            "value": quality.get("has_failure_explanation_case"),
+            "threshold": "malformed diagnostics report a failure reason",
+            "evidence": "Users need to know why Lean diagnostics could not be used as retrieval proof states.",
+        },
+        {
+            "name": "query_time_only_scope",
+            "severity": "required",
+            "passed": "not a corpus extractor" in str(diagnostic.get("production_pipeline_role", "")),
+            "value": diagnostic.get("production_pipeline_role"),
+            "threshold": "query-time diagnostics only; not a LeanRank-data corpus extractor",
+            "evidence": "This evidence must not reintroduce a custom corpus/server extractor into the default pipeline.",
+        },
+    ]
+    required = [gate for gate in gates if gate["severity"] == "required"]
+    advisory = [gate for gate in gates if gate["severity"] == "advisory"]
+    return {
+        "scope": diagnostic.get("scope"),
+        "summary": {
+            "required_gates_passed": all(gate["passed"] for gate in required),
+            "advisory_gates_passed": all(gate["passed"] for gate in advisory),
+            "passed_gate_count": sum(1 for gate in gates if gate["passed"]),
+            "total_gate_count": len(gates),
+            "required_gate_count": len(required),
+            "advisory_gate_count": len(advisory),
+        },
+        "gates": gates,
+    }
+
+
 def _scale_projection_profile(scale: dict[str, Any], throughput: dict[str, Any]) -> dict[str, Any]:
     current_rows = int(scale.get("current_total_split_rows") or 0)
     requested_source_rows = int(scale.get("source_rows") or throughput.get("requested_source_rows") or current_rows or 0)
@@ -1698,6 +1805,7 @@ def build_report(config_path: str = "configs/proofatlas.yaml") -> dict[str, Any]
     throughput["cpu_io_efficiency_profile"] = _cpu_io_efficiency_profile(scale, throughput)
     throughput["performance_acceptance_profile"] = _performance_acceptance_profile(scale, throughput, evaluation)
     throughput["supervision_acceptance_profile"] = _supervision_acceptance_profile(readiness)
+    throughput["lean_diagnostic_acceptance_profile"] = _lean_diagnostic_acceptance_profile(readiness)
     throughput["scale_projection_profile"] = _scale_projection_profile(scale, throughput)
     throughput["artifact_storage_profile"] = _artifact_storage_profile(scale, throughput)
     recommendations = _recommendations(config, sample, benchmark, readiness, scale, throughput, evaluation)

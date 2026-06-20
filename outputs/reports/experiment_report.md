@@ -42,6 +42,25 @@ Lean validation is optional and is not part of the default `erbacher/LeanRank-da
 - Tactic trace counts match extracted proof states: `True`
 - Pipeline role: `optional query diagnostics only; not a corpus extractor and not part of the default LeanRank-data pipeline`
 
+### Lean Diagnostic Acceptance Gates
+
+These gates summarize whether query-time Lean diagnostics can supply proof-state retrieval queries without becoming a default LeanRank-data corpus extractor.
+
+- Required gates passed: `True`
+- Advisory gates passed: `True`
+- Passed gates: `8` / `8`
+
+| Gate | Severity | Passed | Value | Threshold |
+| --- | --- | ---: | --- | --- |
+| `diagnostic_cases_passed` | required | True | {'case_count': 7, 'passed_case_count': 7} | all fixture diagnostic extraction cases pass |
+| `proof_states_extracted` | required | True | 8 | >0 extracted proof states |
+| `retrieval_text_present` | required | True | True | all extracted proof states have retrieval text |
+| `ordered_tactic_state_trace` | required | True | {'all_tactic_trace_counts_match': True, 'has_multi_state_tactic_trace_case': True} | trace counts match and at least one multi-state trace case exists |
+| `initial_goal_skeleton` | required | True | True | theorem/lemma/example statement can be checked as temporary := by skeleton |
+| `timeout_stderr_extraction` | advisory | True | True | timeout stderr unsolved-goal diagnostics remain parseable |
+| `failure_explanation` | advisory | True | True | malformed diagnostics report a failure reason |
+| `query_time_only_scope` | required | True | optional query diagnostics only; not a corpus extractor and not part of the default LeanRank-data pipeline | query-time diagnostics only; not a LeanRank-data corpus extractor |
+
 ## ML Task Definition
 
 ProofAtlas is evaluated as a supervised ranking/retrieval system over a theorem-disjoint train/validation/test split. The train split supplies the candidate premise index and graph evidence. The held-out validation and test positive edges are never used as retrieval candidates; they are used only as gold labels for scoring.
@@ -818,18 +837,18 @@ These linear projections use the current timed pipeline as a capacity-planning b
 This profile records the local footprint of generated LeanRank-data artifacts. It is a practical scale-up signal because embeddings and ANN indexes can dominate disk usage before model training becomes the bottleneck.
 
 - Method: `filesystem_artifact_footprint_with_linear_scale_projection`
-- Total artifact bytes: `3052697863`
-- Total artifact GiB: `2.8430464332923293`
-- Bytes per processed row: `10454.015119241674`
+- Total artifact bytes: `3052725590`
+- Total artifact GiB: `2.8430722560733557`
+- Bytes per processed row: `10454.110070819008`
 - Unreferenced index artifact bytes: `1502501178`
 - Unreferenced index artifact count: `12`
 
 | Projection | Target rows | Scale factor | Artifact GiB |
 | --- | ---: | ---: | ---: |
-| `current_1x` | 292012 | 1.0000 | 2.8430 |
+| `current_1x` | 292012 | 1.0000 | 2.8431 |
 | `current_2x` | 584024 | 2.0000 | 5.6861 |
-| `current_5x` | 1460060 | 5.0000 | 14.2152 |
-| `configured_source_rows` | 350000 | 1.1986 | 3.4076 |
+| `current_5x` | 1460060 | 5.0000 | 14.2154 |
+| `configured_source_rows` | 350000 | 1.1986 | 3.4077 |
 
 Largest generated artifact files:
 

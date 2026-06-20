@@ -524,6 +524,29 @@ def build_audit() -> dict[str, Any]:
         ),
         "performance_acceptance_profile={detail}",
     )
+    checks["validation:lean_diagnostic_acceptance_profile"] = _json_condition(
+        "outputs/reports/pipeline_performance_report.json",
+        lambda data: (
+            bool(data.get("throughput_profile", {}).get("lean_diagnostic_acceptance_profile", {}).get("gates"))
+            and data.get("throughput_profile", {})
+            .get("lean_diagnostic_acceptance_profile", {})
+            .get("summary", {})
+            .get("required_gates_passed")
+            is True
+            and any(
+                row.get("name") == "ordered_tactic_state_trace" and row.get("passed") is True
+                for row in data.get("throughput_profile", {}).get("lean_diagnostic_acceptance_profile", {}).get("gates", [])
+            )
+            and any(
+                row.get("name") == "query_time_only_scope" and row.get("passed") is True
+                for row in data.get("throughput_profile", {}).get("lean_diagnostic_acceptance_profile", {}).get("gates", [])
+            ),
+            {
+                "profile": data.get("throughput_profile", {}).get("lean_diagnostic_acceptance_profile", {}),
+            },
+        ),
+        "lean_diagnostic_acceptance_profile={detail}",
+    )
     checks["validation:scale_projection_profile"] = _json_condition(
         "outputs/reports/pipeline_performance_report.json",
         lambda data: (

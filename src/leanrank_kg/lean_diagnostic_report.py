@@ -145,10 +145,92 @@ def _case_result(case: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _acceptance_profile(report: dict[str, Any]) -> dict[str, Any]:
+    quality = report.get("quality_checks", {}) if isinstance(report, dict) else {}
+    gates = [
+        {
+            "name": "diagnostic_cases_passed",
+            "severity": "required",
+            "passed": quality.get("all_cases_passed") is True,
+            "value": {
+                "passed_case_count": report.get("passed_case_count"),
+                "case_count": report.get("case_count"),
+            },
+            "threshold": "all fixture diagnostic extraction cases pass",
+        },
+        {
+            "name": "proof_states_extracted",
+            "severity": "required",
+            "passed": int(report.get("total_extracted_proof_states") or 0) > 0,
+            "value": report.get("total_extracted_proof_states"),
+            "threshold": ">0 extracted proof states",
+        },
+        {
+            "name": "retrieval_text_present",
+            "severity": "required",
+            "passed": quality.get("all_extracted_states_have_retrieval_text") is True,
+            "value": quality.get("all_extracted_states_have_retrieval_text"),
+            "threshold": "all extracted proof states have retrieval text",
+        },
+        {
+            "name": "ordered_tactic_state_trace",
+            "severity": "required",
+            "passed": quality.get("all_tactic_trace_counts_match") is True and quality.get("has_multi_state_tactic_trace_case") is True,
+            "value": {
+                "all_tactic_trace_counts_match": quality.get("all_tactic_trace_counts_match"),
+                "has_multi_state_tactic_trace_case": quality.get("has_multi_state_tactic_trace_case"),
+            },
+            "threshold": "trace counts match and at least one multi-state trace case exists",
+        },
+        {
+            "name": "initial_goal_skeleton",
+            "severity": "required",
+            "passed": quality.get("has_initial_goal_skeleton_case") is True,
+            "value": quality.get("has_initial_goal_skeleton_case"),
+            "threshold": "theorem/lemma/example statement can be checked as temporary := by skeleton",
+        },
+        {
+            "name": "timeout_stderr_extraction",
+            "severity": "advisory",
+            "passed": quality.get("has_timeout_stderr_extraction_case") is True,
+            "value": quality.get("has_timeout_stderr_extraction_case"),
+            "threshold": "timeout stderr unsolved-goal diagnostics remain parseable",
+        },
+        {
+            "name": "failure_explanation",
+            "severity": "advisory",
+            "passed": quality.get("has_failure_explanation_case") is True,
+            "value": quality.get("has_failure_explanation_case"),
+            "threshold": "malformed diagnostics report a failure reason",
+        },
+        {
+            "name": "query_time_only_scope",
+            "severity": "required",
+            "passed": "not a corpus extractor" in str(report.get("production_pipeline_role", "")),
+            "value": report.get("production_pipeline_role"),
+            "threshold": "query-time diagnostics only; not a LeanRank-data corpus extractor",
+        },
+    ]
+    required = [gate for gate in gates if gate["severity"] == "required"]
+    advisory = [gate for gate in gates if gate["severity"] == "advisory"]
+    return {
+        "scope": report.get("scope"),
+        "summary": {
+            "required_gates_passed": all(gate["passed"] for gate in required),
+            "advisory_gates_passed": all(gate["passed"] for gate in advisory),
+            "passed_gate_count": sum(1 for gate in gates if gate["passed"]),
+            "total_gate_count": len(gates),
+            "required_gate_count": len(required),
+            "advisory_gate_count": len(advisory),
+        },
+        "gates": gates,
+    }
+
+
 def build_report() -> dict[str, Any]:
     cases = [_case_result(case) for case in CASES]
     total_extracted = sum(case["extracted_count"] for case in cases)
-    return {
+    report = {
         "scope": "query-time Lean unsolved-goals diagnostic proof-state extraction",
         "production_pipeline_role": "optional query diagnostics only; not a corpus extractor and not part of the default LeanRank-data pipeline",
         "method": "lean_unsolved_goals_diagnostic",
@@ -189,6 +271,8 @@ def build_report() -> dict[str, Any]:
         },
         "cases": cases,
     }
+    report["acceptance_profile"] = _acceptance_profile(report)
+    return report
 
 
 def run(output_path: str = "outputs/reports/lean_diagnostic_extraction_report.json") -> dict[str, Any]:

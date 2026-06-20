@@ -607,6 +607,8 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     performance_acceptance_summary = performance_acceptance.get("summary", {}) if isinstance(performance_acceptance, dict) else {}
     supervision_acceptance = throughput.get("supervision_acceptance_profile", {}) if isinstance(throughput, dict) else {}
     supervision_acceptance_summary = supervision_acceptance.get("summary", {}) if isinstance(supervision_acceptance, dict) else {}
+    lean_diagnostic_acceptance = throughput.get("lean_diagnostic_acceptance_profile", {}) if isinstance(throughput, dict) else {}
+    lean_diagnostic_acceptance_summary = lean_diagnostic_acceptance.get("summary", {}) if isinstance(lean_diagnostic_acceptance, dict) else {}
     scale_projection = throughput.get("scale_projection_profile", {}) if isinstance(throughput, dict) else {}
     artifact_storage = throughput.get("artifact_storage_profile", {}) if isinstance(throughput, dict) else {}
     embedding_parallel = resource_parallelism.get("embedding_parallelism", {}) if isinstance(resource_parallelism, dict) else {}
@@ -720,6 +722,16 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
         f"- Has ordered tactic-state trace case: `{lean_diagnostic.get('quality_checks', {}).get('has_multi_state_tactic_trace_case', 'n/a')}`",
         f"- Tactic trace counts match extracted proof states: `{lean_diagnostic.get('quality_checks', {}).get('all_tactic_trace_counts_match', 'n/a')}`",
         f"- Pipeline role: `{lean_diagnostic.get('production_pipeline_role', 'n/a')}`",
+        "",
+        "### Lean Diagnostic Acceptance Gates",
+        "",
+        "These gates summarize whether query-time Lean diagnostics can supply proof-state retrieval queries without becoming a default LeanRank-data corpus extractor.",
+        "",
+        f"- Required gates passed: `{lean_diagnostic_acceptance_summary.get('required_gates_passed', 'n/a')}`",
+        f"- Advisory gates passed: `{lean_diagnostic_acceptance_summary.get('advisory_gates_passed', 'n/a')}`",
+        f"- Passed gates: `{lean_diagnostic_acceptance_summary.get('passed_gate_count', 'n/a')}` / `{lean_diagnostic_acceptance_summary.get('total_gate_count', 'n/a')}`",
+        "",
+        _performance_gate_table(lean_diagnostic_acceptance),
         "",
         "## ML Task Definition",
         "",
