@@ -56,6 +56,36 @@ def _tokens(value: Any) -> set[str]:
     return {part for part in str(value or "").replace(".", "_").split("_") if part}
 
 
+def _hard_negative_reason(row: dict[str, Any]) -> str:
+    if row.get("same_namespace"):
+        return "same_namespace_as_positive"
+    if row.get("same_subdomain"):
+        return "same_subdomain_as_positive"
+    if row.get("same_domain"):
+        return "same_domain_as_positive"
+    if float(row.get("name_token_overlap") or 0.0) > 0.0:
+        return "name_token_overlap_with_positive"
+    if float(row.get("proof_state_hardness") or 0.0) >= 0.75:
+        return "high_proof_state_hardness"
+    return "weak_or_global_negative"
+
+
+def _empty_hard_negative_pair_evidence() -> dict[str, Any]:
+    return {
+        "method": "compare_each_negative_candidate_to_positive_premises_in_the_same_proof_state",
+        "pair_count": 0,
+        "reason_method": "ordered_namespace_subdomain_domain_token_hardness_rules",
+        "reason_counts": [],
+        "same_namespace_pair_share": 0.0,
+        "same_domain_pair_share": 0.0,
+        "same_subdomain_pair_share": 0.0,
+        "nonzero_name_token_overlap_pair_share": 0.0,
+        "mean_max_name_token_overlap": 0.0,
+        "mean_proof_state_hardness": 0.0,
+        "examples": [],
+    }
+
+
 def _hard_negative_pair_evidence(
     positives: pd.DataFrame,
     negatives: pd.DataFrame,
@@ -64,34 +94,14 @@ def _hard_negative_pair_evidence(
     limit: int = 8,
 ) -> dict[str, Any]:
     if positives.empty or negatives.empty or premises.empty:
-        return {
-            "method": "compare_each_negative_candidate_to_positive_premises_in_the_same_proof_state",
-            "pair_count": 0,
-            "same_namespace_pair_share": 0.0,
-            "same_domain_pair_share": 0.0,
-            "same_subdomain_pair_share": 0.0,
-            "nonzero_name_token_overlap_pair_share": 0.0,
-            "mean_max_name_token_overlap": 0.0,
-            "mean_proof_state_hardness": 0.0,
-            "examples": [],
-        }
+        return _empty_hard_negative_pair_evidence()
     premise_meta = premises[["id", "full_name", "domain_tag", "subdomain_tag"]].rename(
         columns={"id": "premise_id", "full_name": "premise_full_name"}
     )
     pos = positives[["proof_state_id", "premise_id"]].merge(premise_meta, on="premise_id", how="left")
     neg = negatives[["proof_state_id", "premise_id"]].merge(premise_meta, on="premise_id", how="left")
     if pos.empty or neg.empty:
-        return {
-            "method": "compare_each_negative_candidate_to_positive_premises_in_the_same_proof_state",
-            "pair_count": 0,
-            "same_namespace_pair_share": 0.0,
-            "same_domain_pair_share": 0.0,
-            "same_subdomain_pair_share": 0.0,
-            "nonzero_name_token_overlap_pair_share": 0.0,
-            "mean_max_name_token_overlap": 0.0,
-            "mean_proof_state_hardness": 0.0,
-            "examples": [],
-        }
+        return _empty_hard_negative_pair_evidence()
     hardness = (
         features.set_index("id")["negative_candidate_hardness"]
         if not features.empty and {"id", "negative_candidate_hardness"} <= set(features.columns)
@@ -145,23 +155,22 @@ def _hard_negative_pair_evidence(
             }
         )
     if not evidence_rows:
-        return {
-            "method": "compare_each_negative_candidate_to_positive_premises_in_the_same_proof_state",
-            "pair_count": 0,
-            "same_namespace_pair_share": 0.0,
-            "same_domain_pair_share": 0.0,
-            "same_subdomain_pair_share": 0.0,
-            "nonzero_name_token_overlap_pair_share": 0.0,
-            "mean_max_name_token_overlap": 0.0,
-            "mean_proof_state_hardness": 0.0,
-            "examples": [],
-        }
+        return _empty_hard_negative_pair_evidence()
     evidence = pd.DataFrame(evidence_rows)
     evidence["same_namespace"] = evidence["same_namespace"].astype(bool)
     evidence["same_domain"] = evidence["same_domain"].astype(bool)
     evidence["same_subdomain"] = evidence["same_subdomain"].astype(bool)
     evidence["name_token_overlap"] = evidence["name_token_overlap"].astype(float)
     evidence["proof_state_hardness"] = evidence["proof_state_hardness"].astype(float)
+    evidence["primary_reason"] = [_hard_negative_reason(row) for row in evidence.to_dict(orient="records")]
+    reason_counts = [
+        {
+            "reason": str(reason),
+            "pair_count": int(count),
+            "pair_share": float(count / max(1, len(evidence))),
+        }
+        for reason, count in evidence["primary_reason"].value_counts().items()
+    ]
     examples = evidence.sort_values(
         ["proof_state_hardness", "same_namespace", "same_subdomain", "same_domain", "name_token_overlap"],
         ascending=False,
@@ -169,6 +178,8 @@ def _hard_negative_pair_evidence(
     return {
         "method": "compare_each_negative_candidate_to_positive_premises_in_the_same_proof_state",
         "pair_count": int(len(evidence)),
+        "reason_method": "ordered_namespace_subdomain_domain_token_hardness_rules",
+        "reason_counts": reason_counts,
         "same_namespace_pair_share": float(evidence["same_namespace"].mean()),
         "same_domain_pair_share": float(evidence["same_domain"].mean()),
         "same_subdomain_pair_share": float(evidence["same_subdomain"].mean()),

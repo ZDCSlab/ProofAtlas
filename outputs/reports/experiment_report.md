@@ -646,7 +646,7 @@ These gates summarize whether the normalized LeanRank-data positive premise and 
 | `edge_endpoints_valid` | required | True | {'negative': True, 'positive': True} | positive and negative edge endpoints valid |
 | `train_positive_coverage` | required | True | 1.0000 | >=0.95 train proof-state positive coverage |
 | `train_negative_coverage` | required | True | 1.0000 | >=0.95 train proof-state negative candidate coverage |
-| `hard_negative_pair_evidence` | advisory | True | {'nonzero_name_token_overlap_pair_share': 0.6909879659812259, 'pair_count': 530413, 'same_domain_pair_share': 0.9811675053213251} | >0 train negative/positive comparison pairs |
+| `hard_negative_pair_evidence` | advisory | True | {'nonzero_name_token_overlap_pair_share': 0.6909879659812259, 'pair_count': 530413, 'reason_method': 'ordered_namespace_subdomain_domain_token_hardness_rules', 'same_domain_pair_share': 0.9811675053213251, 'top_reasons': [{'pair_count': 277854, 'pair_share': 0.5238446267342618, 'reason': 'same_subdomain_as_positive'}, {'pair_count': 241389, 'pair_share': 0.4550963117419822, 'reason': 'same_namespace_as_positive'}, {'pair_count': 8736, 'pair_share': 0.01647018455430014, 'reason': 'weak_or_global_negative'}, {'pair_count': 1313, 'pair_share': 0.002475429523786182, 'reason': 'same_domain_as_positive'}, {'pair_count': 754, 'pair_share': 0.0014215337859366192, 'reason': 'name_token_overlap_with_positive'}]} | >0 train negative/positive comparison pairs |
 | `hardness_feature_present` | advisory | True | {'has_negative_candidate_hardness': True, 'high_hardness_negative_candidate_rows': 128855, 'train_hardness_mean': 0.6030019312643399} | negative_candidate_hardness exists |
 
 ### Hard-Negative Quality Profile
@@ -674,13 +674,24 @@ For each train negative candidate, this diagnostic compares it against the posit
 | mean max name-token overlap | 0.2169 |
 | mean proof-state hardness | 0.6126 |
 
-| Proof state | Negative candidate | Closest positive premise | State hardness | Token overlap |
-| --- | --- | --- | ---: | ---: |
-| `ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625` | `CategoryTheory.Functor.relativelyRepresentable.w` | `CategoryTheory.Functor.relativelyRepresentable.lift'` | 0.9788 | 0.6000 |
-| `ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625` | `CategoryTheory.Functor.relativelyRepresentable.lift` | `CategoryTheory.Functor.relativelyRepresentable.lift'` | 0.9788 | 0.6000 |
-| `ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625` | `CategoryTheory.Functor.relativelyRepresentable.fst` | `CategoryTheory.Functor.relativelyRepresentable.lift'` | 0.9788 | 0.6000 |
-| `ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625` | `CategoryTheory.Functor.relativelyRepresentable.isPullback'` | `CategoryTheory.Functor.relativelyRepresentable.lift'` | 0.9788 | 0.6000 |
-| `ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625` | `CategoryTheory.Functor.relativelyRepresentable.snd` | `CategoryTheory.Functor.relativelyRepresentable.lift'` | 0.9788 | 0.6000 |
+- Reason method: `ordered_namespace_subdomain_domain_token_hardness_rules`
+
+| Primary reason | Pair count | Pair share |
+| --- | ---: | ---: |
+| `same_subdomain_as_positive` | 277854 | 0.5238 |
+| `same_namespace_as_positive` | 241389 | 0.4551 |
+| `weak_or_global_negative` | 8736 | 0.0165 |
+| `same_domain_as_positive` | 1313 | 0.0025 |
+| `name_token_overlap_with_positive` | 754 | 0.0014 |
+| `high_proof_state_hardness` | 367 | 0.0007 |
+
+| Proof state | Negative candidate | Closest positive premise | Reason | State hardness | Token overlap |
+| --- | --- | --- | --- | ---: | ---: |
+| `ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625` | `CategoryTheory.Functor.relativelyRepresentable.w` | `CategoryTheory.Functor.relativelyRepresentable.lift'` | `same_namespace_as_positive` | 0.9788 | 0.6000 |
+| `ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625` | `CategoryTheory.Functor.relativelyRepresentable.lift` | `CategoryTheory.Functor.relativelyRepresentable.lift'` | `same_namespace_as_positive` | 0.9788 | 0.6000 |
+| `ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625` | `CategoryTheory.Functor.relativelyRepresentable.fst` | `CategoryTheory.Functor.relativelyRepresentable.lift'` | `same_namespace_as_positive` | 0.9788 | 0.6000 |
+| `ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625` | `CategoryTheory.Functor.relativelyRepresentable.isPullback'` | `CategoryTheory.Functor.relativelyRepresentable.lift'` | `same_namespace_as_positive` | 0.9788 | 0.6000 |
+| `ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625` | `CategoryTheory.Functor.relativelyRepresentable.snd` | `CategoryTheory.Functor.relativelyRepresentable.lift'` | `same_namespace_as_positive` | 0.9788 | 0.6000 |
 
 ### Ranker Training Pair Utilization
 
@@ -920,9 +931,9 @@ These linear projections use the current timed pipeline as a capacity-planning b
 This profile records the local footprint of generated LeanRank-data artifacts. It is a practical scale-up signal because embeddings and ANN indexes can dominate disk usage before model training becomes the bottleneck.
 
 - Method: `filesystem_artifact_footprint_with_linear_scale_projection`
-- Total artifact bytes: `3052769961`
-- Total artifact GiB: `2.843113579787314`
-- Bytes per processed row: `10454.26202005397`
+- Total artifact bytes: `3052777413`
+- Total artifact GiB: `2.84312052000314`
+- Bytes per processed row: `10454.287539553168`
 - Unreferenced index artifact bytes: `1502501178`
 - Unreferenced index artifact count: `12`
 

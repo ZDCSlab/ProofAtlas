@@ -680,6 +680,11 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                     },
                     "hard_negative_pair_evidence": {
                         "pair_count": 90,
+                        "reason_method": "ordered_namespace_subdomain_domain_token_hardness_rules",
+                        "reason_counts": [
+                            {"reason": "same_namespace_as_positive", "pair_count": 18, "pair_share": 0.2},
+                            {"reason": "same_domain_as_positive", "pair_count": 72, "pair_share": 0.8},
+                        ],
                         "same_namespace_pair_share": 0.2,
                         "same_domain_pair_share": 0.7,
                         "same_subdomain_pair_share": 0.4,
@@ -691,6 +696,7 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                                 "proof_state_id": "ps1",
                                 "negative_full_name": "Mathlib.Algebra.Group.mul_left_cancel",
                                 "positive_full_name": "Mathlib.Algebra.Group.mul_assoc",
+                                "primary_reason": "same_namespace_as_positive",
                                 "proof_state_hardness": 0.9,
                                 "name_token_overlap": 0.25,
                             }
@@ -915,6 +921,8 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "outputs/indexes/train_premise_neighbors.joblib" in text
     assert "Hard-Negative Quality Profile" in text
     assert "Hard-Negative Pair Evidence" in text
+    assert "ordered_namespace_subdomain_domain_token_hardness_rules" in text
+    assert "same_namespace_as_positive" in text
     assert "same namespace share" in text
     assert "Mathlib.Algebra.Group.mul_left_cancel" in text
     assert "Ranker Training Pair Utilization" in text

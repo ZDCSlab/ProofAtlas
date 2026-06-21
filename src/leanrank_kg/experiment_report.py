@@ -550,11 +550,34 @@ def _hard_negative_pair_evidence_table(profile: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def _hard_negative_reason_table(profile: dict[str, Any]) -> str:
+    rows = profile.get("reason_counts", []) if isinstance(profile, dict) else []
+    lines = [
+        "| Primary reason | Pair count | Pair share |",
+        "| --- | ---: | ---: |",
+    ]
+    for row in rows:
+        lines.append(
+            "| "
+            + " | ".join(
+                [
+                    f"`{row.get('reason', 'n/a')}`",
+                    _fmt(row.get("pair_count")),
+                    _fmt(row.get("pair_share")),
+                ]
+            )
+            + " |"
+        )
+    if len(lines) == 2:
+        lines.append("| n/a | n/a | n/a |")
+    return "\n".join(lines)
+
+
 def _hard_negative_examples_table(profile: dict[str, Any]) -> str:
     rows = profile.get("examples", []) if isinstance(profile, dict) else []
     lines = [
-        "| Proof state | Negative candidate | Closest positive premise | State hardness | Token overlap |",
-        "| --- | --- | --- | ---: | ---: |",
+        "| Proof state | Negative candidate | Closest positive premise | Reason | State hardness | Token overlap |",
+        "| --- | --- | --- | --- | ---: | ---: |",
     ]
     for row in rows[:5]:
         lines.append(
@@ -564,6 +587,7 @@ def _hard_negative_examples_table(profile: dict[str, Any]) -> str:
                     f"`{row.get('proof_state_id', 'n/a')}`",
                     f"`{row.get('negative_full_name') or row.get('negative_premise_id', 'n/a')}`",
                     f"`{row.get('positive_full_name') or row.get('positive_premise_id', 'n/a')}`",
+                    f"`{row.get('primary_reason', 'n/a')}`",
                     _fmt(row.get("proof_state_hardness")),
                     _fmt(row.get("name_token_overlap")),
                 ]
@@ -571,7 +595,7 @@ def _hard_negative_examples_table(profile: dict[str, Any]) -> str:
             + " |"
         )
     if len(lines) == 2:
-        lines.append("| n/a | n/a | n/a | n/a | n/a |")
+        lines.append("| n/a | n/a | n/a | n/a | n/a | n/a |")
     return "\n".join(lines)
 
 
@@ -1145,6 +1169,10 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
             "For each train negative candidate, this diagnostic compares it against the positive premises attached to the same proof state. High namespace/domain overlap or name-token overlap indicates harder negatives than random unrelated premises.",
             "",
             _hard_negative_pair_evidence_table(hard_negative_pair_evidence),
+            "",
+            f"- Reason method: `{hard_negative_pair_evidence.get('reason_method', 'n/a')}`",
+            "",
+            _hard_negative_reason_table(hard_negative_pair_evidence),
             "",
             _hard_negative_examples_table(hard_negative_pair_evidence),
             "",

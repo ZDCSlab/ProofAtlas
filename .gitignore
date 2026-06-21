@@ -92,6 +92,14 @@ outputs/*
 !outputs/.gitkeep
 !outputs/reports/
 outputs/reports/*
+
+# Keep only curated report artifacts below; ad hoc previews/conflict dumps stay local.
+outputs/reports/*.jsonl
+outputs/reports/*_errors.json
+outputs/reports/*_errors.jsonl
+outputs/reports/*_conflicts.json
+outputs/reports/*_provenance.csv
+
 !outputs/reports/artifact_compatibility_report.json
 !outputs/reports/context_parse_coverage.json
 !outputs/reports/corpus_manifest.json

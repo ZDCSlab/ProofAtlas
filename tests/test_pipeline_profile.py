@@ -220,6 +220,8 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
                     "hard_negative_quality_profile": {"high_hardness_negative_candidate_rows": 7},
                     "hard_negative_pair_evidence": {
                         "pair_count": 90,
+                        "reason_method": "ordered_namespace_subdomain_domain_token_hardness_rules",
+                        "reason_counts": [{"reason": "same_domain_as_positive", "pair_count": 90, "pair_share": 1.0}],
                         "same_domain_pair_share": 0.4,
                         "nonzero_name_token_overlap_pair_share": 0.2,
                     },

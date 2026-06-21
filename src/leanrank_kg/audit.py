@@ -336,6 +336,7 @@ def build_audit() -> dict[str, Any]:
             and len(data.get("splits", {}).get("train", {}).get("hard_negative_quality_profile", {}).get("bucket_counts", [])) >= 4
             and data.get("splits", {}).get("train", {}).get("hard_negative_quality_profile", {}).get("high_hardness_negative_candidate_rows", 0) >= 0
             and data.get("splits", {}).get("train", {}).get("hard_negative_pair_evidence", {}).get("pair_count", 0) > 0
+            and bool(data.get("splits", {}).get("train", {}).get("hard_negative_pair_evidence", {}).get("reason_counts"))
             and bool(data.get("splits", {}).get("train", {}).get("example_traces"))
             and data.get("training_supervision_profile", {}).get("method")
             == "leanrank_data_positive_negative_premise_supervision_readiness"

@@ -4182,6 +4182,7 @@
                 "negative_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.w",
                 "positive_full_name": "CategoryTheory.Functor.relativelyRepresentable.lift'",
                 "positive_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.lift'",
+                "primary_reason": "same_namespace_as_positive",
                 "proof_state_hardness": 0.9788105780287333,
                 "proof_state_id": "ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625",
                 "same_domain": true,
@@ -4194,6 +4195,7 @@
                 "negative_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.lift",
                 "positive_full_name": "CategoryTheory.Functor.relativelyRepresentable.lift'",
                 "positive_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.lift'",
+                "primary_reason": "same_namespace_as_positive",
                 "proof_state_hardness": 0.9788105780287333,
                 "proof_state_id": "ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625",
                 "same_domain": true,
@@ -4206,6 +4208,7 @@
                 "negative_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.fst",
                 "positive_full_name": "CategoryTheory.Functor.relativelyRepresentable.lift'",
                 "positive_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.lift'",
+                "primary_reason": "same_namespace_as_positive",
                 "proof_state_hardness": 0.9788105780287333,
                 "proof_state_id": "ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625",
                 "same_domain": true,
@@ -4218,6 +4221,7 @@
                 "negative_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.isPullback'",
                 "positive_full_name": "CategoryTheory.Functor.relativelyRepresentable.lift'",
                 "positive_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.lift'",
+                "primary_reason": "same_namespace_as_positive",
                 "proof_state_hardness": 0.9788105780287333,
                 "proof_state_id": "ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625",
                 "same_domain": true,
@@ -4230,6 +4234,7 @@
                 "negative_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.snd",
                 "positive_full_name": "CategoryTheory.Functor.relativelyRepresentable.lift'",
                 "positive_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.lift'",
+                "primary_reason": "same_namespace_as_positive",
                 "proof_state_hardness": 0.9788105780287333,
                 "proof_state_id": "ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625",
                 "same_domain": true,
@@ -4242,6 +4247,7 @@
                 "negative_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.isPullback",
                 "positive_full_name": "CategoryTheory.Functor.relativelyRepresentable.lift'",
                 "positive_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.lift'",
+                "primary_reason": "same_namespace_as_positive",
                 "proof_state_hardness": 0.9788105780287333,
                 "proof_state_id": "ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625",
                 "same_domain": true,
@@ -4254,6 +4260,7 @@
                 "negative_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.hom_ext",
                 "positive_full_name": "CategoryTheory.Functor.relativelyRepresentable.lift'",
                 "positive_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.lift'",
+                "primary_reason": "same_namespace_as_positive",
                 "proof_state_hardness": 0.9788105780287333,
                 "proof_state_id": "ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625",
                 "same_domain": true,
@@ -4266,6 +4273,7 @@
                 "negative_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.lift_fst",
                 "positive_full_name": "CategoryTheory.Functor.relativelyRepresentable.lift'",
                 "positive_premise_id": "premise:CategoryTheory.Functor.relativelyRepresentable.lift'",
+                "primary_reason": "same_namespace_as_positive",
                 "proof_state_hardness": 0.9788105780287333,
                 "proof_state_id": "ps:CategoryTheory.Functor.relativelyRepresentable.lift'_snd:0:e9aad449f625",
                 "same_domain": true,
@@ -4278,6 +4286,39 @@
             "method": "compare_each_negative_candidate_to_positive_premises_in_the_same_proof_state",
             "nonzero_name_token_overlap_pair_share": 0.6909879659812259,
             "pair_count": 530413,
+            "reason_counts": [
+              {
+                "pair_count": 277854,
+                "pair_share": 0.5238446267342618,
+                "reason": "same_subdomain_as_positive"
+              },
+              {
+                "pair_count": 241389,
+                "pair_share": 0.4550963117419822,
+                "reason": "same_namespace_as_positive"
+              },
+              {
+                "pair_count": 8736,
+                "pair_share": 0.01647018455430014,
+                "reason": "weak_or_global_negative"
+              },
+              {
+                "pair_count": 1313,
+                "pair_share": 0.002475429523786182,
+                "reason": "same_domain_as_positive"
+              },
+              {
+                "pair_count": 754,
+                "pair_share": 0.0014215337859366192,
+                "reason": "name_token_overlap_with_positive"
+              },
+              {
+                "pair_count": 367,
+                "pair_share": 0.000691913659733076,
+                "reason": "high_proof_state_hardness"
+              }
+            ],
+            "reason_method": "ordered_namespace_subdomain_domain_token_hardness_rules",
             "same_domain_pair_share": 0.9811675053213251,
             "same_namespace_pair_share": 0.4550963117419822,
             "same_subdomain_pair_share": 0.9767087156611923
@@ -4641,7 +4682,7 @@
         "outputs/reports",
         "homepage/assets"
       ],
-      "bytes_per_processed_row": 10454.26202005397,
+      "bytes_per_processed_row": 10454.287539553168,
       "directories": {
         "data/processed": {
           "bytes": 46533700,
@@ -4668,7 +4709,7 @@
           "path": "outputs/indexes"
         },
         "outputs/reports": {
-          "bytes": 19339360,
+          "bytes": 19346812,
           "exists": true,
           "file_count": 39,
           "path": "outputs/reports"
@@ -4724,36 +4765,36 @@
       ],
       "projections": [
         {
-          "estimated_artifact_bytes": 3052769961.0,
-          "estimated_artifact_gib": 2.843113579787314,
+          "estimated_artifact_bytes": 3052777413.0,
+          "estimated_artifact_gib": 2.84312052000314,
           "label": "current_1x",
           "scale_factor_vs_current": 1.0,
           "target_processed_rows": 292012
         },
         {
-          "estimated_artifact_bytes": 6105539922.0,
-          "estimated_artifact_gib": 5.686227159574628,
+          "estimated_artifact_bytes": 6105554826.0,
+          "estimated_artifact_gib": 5.68624104000628,
           "label": "current_2x",
           "scale_factor_vs_current": 2.0,
           "target_processed_rows": 584024
         },
         {
-          "estimated_artifact_bytes": 15263849805.0,
-          "estimated_artifact_gib": 14.21556789893657,
+          "estimated_artifact_bytes": 15263887065.0,
+          "estimated_artifact_gib": 14.2156026000157,
           "label": "current_5x",
           "scale_factor_vs_current": 5.0,
           "target_processed_rows": 1460060
         },
         {
-          "estimated_artifact_bytes": 3658991707.0188894,
-          "estimated_artifact_gib": 3.4077015770775168,
+          "estimated_artifact_bytes": 3659000638.843609,
+          "estimated_artifact_gib": 3.4077098954875105,
           "label": "configured_source_rows",
           "scale_factor_vs_current": 1.1985808802377984,
           "target_processed_rows": 350000
         }
       ],
-      "total_artifact_bytes": 3052769961,
-      "total_artifact_gib": 2.843113579787314,
+      "total_artifact_bytes": 3052777413,
+      "total_artifact_gib": 2.84312052000314,
       "unreferenced_index_artifact_bytes": 1502501178,
       "unreferenced_index_artifact_count": 12,
       "unreferenced_index_artifact_gib": 1.3993132654577494,
@@ -5961,7 +6002,35 @@
           "value": {
             "nonzero_name_token_overlap_pair_share": 0.6909879659812259,
             "pair_count": 530413,
-            "same_domain_pair_share": 0.9811675053213251
+            "reason_method": "ordered_namespace_subdomain_domain_token_hardness_rules",
+            "same_domain_pair_share": 0.9811675053213251,
+            "top_reasons": [
+              {
+                "pair_count": 277854,
+                "pair_share": 0.5238446267342618,
+                "reason": "same_subdomain_as_positive"
+              },
+              {
+                "pair_count": 241389,
+                "pair_share": 0.4550963117419822,
+                "reason": "same_namespace_as_positive"
+              },
+              {
+                "pair_count": 8736,
+                "pair_share": 0.01647018455430014,
+                "reason": "weak_or_global_negative"
+              },
+              {
+                "pair_count": 1313,
+                "pair_share": 0.002475429523786182,
+                "reason": "same_domain_as_positive"
+              },
+              {
+                "pair_count": 754,
+                "pair_share": 0.0014215337859366192,
+                "reason": "name_token_overlap_with_positive"
+              }
+            ]
           }
         },
         {

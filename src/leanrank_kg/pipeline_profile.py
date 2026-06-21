@@ -1593,6 +1593,7 @@ def _supervision_acceptance_profile(readiness: dict[str, Any]) -> dict[str, Any]
     quality_checks = current.get("quality_checks", {}) if isinstance(current, dict) else {}
     hard_negative_quality = train.get("hard_negative_quality_profile", {}) if isinstance(train, dict) else {}
     pair_evidence = train.get("hard_negative_pair_evidence", {}) if isinstance(train, dict) else {}
+    pair_reason_counts = pair_evidence.get("reason_counts", []) if isinstance(pair_evidence, dict) else []
     label_conflicts = premise_trace.get("normalization_label_conflicts", {}) if isinstance(premise_trace, dict) else {}
     gates = [
         {
@@ -1655,6 +1656,8 @@ def _supervision_acceptance_profile(readiness: dict[str, Any]) -> dict[str, Any]
                 "pair_count": pair_evidence.get("pair_count"),
                 "same_domain_pair_share": pair_evidence.get("same_domain_pair_share"),
                 "nonzero_name_token_overlap_pair_share": pair_evidence.get("nonzero_name_token_overlap_pair_share"),
+                "reason_method": pair_evidence.get("reason_method"),
+                "top_reasons": pair_reason_counts[:5] if isinstance(pair_reason_counts, list) else [],
             },
             "threshold": ">0 train negative/positive comparison pairs",
             "evidence": "Hard-negative diagnostics should compare negatives to positives from the same proof state.",
