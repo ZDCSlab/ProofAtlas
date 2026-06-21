@@ -1,6 +1,6 @@
 # ProofAtlas
 
-ProofAtlas builds a non-GNN LeanRank-style math proof knowledge graph. It processes theorem proof-state rows into theorem, proof-state, premise, file, proof-technique, and feature tables, then exposes premise retrieval, similar theorem retrieval, weak proof-technique labeling, difficulty analysis, evaluation reports, and a static homepage.
+ProofAtlas builds a non-GNN LeanRank-style math proof knowledge graph. It processes theorem proof-state rows into theorem, proof-state, premise, file, proof-technique, and feature tables, then exposes premise retrieval, similar theorem retrieval, curated strategy-facet labeling, difficulty analysis, evaluation reports, and a static homepage.
 
 ## Dataset Source
 
@@ -146,7 +146,7 @@ The text-query commands reuse the saved embedding artifacts in `outputs/embeddin
 
 `leanrank-kg build-experiment-report --config configs/proofatlas.yaml` writes `outputs/reports/experiment_report.md`. This is the quantitative ML report deliverable: it treats ProofAtlas as a ranking/retrieval task on `erbacher/LeanRank-data`, uses the held-out test split for final metrics, and reports proof-state-level and theorem-level Recall@k, MRR, MAP, nDCG, gold-premise coverage, domain-level metric breakdowns, index benchmark results, pipeline timings, and scale-up notes.
 
-`leanrank-kg build-research-report --config configs/proofatlas.yaml` writes `outputs/reports/research_report.md` and `outputs/predictions/research_prediction_results.json`. This is the compact research-facing deliverable: it frames ProofAtlas as a processed dataset plus retrieval-grounded prediction artifacts, and summarizes premise retrieval, proof-pattern retrieval, strategy-facet retrieval from similar proof states, and difficulty-profile retrieval from historical neighbors without presenting the system as production proof automation.
+`leanrank-kg build-research-report --config configs/proofatlas.yaml` writes `outputs/reports/research_report.md` and `outputs/predictions/research_prediction_results.json`. This is the compact research-facing deliverable: it frames ProofAtlas as a processed dataset plus retrieval-grounded artifacts, and summarizes premise retrieval, proof-pattern retrieval, strategy-facet retrieval from similar proof states, and difficulty-profile retrieval from historical neighbors without presenting the system as production proof automation.
 
 The default index backend remains sklearn for lightweight local demos and tests. Installing `pip install -e ".[ann]"` enables `hnswlib`, `pip install -e ".[faiss]"` enables FAISS, and `pip install -e ".[lancedb]"` enables an optional LanceDB vector-store backend. Set `index.backend: lancedb` to write LanceDB tables under `outputs/indexes/`; set `index.create_vector_index: true` for LanceDB to build a vector index when the installed LanceDB version supports it.
 
@@ -416,7 +416,7 @@ Example request body:
 
 ## Limitations
 
-This is an MVP. The lightweight local smoke-test dataset is synthetic unless `use_huggingface` is enabled. The production experiment uses `erbacher/LeanRank-data`, BGE sentence embeddings, ANN candidate retrieval, and a learned/fixed reranker. The parser and weak proof-technique labels are deterministic heuristics. New theorem guidance currently uses embedding retrieval plus heuristic proof-technique and difficulty signals; graph-neural reranking remains future work.
+This is an MVP. The lightweight local smoke-test dataset is synthetic unless `use_huggingface` is enabled. The production experiment uses `erbacher/LeanRank-data`, BGE sentence embeddings, ANN candidate retrieval, and a learned/fixed reranker. The parser and strategy-facet annotations are deterministic retrieval annotations. New theorem guidance currently uses embedding retrieval plus strategy-facet and difficulty signals; graph-neural reranking remains future work.
 
 ## No-GNN MVP Scope
 

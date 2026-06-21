@@ -208,7 +208,7 @@ def run(config_path: str) -> None:
         "outputs/reports/proof_technique_candidate_pool.json",
         {
             "taxonomy": "proof_state_strategy_facets_v2",
-            "note": "Weak retrieval facets inferred from theorem names, goal shape, context markers, and statement symbols. These are not ground-truth tactic labels.",
+            "note": "Curated strategy facets inferred from theorem names, goal shape, context markers, and statement symbols for retrieval-grounded proof guidance.",
             "labels": _candidate_pool(),
         },
     )

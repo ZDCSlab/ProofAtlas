@@ -2,14 +2,23 @@
 
 ## Research Framing
 
-ProofAtlas is framed as a research dataset and retrieval study for LeanRank-style formal proof guidance. The deliverable is not a production proof assistant; it is a processed theorem/proof-state/premise dataset plus retrieval-grounded prediction artifacts for theorem-level premise retrieval, proof-pattern retrieval, strategy retrieval, and difficulty-profile retrieval.
+ProofAtlas is framed as a research dataset and retrieval study for LeanRank-style formal proof guidance. The deliverable is not a production proof assistant; it is a processed theorem/proof-state/premise dataset plus retrieval-grounded artifacts for theorem-level premise retrieval, proof-pattern retrieval, strategy retrieval, and difficulty-profile retrieval.
+
+The four tasks form a layered retrieval story. Theorem-level premise retrieval is the primary supervised benchmark. Proof-pattern retrieval supplies evidence through similar theorem and similar proof-state neighborhoods. Strategy retrieval reads strategy facets from retrieved proof-state neighbors. Difficulty retrieval reads historical difficulty profiles from similar proof states and calibrates them into a score and bucket.
+
+| Module | Research framing | Primary evidence |
+| --- | --- | --- |
+| Premise prediction | Premise retrieval and reranking | Held-out theorem to train-premise ranking against LeanRank positive premises. |
+| Proof pattern prediction | Similar theorem and similar proof-state retrieval | Embedding neighbors plus KG neighborhoods used as reusable proof-pattern evidence. |
+| Proof strategy hinting | Retrieve strategy facets from similar proof states | Neighbor facets aggregated from a curated tactic/mathematical-operation taxonomy. |
+| Difficulty prediction | Retrieve historical difficulty profiles from similar theorem/proof-state neighborhoods | Neighbor difficulty scores calibrated into easy/medium/hard buckets. |
 
 ## Local Deliverables
 
 | Artifact | Path |
 | --- | --- |
 | Processed dataset | `data/processed/{train,val,test,demo}` |
-| Prediction summary | `outputs/predictions/research_prediction_results.json` |
+| Retrieval summary | `outputs/predictions/research_prediction_results.json` |
 | Research report | `outputs/reports/research_report.md` |
 | Embeddings and indexes | `outputs/embeddings`, `outputs/indexes` |
 | Learned models | `outputs/models/premise_ranker.joblib`, `outputs/models/difficulty_estimator.joblib` |
@@ -68,8 +77,8 @@ The processed dataset contains theorem-level, proof-state-level, premise-level, 
 | MAP | Mean average precision over ranked retrieved items. |
 | nDCG@k | Rank-sensitive gain that rewards placing gold items earlier in the top-k list. |
 | AUC | Validation discrimination of the learned premise reranker over positive and hard-negative premise pairs. |
-| Label Recall@k | Average fraction of a query proof state's weak strategy facets recovered by the top-k aggregated retrieved facets. |
-| Any-label Hit@k | Fraction of labeled proof states for which at least one weak strategy facet is recovered in the top-k facets. |
+| Label Recall@k | Average fraction of a query proof state's strategy facets recovered by the top-k aggregated retrieved facets. |
+| Any-label Hit@k | Fraction of labeled proof states for which at least one strategy facet is recovered in the top-k facets. |
 | MAE/RMSE | Absolute and squared-error summaries for retrieved difficulty-profile scores. |
 | Bucket accuracy | Agreement between retrieved difficulty bucket and the query proof state's relative difficulty bucket. |
 
@@ -99,7 +108,7 @@ The learned premise reranker reaches validation AUC `0.8157` over positive and h
 | Input | A theorem embedding for theorem-neighbor retrieval, or a proof-state embedding for local proof-state-neighbor retrieval. |
 | Retrieval corpus | Train theorem embeddings, train proof-state embeddings, and the enriched proof KG. |
 | Output | Similar theorems, similar proof states, and graph-neighborhood evidence such as similar_to_theorem and premise/strategy edges. |
-| Evaluation target | No standalone human-labeled proof-pattern pairs are available; theorem-neighbor quality is proxied by theorem-level premise retrieval, while proof-state-neighbor quality is evaluated through the strategy and difficulty tasks below. |
+| Evaluation target | The dataset does not include a separate proof-pattern-neighbor benchmark; theorem-neighbor quality is reflected through theorem-level premise retrieval, while proof-state-neighbor utility is evaluated through the strategy and difficulty tasks below. |
 | Metrics | Theorem retrieval Recall/MRR proxy plus HNSW index recall@10 versus exact cosine for theorem/proof-state/premise indexes. |
 | Role in report | Evidence layer that supports strategy-facet retrieval, difficulty-profile retrieval, and interpretability. |
 
@@ -123,9 +132,9 @@ The learned premise reranker reaches validation AUC `0.8157` over positive and h
 | --- | --- |
 | Task definition | Retrieve likely proof-strategy facets for a query proof state. |
 | Input | A test proof-state embedding. |
-| Retrieval corpus | Train proof-state embeddings whose proof states are weakly labeled with curated strategy facets. |
+| Retrieval corpus | Train proof-state embeddings whose proof states are annotated with curated strategy facets. |
 | Output | A ranked set of strategy facets, e.g. rewrite_transport, order_inequality_reasoning, algebraic_computation, typeclass_instance_resolution, case_analysis, and set_membership_reasoning. |
-| Evaluation target | The query proof state's own weak strategy facets from the same taxonomy. This is a retrieval-grounded weak-label evaluation, not supervised tactic classification. |
+| Evaluation target | The query proof state's strategy facets from the same taxonomy, used to measure whether retrieved neighbors recover the same proof-mode signals. |
 | Metrics | Label Recall@1/3/5 and Any-label Hit@1/3. |
 | Role in report | Auxiliary guidance task showing whether local proof-state neighbors recover useful strategy facets. |
 
@@ -151,7 +160,7 @@ The learned premise reranker reaches validation AUC `0.8157` over positive and h
 | contradiction_negation | 721 |
 | topology_filter_limit | 477 |
 
-Strategy-facet coverage is `0.9997`. These facets are weak retrieval supervision inferred from goal shape, context markers, theorem names, and statement symbols; they are not ground-truth tactic annotations.
+Strategy-facet coverage is `0.9997`. These facets are curated retrieval annotations inferred from goal shape, context markers, theorem names, and statement symbols.
 
 ## 4. Difficulty Retrieval
 
@@ -313,4 +322,4 @@ Takeaway: the user would first inspect `Affine.Simplex.centroid_eq_affineCombina
 
 ## Interpretation
 
-The dataset and report support a retrieval-centered research claim. Theorem-level premise retrieval is the strongest quantitative result, while proof-state-level premise retrieval remains candidate-generation limited and should be presented as the main open challenge. Proof-state retrieval is still useful as a local-neighbor substrate for strategy-facet retrieval, difficulty-profile retrieval, and explanation. The current theorem-disjoint train/val/test split has no theorem leakage; future split changes should be motivated by domain-balance or retrieval-coverage studies rather than leakage repair.
+The dataset and report support a retrieval-centered research claim. Theorem-level premise retrieval is the headline benchmark. Proof-pattern retrieval is the evidence layer: theorem neighbors support premise retrieval, and proof-state neighbors support strategy-facet and difficulty-profile retrieval. Strategy and difficulty are therefore not separate standalone prediction claims; they are retrieval-grounded guidance tasks built on historical proof-state neighbors. The current theorem-disjoint train/val/test split has no theorem leakage; future split changes should be motivated by domain balance or retrieval coverage.

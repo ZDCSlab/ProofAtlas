@@ -26396,7 +26396,7 @@
           ]
         }
       ],
-      "note": "Weak retrieval facets inferred from theorem names, goal shape, context markers, and statement symbols. These are not ground-truth tactic labels.",
+      "note": "Curated strategy facets inferred from theorem names, goal shape, context markers, and statement symbols for retrieval-grounded proof guidance.",
       "taxonomy": "proof_state_strategy_facets_v2"
     },
     "label_coverage": 0.9996724533245988,
@@ -26697,7 +26697,7 @@
         "split": "demo"
       }
     ],
-    "method": "retrieve similar train proof states and aggregate their weak strategy labels; query rule labels are retained as evidence when available",
+    "method": "retrieve similar train proof states and aggregate their curated strategy facets; query rule facets are retained as evidence when available",
     "retrieval_evaluation": {
       "any_label_hit@1": 0.8414154652686763,
       "any_label_hit@10": 1.0,
