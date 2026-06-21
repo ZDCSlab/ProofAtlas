@@ -30,7 +30,7 @@ ProofAtlas is framed as a research dataset and retrieval study for LeanRank-styl
 | Proof-state premise retrieval | 3053 | 0.0148 | 0.0798 | 0.1162 | 0.2362 | 0.0783 | 0.0494 | 0.0697 |
 | Theorem-level premise retrieval | 1000 | 0.2271 | 0.4284 | 0.4940 | 0.6889 | 0.5609 | 0.3741 | 0.4452 |
 
-The learned premise reranker reaches validation AUC `0.8237`. On the small full-rerank diagnostic sample, reranked proof-state Recall@10 is `0.1250` and hybrid candidate reranking reaches `0.1557`.
+The learned premise reranker reaches validation AUC `0.8157`. On the small full-rerank diagnostic sample, reranked proof-state Recall@10 is `0.1250` and hybrid candidate reranking reaches `0.1557`.
 
 ## 2. Proof Pattern Retrieval
 
@@ -52,31 +52,31 @@ Proof-pattern prediction is represented as retrieval: theorem-to-theorem neighbo
 
 ## 3. Strategy Retrieval
 
-Strategy is treated as retrieval-grounded hinting. Historical proof states receive weak technique labels, and a query retrieves similar train proof states before aggregating their labels. This avoids claiming a supervised strategy classifier while still making the strategy signal measurable.
+Strategy is treated as retrieval-grounded hinting. Historical proof states receive weak strategy-facet labels from a curated taxonomy, and a query retrieves similar train proof states before aggregating their facets. This avoids claiming a supervised tactic classifier while still making the strategy signal measurable.
 
 | Strategy retrieval metric | Value |
 | --- | --- |
-| Evaluated test proof states | 2586 |
-| Label Recall@1 | 0.4782 |
-| Label Recall@3 | 0.9027 |
-| Label Recall@5 | 0.9468 |
-| Any-label Hit@1 | 0.9026 |
-| Any-label Hit@3 | 0.9787 |
+| Evaluated test proof states | 3052 |
+| Label Recall@1 | 0.2149 |
+| Label Recall@3 | 0.5479 |
+| Label Recall@5 | 0.7441 |
+| Any-label Hit@1 | 0.8414 |
+| Any-label Hit@3 | 0.9872 |
 
-| Technique label | Test count |
+| Strategy facet | Test count |
 | --- | --- |
-| typeclass_resolution | 2288 |
-| logical_reasoning | 1648 |
-| computation | 722 |
-| rewriting_or_coercion | 590 |
-| theorem_application | 146 |
-| simplification | 63 |
-| case_or_constructor_reasoning | 58 |
-| extensionality | 47 |
-| induction | 9 |
-| automation | 3 |
+| rewrite_transport | 2217 |
+| typeclass_instance_resolution | 1699 |
+| order_inequality_reasoning | 1674 |
+| case_analysis | 1330 |
+| algebraic_computation | 1079 |
+| set_membership_reasoning | 975 |
+| theorem_application | 926 |
+| existential_construction | 796 |
+| contradiction_negation | 721 |
+| topology_filter_limit | 477 |
 
-Proof-technique label coverage is `0.8546`. These labels are weak supervision for retrieval evidence, not ground-truth proof-strategy annotations.
+Strategy-facet coverage is `0.9997`. These facets are weak retrieval supervision inferred from goal shape, context markers, theorem names, and statement symbols; they are not ground-truth tactic annotations.
 
 ## 4. Difficulty Retrieval
 

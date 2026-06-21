@@ -86,6 +86,16 @@ def _labels_by_proof_state(split: str) -> dict[str, set[str]]:
     return {proof_state_id: set(group["label"]) for proof_state_id, group in rows.groupby("proof_state_id")}
 
 
+def _proof_state_label_coverage(split: str = "test") -> float:
+    proof_states_path = Path(f"data/processed/{split}/proof_states.parquet")
+    if not proof_states_path.exists():
+        return 0.0
+    total = pq.ParquetFile(proof_states_path).metadata.num_rows
+    if total <= 0:
+        return 0.0
+    return len(_labels_by_proof_state(split)) / total
+
+
 def _features_by_proof_state(split: str) -> pd.DataFrame:
     path = Path(f"data/processed/{split}/proof_state_features.parquet")
     if not path.exists():
@@ -312,7 +322,7 @@ def _prediction_bundle() -> dict[str, Any]:
             "method": "retrieve similar train proof states and aggregate their weak strategy labels; query rule labels are retained as evidence when available",
             "label_distribution": _csv_records("outputs/reports/proof_technique_distribution.csv"),
             "candidate_pool": read_json("outputs/reports/proof_technique_candidate_pool.json", []),
-            "label_coverage": metrics.get("proof_technique_label_coverage"),
+            "label_coverage": _proof_state_label_coverage("test"),
             "retrieval_evaluation": _strategy_retrieval_evaluation(),
         },
         "difficulty_prediction": {
@@ -440,7 +450,7 @@ def _write_markdown(bundle: dict[str, Any], output_path: str | Path) -> None:
         "",
         "## 3. Strategy Retrieval",
         "",
-        "Strategy is treated as retrieval-grounded hinting. Historical proof states receive weak technique labels, and a query retrieves similar train proof states before aggregating their labels. This avoids claiming a supervised strategy classifier while still making the strategy signal measurable.",
+        "Strategy is treated as retrieval-grounded hinting. Historical proof states receive weak strategy-facet labels from a curated taxonomy, and a query retrieves similar train proof states before aggregating their facets. This avoids claiming a supervised tactic classifier while still making the strategy signal measurable.",
         "",
         _table(
             ["Strategy retrieval metric", "Value"],
@@ -455,11 +465,11 @@ def _write_markdown(bundle: dict[str, Any], output_path: str | Path) -> None:
         ),
         "",
         _table(
-            ["Technique label", "Test count"],
+            ["Strategy facet", "Test count"],
             [[row.get("label"), row.get("count")] for row in technique_rows],
         ),
         "",
-        f"Proof-technique label coverage is `{_fmt(bundle['proof_strategy_hinting'].get('label_coverage'))}`. These labels are weak supervision for retrieval evidence, not ground-truth proof-strategy annotations.",
+        f"Strategy-facet coverage is `{_fmt(bundle['proof_strategy_hinting'].get('label_coverage'))}`. These facets are weak retrieval supervision inferred from goal shape, context markers, theorem names, and statement symbols; they are not ground-truth tactic annotations.",
         "",
         "## 4. Difficulty Retrieval",
         "",

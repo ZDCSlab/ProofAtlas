@@ -25243,77 +25243,77 @@
       "feature_ablation": {
         "candidate_source": {
           "auc_group_only": 0.758544921875,
-          "auc_without_group": 0.791748046875,
+          "auc_without_group": 0.78759765625,
           "columns": [
             "embedding_candidate_rank_score",
             "lexical_candidate_rank_score",
             "candidate_source_overlap",
             "lexical_only_candidate"
           ],
-          "delta_without_group": 0.031982421875
+          "delta_without_group": 0.028076171875
         },
         "difficulty": {
           "auc_group_only": 0.5750732421875,
-          "auc_without_group": 0.81298828125,
+          "auc_without_group": 0.80712890625,
           "columns": [
             "proof_state_difficulty",
             "negative_candidate_hardness"
           ],
-          "delta_without_group": 0.0107421875
+          "delta_without_group": 0.008544921875
         },
         "embedding_similarity": {
           "auc_group_only": 0.756591796875,
-          "auc_without_group": 0.82177734375,
+          "auc_without_group": 0.81396484375,
           "columns": [
             "cosine_similarity"
           ],
-          "delta_without_group": 0.001953125
+          "delta_without_group": 0.001708984375
         },
         "frequency": {
           "auc_group_only": 0.6041259765625,
-          "auc_without_group": 0.82177734375,
+          "auc_without_group": 0.815673828125,
           "columns": [
             "premise_frequency"
           ],
-          "delta_without_group": 0.001953125
+          "delta_without_group": 0.0
         },
         "graph": {
           "auc_group_only": 0.5322265625,
-          "auc_without_group": 0.8232421875,
+          "auc_without_group": 0.815673828125,
           "columns": [
             "graph_premise_degree"
           ],
-          "delta_without_group": 0.00048828125
+          "delta_without_group": 0.0
         },
         "namespace_domain": {
           "auc_group_only": 0.7215576171875,
-          "auc_without_group": 0.820556640625,
+          "auc_without_group": 0.8154296875,
           "columns": [
             "same_namespace",
             "same_domain"
           ],
-          "delta_without_group": 0.003173828125
+          "delta_without_group": 0.000244140625
         },
         "proof_technique": {
-          "auc_group_only": 0.4921875,
+          "auc_group_only": 0.515625,
           "auc_without_group": 0.82177734375,
           "columns": [
             "proof_technique_overlap"
           ],
-          "delta_without_group": 0.001953125
+          "delta_without_group": -0.006103515625
         },
         "symbol_overlap": {
           "auc_group_only": 0.7696533203125,
-          "auc_without_group": 0.811767578125,
+          "auc_without_group": 0.8056640625,
           "columns": [
             "symbol_name_overlap",
             "symbol_context_overlap"
           ],
-          "delta_without_group": 0.011962890625
+          "delta_without_group": 0.010009765625
         },
         "theorem_neighborhood": {
           "auc_group_only": 0.5,
-          "auc_without_group": 0.82373046875,
+          "auc_without_group": 0.815673828125,
           "columns": [
             "theorem_neighborhood_premise_score"
           ],
@@ -25322,7 +25322,7 @@
       },
       "hybrid_reranked_Recall@10": 0.1557017543859649,
       "reranked_Recall@10": 0.125,
-      "validation_auc": 0.82373046875
+      "validation_auc": 0.815673828125
     },
     "theorem": {
       "MAP": 0.3741023060807077,
@@ -25344,7 +25344,7 @@
         "positive_edges": 900,
         "premises": 1416,
         "proof_state_features": 900,
-        "proof_state_techniques": 1960,
+        "proof_state_techniques": 3783,
         "proof_states": 900,
         "theorems": 292
       },
@@ -25353,7 +25353,7 @@
         "positive_edges": 7054,
         "premises": 38332,
         "proof_state_features": 3053,
-        "proof_state_techniques": 5574,
+        "proof_state_techniques": 12992,
         "proof_states": 3053,
         "theorems": 1000
       },
@@ -25362,7 +25362,7 @@
         "positive_edges": 54897,
         "premises": 127561,
         "proof_state_features": 23723,
-        "proof_state_techniques": 44723,
+        "proof_state_techniques": 101714,
         "proof_states": 23723,
         "theorems": 8000
       },
@@ -25371,7 +25371,7 @@
         "positive_edges": 6610,
         "premises": 36292,
         "proof_state_features": 2822,
-        "proof_state_techniques": 5514,
+        "proof_state_techniques": 12176,
         "proof_states": 2822,
         "theorems": 1000
       }
@@ -25599,319 +25599,636 @@
     }
   },
   "proof_strategy_hinting": {
-    "candidate_pool": [
-      {
-        "label": "simplification",
-        "rules": [
-          "simp",
-          "@[simp]",
-          "_simp"
-        ]
-      },
-      {
-        "label": "rewriting_or_coercion",
-        "rules": [
-          "rw",
-          "rewrite",
-          "Eq",
-          "congr",
-          "coe",
-          "cast"
-        ]
-      },
-      {
-        "label": "typeclass_resolution",
-        "rules": [
-          "inferInstance",
-          "inst",
-          "typeclass"
-        ]
-      },
-      {
-        "label": "definition_unfolding",
-        "rules": [
-          "unfold",
-          "defeq"
-        ]
-      },
-      {
-        "label": "theorem_application",
-        "rules": [
-          "exact",
-          "apply",
-          "refine"
-        ]
-      },
-      {
-        "label": "extensionality",
-        "rules": [
-          "ext",
-          "extensionality"
-        ]
-      },
-      {
-        "label": "case_or_constructor_reasoning",
-        "rules": [
-          "cases",
-          "constructor",
-          "rec"
-        ]
-      },
-      {
-        "label": "logical_reasoning",
-        "rules": [
-          "intro",
-          "and",
-          "or",
-          "iff",
-          "forall",
-          "exists"
-        ]
-      },
-      {
-        "label": "induction",
-        "rules": [
-          "induction",
-          "rec_on",
-          "casesOn"
-        ]
-      },
-      {
-        "label": "contradiction",
-        "rules": [
-          "by_contra",
-          "contradiction",
-          "not_not"
-        ]
-      },
-      {
-        "label": "computation",
-        "rules": [
-          "norm_num",
-          "decide",
-          "ring"
-        ]
-      },
-      {
-        "label": "automation",
-        "rules": [
-          "omega",
-          "linarith",
-          "nlinarith",
-          "aesop"
-        ]
-      }
-    ],
-    "label_coverage": 0.8545577771851754,
+    "candidate_pool": {
+      "labels": [
+        {
+          "confidence": 0.72,
+          "description": "Transform the goal by equality, equivalence, coercion, congruence, or transport across definitional wrappers.",
+          "evidence_source": "goal_or_statement_shape",
+          "examples": [
+            "rw",
+            "congr",
+            "coercion/cast",
+            "iff/equality goal"
+          ],
+          "label": "rewrite_transport",
+          "patterns": [
+            "\\b(rw|rewrite|rfl|congr|congrArg|subst)\\b",
+            "\u2194",
+            "=",
+            "\\bcoe\\b",
+            "\\bcast\\b",
+            "\\bmap\\b",
+            "\\bcomp\\b"
+          ]
+        },
+        {
+          "confidence": 0.7,
+          "description": "Normalize expressions by simplification, definitional unfolding, canonical simp lemmas, or local normal forms.",
+          "evidence_source": "lemma_name_or_statement",
+          "examples": [
+            "simp",
+            "@[simp]",
+            "normal form lemma"
+          ],
+          "label": "simplification_normalization",
+          "patterns": [
+            "\\bsimp(?:_|$|\\b)",
+            "@\\[simp\\]",
+            "\\bsimp_",
+            "_simp\\b",
+            "\\bnormalize\\b",
+            "\\bmk_\\b",
+            "\\bto[A-Z]"
+          ]
+        },
+        {
+          "confidence": 0.68,
+          "description": "Close algebraic, numeric, ring, semiring, cardinality, or arithmetic side goals by computation or algebraic normalization.",
+          "evidence_source": "goal_symbols_and_names",
+          "examples": [
+            "ring/norm_num style",
+            "arithmetic operators",
+            "finite sums/products"
+          ],
+          "label": "algebraic_computation",
+          "patterns": [
+            "\\bnorm_num\\b",
+            "\\bring\\b",
+            "\\bomega\\b",
+            "\\blinarith\\b",
+            "\\bnlinarith\\b",
+            "\\bdecide\\b",
+            "[+*/^]",
+            "\\bNat\\b",
+            "\\bInt\\b",
+            "\\bFinset\\b"
+          ]
+        },
+        {
+          "confidence": 0.74,
+          "description": "Reason with inequalities, monotonicity, order bounds, positivity, divisibility, or modular/order relations.",
+          "evidence_source": "goal_symbols",
+          "examples": [
+            "\u2264/< goal",
+            "divisibility/modEq",
+            "monotonicity"
+          ],
+          "label": "order_inequality_reasoning",
+          "patterns": [
+            "\u2264",
+            "\u2265",
+            "<",
+            ">",
+            "\u2223",
+            "\\bMOD\\b",
+            "\\bPMOD\\b",
+            "\\bMonotone\\b",
+            "\\bStrictMono\\b",
+            "\\bNonneg\\b",
+            "\\bPositive\\b"
+          ]
+        },
+        {
+          "confidence": 0.66,
+          "description": "Resolve or exploit typeclass structure such as algebraic hierarchy, category instances, measurability spaces, or topology instances.",
+          "evidence_source": "context_typeclass_bindings",
+          "examples": [
+            "instance hypothesis",
+            "algebra/category/topology class"
+          ],
+          "label": "typeclass_instance_resolution",
+          "patterns": [
+            "\\binst[^\\s:]*\\s*:",
+            "\\bField\\b",
+            "\\bRing\\b",
+            "\\bCategory\\b",
+            "\\bTopologicalSpace\\b",
+            "\\bMeasurableSpace\\b",
+            "\\bNormedField\\b"
+          ]
+        },
+        {
+          "confidence": 0.69,
+          "description": "Split on constructors, alternatives, decidability branches, quotient representatives, or named proof cases.",
+          "evidence_source": "context_case_marker",
+          "examples": [
+            "case ...",
+            "constructor",
+            "or-branch"
+          ],
+          "label": "case_analysis",
+          "patterns": [
+            "^case\\s+",
+            "\\bcase\\s+",
+            "\\bcases\\b",
+            "\\bby_cases\\b",
+            "\\bconstructor\\b",
+            "\\binl\\b",
+            "\\binr\\b",
+            "\\bOr\\b",
+            "\u2228"
+          ]
+        },
+        {
+          "confidence": 0.66,
+          "description": "Use induction, recursion principles, structural recursion, list/tree decomposition, or recursor-generated cases.",
+          "evidence_source": "name_context_or_statement",
+          "examples": [
+            "induction",
+            "rec_on",
+            "recursive datatype"
+          ],
+          "label": "induction_recursion",
+          "patterns": [
+            "\\binduction\\b",
+            "\\brec(?:_on|On)?\\b",
+            "\\bcasesOn\\b",
+            "\\bNat\\.rec\\b",
+            "\\bList\\b",
+            "\\bTree\\b",
+            "\\bPath\\b"
+          ]
+        },
+        {
+          "confidence": 0.78,
+          "description": "Prove equality of structured objects by reducing to pointwise or componentwise equality.",
+          "evidence_source": "goal_or_name",
+          "examples": [
+            "ext",
+            "funext",
+            "hom_ext"
+          ],
+          "label": "extensionality",
+          "patterns": [
+            "\\bext\\b",
+            "\\bextensionality\\b",
+            "\\bfunext\\b",
+            "\\bDFunLike\\.ext\\b",
+            "\\bhom_ext\\b",
+            "\\bext_iff\\b",
+            "\\bpointwise\\b"
+          ]
+        },
+        {
+          "confidence": 0.62,
+          "description": "Apply an existing theorem, implication, iff direction, or named lemma to reduce the current goal.",
+          "evidence_source": "statement_connectives",
+          "examples": [
+            "apply/exact/refine",
+            "_of_ lemma",
+            "iff lemma"
+          ],
+          "label": "theorem_application",
+          "patterns": [
+            "\\bapply\\b",
+            "\\bexact\\b",
+            "\\brefine\\b",
+            "\u2192",
+            "\\b_of_",
+            "\\biff\\b",
+            "_iff_",
+            "\\bIs[A-Z]\\w+"
+          ]
+        },
+        {
+          "confidence": 0.72,
+          "description": "Construct witnesses and prove conjunction/subset/range side conditions for existential goals.",
+          "evidence_source": "goal_shape",
+          "examples": [
+            "exists goal",
+            "witness plus side conditions",
+            "subset/range"
+          ],
+          "label": "existential_construction",
+          "patterns": [
+            "\u2203",
+            "\\bExists\\b",
+            "\\brange\\b",
+            "\u2286",
+            "\u2227",
+            "\\bSubtype\\b",
+            "\\bNonempty\\b"
+          ]
+        },
+        {
+          "confidence": 0.72,
+          "description": "Use negation, contradiction, impossible hypotheses, non-membership, or proof by contradiction.",
+          "evidence_source": "goal_or_context_shape",
+          "examples": [
+            "False/\u00ac goal",
+            "by_contra",
+            "not/Ne lemma"
+          ],
+          "label": "contradiction_negation",
+          "patterns": [
+            "\u00ac",
+            "\\bFalse\\b",
+            "\\bcontradiction\\b",
+            "\\bby_contra\\b",
+            "\\bnot_",
+            "\\bNe\\b",
+            "\u2260"
+          ]
+        },
+        {
+          "confidence": 0.7,
+          "description": "Reason about membership, subset, image/preimage, range, union/intersection, filters, or local set transformations.",
+          "evidence_source": "goal_symbols_and_names",
+          "examples": [
+            "x \u2208 s",
+            "subset",
+            "image/preimage"
+          ],
+          "label": "set_membership_reasoning",
+          "patterns": [
+            "\u2208",
+            "\u2286",
+            "\u222a",
+            "\u2229",
+            "\\bSet\\.",
+            "\\bmem_",
+            "_mem\\b",
+            "\\bimage\\b",
+            "\\bpreimage\\b",
+            "\\brange\\b"
+          ]
+        },
+        {
+          "confidence": 0.73,
+          "description": "Use continuity, neighborhoods, filters, closure, convergence, compactness, or topological local reasoning.",
+          "evidence_source": "domain_specific_goal",
+          "examples": [
+            "ContinuousAt",
+            "Filter.map",
+            "closure"
+          ],
+          "label": "topology_filter_limit",
+          "patterns": [
+            "\\bContinuous",
+            "\\bTendsto\\b",
+            "\\bFilter\\b",
+            "\ud835\udcdd",
+            "\\bclosure\\b",
+            "\\bIsClosed\\b",
+            "\\bIsOpen\\b",
+            "\\bCompact\\b"
+          ]
+        },
+        {
+          "confidence": 0.73,
+          "description": "Use measurability, almost-everywhere facts, integrability, measure restrictions, or measurable selection structure.",
+          "evidence_source": "domain_specific_goal",
+          "examples": [
+            "AEMeasurable",
+            "ae",
+            "measure/integrable"
+          ],
+          "label": "measure_ae_reasoning",
+          "patterns": [
+            "\\bMeasurable\\b",
+            "\\bAEMeasurable\\b",
+            "=\u1da0",
+            "\\bae\\b",
+            "\\bMeasure\\b",
+            "\\bIntegrable\\b",
+            "\\bNullMeasurable\\b"
+          ]
+        },
+        {
+          "confidence": 0.73,
+          "description": "Reason with categorical morphism composition, naturality, isomorphisms, functors, limits, or commutative diagrams.",
+          "evidence_source": "domain_specific_goal",
+          "examples": [
+            "\u226b composition",
+            "functor/naturality",
+            "isIso/limits"
+          ],
+          "label": "category_morphism_reasoning",
+          "patterns": [
+            "\u226b",
+            "\\bCategoryTheory\\b",
+            "\\bFunctor\\b",
+            "\\bNatural\\b",
+            "\\bIsIso\\b",
+            "\\bLimits\\b",
+            "\\bhom\\b"
+          ]
+        }
+      ],
+      "note": "Weak retrieval facets inferred from theorem names, goal shape, context markers, and statement symbols. These are not ground-truth tactic labels.",
+      "taxonomy": "proof_state_strategy_facets_v2"
+    },
+    "label_coverage": 0.9996724533245988,
     "label_distribution": [
       {
-        "count": 17976,
-        "label": "typeclass_resolution",
+        "count": 17756,
+        "label": "rewrite_transport",
         "split": "train"
       },
       {
-        "count": 12664,
-        "label": "logical_reasoning",
+        "count": 13714,
+        "label": "typeclass_instance_resolution",
         "split": "train"
       },
       {
-        "count": 6601,
-        "label": "computation",
+        "count": 11992,
+        "label": "order_inequality_reasoning",
         "split": "train"
       },
       {
-        "count": 4322,
-        "label": "rewriting_or_coercion",
+        "count": 10327,
+        "label": "case_analysis",
         "split": "train"
       },
       {
-        "count": 1571,
+        "count": 9559,
+        "label": "algebraic_computation",
+        "split": "train"
+      },
+      {
+        "count": 7994,
+        "label": "set_membership_reasoning",
+        "split": "train"
+      },
+      {
+        "count": 7431,
         "label": "theorem_application",
         "split": "train"
       },
       {
-        "count": 552,
+        "count": 6571,
+        "label": "existential_construction",
+        "split": "train"
+      },
+      {
+        "count": 5508,
+        "label": "contradiction_negation",
+        "split": "train"
+      },
+      {
+        "count": 3374,
+        "label": "topology_filter_limit",
+        "split": "train"
+      },
+      {
+        "count": 2660,
+        "label": "simplification_normalization",
+        "split": "train"
+      },
+      {
+        "count": 2357,
+        "label": "measure_ae_reasoning",
+        "split": "train"
+      },
+      {
+        "count": 1800,
+        "label": "category_morphism_reasoning",
+        "split": "train"
+      },
+      {
+        "count": 618,
+        "label": "induction_recursion",
+        "split": "train"
+      },
+      {
+        "count": 53,
         "label": "extensionality",
         "split": "train"
       },
       {
-        "count": 523,
-        "label": "simplification",
-        "split": "train"
-      },
-      {
-        "count": 473,
-        "label": "case_or_constructor_reasoning",
-        "split": "train"
-      },
-      {
-        "count": 25,
-        "label": "induction",
-        "split": "train"
-      },
-      {
-        "count": 16,
-        "label": "automation",
-        "split": "train"
-      },
-      {
-        "count": 2136,
-        "label": "typeclass_resolution",
+        "count": 2013,
+        "label": "rewrite_transport",
         "split": "val"
       },
       {
-        "count": 1544,
-        "label": "logical_reasoning",
+        "count": 1663,
+        "label": "typeclass_instance_resolution",
         "split": "val"
       },
       {
-        "count": 794,
-        "label": "computation",
+        "count": 1530,
+        "label": "order_inequality_reasoning",
         "split": "val"
       },
       {
-        "count": 608,
-        "label": "rewriting_or_coercion",
+        "count": 1174,
+        "label": "case_analysis",
         "split": "val"
       },
       {
-        "count": 215,
+        "count": 1108,
+        "label": "algebraic_computation",
+        "split": "val"
+      },
+      {
+        "count": 1057,
+        "label": "set_membership_reasoning",
+        "split": "val"
+      },
+      {
+        "count": 871,
         "label": "theorem_application",
         "split": "val"
       },
       {
-        "count": 75,
-        "label": "simplification",
+        "count": 798,
+        "label": "existential_construction",
         "split": "val"
       },
       {
-        "count": 74,
-        "label": "case_or_constructor_reasoning",
+        "count": 560,
+        "label": "contradiction_negation",
         "split": "val"
       },
       {
-        "count": 60,
-        "label": "extensionality",
+        "count": 510,
+        "label": "topology_filter_limit",
         "split": "val"
       },
       {
-        "count": 5,
-        "label": "induction",
+        "count": 339,
+        "label": "measure_ae_reasoning",
         "split": "val"
       },
       {
-        "count": 3,
-        "label": "automation",
+        "count": 289,
+        "label": "simplification_normalization",
         "split": "val"
       },
       {
-        "count": 2288,
-        "label": "typeclass_resolution",
-        "split": "test"
-      },
-      {
-        "count": 1648,
-        "label": "logical_reasoning",
-        "split": "test"
-      },
-      {
-        "count": 722,
-        "label": "computation",
-        "split": "test"
-      },
-      {
-        "count": 590,
-        "label": "rewriting_or_coercion",
-        "split": "test"
-      },
-      {
-        "count": 146,
-        "label": "theorem_application",
-        "split": "test"
-      },
-      {
-        "count": 63,
-        "label": "simplification",
-        "split": "test"
+        "count": 204,
+        "label": "category_morphism_reasoning",
+        "split": "val"
       },
       {
         "count": 58,
-        "label": "case_or_constructor_reasoning",
-        "split": "test"
+        "label": "induction_recursion",
+        "split": "val"
       },
       {
-        "count": 47,
+        "count": 2,
         "label": "extensionality",
+        "split": "val"
+      },
+      {
+        "count": 2217,
+        "label": "rewrite_transport",
         "split": "test"
       },
       {
-        "count": 9,
-        "label": "induction",
+        "count": 1699,
+        "label": "typeclass_instance_resolution",
         "split": "test"
       },
       {
-        "count": 3,
-        "label": "automation",
+        "count": 1674,
+        "label": "order_inequality_reasoning",
         "split": "test"
       },
       {
-        "count": 678,
-        "label": "typeclass_resolution",
+        "count": 1330,
+        "label": "case_analysis",
+        "split": "test"
+      },
+      {
+        "count": 1079,
+        "label": "algebraic_computation",
+        "split": "test"
+      },
+      {
+        "count": 975,
+        "label": "set_membership_reasoning",
+        "split": "test"
+      },
+      {
+        "count": 926,
+        "label": "theorem_application",
+        "split": "test"
+      },
+      {
+        "count": 796,
+        "label": "existential_construction",
+        "split": "test"
+      },
+      {
+        "count": 721,
+        "label": "contradiction_negation",
+        "split": "test"
+      },
+      {
+        "count": 477,
+        "label": "topology_filter_limit",
+        "split": "test"
+      },
+      {
+        "count": 397,
+        "label": "measure_ae_reasoning",
+        "split": "test"
+      },
+      {
+        "count": 328,
+        "label": "simplification_normalization",
+        "split": "test"
+      },
+      {
+        "count": 272,
+        "label": "category_morphism_reasoning",
+        "split": "test"
+      },
+      {
+        "count": 101,
+        "label": "induction_recursion",
+        "split": "test"
+      },
+      {
+        "count": 631,
+        "label": "rewrite_transport",
         "split": "demo"
       },
       {
-        "count": 582,
-        "label": "logical_reasoning",
+        "count": 517,
+        "label": "typeclass_instance_resolution",
         "split": "demo"
       },
       {
-        "count": 338,
-        "label": "computation",
+        "count": 429,
+        "label": "order_inequality_reasoning",
         "split": "demo"
       },
       {
-        "count": 230,
-        "label": "rewriting_or_coercion",
+        "count": 358,
+        "label": "case_analysis",
         "split": "demo"
       },
       {
-        "count": 47,
+        "count": 299,
+        "label": "algebraic_computation",
+        "split": "demo"
+      },
+      {
+        "count": 299,
         "label": "theorem_application",
         "split": "demo"
       },
       {
-        "count": 47,
-        "label": "simplification",
+        "count": 264,
+        "label": "existential_construction",
         "split": "demo"
       },
       {
-        "count": 22,
+        "count": 238,
+        "label": "set_membership_reasoning",
+        "split": "demo"
+      },
+      {
+        "count": 232,
+        "label": "category_morphism_reasoning",
+        "split": "demo"
+      },
+      {
+        "count": 147,
+        "label": "topology_filter_limit",
+        "split": "demo"
+      },
+      {
+        "count": 142,
+        "label": "contradiction_negation",
+        "split": "demo"
+      },
+      {
+        "count": 135,
+        "label": "measure_ae_reasoning",
+        "split": "demo"
+      },
+      {
+        "count": 70,
+        "label": "simplification_normalization",
+        "split": "demo"
+      },
+      {
+        "count": 20,
+        "label": "induction_recursion",
+        "split": "demo"
+      },
+      {
+        "count": 2,
         "label": "extensionality",
-        "split": "demo"
-      },
-      {
-        "count": 15,
-        "label": "case_or_constructor_reasoning",
-        "split": "demo"
-      },
-      {
-        "count": 1,
-        "label": "induction",
         "split": "demo"
       }
     ],
     "method": "retrieve similar train proof states and aggregate their weak strategy labels; query rule labels are retained as evidence when available",
     "retrieval_evaluation": {
-      "any_label_hit@1": 0.9025522041763341,
-      "any_label_hit@10": 0.9876256767208044,
-      "any_label_hit@3": 0.9787316318638825,
-      "any_label_hit@5": 0.9876256767208044,
+      "any_label_hit@1": 0.8414154652686763,
+      "any_label_hit@10": 1.0,
+      "any_label_hit@3": 0.987221494102228,
+      "any_label_hit@5": 0.9980340760157274,
       "available": true,
-      "evaluated_queries": 2586,
-      "label_recall@1": 0.47815158546017017,
-      "label_recall@10": 0.9482147460685743,
-      "label_recall@3": 0.902700438257283,
-      "label_recall@5": 0.9467839649394173,
+      "evaluated_queries": 3052,
+      "label_recall@1": 0.21490279598077763,
+      "label_recall@10": 0.9418960244648319,
+      "label_recall@3": 0.5479248580166012,
+      "label_recall@5": 0.7440530799475753,
       "neighbor_k": 10,
       "task": "test_proof_state_to_train_proof_state_strategy_label_retrieval"
     }

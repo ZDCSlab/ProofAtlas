@@ -1,103 +1,320 @@
-[
-  {
-    "label": "simplification",
-    "rules": [
-      "simp",
-      "@[simp]",
-      "_simp"
-    ]
-  },
-  {
-    "label": "rewriting_or_coercion",
-    "rules": [
-      "rw",
-      "rewrite",
-      "Eq",
-      "congr",
-      "coe",
-      "cast"
-    ]
-  },
-  {
-    "label": "typeclass_resolution",
-    "rules": [
-      "inferInstance",
-      "inst",
-      "typeclass"
-    ]
-  },
-  {
-    "label": "definition_unfolding",
-    "rules": [
-      "unfold",
-      "defeq"
-    ]
-  },
-  {
-    "label": "theorem_application",
-    "rules": [
-      "exact",
-      "apply",
-      "refine"
-    ]
-  },
-  {
-    "label": "extensionality",
-    "rules": [
-      "ext",
-      "extensionality"
-    ]
-  },
-  {
-    "label": "case_or_constructor_reasoning",
-    "rules": [
-      "cases",
-      "constructor",
-      "rec"
-    ]
-  },
-  {
-    "label": "logical_reasoning",
-    "rules": [
-      "intro",
-      "and",
-      "or",
-      "iff",
-      "forall",
-      "exists"
-    ]
-  },
-  {
-    "label": "induction",
-    "rules": [
-      "induction",
-      "rec_on",
-      "casesOn"
-    ]
-  },
-  {
-    "label": "contradiction",
-    "rules": [
-      "by_contra",
-      "contradiction",
-      "not_not"
-    ]
-  },
-  {
-    "label": "computation",
-    "rules": [
-      "norm_num",
-      "decide",
-      "ring"
-    ]
-  },
-  {
-    "label": "automation",
-    "rules": [
-      "omega",
-      "linarith",
-      "nlinarith",
-      "aesop"
-    ]
-  }
-]
+{
+  "labels": [
+    {
+      "confidence": 0.72,
+      "description": "Transform the goal by equality, equivalence, coercion, congruence, or transport across definitional wrappers.",
+      "evidence_source": "goal_or_statement_shape",
+      "examples": [
+        "rw",
+        "congr",
+        "coercion/cast",
+        "iff/equality goal"
+      ],
+      "label": "rewrite_transport",
+      "patterns": [
+        "\\b(rw|rewrite|rfl|congr|congrArg|subst)\\b",
+        "\u2194",
+        "=",
+        "\\bcoe\\b",
+        "\\bcast\\b",
+        "\\bmap\\b",
+        "\\bcomp\\b"
+      ]
+    },
+    {
+      "confidence": 0.7,
+      "description": "Normalize expressions by simplification, definitional unfolding, canonical simp lemmas, or local normal forms.",
+      "evidence_source": "lemma_name_or_statement",
+      "examples": [
+        "simp",
+        "@[simp]",
+        "normal form lemma"
+      ],
+      "label": "simplification_normalization",
+      "patterns": [
+        "\\bsimp(?:_|$|\\b)",
+        "@\\[simp\\]",
+        "\\bsimp_",
+        "_simp\\b",
+        "\\bnormalize\\b",
+        "\\bmk_\\b",
+        "\\bto[A-Z]"
+      ]
+    },
+    {
+      "confidence": 0.68,
+      "description": "Close algebraic, numeric, ring, semiring, cardinality, or arithmetic side goals by computation or algebraic normalization.",
+      "evidence_source": "goal_symbols_and_names",
+      "examples": [
+        "ring/norm_num style",
+        "arithmetic operators",
+        "finite sums/products"
+      ],
+      "label": "algebraic_computation",
+      "patterns": [
+        "\\bnorm_num\\b",
+        "\\bring\\b",
+        "\\bomega\\b",
+        "\\blinarith\\b",
+        "\\bnlinarith\\b",
+        "\\bdecide\\b",
+        "[+*/^]",
+        "\\bNat\\b",
+        "\\bInt\\b",
+        "\\bFinset\\b"
+      ]
+    },
+    {
+      "confidence": 0.74,
+      "description": "Reason with inequalities, monotonicity, order bounds, positivity, divisibility, or modular/order relations.",
+      "evidence_source": "goal_symbols",
+      "examples": [
+        "\u2264/< goal",
+        "divisibility/modEq",
+        "monotonicity"
+      ],
+      "label": "order_inequality_reasoning",
+      "patterns": [
+        "\u2264",
+        "\u2265",
+        "<",
+        ">",
+        "\u2223",
+        "\\bMOD\\b",
+        "\\bPMOD\\b",
+        "\\bMonotone\\b",
+        "\\bStrictMono\\b",
+        "\\bNonneg\\b",
+        "\\bPositive\\b"
+      ]
+    },
+    {
+      "confidence": 0.66,
+      "description": "Resolve or exploit typeclass structure such as algebraic hierarchy, category instances, measurability spaces, or topology instances.",
+      "evidence_source": "context_typeclass_bindings",
+      "examples": [
+        "instance hypothesis",
+        "algebra/category/topology class"
+      ],
+      "label": "typeclass_instance_resolution",
+      "patterns": [
+        "\\binst[^\\s:]*\\s*:",
+        "\\bField\\b",
+        "\\bRing\\b",
+        "\\bCategory\\b",
+        "\\bTopologicalSpace\\b",
+        "\\bMeasurableSpace\\b",
+        "\\bNormedField\\b"
+      ]
+    },
+    {
+      "confidence": 0.69,
+      "description": "Split on constructors, alternatives, decidability branches, quotient representatives, or named proof cases.",
+      "evidence_source": "context_case_marker",
+      "examples": [
+        "case ...",
+        "constructor",
+        "or-branch"
+      ],
+      "label": "case_analysis",
+      "patterns": [
+        "^case\\s+",
+        "\\bcase\\s+",
+        "\\bcases\\b",
+        "\\bby_cases\\b",
+        "\\bconstructor\\b",
+        "\\binl\\b",
+        "\\binr\\b",
+        "\\bOr\\b",
+        "\u2228"
+      ]
+    },
+    {
+      "confidence": 0.66,
+      "description": "Use induction, recursion principles, structural recursion, list/tree decomposition, or recursor-generated cases.",
+      "evidence_source": "name_context_or_statement",
+      "examples": [
+        "induction",
+        "rec_on",
+        "recursive datatype"
+      ],
+      "label": "induction_recursion",
+      "patterns": [
+        "\\binduction\\b",
+        "\\brec(?:_on|On)?\\b",
+        "\\bcasesOn\\b",
+        "\\bNat\\.rec\\b",
+        "\\bList\\b",
+        "\\bTree\\b",
+        "\\bPath\\b"
+      ]
+    },
+    {
+      "confidence": 0.78,
+      "description": "Prove equality of structured objects by reducing to pointwise or componentwise equality.",
+      "evidence_source": "goal_or_name",
+      "examples": [
+        "ext",
+        "funext",
+        "hom_ext"
+      ],
+      "label": "extensionality",
+      "patterns": [
+        "\\bext\\b",
+        "\\bextensionality\\b",
+        "\\bfunext\\b",
+        "\\bDFunLike\\.ext\\b",
+        "\\bhom_ext\\b",
+        "\\bext_iff\\b",
+        "\\bpointwise\\b"
+      ]
+    },
+    {
+      "confidence": 0.62,
+      "description": "Apply an existing theorem, implication, iff direction, or named lemma to reduce the current goal.",
+      "evidence_source": "statement_connectives",
+      "examples": [
+        "apply/exact/refine",
+        "_of_ lemma",
+        "iff lemma"
+      ],
+      "label": "theorem_application",
+      "patterns": [
+        "\\bapply\\b",
+        "\\bexact\\b",
+        "\\brefine\\b",
+        "\u2192",
+        "\\b_of_",
+        "\\biff\\b",
+        "_iff_",
+        "\\bIs[A-Z]\\w+"
+      ]
+    },
+    {
+      "confidence": 0.72,
+      "description": "Construct witnesses and prove conjunction/subset/range side conditions for existential goals.",
+      "evidence_source": "goal_shape",
+      "examples": [
+        "exists goal",
+        "witness plus side conditions",
+        "subset/range"
+      ],
+      "label": "existential_construction",
+      "patterns": [
+        "\u2203",
+        "\\bExists\\b",
+        "\\brange\\b",
+        "\u2286",
+        "\u2227",
+        "\\bSubtype\\b",
+        "\\bNonempty\\b"
+      ]
+    },
+    {
+      "confidence": 0.72,
+      "description": "Use negation, contradiction, impossible hypotheses, non-membership, or proof by contradiction.",
+      "evidence_source": "goal_or_context_shape",
+      "examples": [
+        "False/\u00ac goal",
+        "by_contra",
+        "not/Ne lemma"
+      ],
+      "label": "contradiction_negation",
+      "patterns": [
+        "\u00ac",
+        "\\bFalse\\b",
+        "\\bcontradiction\\b",
+        "\\bby_contra\\b",
+        "\\bnot_",
+        "\\bNe\\b",
+        "\u2260"
+      ]
+    },
+    {
+      "confidence": 0.7,
+      "description": "Reason about membership, subset, image/preimage, range, union/intersection, filters, or local set transformations.",
+      "evidence_source": "goal_symbols_and_names",
+      "examples": [
+        "x \u2208 s",
+        "subset",
+        "image/preimage"
+      ],
+      "label": "set_membership_reasoning",
+      "patterns": [
+        "\u2208",
+        "\u2286",
+        "\u222a",
+        "\u2229",
+        "\\bSet\\.",
+        "\\bmem_",
+        "_mem\\b",
+        "\\bimage\\b",
+        "\\bpreimage\\b",
+        "\\brange\\b"
+      ]
+    },
+    {
+      "confidence": 0.73,
+      "description": "Use continuity, neighborhoods, filters, closure, convergence, compactness, or topological local reasoning.",
+      "evidence_source": "domain_specific_goal",
+      "examples": [
+        "ContinuousAt",
+        "Filter.map",
+        "closure"
+      ],
+      "label": "topology_filter_limit",
+      "patterns": [
+        "\\bContinuous",
+        "\\bTendsto\\b",
+        "\\bFilter\\b",
+        "\ud835\udcdd",
+        "\\bclosure\\b",
+        "\\bIsClosed\\b",
+        "\\bIsOpen\\b",
+        "\\bCompact\\b"
+      ]
+    },
+    {
+      "confidence": 0.73,
+      "description": "Use measurability, almost-everywhere facts, integrability, measure restrictions, or measurable selection structure.",
+      "evidence_source": "domain_specific_goal",
+      "examples": [
+        "AEMeasurable",
+        "ae",
+        "measure/integrable"
+      ],
+      "label": "measure_ae_reasoning",
+      "patterns": [
+        "\\bMeasurable\\b",
+        "\\bAEMeasurable\\b",
+        "=\u1da0",
+        "\\bae\\b",
+        "\\bMeasure\\b",
+        "\\bIntegrable\\b",
+        "\\bNullMeasurable\\b"
+      ]
+    },
+    {
+      "confidence": 0.73,
+      "description": "Reason with categorical morphism composition, naturality, isomorphisms, functors, limits, or commutative diagrams.",
+      "evidence_source": "domain_specific_goal",
+      "examples": [
+        "\u226b composition",
+        "functor/naturality",
+        "isIso/limits"
+      ],
+      "label": "category_morphism_reasoning",
+      "patterns": [
+        "\u226b",
+        "\\bCategoryTheory\\b",
+        "\\bFunctor\\b",
+        "\\bNatural\\b",
+        "\\bIsIso\\b",
+        "\\bLimits\\b",
+        "\\bhom\\b"
+      ]
+    }
+  ],
+  "note": "Weak retrieval facets inferred from theorem names, goal shape, context markers, and statement symbols. These are not ground-truth tactic labels.",
+  "taxonomy": "proof_state_strategy_facets_v2"
+}

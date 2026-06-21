@@ -11,7 +11,7 @@
       "pair_count": 16554,
       "positive_pairs": 154,
       "query_count": 300,
-      "seconds": 49.95394116686657,
+      "seconds": 49.4559588318225,
       "split": "train",
       "union_hit_query_share": 0.3566666666666667
     },
@@ -26,7 +26,7 @@
       "pair_count": 4133,
       "positive_pairs": 64,
       "query_count": 75,
-      "seconds": 4.923703005071729,
+      "seconds": 4.70353343593888,
       "split": "val",
       "union_hit_query_share": 0.6
     }
@@ -49,81 +49,81 @@
       "candidate_source_overlap",
       "lexical_only_candidate"
     ],
-    "full_auc": 0.82373046875,
+    "full_auc": 0.815673828125,
     "groups": {
       "candidate_source": {
         "auc_group_only": 0.758544921875,
-        "auc_without_group": 0.791748046875,
+        "auc_without_group": 0.78759765625,
         "columns": [
           "embedding_candidate_rank_score",
           "lexical_candidate_rank_score",
           "candidate_source_overlap",
           "lexical_only_candidate"
         ],
-        "delta_without_group": 0.031982421875
+        "delta_without_group": 0.028076171875
       },
       "difficulty": {
         "auc_group_only": 0.5750732421875,
-        "auc_without_group": 0.81298828125,
+        "auc_without_group": 0.80712890625,
         "columns": [
           "proof_state_difficulty",
           "negative_candidate_hardness"
         ],
-        "delta_without_group": 0.0107421875
+        "delta_without_group": 0.008544921875
       },
       "embedding_similarity": {
         "auc_group_only": 0.756591796875,
-        "auc_without_group": 0.82177734375,
+        "auc_without_group": 0.81396484375,
         "columns": [
           "cosine_similarity"
         ],
-        "delta_without_group": 0.001953125
+        "delta_without_group": 0.001708984375
       },
       "frequency": {
         "auc_group_only": 0.6041259765625,
-        "auc_without_group": 0.82177734375,
+        "auc_without_group": 0.815673828125,
         "columns": [
           "premise_frequency"
         ],
-        "delta_without_group": 0.001953125
+        "delta_without_group": 0.0
       },
       "graph": {
         "auc_group_only": 0.5322265625,
-        "auc_without_group": 0.8232421875,
+        "auc_without_group": 0.815673828125,
         "columns": [
           "graph_premise_degree"
         ],
-        "delta_without_group": 0.00048828125
+        "delta_without_group": 0.0
       },
       "namespace_domain": {
         "auc_group_only": 0.7215576171875,
-        "auc_without_group": 0.820556640625,
+        "auc_without_group": 0.8154296875,
         "columns": [
           "same_namespace",
           "same_domain"
         ],
-        "delta_without_group": 0.003173828125
+        "delta_without_group": 0.000244140625
       },
       "proof_technique": {
-        "auc_group_only": 0.4921875,
+        "auc_group_only": 0.515625,
         "auc_without_group": 0.82177734375,
         "columns": [
           "proof_technique_overlap"
         ],
-        "delta_without_group": 0.001953125
+        "delta_without_group": -0.006103515625
       },
       "symbol_overlap": {
         "auc_group_only": 0.7696533203125,
-        "auc_without_group": 0.811767578125,
+        "auc_without_group": 0.8056640625,
         "columns": [
           "symbol_name_overlap",
           "symbol_context_overlap"
         ],
-        "delta_without_group": 0.011962890625
+        "delta_without_group": 0.010009765625
       },
       "theorem_neighborhood": {
         "auc_group_only": 0.5,
-        "auc_without_group": 0.82373046875,
+        "auc_without_group": 0.815673828125,
         "columns": [
           "theorem_neighborhood_premise_score"
         ],
@@ -194,11 +194,11 @@
     "use_candidate_generated_pairs": true
   },
   "timing_profile": {
-    "feature_ablation_seconds": 0.09642096608877182,
-    "model_fit_seconds": 0.0077106282114982605,
-    "total_seconds": 65.91309119015932,
-    "train_feature_seconds": 8.590978082967922,
-    "validation_feature_seconds": 2.2456817280035466
+    "feature_ablation_seconds": 0.09112573089078069,
+    "model_fit_seconds": 0.012458718847483397,
+    "total_seconds": 66.80085196509026,
+    "train_feature_seconds": 9.881153516937047,
+    "validation_feature_seconds": 2.5322203170508146
   },
   "train_pairs": 308,
   "training_pair_source": "candidate_generated_embedding_lexical_union",
@@ -213,7 +213,7 @@
       "negative_candidate_hardness": 1.0,
       "premise_frequency": 0.29545454545454547,
       "proof_state_difficulty": 1.0,
-      "proof_technique_overlap": 0.6233766233766234,
+      "proof_technique_overlap": 0.922077922077922,
       "same_domain": 0.5941558441558441,
       "same_namespace": 0.41883116883116883,
       "symbol_context_overlap": 0.8896103896103896,
@@ -244,6 +244,6 @@
       "total": 308
     }
   },
-  "validation_auc": 0.82373046875,
+  "validation_auc": 0.815673828125,
   "validation_pairs": 128
 }
