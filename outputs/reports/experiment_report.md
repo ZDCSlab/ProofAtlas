@@ -414,6 +414,34 @@ This table converts the aggregate buckets into actionable causes. Overlap is int
 | `reranking_headroom_after_top10` | 458 | 15.0% | 16.2% | A gold premise appears after rank 10, so better ordering could improve top-10 metrics without changing candidate generation. |
 | `top10_hit` | 551 | 18.0% | 19.5% | At least one train-side gold premise already appears in the top 10. |
 
+Proof-state candidate-miss diagnosis:
+
+- Method: `classify_heldout_queries_by_train_gold_availability_candidate_recall_and_topk_ordering`
+- Primary failure mode: `candidate_generation_or_embedding_miss`
+- Candidate-miss share of retrievable: `0.6437146892655368`
+
+| Bucket | Queries | Share of evaluated | Share of retrievable |
+| --- | ---: | ---: | ---: |
+| `topk_hit` | 551 | 0.1805 | 0.1946 |
+| `ordering_miss_after_topk` | 458 | 0.1500 | 0.1617 |
+| `candidate_miss_at_max_k` | 1823 | 0.5971 | 0.6437 |
+| `no_train_gold` | 221 | 0.0724 | n/a |
+
+Proof-state candidate-miss domains:
+
+| Domain | Candidate-miss queries |
+| --- | ---: |
+| Analysis | 255 |
+| MeasureTheory | 230 |
+| Topology | 229 |
+| RingTheory | 177 |
+| Data | 154 |
+| Algebra | 153 |
+| CategoryTheory | 89 |
+| NumberTheory | 83 |
+| Probability | 82 |
+| LinearAlgebra | 77 |
+
 Proof-state rank buckets:
 
 | Rank bucket | Queries |
@@ -470,6 +498,19 @@ Theorem failure diagnosis:
 | `reranking_headroom_after_top10` | 133 | 13.3% | 13.9% | A gold premise appears after rank 10, so better ordering could improve top-10 metrics without changing candidate generation. |
 | `top10_hit` | 767 | 76.7% | 80.3% | At least one train-side gold premise already appears in the top 10. |
 
+Theorem candidate-miss diagnosis:
+
+- Method: `classify_heldout_queries_by_train_gold_availability_candidate_recall_and_topk_ordering`
+- Primary failure mode: `mixed_or_monitor`
+- Candidate-miss share of retrievable: `0.05759162303664921`
+
+| Bucket | Queries | Share of evaluated | Share of retrievable |
+| --- | ---: | ---: | ---: |
+| `topk_hit` | 767 | 0.7670 | 0.8031 |
+| `ordering_miss_after_topk` | 133 | 0.1330 | 0.1393 |
+| `candidate_miss_at_max_k` | 55 | 0.0550 | 0.0576 |
+| `no_train_gold` | 45 | 0.0450 | n/a |
+
 Theorem rank buckets:
 
 | Rank bucket | Queries |
@@ -515,6 +556,8 @@ Theorem zero-recall domains:
 | `queries_with_missing_gold` | 5 |
 | `zero_recall_at_max_k` | 13 |
 | `max_k` | 10 |
+
+- Reranked primary failure mode: `candidate_generation_or_embedding_miss`
 
 ### Worst Proof-State Queries
 
@@ -722,7 +765,7 @@ This profile verifies that the learned premise ranker uses normalized LeanRank-d
 - Timing config matches current report config: `True`
 - Timing generated at: `2026-06-20T22:46:12.435080+00:00`
 - Timing report: `outputs/reports/pipeline_run_timings.json`
-- Evaluation internal total seconds: `26.384093748172745`
+- Evaluation internal total seconds: `26.26292545394972`
 - Evaluation timed substages: `7`
 
 | Stage | Seconds |
@@ -744,13 +787,13 @@ These timings split the `evaluate` pipeline stage into proof-state retrieval, th
 
 | Evaluation substage | Seconds | Queries | Backend |
 | --- | ---: | ---: | --- |
-| `test_reranked_proof_state_retrieval` | 14.4539 | 20 | batched_torch_cuda_then_rerank |
-| `val_proof_state_retrieval` | 6.9215 | 2822 | torch_cuda |
-| `val_proof_state_query_representation_diagnostic` | 1.6064 | 50 | n/a |
-| `test_proof_state_query_representation_diagnostic` | 1.1581 | 50 | n/a |
-| `test_proof_state_retrieval` | 0.9978 | 3053 | torch_cuda |
-| `test_theorem_retrieval` | 0.4331 | 1000 | torch_cuda |
-| `val_theorem_retrieval` | 0.3376 | 1000 | torch_cuda |
+| `test_reranked_proof_state_retrieval` | 14.4926 | 20 | batched_torch_cuda_then_rerank |
+| `val_proof_state_retrieval` | 6.8400 | 2822 | torch_cuda |
+| `val_proof_state_query_representation_diagnostic` | 1.8116 | 50 | n/a |
+| `test_proof_state_retrieval` | 0.9846 | 3053 | torch_cuda |
+| `test_proof_state_query_representation_diagnostic` | 0.8953 | 50 | n/a |
+| `test_theorem_retrieval` | 0.4361 | 1000 | torch_cuda |
+| `val_theorem_retrieval` | 0.3405 | 1000 | torch_cuda |
 
 ### Rerank Evaluation Cost Profile
 
@@ -762,11 +805,11 @@ The reranked proof-state diagnostic follows the slower homepage/API-style path. 
 - Sampled rerank queries: `20`
 - Full proof-state queries: `3053`
 - Sampled fraction of full proof-state eval: `0.006550933508024894`
-- Rerank seconds/query: `0.722693252505269`
-- Batched embedding seconds/query: `0.0003268397654947583`
-- Rerank/batched seconds per query: `2211.154604799333`
-- Projected full rerank seconds: `2206.382499898586`
-- Projected full rerank minutes: `36.77304166497643`
+- Rerank seconds/query: `0.7246289607486688`
+- Batched embedding seconds/query: `0.0003225104742989437`
+- Rerank/batched seconds per query: `2246.838532372721`
+- Projected full rerank seconds: `2212.292217165686`
+- Projected full rerank minutes: `36.87153695276143`
 - Sampled rerank Recall@10 delta: `0.0526104662069575`
 - Policy: keep reranked proof-state evaluation sampled for development and use full batched embedding evaluation for final held-out coverage
 
@@ -846,7 +889,7 @@ This plan turns the timed LeanRank-data run into concrete optimization actions. 
 | 1 | `embedding_reuse` | `reuse_saved_embeddings_for_report_rerank_and_homepage_refreshes` | 148.6884 | none_when_embedding_inputs_are_unchanged |
 | 2 | `cpu_io_stage` | `optimize_sample_stage_vectorization_or_io` | 20.1418 | none_if_outputs_are_schema_and_artifact_compatible |
 | 3 | `ann_candidate_generation` | `keep_ann_index_for_interactive_retrieval_and_large_refreshes` | n/a | monitor_recall_vs_exact_gate |
-| 4 | `rerank_evaluation_policy` | `keep_expensive_reranked_proof_state_evaluation_sampled_during_development` | 2191.9286 | use_full_batched_embedding_eval_for_final_metrics_and_sampled_rerank_only_as_diagnostic |
+| 4 | `rerank_evaluation_policy` | `keep_expensive_reranked_proof_state_evaluation_sampled_during_development` | 2197.7996 | use_full_batched_embedding_eval_for_final_metrics_and_sampled_rerank_only_as_diagnostic |
 
 ### Performance Acceptance Gates
 
@@ -894,8 +937,8 @@ These gates summarize whether the committed performance evidence is strong enoug
 - Pipeline seconds per 100k processed rows: `170.99914395400992`
 - Slowest timed stage: `embed`
 - Saved pipeline evaluate seconds: `19.468068956863135`
-- Current standalone evaluation seconds: `26.384093748172745`
-- Timed/current evaluation ratio: `0.737871429001097`
+- Current standalone evaluation seconds: `26.26292545394972`
+- Timed/current evaluation ratio: `0.7412757193024475`
 - Primary bottleneck share: `0.2977710478575022`
 - Top-3 timed-stage share: `0.561019378074775`
 - Mean index speedup vs exact: `17.07151721843473`
@@ -931,18 +974,18 @@ These linear projections use the current timed pipeline as a capacity-planning b
 This profile records the local footprint of generated LeanRank-data artifacts. It is a practical scale-up signal because embeddings and ANN indexes can dominate disk usage before model training becomes the bottleneck.
 
 - Method: `filesystem_artifact_footprint_with_linear_scale_projection`
-- Total artifact bytes: `3052777413`
-- Total artifact GiB: `2.84312052000314`
-- Bytes per processed row: `10454.287539553168`
+- Total artifact bytes: `3052813529`
+- Total artifact GiB: `2.843154155649245`
+- Bytes per processed row: `10454.411219401942`
 - Unreferenced index artifact bytes: `1502501178`
 - Unreferenced index artifact count: `12`
 
 | Projection | Target rows | Scale factor | Artifact GiB |
 | --- | ---: | ---: | ---: |
-| `current_1x` | 292012 | 1.0000 | 2.8431 |
-| `current_2x` | 584024 | 2.0000 | 5.6862 |
-| `current_5x` | 1460060 | 5.0000 | 14.2156 |
-| `configured_source_rows` | 350000 | 1.1986 | 3.4077 |
+| `current_1x` | 292012 | 1.0000 | 2.8432 |
+| `current_2x` | 584024 | 2.0000 | 5.6863 |
+| `current_5x` | 1460060 | 5.0000 | 14.2158 |
+| `configured_source_rows` | 350000 | 1.1986 | 3.4078 |
 
 Largest generated artifact files:
 

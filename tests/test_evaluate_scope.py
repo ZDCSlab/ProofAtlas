@@ -145,6 +145,57 @@ def test_query_representation_diagnostic_includes_stored_and_fused_variants(tmp_
     assert result["best_variant_by_recall"] in variants
 
 
+def test_candidate_miss_diagnosis_classifies_retrieval_failures():
+    rows = [
+        {
+            "domain_tag": "Algebra",
+            "gold_total_count": 1,
+            "gold_in_train_index_count": 0,
+            "gold_missing_from_train_index_count": 1,
+            "rank_of_first_gold": None,
+            "Recall@100": 0.0,
+        },
+        {
+            "domain_tag": "Topology",
+            "gold_total_count": 2,
+            "gold_in_train_index_count": 1,
+            "gold_missing_from_train_index_count": 1,
+            "rank_of_first_gold": None,
+            "Recall@100": 0.0,
+        },
+        {
+            "domain_tag": "Topology",
+            "gold_total_count": 1,
+            "gold_in_train_index_count": 1,
+            "gold_missing_from_train_index_count": 0,
+            "rank_of_first_gold": 42,
+            "Recall@100": 1.0,
+        },
+        {
+            "domain_tag": "Algebra",
+            "gold_total_count": 1,
+            "gold_in_train_index_count": 1,
+            "gold_missing_from_train_index_count": 0,
+            "rank_of_first_gold": 3,
+            "Recall@100": 1.0,
+        },
+    ]
+
+    diagnosis = evaluate._candidate_miss_diagnosis(rows, [10, 100])
+    counts = {row["bucket"]: row["query_count"] for row in diagnosis["bucket_counts"]}
+
+    assert diagnosis["method"] == "classify_heldout_queries_by_train_gold_availability_candidate_recall_and_topk_ordering"
+    assert counts == {
+        "topk_hit": 1,
+        "ordering_miss_after_topk": 1,
+        "candidate_miss_at_max_k": 1,
+        "no_train_gold": 1,
+    }
+    assert diagnosis["missing_train_gold_partial_queries"] == 1
+    assert diagnosis["candidate_miss_query_share_of_retrievable"] == 1 / 3
+    assert diagnosis["top_candidate_miss_domains"] == [{"domain_tag": "Topology", "query_count": 1}]
+
+
 def test_theorem_evaluation_skips_case_study_query_text_when_disabled(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     (tmp_path / "data/processed/test").mkdir(parents=True)

@@ -80,14 +80,14 @@
         "actual_backend": "torch_cuda",
         "evaluated_queries": 2822,
         "name": "val_proof_state_retrieval",
-        "seconds": 6.92148191598244,
+        "seconds": 6.839982734061778,
         "split": "val"
       },
       {
         "actual_backend": "torch_cuda",
         "evaluated_queries": 3053,
         "name": "test_proof_state_retrieval",
-        "seconds": 0.997841804055497,
+        "seconds": 0.9846244780346751,
         "split": "test"
       },
       {
@@ -95,7 +95,7 @@
         "case_study_limit": 0,
         "evaluated_queries": 1000,
         "name": "val_theorem_retrieval",
-        "seconds": 0.33760711504146457,
+        "seconds": 0.34053498785942793,
         "split": "val"
       },
       {
@@ -103,7 +103,7 @@
         "case_study_limit": 0,
         "evaluated_queries": 1000,
         "name": "test_theorem_retrieval",
-        "seconds": 0.433087405981496,
+        "seconds": 0.4361388839315623,
         "split": "test"
       },
       {
@@ -111,21 +111,21 @@
         "candidate_k": 50,
         "evaluated_queries": 20,
         "name": "test_reranked_proof_state_retrieval",
-        "seconds": 14.453865050105378,
+        "seconds": 14.492579214973375,
         "split": "test"
       },
       {
         "best_variant_by_recall": "stored_plus_goal_only",
         "evaluated_queries": 50,
         "name": "val_proof_state_query_representation_diagnostic",
-        "seconds": 1.6063684159889817,
+        "seconds": 1.8116060649044812,
         "split": "val"
       },
       {
         "best_variant_by_recall": "stored_plus_full_name_context_goal",
         "evaluated_queries": 50,
         "name": "test_proof_state_query_representation_diagnostic",
-        "seconds": 1.1580695090815425,
+        "seconds": 0.8953292008955032,
         "split": "test"
       }
     ],
@@ -133,7 +133,7 @@
       "test": null,
       "val": null
     },
-    "total_seconds": 26.384093748172745,
+    "total_seconds": 26.26292545394972,
     "use_gpu": true
   },
   "label_policy": "held-out test positive_edges are used only for evaluation",
@@ -625,6 +625,65 @@
           }
         }
       ],
+      "candidate_miss_diagnosis": {
+        "bucket_counts": [
+          {
+            "bucket": "topk_hit",
+            "query_count": 6,
+            "query_share": 0.3,
+            "retrievable_query_share": 0.3157894736842105
+          },
+          {
+            "bucket": "ordering_miss_after_topk",
+            "query_count": 0,
+            "query_share": 0.0,
+            "retrievable_query_share": 0.0
+          },
+          {
+            "bucket": "candidate_miss_at_max_k",
+            "query_count": 13,
+            "query_share": 0.65,
+            "retrievable_query_share": 0.6842105263157895
+          },
+          {
+            "bucket": "no_train_gold",
+            "query_count": 1,
+            "query_share": 0.05,
+            "retrievable_query_share": null
+          }
+        ],
+        "candidate_miss_query_share_of_retrievable": 0.6842105263157895,
+        "evaluated_queries": 20,
+        "gold_premises_in_train_index": 50,
+        "gold_premises_missing_from_train_index": 7,
+        "gold_premises_total": 57,
+        "max_k": 10,
+        "method": "classify_heldout_queries_by_train_gold_availability_candidate_recall_and_topk_ordering",
+        "missing_train_gold_partial_queries": 4,
+        "ordering_k": 10,
+        "ordering_miss_query_share_of_retrievable": 0.0,
+        "primary_failure_mode": "candidate_generation_or_embedding_miss",
+        "retrievable_queries": 19,
+        "top_candidate_miss_domains": [
+          {
+            "domain_tag": "LinearAlgebra",
+            "query_count": 7
+          },
+          {
+            "domain_tag": "Topology",
+            "query_count": 3
+          },
+          {
+            "domain_tag": "Algebra",
+            "query_count": 2
+          },
+          {
+            "domain_tag": "Geometry",
+            "query_count": 1
+          }
+        ],
+        "topk_hit_query_share_of_retrievable": 0.3157894736842105
+      },
       "domain_breakdown": [
         {
           "domain_tag": "LinearAlgebra",
@@ -1468,6 +1527,97 @@
       ]
     },
     "proof_state_retrieval": {
+      "candidate_miss_diagnosis": {
+        "bucket_counts": [
+          {
+            "bucket": "topk_hit",
+            "query_count": 551,
+            "query_share": 0.1804782181460858,
+            "retrievable_query_share": 0.19456214689265536
+          },
+          {
+            "bucket": "ordering_miss_after_topk",
+            "query_count": 458,
+            "query_share": 0.15001637733377007,
+            "retrievable_query_share": 0.1617231638418079
+          },
+          {
+            "bucket": "candidate_miss_at_max_k",
+            "query_count": 1823,
+            "query_share": 0.5971175892564691,
+            "retrievable_query_share": 0.6437146892655368
+          },
+          {
+            "bucket": "no_train_gold",
+            "query_count": 221,
+            "query_share": 0.07238781526367508,
+            "retrievable_query_share": null
+          }
+        ],
+        "candidate_miss_query_share_of_retrievable": 0.6437146892655368,
+        "evaluated_queries": 3053,
+        "gold_premises_in_train_index": 6402,
+        "gold_premises_missing_from_train_index": 652,
+        "gold_premises_total": 7054,
+        "max_k": 100,
+        "method": "classify_heldout_queries_by_train_gold_availability_candidate_recall_and_topk_ordering",
+        "missing_train_gold_partial_queries": 341,
+        "ordering_k": 10,
+        "ordering_miss_query_share_of_retrievable": 0.1617231638418079,
+        "primary_failure_mode": "candidate_generation_or_embedding_miss",
+        "retrievable_queries": 2832,
+        "top_candidate_miss_domains": [
+          {
+            "domain_tag": "Analysis",
+            "query_count": 255
+          },
+          {
+            "domain_tag": "MeasureTheory",
+            "query_count": 230
+          },
+          {
+            "domain_tag": "Topology",
+            "query_count": 229
+          },
+          {
+            "domain_tag": "RingTheory",
+            "query_count": 177
+          },
+          {
+            "domain_tag": "Data",
+            "query_count": 154
+          },
+          {
+            "domain_tag": "Algebra",
+            "query_count": 153
+          },
+          {
+            "domain_tag": "CategoryTheory",
+            "query_count": 89
+          },
+          {
+            "domain_tag": "NumberTheory",
+            "query_count": 83
+          },
+          {
+            "domain_tag": "Probability",
+            "query_count": 82
+          },
+          {
+            "domain_tag": "LinearAlgebra",
+            "query_count": 77
+          },
+          {
+            "domain_tag": "GroupTheory",
+            "query_count": 44
+          },
+          {
+            "domain_tag": "Order",
+            "query_count": 41
+          }
+        ],
+        "topk_hit_query_share_of_retrievable": 0.19456214689265536
+      },
       "domain_breakdown": [
         {
           "domain_tag": "Analysis",
@@ -3375,6 +3525,97 @@
       ]
     },
     "theorem_retrieval": {
+      "candidate_miss_diagnosis": {
+        "bucket_counts": [
+          {
+            "bucket": "topk_hit",
+            "query_count": 767,
+            "query_share": 0.767,
+            "retrievable_query_share": 0.8031413612565445
+          },
+          {
+            "bucket": "ordering_miss_after_topk",
+            "query_count": 133,
+            "query_share": 0.133,
+            "retrievable_query_share": 0.13926701570680627
+          },
+          {
+            "bucket": "candidate_miss_at_max_k",
+            "query_count": 55,
+            "query_share": 0.055,
+            "retrievable_query_share": 0.05759162303664921
+          },
+          {
+            "bucket": "no_train_gold",
+            "query_count": 45,
+            "query_share": 0.045,
+            "retrievable_query_share": null
+          }
+        ],
+        "candidate_miss_query_share_of_retrievable": 0.05759162303664921,
+        "evaluated_queries": 1000,
+        "gold_premises_in_train_index": 4881,
+        "gold_premises_missing_from_train_index": 546,
+        "gold_premises_total": 5427,
+        "max_k": 100,
+        "method": "classify_heldout_queries_by_train_gold_availability_candidate_recall_and_topk_ordering",
+        "missing_train_gold_partial_queries": 313,
+        "ordering_k": 10,
+        "ordering_miss_query_share_of_retrievable": 0.13926701570680627,
+        "primary_failure_mode": "mixed_or_monitor",
+        "retrievable_queries": 955,
+        "top_candidate_miss_domains": [
+          {
+            "domain_tag": "Analysis",
+            "query_count": 8
+          },
+          {
+            "domain_tag": "MeasureTheory",
+            "query_count": 7
+          },
+          {
+            "domain_tag": "NumberTheory",
+            "query_count": 6
+          },
+          {
+            "domain_tag": "CategoryTheory",
+            "query_count": 5
+          },
+          {
+            "domain_tag": "Algebra",
+            "query_count": 5
+          },
+          {
+            "domain_tag": "Topology",
+            "query_count": 5
+          },
+          {
+            "domain_tag": "Data",
+            "query_count": 4
+          },
+          {
+            "domain_tag": "RingTheory",
+            "query_count": 3
+          },
+          {
+            "domain_tag": "GroupTheory",
+            "query_count": 2
+          },
+          {
+            "domain_tag": "Order",
+            "query_count": 2
+          },
+          {
+            "domain_tag": "Probability",
+            "query_count": 2
+          },
+          {
+            "domain_tag": "Combinatorics",
+            "query_count": 2
+          }
+        ],
+        "topk_hit_query_share_of_retrievable": 0.8031413612565445
+      },
       "case_studies": [
         {
           "full_name": "AList.lookup_to_alist",
@@ -23897,6 +24138,97 @@
       }
     },
     "proof_state_retrieval": {
+      "candidate_miss_diagnosis": {
+        "bucket_counts": [
+          {
+            "bucket": "topk_hit",
+            "query_count": 495,
+            "query_share": 0.17540751240255137,
+            "retrievable_query_share": 0.1872871736662883
+          },
+          {
+            "bucket": "ordering_miss_after_topk",
+            "query_count": 479,
+            "query_share": 0.16973777462792347,
+            "retrievable_query_share": 0.18123344684071133
+          },
+          {
+            "bucket": "candidate_miss_at_max_k",
+            "query_count": 1669,
+            "query_share": 0.5914245216158752,
+            "retrievable_query_share": 0.6314793794930004
+          },
+          {
+            "bucket": "no_train_gold",
+            "query_count": 179,
+            "query_share": 0.0634301913536499,
+            "retrievable_query_share": null
+          }
+        ],
+        "candidate_miss_query_share_of_retrievable": 0.6314793794930004,
+        "evaluated_queries": 2822,
+        "gold_premises_in_train_index": 6014,
+        "gold_premises_missing_from_train_index": 596,
+        "gold_premises_total": 6610,
+        "max_k": 100,
+        "method": "classify_heldout_queries_by_train_gold_availability_candidate_recall_and_topk_ordering",
+        "missing_train_gold_partial_queries": 332,
+        "ordering_k": 10,
+        "ordering_miss_query_share_of_retrievable": 0.18123344684071133,
+        "primary_failure_mode": "candidate_generation_or_embedding_miss",
+        "retrievable_queries": 2643,
+        "top_candidate_miss_domains": [
+          {
+            "domain_tag": "Analysis",
+            "query_count": 273
+          },
+          {
+            "domain_tag": "MeasureTheory",
+            "query_count": 237
+          },
+          {
+            "domain_tag": "Algebra",
+            "query_count": 152
+          },
+          {
+            "domain_tag": "Data",
+            "query_count": 149
+          },
+          {
+            "domain_tag": "RingTheory",
+            "query_count": 118
+          },
+          {
+            "domain_tag": "Topology",
+            "query_count": 111
+          },
+          {
+            "domain_tag": "LinearAlgebra",
+            "query_count": 82
+          },
+          {
+            "domain_tag": "Combinatorics",
+            "query_count": 78
+          },
+          {
+            "domain_tag": "Order",
+            "query_count": 73
+          },
+          {
+            "domain_tag": "Geometry",
+            "query_count": 59
+          },
+          {
+            "domain_tag": "CategoryTheory",
+            "query_count": 59
+          },
+          {
+            "domain_tag": "Probability",
+            "query_count": 49
+          }
+        ],
+        "topk_hit_query_share_of_retrievable": 0.1872871736662883
+      },
       "domain_breakdown": [
         {
           "domain_tag": "Analysis",
@@ -24841,6 +25173,97 @@
       }
     },
     "theorem_retrieval": {
+      "candidate_miss_diagnosis": {
+        "bucket_counts": [
+          {
+            "bucket": "topk_hit",
+            "query_count": 780,
+            "query_share": 0.78,
+            "retrievable_query_share": 0.8116545265348595
+          },
+          {
+            "bucket": "ordering_miss_after_topk",
+            "query_count": 143,
+            "query_share": 0.143,
+            "retrievable_query_share": 0.14880332986472425
+          },
+          {
+            "bucket": "candidate_miss_at_max_k",
+            "query_count": 38,
+            "query_share": 0.038,
+            "retrievable_query_share": 0.03954214360041623
+          },
+          {
+            "bucket": "no_train_gold",
+            "query_count": 39,
+            "query_share": 0.039,
+            "retrievable_query_share": null
+          }
+        ],
+        "candidate_miss_query_share_of_retrievable": 0.03954214360041623,
+        "evaluated_queries": 1000,
+        "gold_premises_in_train_index": 4569,
+        "gold_premises_missing_from_train_index": 518,
+        "gold_premises_total": 5087,
+        "max_k": 100,
+        "method": "classify_heldout_queries_by_train_gold_availability_candidate_recall_and_topk_ordering",
+        "missing_train_gold_partial_queries": 298,
+        "ordering_k": 10,
+        "ordering_miss_query_share_of_retrievable": 0.14880332986472425,
+        "primary_failure_mode": "mixed_or_monitor",
+        "retrievable_queries": 961,
+        "top_candidate_miss_domains": [
+          {
+            "domain_tag": "Analysis",
+            "query_count": 7
+          },
+          {
+            "domain_tag": "Data",
+            "query_count": 4
+          },
+          {
+            "domain_tag": "Algebra",
+            "query_count": 4
+          },
+          {
+            "domain_tag": "AlgebraicGeometry",
+            "query_count": 3
+          },
+          {
+            "domain_tag": "GroupTheory",
+            "query_count": 3
+          },
+          {
+            "domain_tag": "NumberTheory",
+            "query_count": 2
+          },
+          {
+            "domain_tag": "Topology",
+            "query_count": 2
+          },
+          {
+            "domain_tag": "Tactic",
+            "query_count": 2
+          },
+          {
+            "domain_tag": "RingTheory",
+            "query_count": 2
+          },
+          {
+            "domain_tag": "Geometry",
+            "query_count": 2
+          },
+          {
+            "domain_tag": "AlgebraicTopology",
+            "query_count": 1
+          },
+          {
+            "domain_tag": "CategoryTheory",
+            "query_count": 1
+          }
+        ],
+        "topk_hit_query_share_of_retrievable": 0.8116545265348595
+      },
       "domain_breakdown": [
         {
           "domain_tag": "Algebra",

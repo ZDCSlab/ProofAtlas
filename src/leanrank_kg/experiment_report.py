@@ -161,6 +161,32 @@ def _failure_diagnosis_table(profile: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def _candidate_miss_diagnosis_table(profile: dict[str, Any]) -> str:
+    rows = profile.get("bucket_counts", []) if isinstance(profile, dict) else []
+    lines = [
+        "| Bucket | Queries | Share of evaluated | Share of retrievable |",
+        "| --- | ---: | ---: | ---: |",
+    ]
+    for row in rows:
+        lines.append(
+            f"| `{row.get('bucket', 'n/a')}` | {_fmt(row.get('query_count'))} | "
+            f"{_fmt(row.get('query_share'))} | {_fmt(row.get('retrievable_query_share'))} |"
+        )
+    if len(lines) == 2:
+        lines.append("| n/a | n/a | n/a | n/a |")
+    return "\n".join(lines)
+
+
+def _candidate_miss_domain_table(profile: dict[str, Any]) -> str:
+    rows = profile.get("top_candidate_miss_domains", []) if isinstance(profile, dict) else []
+    lines = ["| Domain | Candidate-miss queries |", "| --- | ---: |"]
+    for row in rows[:10]:
+        lines.append(f"| {row.get('domain_tag', 'Unknown')} | {_fmt(row.get('query_count'))} |")
+    if len(lines) == 2:
+        lines.append("| n/a | n/a |")
+    return "\n".join(lines)
+
+
 def _index_benchmark_table(bench_entities: dict[str, Any]) -> str:
     lines = [
         "| Entity | Backend | Rows | Exact ms/query | Indexed ms/query | Speedup | Recall@1 vs exact | Recall@5 vs exact | Recall@10 vs exact | Top1 match@10 | Build seconds | Indexed total seconds |",
@@ -641,6 +667,9 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     proof_failure_profile = test_eval.get("test", {}).get("proof_state_retrieval", {}).get("failure_profile", {})
     theorem_failure_profile = test_eval.get("test", {}).get("theorem_retrieval", {}).get("failure_profile", {})
     reranked_failure_profile = reranked_proof_state.get("failure_profile", {})
+    proof_candidate_miss_diagnosis = test_eval.get("test", {}).get("proof_state_retrieval", {}).get("candidate_miss_diagnosis", {})
+    theorem_candidate_miss_diagnosis = test_eval.get("test", {}).get("theorem_retrieval", {}).get("candidate_miss_diagnosis", {})
+    reranked_candidate_miss_diagnosis = reranked_proof_state.get("candidate_miss_diagnosis", {})
     proof_worst_cases = test_eval.get("test", {}).get("proof_state_retrieval", {}).get("worst_cases", [])
     theorem_worst_cases = test_eval.get("test", {}).get("theorem_retrieval", {}).get("worst_cases", [])
     validation_proof_metrics = test_eval.get("validation", {}).get("proof_state_retrieval", {}).get("metrics", {})
@@ -1035,6 +1064,18 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
         "",
         _failure_diagnosis_table(proof_failure_profile),
         "",
+        "Proof-state candidate-miss diagnosis:",
+        "",
+        f"- Method: `{proof_candidate_miss_diagnosis.get('method', 'n/a')}`",
+        f"- Primary failure mode: `{proof_candidate_miss_diagnosis.get('primary_failure_mode', 'n/a')}`",
+        f"- Candidate-miss share of retrievable: `{proof_candidate_miss_diagnosis.get('candidate_miss_query_share_of_retrievable', 'n/a')}`",
+        "",
+        _candidate_miss_diagnosis_table(proof_candidate_miss_diagnosis),
+        "",
+        "Proof-state candidate-miss domains:",
+        "",
+        _candidate_miss_domain_table(proof_candidate_miss_diagnosis),
+        "",
         "Proof-state rank buckets:",
         "",
         _rank_bucket_table(proof_failure_profile),
@@ -1055,6 +1096,14 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
         "",
         _failure_diagnosis_table(theorem_failure_profile),
         "",
+        "Theorem candidate-miss diagnosis:",
+        "",
+        f"- Method: `{theorem_candidate_miss_diagnosis.get('method', 'n/a')}`",
+        f"- Primary failure mode: `{theorem_candidate_miss_diagnosis.get('primary_failure_mode', 'n/a')}`",
+        f"- Candidate-miss share of retrievable: `{theorem_candidate_miss_diagnosis.get('candidate_miss_query_share_of_retrievable', 'n/a')}`",
+        "",
+        _candidate_miss_diagnosis_table(theorem_candidate_miss_diagnosis),
+        "",
         "Theorem rank buckets:",
         "",
         _rank_bucket_table(theorem_failure_profile),
@@ -1070,6 +1119,8 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
         "#### Reranked Proof-State Diagnostic Failure Profile",
         "",
         _failure_profile_table(reranked_failure_profile),
+        "",
+        f"- Reranked primary failure mode: `{reranked_candidate_miss_diagnosis.get('primary_failure_mode', 'n/a')}`",
         "",
         "### Worst Proof-State Queries",
         "",

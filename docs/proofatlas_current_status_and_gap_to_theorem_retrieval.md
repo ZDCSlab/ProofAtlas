@@ -137,6 +137,15 @@ Interpretation:
   retrievable proof-state queries miss all gold premises in the top-100
   candidate pool, while 458 have a gold premise after rank 10 and are therefore
   plausible reranking wins.
+- The candidate-miss diagnosis classifies proof-state failures as
+  `candidate_generation_or_embedding_miss`: 64.37% of retrievable proof-state
+  queries miss all train-side gold premises in the top-100 candidate pool,
+  16.17% have ordering/reranking headroom after top 10, and 19.46% already
+  have a top-10 hit.
+- Theorem-level candidate generation is much stronger: 80.31% of retrievable
+  theorem queries already have a top-10 hit, 13.93% have ordering/reranking
+  headroom after top 10, and only 5.76% miss all train-side gold premises in the
+  top-100 candidate pool.
 - Reranking helps user-facing examples, but the broad accuracy ceiling is still
   controlled by embedding candidate generation and gold-premise availability in
   the train premise index.
@@ -214,7 +223,9 @@ quality and presentation around the ML retrieval task:
    Current proof-state Recall@100 is the weakest headline metric. The next
    useful experiments are query representation ablations, larger candidate
    depth, domain-specific retrieval, and hybrid lexical plus embedding
-   retrieval.
+   retrieval. The new candidate-miss diagnosis shows this is the primary
+   accuracy gap: 1,823 retrievable proof-state queries still miss all train-side
+   gold premises at top 100.
 
 2. Broaden rerank evaluation.
    The user-facing reranker diagnostic is intentionally small because it follows

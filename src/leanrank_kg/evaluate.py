@@ -187,6 +187,99 @@ def _failure_profile(rows: list[dict], top_ks: list[int]) -> dict[str, Any]:
     }
 
 
+def _candidate_miss_diagnosis(rows: list[dict], top_ks: list[int], *, ordering_k: int = 10) -> dict[str, Any]:
+    if not rows:
+        return {
+            "method": "classify_heldout_queries_by_train_gold_availability_candidate_recall_and_topk_ordering",
+            "evaluated_queries": 0,
+            "retrievable_queries": 0,
+            "max_k": max(top_ks) if top_ks else 0,
+            "ordering_k": ordering_k,
+            "bucket_counts": [],
+            "top_candidate_miss_domains": [],
+            "primary_failure_mode": "no_rows",
+        }
+    observed_top_ks = [k for k in top_ks if any(f"Recall@{k}" in row for row in rows)]
+    max_k = max(observed_top_ks or top_ks)
+    ordering_k = min(ordering_k, max_k)
+    buckets = {
+        "topk_hit": 0,
+        "ordering_miss_after_topk": 0,
+        "candidate_miss_at_max_k": 0,
+        "no_train_gold": 0,
+    }
+    missing_train_gold_partial = 0
+    candidate_miss_domains: dict[str, int] = {}
+    total_gold = 0
+    train_gold = 0
+    missing_gold = 0
+    retrievable = 0
+    for row in rows:
+        gold_total = int(row.get("gold_total_count", 0) or 0)
+        gold_in_train = int(row.get("gold_in_train_index_count", 0) or 0)
+        gold_missing = int(row.get("gold_missing_from_train_index_count", 0) or 0)
+        total_gold += gold_total
+        train_gold += gold_in_train
+        missing_gold += gold_missing
+        if gold_missing > 0 and gold_in_train > 0:
+            missing_train_gold_partial += 1
+        if gold_in_train <= 0:
+            buckets["no_train_gold"] += 1
+            continue
+        retrievable += 1
+        rank = row.get("rank_of_first_gold")
+        recall_at_max = float(row.get(f"Recall@{max_k}", 0.0) or 0.0)
+        if isinstance(rank, int) and rank <= ordering_k:
+            buckets["topk_hit"] += 1
+        elif recall_at_max > 0.0:
+            buckets["ordering_miss_after_topk"] += 1
+        else:
+            buckets["candidate_miss_at_max_k"] += 1
+            domain = str(row.get("domain_tag", "Unknown") or "Unknown")
+            candidate_miss_domains[domain] = candidate_miss_domains.get(domain, 0) + 1
+    denominator = max(1, len(rows))
+    retrievable_denominator = max(1, retrievable)
+    bucket_counts = [
+        {
+            "bucket": bucket,
+            "query_count": int(count),
+            "query_share": float(count / denominator),
+            "retrievable_query_share": float(count / retrievable_denominator)
+            if bucket != "no_train_gold"
+            else None,
+        }
+        for bucket, count in buckets.items()
+    ]
+    if buckets["candidate_miss_at_max_k"] / retrievable_denominator >= 0.5:
+        primary = "candidate_generation_or_embedding_miss"
+    elif buckets["ordering_miss_after_topk"] / retrievable_denominator >= 0.25:
+        primary = "candidate_ordering_after_recall"
+    elif buckets["no_train_gold"] / denominator >= 0.25:
+        primary = "gold_unavailable_in_train_index"
+    else:
+        primary = "mixed_or_monitor"
+    return {
+        "method": "classify_heldout_queries_by_train_gold_availability_candidate_recall_and_topk_ordering",
+        "evaluated_queries": len(rows),
+        "retrievable_queries": retrievable,
+        "max_k": max_k,
+        "ordering_k": ordering_k,
+        "bucket_counts": bucket_counts,
+        "missing_train_gold_partial_queries": missing_train_gold_partial,
+        "gold_premises_total": int(total_gold),
+        "gold_premises_in_train_index": int(train_gold),
+        "gold_premises_missing_from_train_index": int(missing_gold),
+        "candidate_miss_query_share_of_retrievable": float(buckets["candidate_miss_at_max_k"] / retrievable_denominator),
+        "ordering_miss_query_share_of_retrievable": float(buckets["ordering_miss_after_topk"] / retrievable_denominator),
+        "topk_hit_query_share_of_retrievable": float(buckets["topk_hit"] / retrievable_denominator),
+        "primary_failure_mode": primary,
+        "top_candidate_miss_domains": [
+            {"domain_tag": domain, "query_count": count}
+            for domain, count in sorted(candidate_miss_domains.items(), key=lambda item: item[1], reverse=True)[:12]
+        ],
+    }
+
+
 def _ranking_row(retrieved_ids: list[str], gold_all: set[str], train_premises: set[str], top_ks: list[int]) -> dict:
     gold_in_index = gold_all & train_premises
     gold_missing = gold_all - train_premises
@@ -1087,6 +1180,7 @@ def run(config_path: str, full_heldout: bool = False) -> None:
                 "metrics": proof_state_by_split["test"]["metrics"],
                 "domain_breakdown": _domain_breakdown(proof_state_by_split["test"].get("per_query", []), top_ks),
                 "failure_profile": _failure_profile(proof_state_by_split["test"].get("per_query", []), top_ks),
+                "candidate_miss_diagnosis": _candidate_miss_diagnosis(proof_state_by_split["test"].get("per_query", []), top_ks),
                 "worst_cases": _worst_cases(proof_state_by_split["test"].get("per_query", []), top_ks, id_keys=["proof_state_id"]),
                 "examples": proof_state_by_split["test"]["examples"],
             },
@@ -1096,6 +1190,7 @@ def run(config_path: str, full_heldout: bool = False) -> None:
                 "candidate_k_ablation": reranked_proof_state_eval.get("candidate_k_ablation", []),
                 "domain_breakdown": _domain_breakdown(reranked_proof_state_eval.get("per_query", []), top_ks),
                 "failure_profile": _failure_profile(reranked_proof_state_eval.get("per_query", []), top_ks),
+                "candidate_miss_diagnosis": _candidate_miss_diagnosis(reranked_proof_state_eval.get("per_query", []), top_ks),
                 "worst_cases": _worst_cases(reranked_proof_state_eval.get("per_query", []), top_ks, id_keys=["proof_state_id"]),
                 "examples": reranked_proof_state_eval["examples"],
             },
@@ -1104,6 +1199,7 @@ def run(config_path: str, full_heldout: bool = False) -> None:
                 "metrics": theorem_by_split["test"]["metrics"],
                 "domain_breakdown": _domain_breakdown(theorem_by_split["test"].get("per_query", []), top_ks, metric_prefix="theorem_retrieval_"),
                 "failure_profile": _failure_profile(theorem_by_split["test"].get("per_query", []), top_ks),
+                "candidate_miss_diagnosis": _candidate_miss_diagnosis(theorem_by_split["test"].get("per_query", []), top_ks),
                 "worst_cases": _worst_cases(theorem_by_split["test"].get("per_query", []), top_ks, id_keys=["theorem_id", "full_name"]),
                 "case_studies": case_studies,
             },
@@ -1113,12 +1209,14 @@ def run(config_path: str, full_heldout: bool = False) -> None:
                 "metrics": proof_state_by_split["val"]["metrics"],
                 "domain_breakdown": _domain_breakdown(proof_state_by_split["val"].get("per_query", []), top_ks),
                 "failure_profile": _failure_profile(proof_state_by_split["val"].get("per_query", []), top_ks),
+                "candidate_miss_diagnosis": _candidate_miss_diagnosis(proof_state_by_split["val"].get("per_query", []), top_ks),
             },
             "proof_state_query_representation_diagnostic": query_representation_diagnostics.get("val", {}),
             "theorem_retrieval": {
                 "metrics": theorem_by_split["val"]["metrics"],
                 "domain_breakdown": _domain_breakdown(theorem_by_split["val"].get("per_query", []), top_ks, metric_prefix="theorem_retrieval_"),
                 "failure_profile": _failure_profile(theorem_by_split["val"].get("per_query", []), top_ks),
+                "candidate_miss_diagnosis": _candidate_miss_diagnosis(theorem_by_split["val"].get("per_query", []), top_ks),
             },
         },
     }

@@ -313,6 +313,8 @@ def test_text_query_retrieval_and_theorem_guidance_are_json_serializable(tmp_pat
     assert test_eval["test"]["theorem_retrieval"]["domain_breakdown"]
     assert test_eval["test"]["proof_state_retrieval"]["failure_profile"]["rank_buckets"]
     assert test_eval["test"]["theorem_retrieval"]["failure_profile"]["gold_coverage_buckets"]
+    assert test_eval["test"]["proof_state_retrieval"]["candidate_miss_diagnosis"]["bucket_counts"]
+    assert "primary_failure_mode" in test_eval["test"]["proof_state_retrieval"]["candidate_miss_diagnosis"]
     assert "zero_recall_at_max_k" in test_eval["test"]["proof_state_retrieval"]["failure_profile"]
     assert test_eval["test"]["proof_state_retrieval"]["worst_cases"]
     assert test_eval["test"]["theorem_retrieval"]["worst_cases"]

@@ -68,6 +68,21 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                         "gold_coverage_buckets": {"full_train_gold_coverage": 1, "partial_train_gold_coverage": 1, "no_train_gold_coverage": 1},
                         "zero_recall_domains": [{"domain_tag": "Algebra", "zero_recall_queries": 1}],
                     },
+                    "candidate_miss_diagnosis": {
+                        "method": "classify_heldout_queries_by_train_gold_availability_candidate_recall_and_topk_ordering",
+                        "evaluated_queries": 3,
+                        "retrievable_queries": 2,
+                        "max_k": 100,
+                        "ordering_k": 10,
+                        "primary_failure_mode": "candidate_generation_or_embedding_miss",
+                        "candidate_miss_query_share_of_retrievable": 0.5,
+                        "bucket_counts": [
+                            {"bucket": "topk_hit", "query_count": 1, "query_share": 0.3333, "retrievable_query_share": 0.5},
+                            {"bucket": "candidate_miss_at_max_k", "query_count": 1, "query_share": 0.3333, "retrievable_query_share": 0.5},
+                            {"bucket": "no_train_gold", "query_count": 1, "query_share": 0.3333, "retrievable_query_share": None},
+                        ],
+                        "top_candidate_miss_domains": [{"domain_tag": "Algebra", "query_count": 1}],
+                    },
                     "worst_cases": [{"proof_state_id": "ps_bad", "rank_of_first_gold": 27, "Recall@10": 0.0, "MRR": 0.0, "gold_premises_total": 1, "gold_premises_in_train_index": 1}],
                 },
                 "proof_state_query_representation_diagnostic": {
@@ -91,6 +106,13 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                         "rank_buckets": {"miss_top_100": 1, "no_train_gold": 1},
                         "gold_coverage_buckets": {"partial_train_gold_coverage": 1, "no_train_gold_coverage": 1},
                         "zero_recall_domains": [{"domain_tag": "Algebra", "zero_recall_queries": 1}],
+                    },
+                    "candidate_miss_diagnosis": {
+                        "method": "classify_heldout_queries_by_train_gold_availability_candidate_recall_and_topk_ordering",
+                        "primary_failure_mode": "mixed_or_monitor",
+                        "candidate_miss_query_share_of_retrievable": 0.0,
+                        "bucket_counts": [{"bucket": "ordering_miss_after_topk", "query_count": 1, "query_share": 0.5, "retrievable_query_share": 1.0}],
+                        "top_candidate_miss_domains": [],
                     },
                     "worst_cases": [{"full_name": "Mathlib.Bad", "rank_of_first_gold": 19, "theorem_retrieval_Recall@10": 0.0, "theorem_retrieval_MRR": 0.0, "gold_premises_total": 2, "gold_premises_in_train_index": 1}],
                 },
@@ -923,6 +945,10 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "Hard-Negative Pair Evidence" in text
     assert "ordered_namespace_subdomain_domain_token_hardness_rules" in text
     assert "same_namespace_as_positive" in text
+    assert "Proof-state candidate-miss diagnosis" in text
+    assert "candidate_generation_or_embedding_miss" in text
+    assert "candidate_miss_at_max_k" in text
+    assert "Theorem candidate-miss diagnosis" in text
     assert "same namespace share" in text
     assert "Mathlib.Algebra.Group.mul_left_cancel" in text
     assert "Ranker Training Pair Utilization" in text
