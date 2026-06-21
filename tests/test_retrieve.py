@@ -484,85 +484,27 @@ def test_text_query_retrieval_and_theorem_guidance_are_json_serializable(tmp_pat
     assert graph_asset["edges"]
     html = (tmp_path / "homepage/index.html").read_text(encoding="utf-8")
     assert all(line.rstrip() == line for line in html.splitlines())
-    assert "LeanRank Proof Knowledge Graph" in html
-    assert "Interactive Proof Guidance Workbench" in html
-    assert "Get Proof Guidance" in html
-    assert "sample-theorems" in html
-    assert "New Theorem Proof Guidance" in html
-    assert "Train gold premises" in html
-    assert "missing from train" in html
-    assert "Knowledge Graph Overview" in html
-    assert "Edge Types" in html
-    assert "kg-edge-legend" in html
-    assert "kg-detail" in html
-    assert "Click a graph node or edge" in html
-    assert "edgeDescriptions" in html
-    assert "theorem uses premise" in html
-    assert "Proof Guidance Panel" in html
-    assert "Why Were These Premises Recommended?" in html
-    assert "Evaluation And Examples" in html
-    assert "Local asset fallback" in html
-    assert "renderLocalFallback" in html
-    assert "Gold premises:" in html
-    assert "Gold premise: <code></code>" not in html
+    assert "ProofAtlas Research Report" in html
+    assert "Retrieval-Centered LeanRank Proof Guidance" in html
+    assert "Four Research Tasks" in html
+    assert "Dataset And Split Statistics" in html
+    assert "Top Test Domains" in html
+    assert "Theorem-Level Premise Retrieval" in html
+    assert "Strategy retrieval" in html
+    assert "Difficulty retrieval" in html
+    assert "Case Studies" in html
+    assert "Retrieved Premises" in html
+    assert "Similar Theorems" in html
+    assert "Similar Proof States" in html
+    assert "Strategy Facets" in html
+    assert "Reproducibility Notes" in html
+    assert "Interactive Proof Guidance Workbench" not in html
+    assert "Get Proof Guidance" not in html
+    assert "API URL" not in html
+    assert "renderLocalFallback" not in html
+    assert "Production Evidence" not in html
+    assert "gold premise train coverage" in html
     assert "<b></b>" not in html
-    assert "localCaseScore" in html
-    assert "API unavailable; showing nearest precomputed case study" in html
-    assert "Query theorem" in html
-    assert "Top premise" in html
-    assert "Similar theorem" in html
-    assert "Suggested technique" in html
-    assert "precomputed theorem guidance examples" in html
-    assert "renderExplanationPaths" in html
-    assert "shared namespace" in html
-    assert "Graph evidence for" in html
-    assert "historical premise frequency" in html
-    assert "Pipeline Summary" in html
-    assert "Refresh Dashboard" in html
-    assert "Production Evidence" in html
-    assert "Retrieval Failure Profile" in html
-    assert "Proof-state test coverage" in html
-    assert "Theorem test coverage" in html
-    assert "Proof-state miss top" in html
-    assert "Proof-state no train gold" in html
-    assert "Theorem miss top" in html
-    assert "Rerank miss top" in html
-    assert "Positive premise edges" in html
-    assert "Negative candidates" in html
-    assert "Label disjoint" in html
-    assert "Train label overlap" in html
-    assert "Scale estimate reliable" in html
-    assert "Embedding throughput" in html
-    assert "Current eval timing" in html
-    assert "Pipeline eval timing" in html
-    assert "Timing freshness" in html
-    assert "Pipeline bottleneck" in html
-    assert "Refresh And Retraining Policy" in html
-    assert "Reuse by default" in html
-    assert "Cached embeddings" in html
-    assert "Indexed manifests" in html
-    assert "Premise ranker" in html
-    assert "Do not retrain by default" in html
-    assert "Rapid Convergence Priorities" in html
-    assert "proof_state_query_and_embedding" in html
-    assert "Proof-state top-100 miss" in html
-    assert "Proof-state candidate miss" in html
-    assert "Proof-state rerank headroom" in html
-    assert "Theorem candidate miss" in html
-    assert "Theorem rerank headroom" in html
-    if homepage_summary["production_evidence"]["timing"]["evaluation_timing"].get("slowest_substages"):
-        assert "Evaluation bottleneck" in html
-    assert "Top-3 timed stages" in html
-    assert "Trend baseline" in html
-    assert "History entries" in html
-    assert "kg-svg" in html
-    assert "Lean check" in html
-    assert "Query source" in html
-    assert "Corpus source" in html
-    assert "Data supervision" in html
-    assert "synthetic_demo_rows" in html
-    assert "Config hash" in html
-    assert "retrieve-theorem-guidance" in html
 
 
 def test_refresh_trend_reports_metric_deltas():

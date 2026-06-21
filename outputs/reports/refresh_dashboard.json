@@ -51,24 +51,24 @@
     "train_calibration_bins": [
       {
         "bucket": "easy",
-        "count": 22041,
-        "mae": 0.036482384805407275,
-        "mean_prediction": 0.20303236302656896,
-        "mean_target": 0.2025525528343334
+        "count": 11862,
+        "mae": 0.03057251802119738,
+        "mean_prediction": 0.16999109866592693,
+        "mean_target": 0.16786693393090574
       },
       {
         "bucket": "medium",
-        "count": 1675,
-        "mae": 0.07103469553763624,
-        "mean_prediction": 0.4243557506223534,
-        "mean_target": 0.43190694982508043
+        "count": 8302,
+        "mae": 0.040783872152193666,
+        "mean_prediction": 0.22812910503935951,
+        "mean_target": 0.229442019231408
       },
       {
         "bucket": "hard",
-        "count": 7,
-        "mae": 0.08107444317039643,
-        "mean_prediction": 0.678092800323152,
-        "mean_target": 0.7591672434935484
+        "count": 3559,
+        "mae": 0.06249507284314698,
+        "mean_prediction": 0.3597124481459182,
+        "mean_target": 0.3644714567955755
       }
     ],
     "train_mae": 0.03893516332772901,
