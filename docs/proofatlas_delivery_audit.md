@@ -30,7 +30,7 @@ Out of current production scope:
 | Experiment report | `outputs/reports/experiment_report.md` | Delivered |
 | Held-out quantitative evaluation | `outputs/reports/test_set_evaluation.json`, `outputs/reports/metrics.json` | Delivered |
 | LeanRank-data source provenance | `outputs/reports/corpus_manifest.json`, `outputs/reports/premise_trace_supervision_report.json` | Delivered |
-| Premise positive/negative supervision | 69,461 positive edges, 663,198 negative edges, positive/negative overlap removed: 4,088; train trace profile includes 54,897 positive trace rows, 530,413 hard-negative rows, 128,855 high-hardness rows, and 3 example proof-state traces; hard-negative pair evidence compares 530,413 train negative candidates to same-proof-state positive premises, with 45.5% same namespace, 98.1% same domain, 97.7% same subdomain, and 69.1% nonzero name-token overlap; ranker training sample uses 10,000 positive pairs and 10,000 hard-negative pairs with 100.0% nonzero hard-negative hardness coverage | Delivered |
+| Premise positive/negative supervision | 69,461 positive edges, 663,198 negative edges, positive/negative overlap removed: 4,088; train trace profile includes 54,897 positive trace rows, 530,413 hard-negative rows, 128,855 high-hardness rows, and 3 example proof-state traces; hard-negative pair evidence compares 530,413 train negative candidates to same-proof-state positive premises, with 45.5% same namespace, 98.1% same domain, 97.7% same subdomain, and 69.1% nonzero name-token overlap; candidate-generated ranker training sample uses 154 positive pairs and 154 hard-negative pairs with 100.0% nonzero hard-negative hardness coverage | Delivered |
 | Larger real-data pipeline | `configs/proofatlas.yaml`, 292,012 current split rows, 10,000 requested theorems, 350,000 source rows | Delivered |
 | GPU BGE embeddings | `outputs/embeddings/embedding_config.json`: `BAAI/bge-base-en-v1.5`, devices `cuda:0` to `cuda:6`, proof-state template `full_name + goal_text` | Delivered |
 | ANN performance | `outputs/reports/index_benchmark.json`: hnswlib premise retrieval 19.0x faster than exact cosine at Recall@10 vs exact 0.994 | Delivered |
@@ -82,18 +82,18 @@ From `outputs/reports/index_benchmark.json` and `outputs/reports/pipeline_perfor
 
 | Entity | Backend | Rows | Exact ms/query | Indexed ms/query | Speedup | Recall@10 vs exact |
 | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| Premise | hnswlib | 127,561 | 69.1912 | 3.6822 | 18.7909 | 0.9930 |
-| ProofState | hnswlib | 23,723 | 12.8202 | 0.8267 | 15.5081 | 0.9500 |
-| Theorem | hnswlib | 8,000 | 4.0994 | 0.2423 | 16.9156 | 0.9960 |
+| Premise | hnswlib | 127,561 | 69.2046 | 3.3943 | 20.3886 | 0.9920 |
+| ProofState | hnswlib | 23,723 | 12.7162 | 0.7790 | 16.3245 | 0.9520 |
+| Theorem | hnswlib | 8,000 | 4.1274 | 0.2248 | 18.3571 | 0.9900 |
 
 Pipeline bottleneck profile:
 
 | Stage group | Field | Value |
 | --- | --- | ---: |
 | Primary bottleneck | stage | embed |
-| Primary bottleneck | seconds | 148.6884 |
-| Primary bottleneck | share of total | 0.2978 |
-| Top-3 timed stages | share of total | 0.5610 |
+| Primary bottleneck | seconds | 148.6939 |
+| Primary bottleneck | share of total | 0.2544 |
+| Top-3 timed stages | share of total | 0.5058 |
 
 Performance acceptance gates:
 
@@ -107,10 +107,10 @@ Scale projection:
 
 | Projection | Target rows | Total seconds | Embed seconds | Index build seconds |
 | --- | ---: | ---: | ---: | ---: |
-| current_1x | 292012 | 499.3380 | 148.6884 | 6.3293 |
-| current_2x | 584024 | 998.6760 | 297.3768 | 12.6587 |
-| current_5x | 1460060 | 2496.6901 | 743.4420 | 31.6467 |
-| configured_source_rows | 350000 | 598.4970 | 178.2151 | 7.5862 |
+| current_1x | 292012 | 584.3795 | 148.6939 | 6.5192 |
+| current_2x | 584024 | 1168.7590 | 297.3878 | 13.0384 |
+| current_5x | 1460060 | 2921.8975 | 743.4695 | 32.5960 |
+| configured_source_rows | 350000 | 700.4261 | 178.2217 | 7.8138 |
 
 Execution mode summary:
 
@@ -142,10 +142,10 @@ Do not retrain by default. Reuse embeddings, indexes, and trained models for rep
 
 Pipeline timing:
 
-- Total seconds: 499.3380
-- Saved full-pipeline evaluate stage: 19.4681 seconds
-- Current standalone full-heldout evaluation: 59.0257 seconds
-- Reranked proof-state diagnostic: 20 / 3053 sampled queries; projected full rerank 2153.1983 seconds; 143.2731x batched seconds/query
+- Total seconds: 584.3795
+- Saved full-pipeline evaluate stage: 34.9685 seconds
+- Current standalone full-heldout evaluation: 58.6901 seconds
+- Reranked proof-state diagnostic: 20 / 3053 sampled queries; projected full rerank 2123.0436 seconds; 142.0205x batched seconds/query
 - Timing freshness: current; full-pipeline evaluate timing and standalone evaluation timing are aligned.
 
 Pipeline scale profile:
@@ -157,10 +157,10 @@ Pipeline scale profile:
 - Embedding devices: `cuda:0` to `cuda:6`
 - Index backend: `hnswlib`
 - LeanRank premise supervision ready: true
-- Artifact storage: 2.8432 GiB total, 10,454.6350 bytes per processed row
-- Largest storage component: `outputs/indexes`, 2,295,002,043 bytes
+- Artifact storage: 2.8432 GiB total, 10,454.5408 bytes per processed row
+- Largest storage component: `outputs/indexes`, 2,295,000,620 bytes
 - Unreferenced index artifacts: 1,502,501,178 bytes (1.3993 GiB) not pointed to by current manifests
-- Projected storage at current_5x: 14.2161 GiB
+- Projected storage at current_5x: 14.2159 GiB
 
 ## Verification Commands
 

@@ -22,7 +22,7 @@
     "warnings": []
   },
   "corpus": {
-    "config_hash": "37ec7d5d3cf4d7b9",
+    "config_hash": "614a66ee7ff568bc",
     "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
     "data_supervision": {
       "has_negative_candidates": true,
@@ -236,24 +236,24 @@
   "index_benchmark": {
     "premise": {
       "backend": "hnswlib",
-      "exact_ms_per_query": 69.19121138984337,
+      "exact_ms_per_query": 69.20463973889127,
       "indexed_available": true,
-      "indexed_ms_per_query": 3.682160989847034,
-      "recall_vs_exact": 0.993
+      "indexed_ms_per_query": 3.3942832984030247,
+      "recall_vs_exact": 0.9919999999999999
     },
     "proof_state": {
       "backend": "hnswlib",
-      "exact_ms_per_query": 12.8202082705684,
+      "exact_ms_per_query": 12.716230349615216,
       "indexed_available": true,
-      "indexed_ms_per_query": 0.8266799803823233,
-      "recall_vs_exact": 0.9500000000000002
+      "indexed_ms_per_query": 0.7789641292765737,
+      "recall_vs_exact": 0.9520000000000002
     },
     "theorem": {
       "backend": "hnswlib",
-      "exact_ms_per_query": 4.0994407795369625,
+      "exact_ms_per_query": 4.127389050554484,
       "indexed_available": true,
-      "indexed_ms_per_query": 0.24234733078628778,
-      "recall_vs_exact": 0.996
+      "indexed_ms_per_query": 0.22483923006802797,
+      "recall_vs_exact": 0.99
     }
   },
   "parsing": {
@@ -361,7 +361,7 @@
     "gold_premises_missing_from_train_index": 546,
     "premise_mrr": 0.07831169467619567,
     "premise_recall_at_10": 0.11624918291584951,
-    "ranker_auc": 0.8214308,
+    "ranker_auc": 0.82373046875,
     "theorem_mrr": 0.5608535466914221,
     "theorem_ndcg_at_10": 0.4451927253442335,
     "theorem_recall_at_10": 0.49403129986534694
@@ -440,8 +440,8 @@
         "relative": 0.0
       },
       "premise_recall_at_10": {
-        "absolute": 0.0,
-        "relative": 0.0
+        "absolute": -0.0116763489990441,
+        "relative": -0.09127457845406615
       },
       "premises": {
         "absolute": 0.0,
@@ -456,12 +456,12 @@
         "relative": 0.0
       },
       "theorem_mrr": {
-        "absolute": 0.0,
-        "relative": 0.0
+        "absolute": 0.013541170169129035,
+        "relative": 0.024741209499357045
       },
       "theorem_recall_at_10": {
-        "absolute": 0.0,
-        "relative": 0.0
+        "absolute": 0.07074268670025691,
+        "relative": 0.16712636366777486
       },
       "theorems": {
         "absolute": 0.0,

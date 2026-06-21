@@ -151,19 +151,17 @@ Interpretation:
   is 0.2494 versus embedding top-100 recall 0.2362, and the embedding+lexical
   union candidate oracle reaches 0.3266. Lexical retrieval adds gold premises
   for 367 retrievable proof-state queries that embedding top-100 missed.
-- The first actual hybrid rerank sample now unions embedding and lexical
-  candidates before the existing learned/fixed reranker. On 20 sampled test
-  queries it adds one gold candidate after an embedding miss, but Recall@10
-  remains tied with embedding-only rerank at 0.1689. This means candidate union
-  is useful, but the next accuracy work needs lexical-source/rank features so
-  added candidates are promoted into the top-k output.
-- Lexical-source and candidate-rank features are now wired through the hybrid
-  rerank path and exposed in ranked examples. The same 20-query diagnostic
-  still ties embedding-only rerank at Recall@10 0.1689, with mean lexical-only
-  candidates 38.1053 and mean embedding/lexical overlap 11.8947 per retrievable
-  query. The remaining bottleneck is therefore not just candidate inclusion; it
-  is training or calibrating the ranker on candidate-generated positives and
-  lexical-only hard negatives.
+- Candidate-source and candidate-rank features are now wired through the hybrid
+  rerank path, exposed in ranked examples, and used by a candidate-generated
+  ranker trained on real embedding+lexical union candidates. The train profile
+  uses 300 proof-state queries, 16,554 candidate pairs, 154 positive in-pool
+  pairs, and validation AUC 0.8237.
+- The current 20-query rerank diagnostic shows the candidate-trained hybrid path
+  improving over embedding-only rerank: Recall@10 is 0.1557 for hybrid
+  embedding+lexical rerank versus 0.1250 for embedding-only rerank. The full
+  batched proof-state embedding evaluation remains 0.1162 Recall@10 and 0.2362
+  Recall@100, so the broad accuracy ceiling is still candidate generation and
+  query representation rather than only final reranking.
 - Reranking helps user-facing examples, but the broad accuracy ceiling is still
   controlled by embedding candidate generation and gold-premise availability in
   the train premise index.
@@ -174,7 +172,7 @@ Current production timing evidence:
 
 | Signal | Value |
 | --- | ---: |
-| Total timed pipeline run | 499.3380 seconds |
+| Total timed pipeline run | 584.3795 seconds |
 | Executed stages | 20 |
 | Skipped stages | 0 |
 | Throughput basis | executed_pipeline_run |

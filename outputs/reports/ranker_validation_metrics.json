@@ -1,4 +1,36 @@
 {
+  "candidate_generated_pair_profile": {
+    "train": {
+      "candidate_source_overlap_pair_share": 0.08735048930772019,
+      "embedding_candidate_k": 30,
+      "enabled": true,
+      "lexical_added_gold_queries": 33,
+      "lexical_candidate_k": 30,
+      "lexical_only_pair_share": 0.4563247553461399,
+      "negative_pairs": 16400,
+      "pair_count": 16554,
+      "positive_pairs": 154,
+      "query_count": 300,
+      "seconds": 49.95394116686657,
+      "split": "train",
+      "union_hit_query_share": 0.3566666666666667
+    },
+    "val": {
+      "candidate_source_overlap_pair_share": 0.08879748366803775,
+      "embedding_candidate_k": 30,
+      "enabled": true,
+      "lexical_added_gold_queries": 4,
+      "lexical_candidate_k": 30,
+      "lexical_only_pair_share": 0.4556012581659811,
+      "negative_pairs": 4069,
+      "pair_count": 4133,
+      "positive_pairs": 64,
+      "query_count": 75,
+      "seconds": 4.923703005071729,
+      "split": "val",
+      "union_hit_query_share": 0.6
+    }
+  },
   "feature_ablation": {
     "feature_columns": [
       "cosine_similarity",
@@ -11,76 +43,91 @@
       "symbol_name_overlap",
       "symbol_context_overlap",
       "graph_premise_degree",
-      "theorem_neighborhood_premise_score"
+      "theorem_neighborhood_premise_score",
+      "embedding_candidate_rank_score",
+      "lexical_candidate_rank_score",
+      "candidate_source_overlap",
+      "lexical_only_candidate"
     ],
-    "full_auc": 0.8214308,
+    "full_auc": 0.82373046875,
     "groups": {
+      "candidate_source": {
+        "auc_group_only": 0.758544921875,
+        "auc_without_group": 0.791748046875,
+        "columns": [
+          "embedding_candidate_rank_score",
+          "lexical_candidate_rank_score",
+          "candidate_source_overlap",
+          "lexical_only_candidate"
+        ],
+        "delta_without_group": 0.031982421875
+      },
       "difficulty": {
-        "auc_group_only": 0.49623204,
-        "auc_without_group": 0.8217188,
+        "auc_group_only": 0.5750732421875,
+        "auc_without_group": 0.81298828125,
         "columns": [
           "proof_state_difficulty",
           "negative_candidate_hardness"
         ],
-        "delta_without_group": -0.00028799999999995496
+        "delta_without_group": 0.0107421875
       },
       "embedding_similarity": {
-        "auc_group_only": 0.59946376,
-        "auc_without_group": 0.8190852200000001,
+        "auc_group_only": 0.756591796875,
+        "auc_without_group": 0.82177734375,
         "columns": [
           "cosine_similarity"
         ],
-        "delta_without_group": 0.0023455799999999583
+        "delta_without_group": 0.001953125
       },
       "frequency": {
-        "auc_group_only": 0.78416494,
-        "auc_without_group": 0.78310064,
+        "auc_group_only": 0.6041259765625,
+        "auc_without_group": 0.82177734375,
         "columns": [
           "premise_frequency"
         ],
-        "delta_without_group": 0.03833016
+        "delta_without_group": 0.001953125
       },
       "graph": {
-        "auc_group_only": 0.67965306,
-        "auc_without_group": 0.82545724,
+        "auc_group_only": 0.5322265625,
+        "auc_without_group": 0.8232421875,
         "columns": [
           "graph_premise_degree"
         ],
-        "delta_without_group": -0.0040264399999999645
+        "delta_without_group": 0.00048828125
       },
       "namespace_domain": {
-        "auc_group_only": 0.51632808,
-        "auc_without_group": 0.8192940000000001,
+        "auc_group_only": 0.7215576171875,
+        "auc_without_group": 0.820556640625,
         "columns": [
           "same_namespace",
           "same_domain"
         ],
-        "delta_without_group": 0.0021367999999999387
+        "delta_without_group": 0.003173828125
       },
       "proof_technique": {
-        "auc_group_only": 0.4953000000000001,
-        "auc_without_group": 0.8215481200000001,
+        "auc_group_only": 0.4921875,
+        "auc_without_group": 0.82177734375,
         "columns": [
           "proof_technique_overlap"
         ],
-        "delta_without_group": -0.00011732000000008735
+        "delta_without_group": 0.001953125
       },
       "symbol_overlap": {
-        "auc_group_only": 0.59927374,
-        "auc_without_group": 0.8077663599999998,
+        "auc_group_only": 0.7696533203125,
+        "auc_without_group": 0.811767578125,
         "columns": [
           "symbol_name_overlap",
           "symbol_context_overlap"
         ],
-        "delta_without_group": 0.013664440000000222
+        "delta_without_group": 0.011962890625
       },
       "theorem_neighborhood": {
-        "auc_group_only": 0.580964,
-        "auc_without_group": 0.81966984,
+        "auc_group_only": 0.5,
+        "auc_without_group": 0.82373046875,
         "columns": [
           "theorem_neighborhood_premise_score"
         ],
-        "delta_without_group": 0.0017609600000000336
+        "delta_without_group": 0.0
       }
     }
   },
@@ -95,9 +142,19 @@
     "symbol_name_overlap",
     "symbol_context_overlap",
     "graph_premise_degree",
-    "theorem_neighborhood_premise_score"
+    "theorem_neighborhood_premise_score",
+    "embedding_candidate_rank_score",
+    "lexical_candidate_rank_score",
+    "candidate_source_overlap",
+    "lexical_only_candidate"
   ],
   "feature_groups": {
+    "candidate_source": [
+      "embedding_candidate_rank_score",
+      "lexical_candidate_rank_score",
+      "candidate_source_overlap",
+      "lexical_only_candidate"
+    ],
     "difficulty": [
       "proof_state_difficulty",
       "negative_candidate_hardness"
@@ -127,38 +184,48 @@
     ]
   },
   "ranker_config": {
+    "candidate_generated_batch_size": 256,
+    "candidate_generated_embedding_k": 30,
+    "candidate_generated_lexical_k": 30,
+    "candidate_generated_query_limit": 300,
     "max_train_pairs_per_label": 10000,
     "max_validation_pairs_per_label": 5000,
-    "random_seed": 42
+    "random_seed": 42,
+    "use_candidate_generated_pairs": true
   },
   "timing_profile": {
-    "feature_ablation_seconds": 0.44068691600114107,
-    "model_fit_seconds": 0.03800319111905992,
-    "total_seconds": 17.046396038029343,
-    "train_feature_seconds": 12.822568715084344,
-    "validation_feature_seconds": 3.6532230398152024
+    "feature_ablation_seconds": 0.09642096608877182,
+    "model_fit_seconds": 0.0077106282114982605,
+    "total_seconds": 65.91309119015932,
+    "train_feature_seconds": 8.590978082967922,
+    "validation_feature_seconds": 2.2456817280035466
   },
-  "train_pairs": 20000,
+  "train_pairs": 308,
+  "training_pair_source": "candidate_generated_embedding_lexical_union",
   "training_pair_utilization": {
     "feature_nonzero_rates": {
+      "candidate_source_overlap": 0.2694805194805195,
       "cosine_similarity": 1.0,
-      "graph_premise_degree": 0.39425,
+      "embedding_candidate_rank_score": 0.6006493506493507,
+      "graph_premise_degree": 0.1396103896103896,
+      "lexical_candidate_rank_score": 0.6688311688311688,
+      "lexical_only_candidate": 0.39935064935064934,
       "negative_candidate_hardness": 1.0,
-      "premise_frequency": 0.45665,
+      "premise_frequency": 0.29545454545454547,
       "proof_state_difficulty": 1.0,
-      "proof_technique_overlap": 0.51765,
-      "same_domain": 0.40485,
-      "same_namespace": 0.20315,
-      "symbol_context_overlap": 0.63295,
-      "symbol_name_overlap": 0.55695,
-      "theorem_neighborhood_premise_score": 0.30525
+      "proof_technique_overlap": 0.6233766233766234,
+      "same_domain": 0.5941558441558441,
+      "same_namespace": 0.41883116883116883,
+      "symbol_context_overlap": 0.8896103896103896,
+      "symbol_name_overlap": 0.827922077922078,
+      "theorem_neighborhood_premise_score": 0.1331168831168831
     },
     "hardness_feature": {
-      "all_pair_nonzero_count": 20000,
+      "all_pair_nonzero_count": 308,
       "all_pair_nonzero_share": 1.0,
       "column": "negative_candidate_hardness",
-      "negative_pair_mean_hardness": 0.6125832683406032,
-      "negative_pair_nonzero_count": 10000,
+      "negative_pair_mean_hardness": 0.6168308840601879,
+      "negative_pair_nonzero_count": 154,
       "negative_pair_nonzero_share": 1.0
     },
     "label_source": {
@@ -166,17 +233,17 @@
       "positive_pairs": "data/processed/train/positive_edges.parquet label=1"
     },
     "raw_pair_counts": {
-      "hard_negative": 530413,
-      "positive": 54897,
-      "total": 585310
+      "hard_negative": 16400,
+      "positive": 154,
+      "total": 16554
     },
     "training_sample_counts": {
-      "hard_negative": 10000,
+      "hard_negative": 154,
       "hard_negative_to_positive_ratio": 1.0,
-      "positive": 10000,
-      "total": 20000
+      "positive": 154,
+      "total": 308
     }
   },
-  "validation_auc": 0.8214308,
-  "validation_pairs": 10000
+  "validation_auc": 0.82373046875,
+  "validation_pairs": 128
 }

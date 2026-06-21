@@ -5,10 +5,10 @@ from difflib import SequenceMatcher
 from leanrank_kg import build_graph, compute_difficulty, download_or_sample, embed, normalize, train_difficulty, train_ranker, weak_label_proof_technique
 
 
-def _write_config(tmp_path, rows=100):
+def _write_config(tmp_path, rows=100, extra=""):
     (tmp_path / "configs").mkdir()
     (tmp_path / "configs/sample.yaml").write_text(
-        f"dataset_name: erbacher/LeanRank-data\nrandom_seed: 11\nuse_huggingface: false\nsample: {{total_rows: {rows}, small_debug_rows: {rows}, committed_demo_rows: {rows}}}\nsplit: {{train_ratio: 0.8, val_ratio: 0.1, test_ratio: 0.1}}\nretrieval: {{top_k: [1, 5, 10]}}\nsimilarity: {{theorem_top_k: 3}}\nproof_techniques: {{max_labels_per_state: 5, minimum_support: 1}}\nembedding: {{backend: tfidf}}\n",
+        f"dataset_name: erbacher/LeanRank-data\nrandom_seed: 11\nuse_huggingface: false\nsample: {{total_rows: {rows}, small_debug_rows: {rows}, committed_demo_rows: {rows}}}\nsplit: {{train_ratio: 0.8, val_ratio: 0.1, test_ratio: 0.1}}\nretrieval: {{top_k: [1, 5, 10]}}\nsimilarity: {{theorem_top_k: 3}}\nproof_techniques: {{max_labels_per_state: 5, minimum_support: 1}}\nembedding: {{backend: tfidf}}\n{extra}",
         encoding="utf-8",
     )
     return "configs/sample.yaml"
@@ -103,6 +103,29 @@ def test_ranker_features_use_processed_feature_tables(tmp_path, monkeypatch):
     ].nunique().sum() > 6
 
 
+def test_candidate_generated_ranker_pairs_expose_retrieval_context(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    cfg = _write_config(tmp_path, 120)
+    download_or_sample.run(cfg, 120)
+    normalize.run(cfg)
+    build_graph.run(cfg)
+    weak_label_proof_technique.run(cfg)
+    compute_difficulty.run(cfg)
+    embed.run(cfg)
+    pairs, profile = train_ranker._candidate_generated_pairs(
+        "train",
+        max_queries=8,
+        embedding_candidate_k=8,
+        lexical_candidate_k=8,
+        batch_size=4,
+    )
+    assert profile["pair_count"] == len(pairs)
+    assert profile["query_count"] > 0
+    assert {"embedding_candidate_rank_score", "lexical_candidate_rank_score", "candidate_source_overlap", "lexical_only_candidate"} <= set(pairs)
+    assert pairs["label"].isin([0, 1]).all()
+    assert pairs[["embedding_candidate_rank_score", "lexical_candidate_rank_score"]].max().max() > 0
+
+
 def test_ranker_pair_sampling_uses_configured_label_cap():
     pairs = pd.DataFrame(
         {
@@ -135,7 +158,11 @@ def test_ranker_pair_sampling_can_keep_all_pairs():
 
 def test_ranker_writes_feature_ablation_report(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
-    cfg = _write_config(tmp_path, 120)
+    cfg = _write_config(
+        tmp_path,
+        120,
+        extra="\nranker: {use_candidate_generated_pairs: true, candidate_generated_query_limit: 12, candidate_generated_embedding_k: 8, candidate_generated_lexical_k: 8, max_train_pairs_per_label: 20, max_validation_pairs_per_label: 10}\n",
+    )
     download_or_sample.run(cfg, 120)
     normalize.run(cfg)
     build_graph.run(cfg)
@@ -145,6 +172,8 @@ def test_ranker_writes_feature_ablation_report(tmp_path, monkeypatch):
     train_ranker.run(cfg)
     metrics = json.loads((tmp_path / "outputs/reports/ranker_validation_metrics.json").read_text(encoding="utf-8"))
     assert metrics["feature_columns"]
+    assert metrics["training_pair_source"] == "candidate_generated_embedding_lexical_union"
+    assert metrics["candidate_generated_pair_profile"]["train"]["pair_count"] > 0
     assert "feature_groups" in metrics
     utilization = metrics["training_pair_utilization"]
     assert utilization["label_source"]["positive_pairs"].endswith("positive_edges.parquet label=1")
@@ -159,9 +188,9 @@ def test_ranker_writes_feature_ablation_report(tmp_path, monkeypatch):
     if "feature_ablation" in metrics:
         ablation = metrics["feature_ablation"]
         assert "full_auc" in ablation
-        assert {"embedding_similarity", "namespace_domain", "proof_technique", "difficulty", "frequency", "symbol_overlap", "graph", "theorem_neighborhood"} <= set(ablation["groups"])
+        assert {"embedding_similarity", "namespace_domain", "proof_technique", "difficulty", "frequency", "symbol_overlap", "graph", "theorem_neighborhood", "candidate_source"} <= set(ablation["groups"])
         assert "delta_without_group" in ablation["groups"]["embedding_similarity"]
-    assert {"symbol_overlap", "graph", "theorem_neighborhood"} <= set(metrics["feature_groups"])
+    assert {"symbol_overlap", "graph", "theorem_neighborhood", "candidate_source"} <= set(metrics["feature_groups"])
 
 
 def test_difficulty_estimator_trains_from_feature_tables(tmp_path, monkeypatch):

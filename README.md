@@ -163,11 +163,11 @@ Current `configs/proofatlas.yaml` full held-out test results:
 | --- | --- | ---: |
 | Proof-state premise retrieval | Recall@10 | 0.1162 |
 | Proof-state premise retrieval | Recall@100 | 0.2362 |
-| Reranked proof-state diagnostic | Recall@10 | 0.1689 |
+| Reranked proof-state diagnostic | Recall@10 | 0.1250 |
 | Theorem-level premise retrieval | Recall@10 | 0.4940 |
 | Theorem-level premise retrieval | Recall@100 | 0.6889 |
 | Theorem-level premise retrieval | MRR | 0.5609 |
-| Learned premise ranker | validation AUC | 0.8214 |
+| Learned premise ranker | validation AUC | 0.8237 |
 
 Current retrieval failure diagnosis:
 
@@ -193,40 +193,40 @@ Current production run coverage and timing:
 | --- | --- | ---: |
 | Held-out proof-state evaluation | coverage | 3053 / 3053 |
 | Held-out theorem evaluation | coverage | 1000 / 1000 |
-| Pipeline timing | total seconds | 499.3380 |
+| Pipeline timing | total seconds | 584.3795 |
 | Pipeline timing | executed/skipped stages | 20 / 0 |
 | Pipeline timing | throughput basis | executed_pipeline_run |
 | Pipeline timing | scale estimate reliable | True |
-| Pipeline timing | saved evaluate seconds | 19.4681 |
-| Pipeline timing | current standalone evaluation seconds | 59.0257 |
-| Pipeline timing | timed/current evaluation ratio | 0.3298 |
+| Pipeline timing | saved evaluate seconds | 34.9685 |
+| Pipeline timing | current standalone evaluation seconds | 58.6901 |
+| Pipeline timing | timed/current evaluation ratio | 0.5958 |
 | Rerank diagnostic cost | sampled/full proof-state queries | 20 / 3053 |
 | Rerank diagnostic cost | sampled fraction | 0.0066 |
-| Rerank diagnostic cost | projected full rerank seconds | 2153.1983 |
-| Rerank diagnostic cost | rerank/batched seconds per query | 143.2731 |
+| Rerank diagnostic cost | projected full rerank seconds | 2123.0436 |
+| Rerank diagnostic cost | rerank/batched seconds per query | 142.0205 |
 | Artifact storage | total GiB | 2.8432 |
-| Artifact storage | bytes per processed row | 10454.6350 |
-| Artifact storage | index bytes | 2295002043 |
+| Artifact storage | bytes per processed row | 10454.5408 |
+| Artifact storage | index bytes | 2295000620 |
 | Artifact storage | unreferenced index bytes | 1502501178 |
 | Artifact storage | unreferenced index GiB | 1.3993 |
-| Artifact storage | current_5x projected GiB | 14.2161 |
+| Artifact storage | current_5x projected GiB | 14.2159 |
 
 Current production performance snapshot:
 
 | Entity | Backend | Rows | Exact ms/query | Indexed ms/query | Speedup | Recall@10 vs exact |
 | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| Premise | hnswlib | 127,561 | 69.1912 | 3.6822 | 18.7909 | 0.9930 |
-| ProofState | hnswlib | 23,723 | 12.8202 | 0.8267 | 15.5081 | 0.9500 |
-| Theorem | hnswlib | 8,000 | 4.0994 | 0.2423 | 16.9156 | 0.9960 |
+| Premise | hnswlib | 127,561 | 69.2046 | 3.3943 | 20.3886 | 0.9920 |
+| ProofState | hnswlib | 23,723 | 12.7162 | 0.7790 | 16.3245 | 0.9520 |
+| Theorem | hnswlib | 8,000 | 4.1274 | 0.2248 | 18.3571 | 0.9900 |
 
 Current pipeline bottleneck profile:
 
 | Stage group | Field | Value |
 | --- | --- | ---: |
 | Primary bottleneck | stage | embed |
-| Primary bottleneck | seconds | 148.6884 |
-| Primary bottleneck | share of total | 0.2978 |
-| Top-3 timed stages | share of total | 0.5610 |
+| Primary bottleneck | seconds | 148.6939 |
+| Primary bottleneck | share of total | 0.2544 |
+| Top-3 timed stages | share of total | 0.5058 |
 
 Current resource and parallelism profile:
 
@@ -236,12 +236,12 @@ Current resource and parallelism profile:
 | Embedding | device count | 7 |
 | Embedding | multi-process | True |
 | Embedding | batch size | 512 |
-| Embedding | rows/sec during embed stage | 1643.6453 |
+| Embedding | rows/sec during embed stage | 1643.5845 |
 | Evaluation | actual backends | torch_cuda |
 | Evaluation | candidate count | 127,561 |
 | Indexing | backend | hnswlib |
 | Indexing | hnswlib parameters | M=16, ef_construction=200, ef_search=100 |
-| Indexing | min recall vs exact | 0.9500 |
+| Indexing | min recall vs exact | 0.9520 |
 
 Current execution mode summary:
 
@@ -271,10 +271,10 @@ Current scale projection:
 
 | Projection | Target rows | Total seconds | Embed seconds | Index build seconds |
 | --- | ---: | ---: | ---: | ---: |
-| current_1x | 292012 | 499.3380 | 148.6884 | 6.3293 |
-| current_2x | 584024 | 998.6760 | 297.3768 | 12.6587 |
-| current_5x | 1460060 | 2496.6901 | 743.4420 | 31.6467 |
-| configured_source_rows | 350000 | 598.4970 | 178.2151 | 7.5862 |
+| current_1x | 292012 | 584.3795 | 148.6939 | 6.5192 |
+| current_2x | 584024 | 1168.7590 | 297.3878 | 13.0384 |
+| current_5x | 1460060 | 2921.8975 | 743.4695 | 32.5960 |
+| configured_source_rows | 350000 | 700.4261 | 178.2217 | 7.8138 |
 
 Current artifact reuse and retraining policy:
 
@@ -308,8 +308,8 @@ Current LeanRank-data premise supervision snapshot:
 | Train hard-negative pair evidence | same domain share | 0.9812 |
 | Train hard-negative pair evidence | same subdomain share | 0.9767 |
 | Train hard-negative pair evidence | nonzero name-token overlap share | 0.6910 |
-| Ranker training sample | positive pairs | 10000 |
-| Ranker training sample | hard negative pairs | 10000 |
+| Ranker training sample | positive pairs | 154 |
+| Ranker training sample | hard negative pairs | 154 |
 | Ranker training sample | hard-negative/positive ratio | 1.0000 |
 | Ranker hardness feature | hard-negative nonzero share | 1.0000 |
 

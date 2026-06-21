@@ -33,9 +33,9 @@
     }
   },
   "embedding_config_hash": "508c36101a363506",
-  "expected_config_hash": "37ec7d5d3cf4d7b9",
+  "expected_config_hash": "614a66ee7ff568bc",
   "failures": [],
-  "manifest_config_hash": "37ec7d5d3cf4d7b9",
+  "manifest_config_hash": "614a66ee7ff568bc",
   "passed": true,
   "source_kind": "huggingface",
   "splits": {

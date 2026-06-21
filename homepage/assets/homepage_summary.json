@@ -8,7 +8,7 @@
     "leanrank-kg build-homepage --config configs/proofatlas.yaml"
   ],
   "corpus_manifest": {
-    "config_hash": "37ec7d5d3cf4d7b9",
+    "config_hash": "614a66ee7ff568bc",
     "config_path": "configs/proofatlas.yaml",
     "corpus": {
       "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
@@ -72,7 +72,7 @@
   "dataset": {
     "configured_rows": 60000,
     "corpus_manifest": {
-      "config_hash": "37ec7d5d3cf4d7b9",
+      "config_hash": "614a66ee7ff568bc",
       "config_path": "configs/proofatlas.yaml",
       "corpus": {
         "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
@@ -1274,7 +1274,7 @@
     "split": "demo"
   },
   "metrics": {
-    "AUC": 0.8214308,
+    "AUC": 0.82373046875,
     "MAP": 0.04940290267379889,
     "MRR": 0.07831169467619567,
     "Recall@1": 0.014799239719790566,
@@ -1327,40 +1327,40 @@
     "difficulty_estimator_train_mae": 0.03893516332772901,
     "difficulty_estimator_val_mae": 0.06381645932653449,
     "gold_premise_coverage": 0.9075701729515169,
-    "hybrid_reranked_proof_state_MAP": 0.0756578947368421,
-    "hybrid_reranked_proof_state_MRR": 0.17543859649122806,
-    "hybrid_reranked_proof_state_Recall@1": 0.03289473684210526,
-    "hybrid_reranked_proof_state_Recall@10": 0.16885964912280702,
-    "hybrid_reranked_proof_state_Recall@5": 0.1337719298245614,
+    "hybrid_reranked_proof_state_MAP": 0.04945697577276525,
+    "hybrid_reranked_proof_state_MRR": 0.12719298245614036,
+    "hybrid_reranked_proof_state_Recall@1": 0.006578947368421052,
+    "hybrid_reranked_proof_state_Recall@10": 0.1557017543859649,
+    "hybrid_reranked_proof_state_Recall@5": 0.08991228070175439,
     "hybrid_reranked_proof_state_evaluated_queries": 20,
     "hybrid_reranked_proof_state_evaluated_retrievable_queries": 19,
     "hybrid_reranked_proof_state_gold_premise_coverage": 0.8771929824561403,
     "hybrid_reranked_proof_state_gold_premises_in_train_index": 50,
     "hybrid_reranked_proof_state_gold_premises_missing_from_train_index": 7,
     "hybrid_reranked_proof_state_gold_premises_total": 57,
-    "hybrid_reranked_proof_state_nDCG@1": 0.10526315789473684,
-    "hybrid_reranked_proof_state_nDCG@10": 0.12255203159139533,
-    "hybrid_reranked_proof_state_nDCG@5": 0.11150653640929499,
+    "hybrid_reranked_proof_state_nDCG@1": 0.05263157894736842,
+    "hybrid_reranked_proof_state_nDCG@10": 0.09488201766896358,
+    "hybrid_reranked_proof_state_nDCG@5": 0.06906426647650549,
     "nDCG@1": 0.02401129943502825,
     "nDCG@10": 0.06965706738000225,
     "nDCG@100": 0.09865340927291225,
     "nDCG@5": 0.056421291554973385,
     "nDCG@50": 0.09075943438226491,
     "proof_technique_label_coverage": 0.8545577771851754,
-    "reranked_proof_state_MAP": 0.07650375939849624,
-    "reranked_proof_state_MRR": 0.17982456140350878,
-    "reranked_proof_state_Recall@1": 0.03289473684210526,
-    "reranked_proof_state_Recall@10": 0.16885964912280702,
-    "reranked_proof_state_Recall@5": 0.1337719298245614,
+    "reranked_proof_state_MAP": 0.036278195488721805,
+    "reranked_proof_state_MRR": 0.11453634085213031,
+    "reranked_proof_state_Recall@1": 0.006578947368421052,
+    "reranked_proof_state_Recall@10": 0.125,
+    "reranked_proof_state_Recall@5": 0.08991228070175439,
     "reranked_proof_state_evaluated_queries": 20,
     "reranked_proof_state_evaluated_retrievable_queries": 19,
     "reranked_proof_state_gold_premise_coverage": 0.8771929824561403,
     "reranked_proof_state_gold_premises_in_train_index": 50,
     "reranked_proof_state_gold_premises_missing_from_train_index": 7,
     "reranked_proof_state_gold_premises_total": 57,
-    "reranked_proof_state_nDCG@1": 0.10526315789473684,
-    "reranked_proof_state_nDCG@10": 0.12376565228608487,
-    "reranked_proof_state_nDCG@5": 0.11293087792113359,
+    "reranked_proof_state_nDCG@1": 0.05263157894736842,
+    "reranked_proof_state_nDCG@10": 0.07490240323179727,
+    "reranked_proof_state_nDCG@5": 0.06406762886684599,
     "test_proof_state_evaluated_queries": 3053,
     "test_proof_state_evaluated_retrievable_queries": 2832,
     "theorem_retrieval_MAP": 0.3741023060807077,
@@ -1433,9 +1433,9 @@
       },
       "reranked_proof_state": {
         "candidate_pool_miss_top_10": {
-          "queries": 13,
-          "share_of_evaluated": 0.65,
-          "share_of_retrievable": 0.6842105263157895
+          "queries": 14,
+          "share_of_evaluated": 0.7,
+          "share_of_retrievable": 0.7368421052631579
         },
         "evaluated_queries": 20,
         "max_k": 10,
@@ -1456,9 +1456,9 @@
         },
         "retrievable_queries": 19,
         "top10_hit": {
-          "queries": 6,
-          "share_of_evaluated": 0.3,
-          "share_of_retrievable": 0.3157894736842105
+          "queries": 5,
+          "share_of_evaluated": 0.25,
+          "share_of_retrievable": 0.2631578947368421
         }
       },
       "theorem": {
@@ -1576,14 +1576,14 @@
         "queries_with_missing_gold": 5,
         "queries_without_train_gold": 1,
         "rank_buckets": {
-          "miss_top_10": 13,
+          "miss_top_10": 14,
           "no_train_gold": 1,
-          "rank_1": 2,
-          "rank_2_to_5": 4,
-          "rank_6_to_10": 0
+          "rank_1": 1,
+          "rank_2_to_5": 3,
+          "rank_6_to_10": 1
         },
         "retrievable_queries": 19,
-        "zero_recall_at_max_k": 13,
+        "zero_recall_at_max_k": 14,
         "zero_recall_domains": [
           {
             "domain_tag": "LinearAlgebra",
@@ -1595,7 +1595,7 @@
           },
           {
             "domain_tag": "Algebra",
-            "zero_recall_queries": 2
+            "zero_recall_queries": 3
           },
           {
             "domain_tag": "Geometry",
@@ -1690,8 +1690,8 @@
       "accuracy_snapshot": {
         "proof_state_recall_at_10": 0.11624918291584951,
         "proof_state_recall_at_100": 0.23617207100657536,
-        "reranked_minus_embedding_recall_at_10": 0.0526104662069575,
-        "reranked_proof_state_recall_at_10": 0.16885964912280702,
+        "reranked_minus_embedding_recall_at_10": 0.008750817084150486,
+        "reranked_proof_state_recall_at_10": 0.125,
         "theorem_recall_at_10": 0.49403129986534694,
         "theorem_recall_at_100": 0.6888562692074705
       },
@@ -1764,9 +1764,9 @@
         },
         {
           "area": "ranker_feature_iteration",
-          "current_value": 0.03833016,
+          "current_value": 0.031982421875,
           "priority": 3,
-          "reason": "Ranker ablation says `frequency` is the strongest currently measured feature group by delta_without_group.",
+          "reason": "Ranker ablation says `candidate_source` is the strongest currently measured feature group by delta_without_group.",
           "target_metric": "validation/test Recall@10 and MAP"
         },
         {
@@ -1779,9 +1779,9 @@
       ],
       "rerank_candidate_depth": {
         "best_by_recall_at_10": {
-          "MAP": 0.07650375939849624,
-          "MRR": 0.17982456140350878,
-          "Recall@10": 0.16885964912280702,
+          "MAP": 0.036278195488721805,
+          "MRR": 0.11453634085213031,
+          "Recall@10": 0.125,
           "candidate_k": 50
         },
         "evaluated_candidate_k_values": [
@@ -1791,51 +1791,55 @@
       },
       "strongest_ranker_feature_groups": [
         {
-          "auc_group_only": 0.78416494,
-          "auc_without_group": 0.78310064,
+          "auc_group_only": 0.758544921875,
+          "auc_without_group": 0.791748046875,
           "columns": [
-            "premise_frequency"
+            "embedding_candidate_rank_score",
+            "lexical_candidate_rank_score",
+            "candidate_source_overlap",
+            "lexical_only_candidate"
           ],
-          "delta_without_group": 0.03833016,
-          "group": "frequency"
+          "delta_without_group": 0.031982421875,
+          "group": "candidate_source"
         },
         {
-          "auc_group_only": 0.59927374,
-          "auc_without_group": 0.8077663599999998,
+          "auc_group_only": 0.7696533203125,
+          "auc_without_group": 0.811767578125,
           "columns": [
             "symbol_name_overlap",
             "symbol_context_overlap"
           ],
-          "delta_without_group": 0.013664440000000222,
+          "delta_without_group": 0.011962890625,
           "group": "symbol_overlap"
         },
         {
-          "auc_group_only": 0.59946376,
-          "auc_without_group": 0.8190852200000001,
+          "auc_group_only": 0.5750732421875,
+          "auc_without_group": 0.81298828125,
           "columns": [
-            "cosine_similarity"
+            "proof_state_difficulty",
+            "negative_candidate_hardness"
           ],
-          "delta_without_group": 0.0023455799999999583,
-          "group": "embedding_similarity"
+          "delta_without_group": 0.0107421875,
+          "group": "difficulty"
         },
         {
-          "auc_group_only": 0.51632808,
-          "auc_without_group": 0.8192940000000001,
+          "auc_group_only": 0.7215576171875,
+          "auc_without_group": 0.820556640625,
           "columns": [
             "same_namespace",
             "same_domain"
           ],
-          "delta_without_group": 0.0021367999999999387,
+          "delta_without_group": 0.003173828125,
           "group": "namespace_domain"
         },
         {
-          "auc_group_only": 0.580964,
-          "auc_without_group": 0.81966984,
+          "auc_group_only": 0.756591796875,
+          "auc_without_group": 0.82177734375,
           "columns": [
-            "theorem_neighborhood_premise_score"
+            "cosine_similarity"
           ],
-          "delta_without_group": 0.0017609600000000336,
-          "group": "theorem_neighborhood"
+          "delta_without_group": 0.001953125,
+          "group": "embedding_similarity"
         }
       ]
     },
@@ -1848,7 +1852,7 @@
         "embedding_rows": 244391,
         "index_backend": "hnswlib",
         "indexed_entity_count": 12,
-        "premise_ranker_bytes": 1455,
+        "premise_ranker_bytes": 1615,
         "premise_ranker_exists": true
       },
       "dataset_name": "erbacher/LeanRank-data",
@@ -1933,35 +1937,35 @@
     "timing": {
       "bottleneck_profile": {
         "primary_stage": "embed",
-        "primary_stage_seconds": 148.68840552284382,
-        "primary_stage_share_of_total": 0.2977710478575022,
-        "top3_stage_seconds": 280.13830556580797,
-        "top3_stage_share_of_total": 0.561019378074775,
+        "primary_stage_seconds": 148.69390594610013,
+        "primary_stage_share_of_total": 0.2544475031216892,
+        "top3_stage_seconds": 295.56429658201523,
+        "top3_stage_share_of_total": 0.5057745762928131,
         "top_stages": [
           {
             "name": "embed",
-            "seconds": 148.68840552284382,
-            "share_of_total": 0.2977710478575022
+            "seconds": 148.69390594610013,
+            "share_of_total": 0.2544475031216892
           },
           {
             "name": "sample",
-            "seconds": 80.56720186397433,
-            "share_of_total": 0.16134802197671516
+            "seconds": 80.95330822793767,
+            "share_of_total": 0.13852865735806222
+          },
+          {
+            "name": "train_ranker",
+            "seconds": 65.91708240797743,
+            "share_of_total": 0.11279841581306163
           },
           {
             "name": "augment_graph",
-            "seconds": 50.88269817898981,
-            "share_of_total": 0.10190030824055761
+            "seconds": 51.279066412942484,
+            "share_of_total": 0.08774959759221189
           },
           {
             "name": "normalize",
-            "seconds": 43.72302240296267,
-            "share_of_total": 0.08756197331356133
-          },
-          {
-            "name": "validate",
-            "seconds": 38.67154646711424,
-            "share_of_total": 0.07744562780998777
+            "seconds": 43.68513781297952,
+            "share_of_total": 0.07475473974077189
           }
         ]
       },
@@ -1975,21 +1979,21 @@
         "cuda:5",
         "cuda:6"
       ],
-      "embedding_rows_per_second": 489.4299854857369,
+      "embedding_rows_per_second": 418.2059738073865,
       "evaluation_timing": {
         "slowest_substages": [
           {
             "actual_backend": "torch_cuda",
             "evaluated_queries": 2822,
             "name": "val_proof_state_retrieval",
-            "seconds": 20.166608758969232,
+            "seconds": 20.125107486033812,
             "split": "val"
           },
           {
             "actual_backend": "torch_cuda",
             "evaluated_queries": 3053,
             "name": "test_proof_state_retrieval",
-            "seconds": 15.028629810083658,
+            "seconds": 14.948849298991263,
             "split": "test"
           },
           {
@@ -1997,7 +2001,7 @@
             "candidate_k": 50,
             "evaluated_queries": 20,
             "name": "test_reranked_proof_state_retrieval",
-            "seconds": 14.105458579026163,
+            "seconds": 13.90791777195409,
             "split": "test"
           },
           {
@@ -2006,21 +2010,21 @@
             "evaluated_queries": 20,
             "lexical_candidate_k": 50,
             "name": "test_hybrid_candidate_reranked_proof_state_retrieval",
-            "seconds": 5.646435401169583,
+            "seconds": 5.743927045026794,
             "split": "test"
           },
           {
             "best_variant_by_recall": "stored_plus_goal_only",
             "evaluated_queries": 50,
             "name": "val_proof_state_query_representation_diagnostic",
-            "seconds": 1.7435622399207205,
+            "seconds": 1.6981809849385172,
             "split": "val"
           },
           {
             "best_variant_by_recall": "stored_plus_full_name_context_goal",
             "evaluated_queries": 50,
             "name": "test_proof_state_query_representation_diagnostic",
-            "seconds": 0.8969280230812728,
+            "seconds": 0.90008874097839,
             "split": "test"
           },
           {
@@ -2028,7 +2032,7 @@
             "case_study_limit": 0,
             "evaluated_queries": 1000,
             "name": "test_theorem_retrieval",
-            "seconds": 0.47176785906776786,
+            "seconds": 0.46141390316188335,
             "split": "test"
           },
           {
@@ -2036,27 +2040,27 @@
             "case_study_limit": 0,
             "evaluated_queries": 1000,
             "name": "val_theorem_retrieval",
-            "seconds": 0.44639771222136915,
+            "seconds": 0.4313128918875009,
             "split": "val"
           }
         ],
         "substage_count": 8,
-        "substage_seconds_total": 58.505788383539766,
-        "total_seconds": 59.025652127107605
+        "substage_seconds_total": 58.21679812297225,
+        "total_seconds": 58.69010592997074
       },
       "evaluation_timing_delta": {
-        "current_evaluation_seconds": 59.025652127107605,
+        "current_evaluation_seconds": 58.69010592997074,
         "current_faster_than_pipeline_timing": false,
-        "timed_pipeline_evaluate_seconds": 19.468068956863135,
-        "timed_to_current_ratio": 0.32982386903477173
+        "timed_pipeline_evaluate_seconds": 34.968471507076174,
+        "timed_to_current_ratio": 0.5958154437274434
       },
       "executed_stage_count": 20,
-      "processed_rows_per_second": 584.7982492058259,
+      "processed_rows_per_second": 499.6958268653205,
       "scale_estimate_reliable": true,
       "skipped_stage_count": 0,
       "slowest_stage": "embed",
       "throughput_basis": "executed_pipeline_run",
-      "total_seconds": 499.3380202429835
+      "total_seconds": 584.3795050918125
     }
   },
   "proof_techniques": [
@@ -2280,7 +2284,7 @@
       "warnings": []
     },
     "corpus": {
-      "config_hash": "37ec7d5d3cf4d7b9",
+      "config_hash": "614a66ee7ff568bc",
       "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
       "data_supervision": {
         "has_negative_candidates": true,
@@ -2494,24 +2498,24 @@
     "index_benchmark": {
       "premise": {
         "backend": "hnswlib",
-        "exact_ms_per_query": 69.19121138984337,
+        "exact_ms_per_query": 69.20463973889127,
         "indexed_available": true,
-        "indexed_ms_per_query": 3.682160989847034,
-        "recall_vs_exact": 0.993
+        "indexed_ms_per_query": 3.3942832984030247,
+        "recall_vs_exact": 0.9919999999999999
       },
       "proof_state": {
         "backend": "hnswlib",
-        "exact_ms_per_query": 12.8202082705684,
+        "exact_ms_per_query": 12.716230349615216,
         "indexed_available": true,
-        "indexed_ms_per_query": 0.8266799803823233,
-        "recall_vs_exact": 0.9500000000000002
+        "indexed_ms_per_query": 0.7789641292765737,
+        "recall_vs_exact": 0.9520000000000002
       },
       "theorem": {
         "backend": "hnswlib",
-        "exact_ms_per_query": 4.0994407795369625,
+        "exact_ms_per_query": 4.127389050554484,
         "indexed_available": true,
-        "indexed_ms_per_query": 0.24234733078628778,
-        "recall_vs_exact": 0.996
+        "indexed_ms_per_query": 0.22483923006802797,
+        "recall_vs_exact": 0.99
       }
     },
     "parsing": {
@@ -2619,7 +2623,7 @@
       "gold_premises_missing_from_train_index": 546,
       "premise_mrr": 0.07831169467619567,
       "premise_recall_at_10": 0.11624918291584951,
-      "ranker_auc": 0.8214308,
+      "ranker_auc": 0.82373046875,
       "theorem_mrr": 0.5608535466914221,
       "theorem_ndcg_at_10": 0.4451927253442335,
       "theorem_recall_at_10": 0.49403129986534694
@@ -2698,8 +2702,8 @@
           "relative": 0.0
         },
         "premise_recall_at_10": {
-          "absolute": 0.0,
-          "relative": 0.0
+          "absolute": -0.0116763489990441,
+          "relative": -0.09127457845406615
         },
         "premises": {
           "absolute": 0.0,
@@ -2714,12 +2718,12 @@
           "relative": 0.0
         },
         "theorem_mrr": {
-          "absolute": 0.0,
-          "relative": 0.0
+          "absolute": 0.013541170169129035,
+          "relative": 0.024741209499357045
         },
         "theorem_recall_at_10": {
-          "absolute": 0.0,
-          "relative": 0.0
+          "absolute": 0.07074268670025691,
+          "relative": 0.16712636366777486
         },
         "theorems": {
           "absolute": 0.0,
@@ -2733,886 +2737,6 @@
   },
   "refresh_history": {
     "entries": [
-      {
-        "corpus": {
-          "config_hash": "37ec7d5d3cf4d7b9",
-          "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
-          "data_supervision": {
-            "has_negative_candidates": true,
-            "has_real_mathlib_source": true,
-            "has_tactic_states": true,
-            "has_true_positive_premises": true,
-            "kind": "leanrank_proof_state_rows",
-            "limitations": [],
-            "premise_label_semantics": "leanrank_positive_and_negative_candidates",
-            "proof_trace_level": "proof_state_rows",
-            "suitable_for": {
-              "kg_visualization": true,
-              "premise_ranking_training": true,
-              "proof_state_pattern_training": true,
-              "theorem_text_retrieval_demo": true
-            }
-          },
-          "dataset_name": "erbacher/LeanRank-data",
-          "lean_version": "unknown",
-          "mathlib_commit": "unknown",
-          "sampled_rows": 292012,
-          "sampled_theorems": 10000,
-          "source_kind": "huggingface"
-        },
-        "deltas_from_previous": {
-          "artifact_compatible": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "difficulty_train_mae": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "edges": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "minimum_context_coverage": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "nodes": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "premise_index_recall_vs_exact": {
-            "absolute": 0.004999999999999893,
-            "relative": 0.005060728744939163
-          },
-          "premise_recall_at_10": {
-            "absolute": 0.0116763489990441,
-            "relative": 0.10044241779743414
-          },
-          "premises": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "proof_states": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "ready_for_refresh_comparison": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "theorem_mrr": {
-            "absolute": -0.013541170169129035,
-            "relative": -0.02414386117197775
-          },
-          "theorem_recall_at_10": {
-            "absolute": -0.07074268670025691,
-            "relative": -0.1431947464048098
-          },
-          "theorems": {
-            "absolute": 0.0,
-            "relative": 0.0
-          }
-        },
-        "generated_at": "2026-06-20T22:46:02.547677+00:00",
-        "metrics": {
-          "artifact_compatible": true,
-          "difficulty_train_mae": 0.03893516332772901,
-          "edges": 1385416,
-          "minimum_context_coverage": 1.0,
-          "nodes": 280422,
-          "premise_index_recall_vs_exact": 0.993,
-          "premise_recall_at_10": 0.12792553191489361,
-          "premises": 202185,
-          "proof_states": 29598,
-          "ready_for_refresh_comparison": true,
-          "theorem_mrr": 0.547312376522293,
-          "theorem_recall_at_10": 0.42328861316509003,
-          "theorems": 10000
-        },
-        "quality_gate_changes": {},
-        "quality_gates": {
-          "artifact_compatible": true,
-          "graph_valid": true,
-          "index_benchmark_present": true,
-          "parsing_coverage_present": true,
-          "schema_clean": true,
-          "split_clean": true,
-          "theorem_eval_present": true,
-          "theorem_query_parse_present": true
-        },
-        "ready_for_refresh_comparison": true
-      },
-      {
-        "corpus": {
-          "config_hash": "37ec7d5d3cf4d7b9",
-          "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
-          "data_supervision": {
-            "has_negative_candidates": true,
-            "has_real_mathlib_source": true,
-            "has_tactic_states": true,
-            "has_true_positive_premises": true,
-            "kind": "leanrank_proof_state_rows",
-            "limitations": [],
-            "premise_label_semantics": "leanrank_positive_and_negative_candidates",
-            "proof_trace_level": "proof_state_rows",
-            "suitable_for": {
-              "kg_visualization": true,
-              "premise_ranking_training": true,
-              "proof_state_pattern_training": true,
-              "theorem_text_retrieval_demo": true
-            }
-          },
-          "dataset_name": "erbacher/LeanRank-data",
-          "lean_version": "unknown",
-          "mathlib_commit": "unknown",
-          "sampled_rows": 292012,
-          "sampled_theorems": 10000,
-          "source_kind": "huggingface"
-        },
-        "deltas_from_previous": {
-          "artifact_compatible": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "difficulty_train_mae": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "edges": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "minimum_context_coverage": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "nodes": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "premise_index_recall_vs_exact": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "premise_recall_at_10": {
-            "absolute": -0.0116763489990441,
-            "relative": -0.09127457845406615
-          },
-          "premises": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "proof_states": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "ready_for_refresh_comparison": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "theorem_mrr": {
-            "absolute": 0.013541170169129035,
-            "relative": 0.024741209499357045
-          },
-          "theorem_recall_at_10": {
-            "absolute": 0.07074268670025691,
-            "relative": 0.16712636366777486
-          },
-          "theorems": {
-            "absolute": 0.0,
-            "relative": 0.0
-          }
-        },
-        "generated_at": "2026-06-20T22:49:48.561501+00:00",
-        "metrics": {
-          "artifact_compatible": true,
-          "difficulty_train_mae": 0.03893516332772901,
-          "edges": 1385416,
-          "minimum_context_coverage": 1.0,
-          "nodes": 280422,
-          "premise_index_recall_vs_exact": 0.993,
-          "premise_recall_at_10": 0.11624918291584951,
-          "premises": 202185,
-          "proof_states": 29598,
-          "ready_for_refresh_comparison": true,
-          "theorem_mrr": 0.5608535466914221,
-          "theorem_recall_at_10": 0.49403129986534694,
-          "theorems": 10000
-        },
-        "quality_gate_changes": {},
-        "quality_gates": {
-          "artifact_compatible": true,
-          "graph_valid": true,
-          "index_benchmark_present": true,
-          "parsing_coverage_present": true,
-          "schema_clean": true,
-          "split_clean": true,
-          "theorem_eval_present": true,
-          "theorem_query_parse_present": true
-        },
-        "ready_for_refresh_comparison": true
-      },
-      {
-        "corpus": {
-          "config_hash": "37ec7d5d3cf4d7b9",
-          "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
-          "data_supervision": {
-            "has_negative_candidates": true,
-            "has_real_mathlib_source": true,
-            "has_tactic_states": true,
-            "has_true_positive_premises": true,
-            "kind": "leanrank_proof_state_rows",
-            "limitations": [],
-            "premise_label_semantics": "leanrank_positive_and_negative_candidates",
-            "proof_trace_level": "proof_state_rows",
-            "suitable_for": {
-              "kg_visualization": true,
-              "premise_ranking_training": true,
-              "proof_state_pattern_training": true,
-              "theorem_text_retrieval_demo": true
-            }
-          },
-          "dataset_name": "erbacher/LeanRank-data",
-          "lean_version": "unknown",
-          "mathlib_commit": "unknown",
-          "sampled_rows": 292012,
-          "sampled_theorems": 10000,
-          "source_kind": "huggingface"
-        },
-        "deltas_from_previous": {
-          "artifact_compatible": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "difficulty_train_mae": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "edges": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "minimum_context_coverage": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "nodes": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "premise_index_recall_vs_exact": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "premise_recall_at_10": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "premises": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "proof_states": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "ready_for_refresh_comparison": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "theorem_mrr": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "theorem_recall_at_10": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "theorems": {
-            "absolute": 0.0,
-            "relative": 0.0
-          }
-        },
-        "generated_at": "2026-06-20T22:55:33.740022+00:00",
-        "metrics": {
-          "artifact_compatible": true,
-          "difficulty_train_mae": 0.03893516332772901,
-          "edges": 1385416,
-          "minimum_context_coverage": 1.0,
-          "nodes": 280422,
-          "premise_index_recall_vs_exact": 0.993,
-          "premise_recall_at_10": 0.11624918291584951,
-          "premises": 202185,
-          "proof_states": 29598,
-          "ready_for_refresh_comparison": true,
-          "theorem_mrr": 0.5608535466914221,
-          "theorem_recall_at_10": 0.49403129986534694,
-          "theorems": 10000
-        },
-        "quality_gate_changes": {},
-        "quality_gates": {
-          "artifact_compatible": true,
-          "graph_valid": true,
-          "index_benchmark_present": true,
-          "parsing_coverage_present": true,
-          "schema_clean": true,
-          "split_clean": true,
-          "theorem_eval_present": true,
-          "theorem_query_parse_present": true
-        },
-        "ready_for_refresh_comparison": true
-      },
-      {
-        "corpus": {
-          "config_hash": "37ec7d5d3cf4d7b9",
-          "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
-          "data_supervision": {
-            "has_negative_candidates": true,
-            "has_real_mathlib_source": true,
-            "has_tactic_states": true,
-            "has_true_positive_premises": true,
-            "kind": "leanrank_proof_state_rows",
-            "limitations": [],
-            "premise_label_semantics": "leanrank_positive_and_negative_candidates",
-            "proof_trace_level": "proof_state_rows",
-            "suitable_for": {
-              "kg_visualization": true,
-              "premise_ranking_training": true,
-              "proof_state_pattern_training": true,
-              "theorem_text_retrieval_demo": true
-            }
-          },
-          "dataset_name": "erbacher/LeanRank-data",
-          "lean_version": "unknown",
-          "mathlib_commit": "unknown",
-          "sampled_rows": 292012,
-          "sampled_theorems": 10000,
-          "source_kind": "huggingface"
-        },
-        "deltas_from_previous": {
-          "artifact_compatible": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "difficulty_train_mae": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "edges": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "minimum_context_coverage": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "nodes": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "premise_index_recall_vs_exact": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "premise_recall_at_10": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "premises": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "proof_states": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "ready_for_refresh_comparison": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "theorem_mrr": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "theorem_recall_at_10": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "theorems": {
-            "absolute": 0.0,
-            "relative": 0.0
-          }
-        },
-        "generated_at": "2026-06-20T22:59:54.598122+00:00",
-        "metrics": {
-          "artifact_compatible": true,
-          "difficulty_train_mae": 0.03893516332772901,
-          "edges": 1385416,
-          "minimum_context_coverage": 1.0,
-          "nodes": 280422,
-          "premise_index_recall_vs_exact": 0.993,
-          "premise_recall_at_10": 0.11624918291584951,
-          "premises": 202185,
-          "proof_states": 29598,
-          "ready_for_refresh_comparison": true,
-          "theorem_mrr": 0.5608535466914221,
-          "theorem_recall_at_10": 0.49403129986534694,
-          "theorems": 10000
-        },
-        "quality_gate_changes": {},
-        "quality_gates": {
-          "artifact_compatible": true,
-          "graph_valid": true,
-          "index_benchmark_present": true,
-          "parsing_coverage_present": true,
-          "schema_clean": true,
-          "split_clean": true,
-          "theorem_eval_present": true,
-          "theorem_query_parse_present": true
-        },
-        "ready_for_refresh_comparison": true
-      },
-      {
-        "corpus": {
-          "config_hash": "37ec7d5d3cf4d7b9",
-          "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
-          "data_supervision": {
-            "has_negative_candidates": true,
-            "has_real_mathlib_source": true,
-            "has_tactic_states": true,
-            "has_true_positive_premises": true,
-            "kind": "leanrank_proof_state_rows",
-            "limitations": [],
-            "premise_label_semantics": "leanrank_positive_and_negative_candidates",
-            "proof_trace_level": "proof_state_rows",
-            "suitable_for": {
-              "kg_visualization": true,
-              "premise_ranking_training": true,
-              "proof_state_pattern_training": true,
-              "theorem_text_retrieval_demo": true
-            }
-          },
-          "dataset_name": "erbacher/LeanRank-data",
-          "lean_version": "unknown",
-          "mathlib_commit": "unknown",
-          "sampled_rows": 292012,
-          "sampled_theorems": 10000,
-          "source_kind": "huggingface"
-        },
-        "deltas_from_previous": {
-          "artifact_compatible": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "difficulty_train_mae": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "edges": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "minimum_context_coverage": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "nodes": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "premise_index_recall_vs_exact": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "premise_recall_at_10": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "premises": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "proof_states": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "ready_for_refresh_comparison": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "theorem_mrr": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "theorem_recall_at_10": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "theorems": {
-            "absolute": 0.0,
-            "relative": 0.0
-          }
-        },
-        "generated_at": "2026-06-20T23:01:05.451076+00:00",
-        "metrics": {
-          "artifact_compatible": true,
-          "difficulty_train_mae": 0.03893516332772901,
-          "edges": 1385416,
-          "minimum_context_coverage": 1.0,
-          "nodes": 280422,
-          "premise_index_recall_vs_exact": 0.993,
-          "premise_recall_at_10": 0.11624918291584951,
-          "premises": 202185,
-          "proof_states": 29598,
-          "ready_for_refresh_comparison": true,
-          "theorem_mrr": 0.5608535466914221,
-          "theorem_recall_at_10": 0.49403129986534694,
-          "theorems": 10000
-        },
-        "quality_gate_changes": {},
-        "quality_gates": {
-          "artifact_compatible": true,
-          "graph_valid": true,
-          "index_benchmark_present": true,
-          "parsing_coverage_present": true,
-          "schema_clean": true,
-          "split_clean": true,
-          "theorem_eval_present": true,
-          "theorem_query_parse_present": true
-        },
-        "ready_for_refresh_comparison": true
-      },
-      {
-        "corpus": {
-          "config_hash": "37ec7d5d3cf4d7b9",
-          "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
-          "data_supervision": {
-            "has_negative_candidates": true,
-            "has_real_mathlib_source": true,
-            "has_tactic_states": true,
-            "has_true_positive_premises": true,
-            "kind": "leanrank_proof_state_rows",
-            "limitations": [],
-            "premise_label_semantics": "leanrank_positive_and_negative_candidates",
-            "proof_trace_level": "proof_state_rows",
-            "suitable_for": {
-              "kg_visualization": true,
-              "premise_ranking_training": true,
-              "proof_state_pattern_training": true,
-              "theorem_text_retrieval_demo": true
-            }
-          },
-          "dataset_name": "erbacher/LeanRank-data",
-          "lean_version": "unknown",
-          "mathlib_commit": "unknown",
-          "sampled_rows": 292012,
-          "sampled_theorems": 10000,
-          "source_kind": "huggingface"
-        },
-        "deltas_from_previous": {
-          "artifact_compatible": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "difficulty_train_mae": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "edges": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "minimum_context_coverage": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "nodes": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "premise_index_recall_vs_exact": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "premise_recall_at_10": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "premises": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "proof_states": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "ready_for_refresh_comparison": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "theorem_mrr": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "theorem_recall_at_10": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "theorems": {
-            "absolute": 0.0,
-            "relative": 0.0
-          }
-        },
-        "generated_at": "2026-06-20T23:05:51.257672+00:00",
-        "metrics": {
-          "artifact_compatible": true,
-          "difficulty_train_mae": 0.03893516332772901,
-          "edges": 1385416,
-          "minimum_context_coverage": 1.0,
-          "nodes": 280422,
-          "premise_index_recall_vs_exact": 0.993,
-          "premise_recall_at_10": 0.11624918291584951,
-          "premises": 202185,
-          "proof_states": 29598,
-          "ready_for_refresh_comparison": true,
-          "theorem_mrr": 0.5608535466914221,
-          "theorem_recall_at_10": 0.49403129986534694,
-          "theorems": 10000
-        },
-        "quality_gate_changes": {},
-        "quality_gates": {
-          "artifact_compatible": true,
-          "graph_valid": true,
-          "index_benchmark_present": true,
-          "parsing_coverage_present": true,
-          "schema_clean": true,
-          "split_clean": true,
-          "theorem_eval_present": true,
-          "theorem_query_parse_present": true
-        },
-        "ready_for_refresh_comparison": true
-      },
-      {
-        "corpus": {
-          "config_hash": "37ec7d5d3cf4d7b9",
-          "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
-          "data_supervision": {
-            "has_negative_candidates": true,
-            "has_real_mathlib_source": true,
-            "has_tactic_states": true,
-            "has_true_positive_premises": true,
-            "kind": "leanrank_proof_state_rows",
-            "limitations": [],
-            "premise_label_semantics": "leanrank_positive_and_negative_candidates",
-            "proof_trace_level": "proof_state_rows",
-            "suitable_for": {
-              "kg_visualization": true,
-              "premise_ranking_training": true,
-              "proof_state_pattern_training": true,
-              "theorem_text_retrieval_demo": true
-            }
-          },
-          "dataset_name": "erbacher/LeanRank-data",
-          "lean_version": "unknown",
-          "mathlib_commit": "unknown",
-          "sampled_rows": 292012,
-          "sampled_theorems": 10000,
-          "source_kind": "huggingface"
-        },
-        "deltas_from_previous": {
-          "artifact_compatible": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "difficulty_train_mae": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "edges": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "minimum_context_coverage": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "nodes": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "premise_index_recall_vs_exact": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "premise_recall_at_10": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "premises": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "proof_states": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "ready_for_refresh_comparison": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "theorem_mrr": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "theorem_recall_at_10": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "theorems": {
-            "absolute": 0.0,
-            "relative": 0.0
-          }
-        },
-        "generated_at": "2026-06-20T23:11:27.875219+00:00",
-        "metrics": {
-          "artifact_compatible": true,
-          "difficulty_train_mae": 0.03893516332772901,
-          "edges": 1385416,
-          "minimum_context_coverage": 1.0,
-          "nodes": 280422,
-          "premise_index_recall_vs_exact": 0.993,
-          "premise_recall_at_10": 0.11624918291584951,
-          "premises": 202185,
-          "proof_states": 29598,
-          "ready_for_refresh_comparison": true,
-          "theorem_mrr": 0.5608535466914221,
-          "theorem_recall_at_10": 0.49403129986534694,
-          "theorems": 10000
-        },
-        "quality_gate_changes": {},
-        "quality_gates": {
-          "artifact_compatible": true,
-          "graph_valid": true,
-          "index_benchmark_present": true,
-          "parsing_coverage_present": true,
-          "schema_clean": true,
-          "split_clean": true,
-          "theorem_eval_present": true,
-          "theorem_query_parse_present": true
-        },
-        "ready_for_refresh_comparison": true
-      },
-      {
-        "corpus": {
-          "config_hash": "37ec7d5d3cf4d7b9",
-          "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
-          "data_supervision": {
-            "has_negative_candidates": true,
-            "has_real_mathlib_source": true,
-            "has_tactic_states": true,
-            "has_true_positive_premises": true,
-            "kind": "leanrank_proof_state_rows",
-            "limitations": [],
-            "premise_label_semantics": "leanrank_positive_and_negative_candidates",
-            "proof_trace_level": "proof_state_rows",
-            "suitable_for": {
-              "kg_visualization": true,
-              "premise_ranking_training": true,
-              "proof_state_pattern_training": true,
-              "theorem_text_retrieval_demo": true
-            }
-          },
-          "dataset_name": "erbacher/LeanRank-data",
-          "lean_version": "unknown",
-          "mathlib_commit": "unknown",
-          "sampled_rows": 292012,
-          "sampled_theorems": 10000,
-          "source_kind": "huggingface"
-        },
-        "deltas_from_previous": {
-          "artifact_compatible": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "difficulty_train_mae": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "edges": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "minimum_context_coverage": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "nodes": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "premise_index_recall_vs_exact": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "premise_recall_at_10": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "premises": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "proof_states": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "ready_for_refresh_comparison": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "theorem_mrr": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "theorem_recall_at_10": {
-            "absolute": 0.0,
-            "relative": 0.0
-          },
-          "theorems": {
-            "absolute": 0.0,
-            "relative": 0.0
-          }
-        },
-        "generated_at": "2026-06-20T23:17:37.176555+00:00",
-        "metrics": {
-          "artifact_compatible": true,
-          "difficulty_train_mae": 0.03893516332772901,
-          "edges": 1385416,
-          "minimum_context_coverage": 1.0,
-          "nodes": 280422,
-          "premise_index_recall_vs_exact": 0.993,
-          "premise_recall_at_10": 0.11624918291584951,
-          "premises": 202185,
-          "proof_states": 29598,
-          "ready_for_refresh_comparison": true,
-          "theorem_mrr": 0.5608535466914221,
-          "theorem_recall_at_10": 0.49403129986534694,
-          "theorems": 10000
-        },
-        "quality_gate_changes": {},
-        "quality_gates": {
-          "artifact_compatible": true,
-          "graph_valid": true,
-          "index_benchmark_present": true,
-          "parsing_coverage_present": true,
-          "schema_clean": true,
-          "split_clean": true,
-          "theorem_eval_present": true,
-          "theorem_query_parse_present": true
-        },
-        "ready_for_refresh_comparison": true
-      },
       {
         "corpus": {
           "config_hash": "37ec7d5d3cf4d7b9",
@@ -4932,13 +4056,893 @@
           "theorem_query_parse_present": true
         },
         "ready_for_refresh_comparison": true
+      },
+      {
+        "corpus": {
+          "config_hash": "37ec7d5d3cf4d7b9",
+          "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
+          "data_supervision": {
+            "has_negative_candidates": true,
+            "has_real_mathlib_source": true,
+            "has_tactic_states": true,
+            "has_true_positive_premises": true,
+            "kind": "leanrank_proof_state_rows",
+            "limitations": [],
+            "premise_label_semantics": "leanrank_positive_and_negative_candidates",
+            "proof_trace_level": "proof_state_rows",
+            "suitable_for": {
+              "kg_visualization": true,
+              "premise_ranking_training": true,
+              "proof_state_pattern_training": true,
+              "theorem_text_retrieval_demo": true
+            }
+          },
+          "dataset_name": "erbacher/LeanRank-data",
+          "lean_version": "unknown",
+          "mathlib_commit": "unknown",
+          "sampled_rows": 292012,
+          "sampled_theorems": 10000,
+          "source_kind": "huggingface"
+        },
+        "deltas_from_previous": {
+          "artifact_compatible": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "difficulty_train_mae": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "edges": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "minimum_context_coverage": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "nodes": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "premise_index_recall_vs_exact": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "premise_recall_at_10": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "premises": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "proof_states": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "ready_for_refresh_comparison": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "theorem_mrr": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "theorem_recall_at_10": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "theorems": {
+            "absolute": 0.0,
+            "relative": 0.0
+          }
+        },
+        "generated_at": "2026-06-21T00:55:47.277178+00:00",
+        "metrics": {
+          "artifact_compatible": true,
+          "difficulty_train_mae": 0.03893516332772901,
+          "edges": 1385416,
+          "minimum_context_coverage": 1.0,
+          "nodes": 280422,
+          "premise_index_recall_vs_exact": 0.993,
+          "premise_recall_at_10": 0.11624918291584951,
+          "premises": 202185,
+          "proof_states": 29598,
+          "ready_for_refresh_comparison": true,
+          "theorem_mrr": 0.5608535466914221,
+          "theorem_recall_at_10": 0.49403129986534694,
+          "theorems": 10000
+        },
+        "quality_gate_changes": {},
+        "quality_gates": {
+          "artifact_compatible": true,
+          "graph_valid": true,
+          "index_benchmark_present": true,
+          "parsing_coverage_present": true,
+          "schema_clean": true,
+          "split_clean": true,
+          "theorem_eval_present": true,
+          "theorem_query_parse_present": true
+        },
+        "ready_for_refresh_comparison": true
+      },
+      {
+        "corpus": {
+          "config_hash": "37ec7d5d3cf4d7b9",
+          "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
+          "data_supervision": {
+            "has_negative_candidates": true,
+            "has_real_mathlib_source": true,
+            "has_tactic_states": true,
+            "has_true_positive_premises": true,
+            "kind": "leanrank_proof_state_rows",
+            "limitations": [],
+            "premise_label_semantics": "leanrank_positive_and_negative_candidates",
+            "proof_trace_level": "proof_state_rows",
+            "suitable_for": {
+              "kg_visualization": true,
+              "premise_ranking_training": true,
+              "proof_state_pattern_training": true,
+              "theorem_text_retrieval_demo": true
+            }
+          },
+          "dataset_name": "erbacher/LeanRank-data",
+          "lean_version": "unknown",
+          "mathlib_commit": "unknown",
+          "sampled_rows": 292012,
+          "sampled_theorems": 10000,
+          "source_kind": "huggingface"
+        },
+        "deltas_from_previous": {
+          "artifact_compatible": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "difficulty_train_mae": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "edges": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "minimum_context_coverage": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "nodes": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "premise_index_recall_vs_exact": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "premise_recall_at_10": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "premises": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "proof_states": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "ready_for_refresh_comparison": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "theorem_mrr": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "theorem_recall_at_10": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "theorems": {
+            "absolute": 0.0,
+            "relative": 0.0
+          }
+        },
+        "generated_at": "2026-06-21T00:59:29.403752+00:00",
+        "metrics": {
+          "artifact_compatible": true,
+          "difficulty_train_mae": 0.03893516332772901,
+          "edges": 1385416,
+          "minimum_context_coverage": 1.0,
+          "nodes": 280422,
+          "premise_index_recall_vs_exact": 0.993,
+          "premise_recall_at_10": 0.11624918291584951,
+          "premises": 202185,
+          "proof_states": 29598,
+          "ready_for_refresh_comparison": true,
+          "theorem_mrr": 0.5608535466914221,
+          "theorem_recall_at_10": 0.49403129986534694,
+          "theorems": 10000
+        },
+        "quality_gate_changes": {},
+        "quality_gates": {
+          "artifact_compatible": true,
+          "graph_valid": true,
+          "index_benchmark_present": true,
+          "parsing_coverage_present": true,
+          "schema_clean": true,
+          "split_clean": true,
+          "theorem_eval_present": true,
+          "theorem_query_parse_present": true
+        },
+        "ready_for_refresh_comparison": true
+      },
+      {
+        "corpus": {
+          "config_hash": "37ec7d5d3cf4d7b9",
+          "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
+          "data_supervision": {
+            "has_negative_candidates": true,
+            "has_real_mathlib_source": true,
+            "has_tactic_states": true,
+            "has_true_positive_premises": true,
+            "kind": "leanrank_proof_state_rows",
+            "limitations": [],
+            "premise_label_semantics": "leanrank_positive_and_negative_candidates",
+            "proof_trace_level": "proof_state_rows",
+            "suitable_for": {
+              "kg_visualization": true,
+              "premise_ranking_training": true,
+              "proof_state_pattern_training": true,
+              "theorem_text_retrieval_demo": true
+            }
+          },
+          "dataset_name": "erbacher/LeanRank-data",
+          "lean_version": "unknown",
+          "mathlib_commit": "unknown",
+          "sampled_rows": 292012,
+          "sampled_theorems": 10000,
+          "source_kind": "huggingface"
+        },
+        "deltas_from_previous": {
+          "artifact_compatible": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "difficulty_train_mae": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "edges": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "minimum_context_coverage": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "nodes": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "premise_index_recall_vs_exact": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "premise_recall_at_10": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "premises": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "proof_states": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "ready_for_refresh_comparison": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "theorem_mrr": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "theorem_recall_at_10": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "theorems": {
+            "absolute": 0.0,
+            "relative": 0.0
+          }
+        },
+        "generated_at": "2026-06-21T01:00:13.710216+00:00",
+        "metrics": {
+          "artifact_compatible": true,
+          "difficulty_train_mae": 0.03893516332772901,
+          "edges": 1385416,
+          "minimum_context_coverage": 1.0,
+          "nodes": 280422,
+          "premise_index_recall_vs_exact": 0.993,
+          "premise_recall_at_10": 0.11624918291584951,
+          "premises": 202185,
+          "proof_states": 29598,
+          "ready_for_refresh_comparison": true,
+          "theorem_mrr": 0.5608535466914221,
+          "theorem_recall_at_10": 0.49403129986534694,
+          "theorems": 10000
+        },
+        "quality_gate_changes": {},
+        "quality_gates": {
+          "artifact_compatible": true,
+          "graph_valid": true,
+          "index_benchmark_present": true,
+          "parsing_coverage_present": true,
+          "schema_clean": true,
+          "split_clean": true,
+          "theorem_eval_present": true,
+          "theorem_query_parse_present": true
+        },
+        "ready_for_refresh_comparison": true
+      },
+      {
+        "corpus": {
+          "config_hash": "37ec7d5d3cf4d7b9",
+          "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
+          "data_supervision": {
+            "has_negative_candidates": true,
+            "has_real_mathlib_source": true,
+            "has_tactic_states": true,
+            "has_true_positive_premises": true,
+            "kind": "leanrank_proof_state_rows",
+            "limitations": [],
+            "premise_label_semantics": "leanrank_positive_and_negative_candidates",
+            "proof_trace_level": "proof_state_rows",
+            "suitable_for": {
+              "kg_visualization": true,
+              "premise_ranking_training": true,
+              "proof_state_pattern_training": true,
+              "theorem_text_retrieval_demo": true
+            }
+          },
+          "dataset_name": "erbacher/LeanRank-data",
+          "lean_version": "unknown",
+          "mathlib_commit": "unknown",
+          "sampled_rows": 292012,
+          "sampled_theorems": 10000,
+          "source_kind": "huggingface"
+        },
+        "deltas_from_previous": {
+          "artifact_compatible": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "difficulty_train_mae": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "edges": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "minimum_context_coverage": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "nodes": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "premise_index_recall_vs_exact": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "premise_recall_at_10": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "premises": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "proof_states": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "ready_for_refresh_comparison": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "theorem_mrr": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "theorem_recall_at_10": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "theorems": {
+            "absolute": 0.0,
+            "relative": 0.0
+          }
+        },
+        "generated_at": "2026-06-21T01:00:58.276120+00:00",
+        "metrics": {
+          "artifact_compatible": true,
+          "difficulty_train_mae": 0.03893516332772901,
+          "edges": 1385416,
+          "minimum_context_coverage": 1.0,
+          "nodes": 280422,
+          "premise_index_recall_vs_exact": 0.993,
+          "premise_recall_at_10": 0.11624918291584951,
+          "premises": 202185,
+          "proof_states": 29598,
+          "ready_for_refresh_comparison": true,
+          "theorem_mrr": 0.5608535466914221,
+          "theorem_recall_at_10": 0.49403129986534694,
+          "theorems": 10000
+        },
+        "quality_gate_changes": {},
+        "quality_gates": {
+          "artifact_compatible": true,
+          "graph_valid": true,
+          "index_benchmark_present": true,
+          "parsing_coverage_present": true,
+          "schema_clean": true,
+          "split_clean": true,
+          "theorem_eval_present": true,
+          "theorem_query_parse_present": true
+        },
+        "ready_for_refresh_comparison": true
+      },
+      {
+        "corpus": {
+          "config_hash": "37ec7d5d3cf4d7b9",
+          "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
+          "data_supervision": {
+            "has_negative_candidates": true,
+            "has_real_mathlib_source": true,
+            "has_tactic_states": true,
+            "has_true_positive_premises": true,
+            "kind": "leanrank_proof_state_rows",
+            "limitations": [],
+            "premise_label_semantics": "leanrank_positive_and_negative_candidates",
+            "proof_trace_level": "proof_state_rows",
+            "suitable_for": {
+              "kg_visualization": true,
+              "premise_ranking_training": true,
+              "proof_state_pattern_training": true,
+              "theorem_text_retrieval_demo": true
+            }
+          },
+          "dataset_name": "erbacher/LeanRank-data",
+          "lean_version": "unknown",
+          "mathlib_commit": "unknown",
+          "sampled_rows": 292012,
+          "sampled_theorems": 10000,
+          "source_kind": "huggingface"
+        },
+        "deltas_from_previous": {
+          "artifact_compatible": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "difficulty_train_mae": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "edges": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "minimum_context_coverage": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "nodes": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "premise_index_recall_vs_exact": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "premise_recall_at_10": {
+            "absolute": 0.0116763489990441,
+            "relative": 0.10044241779743414
+          },
+          "premises": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "proof_states": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "ready_for_refresh_comparison": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "theorem_mrr": {
+            "absolute": -0.013541170169129035,
+            "relative": -0.02414386117197775
+          },
+          "theorem_recall_at_10": {
+            "absolute": -0.07074268670025691,
+            "relative": -0.1431947464048098
+          },
+          "theorems": {
+            "absolute": 0.0,
+            "relative": 0.0
+          }
+        },
+        "generated_at": "2026-06-21T01:05:47.041832+00:00",
+        "metrics": {
+          "artifact_compatible": true,
+          "difficulty_train_mae": 0.03893516332772901,
+          "edges": 1385416,
+          "minimum_context_coverage": 1.0,
+          "nodes": 280422,
+          "premise_index_recall_vs_exact": 0.993,
+          "premise_recall_at_10": 0.12792553191489361,
+          "premises": 202185,
+          "proof_states": 29598,
+          "ready_for_refresh_comparison": true,
+          "theorem_mrr": 0.547312376522293,
+          "theorem_recall_at_10": 0.42328861316509003,
+          "theorems": 10000
+        },
+        "quality_gate_changes": {},
+        "quality_gates": {
+          "artifact_compatible": true,
+          "graph_valid": true,
+          "index_benchmark_present": true,
+          "parsing_coverage_present": true,
+          "schema_clean": true,
+          "split_clean": true,
+          "theorem_eval_present": true,
+          "theorem_query_parse_present": true
+        },
+        "ready_for_refresh_comparison": true
+      },
+      {
+        "corpus": {
+          "config_hash": "614a66ee7ff568bc",
+          "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
+          "data_supervision": {
+            "has_negative_candidates": true,
+            "has_real_mathlib_source": true,
+            "has_tactic_states": true,
+            "has_true_positive_premises": true,
+            "kind": "leanrank_proof_state_rows",
+            "limitations": [],
+            "premise_label_semantics": "leanrank_positive_and_negative_candidates",
+            "proof_trace_level": "proof_state_rows",
+            "suitable_for": {
+              "kg_visualization": true,
+              "premise_ranking_training": true,
+              "proof_state_pattern_training": true,
+              "theorem_text_retrieval_demo": true
+            }
+          },
+          "dataset_name": "erbacher/LeanRank-data",
+          "lean_version": "unknown",
+          "mathlib_commit": "unknown",
+          "sampled_rows": 292012,
+          "sampled_theorems": 10000,
+          "source_kind": "huggingface"
+        },
+        "deltas_from_previous": {
+          "artifact_compatible": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "difficulty_train_mae": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "edges": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "minimum_context_coverage": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "nodes": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "premise_index_recall_vs_exact": {
+            "absolute": -0.001000000000000112,
+            "relative": -0.0010070493454180382
+          },
+          "premise_recall_at_10": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "premises": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "proof_states": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "ready_for_refresh_comparison": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "theorem_mrr": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "theorem_recall_at_10": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "theorems": {
+            "absolute": 0.0,
+            "relative": 0.0
+          }
+        },
+        "generated_at": "2026-06-21T01:15:41.668666+00:00",
+        "metrics": {
+          "artifact_compatible": true,
+          "difficulty_train_mae": 0.03893516332772901,
+          "edges": 1385416,
+          "minimum_context_coverage": 1.0,
+          "nodes": 280422,
+          "premise_index_recall_vs_exact": 0.9919999999999999,
+          "premise_recall_at_10": 0.12792553191489361,
+          "premises": 202185,
+          "proof_states": 29598,
+          "ready_for_refresh_comparison": true,
+          "theorem_mrr": 0.547312376522293,
+          "theorem_recall_at_10": 0.42328861316509003,
+          "theorems": 10000
+        },
+        "quality_gate_changes": {},
+        "quality_gates": {
+          "artifact_compatible": true,
+          "graph_valid": true,
+          "index_benchmark_present": true,
+          "parsing_coverage_present": true,
+          "schema_clean": true,
+          "split_clean": true,
+          "theorem_eval_present": true,
+          "theorem_query_parse_present": true
+        },
+        "ready_for_refresh_comparison": true
+      },
+      {
+        "corpus": {
+          "config_hash": "614a66ee7ff568bc",
+          "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
+          "data_supervision": {
+            "has_negative_candidates": true,
+            "has_real_mathlib_source": true,
+            "has_tactic_states": true,
+            "has_true_positive_premises": true,
+            "kind": "leanrank_proof_state_rows",
+            "limitations": [],
+            "premise_label_semantics": "leanrank_positive_and_negative_candidates",
+            "proof_trace_level": "proof_state_rows",
+            "suitable_for": {
+              "kg_visualization": true,
+              "premise_ranking_training": true,
+              "proof_state_pattern_training": true,
+              "theorem_text_retrieval_demo": true
+            }
+          },
+          "dataset_name": "erbacher/LeanRank-data",
+          "lean_version": "unknown",
+          "mathlib_commit": "unknown",
+          "sampled_rows": 292012,
+          "sampled_theorems": 10000,
+          "source_kind": "huggingface"
+        },
+        "deltas_from_previous": {
+          "artifact_compatible": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "difficulty_train_mae": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "edges": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "minimum_context_coverage": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "nodes": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "premise_index_recall_vs_exact": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "premise_recall_at_10": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "premises": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "proof_states": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "ready_for_refresh_comparison": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "theorem_mrr": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "theorem_recall_at_10": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "theorems": {
+            "absolute": 0.0,
+            "relative": 0.0
+          }
+        },
+        "generated_at": "2026-06-21T01:16:32.993854+00:00",
+        "metrics": {
+          "artifact_compatible": true,
+          "difficulty_train_mae": 0.03893516332772901,
+          "edges": 1385416,
+          "minimum_context_coverage": 1.0,
+          "nodes": 280422,
+          "premise_index_recall_vs_exact": 0.9919999999999999,
+          "premise_recall_at_10": 0.12792553191489361,
+          "premises": 202185,
+          "proof_states": 29598,
+          "ready_for_refresh_comparison": true,
+          "theorem_mrr": 0.547312376522293,
+          "theorem_recall_at_10": 0.42328861316509003,
+          "theorems": 10000
+        },
+        "quality_gate_changes": {},
+        "quality_gates": {
+          "artifact_compatible": true,
+          "graph_valid": true,
+          "index_benchmark_present": true,
+          "parsing_coverage_present": true,
+          "schema_clean": true,
+          "split_clean": true,
+          "theorem_eval_present": true,
+          "theorem_query_parse_present": true
+        },
+        "ready_for_refresh_comparison": true
+      },
+      {
+        "corpus": {
+          "config_hash": "614a66ee7ff568bc",
+          "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
+          "data_supervision": {
+            "has_negative_candidates": true,
+            "has_real_mathlib_source": true,
+            "has_tactic_states": true,
+            "has_true_positive_premises": true,
+            "kind": "leanrank_proof_state_rows",
+            "limitations": [],
+            "premise_label_semantics": "leanrank_positive_and_negative_candidates",
+            "proof_trace_level": "proof_state_rows",
+            "suitable_for": {
+              "kg_visualization": true,
+              "premise_ranking_training": true,
+              "proof_state_pattern_training": true,
+              "theorem_text_retrieval_demo": true
+            }
+          },
+          "dataset_name": "erbacher/LeanRank-data",
+          "lean_version": "unknown",
+          "mathlib_commit": "unknown",
+          "sampled_rows": 292012,
+          "sampled_theorems": 10000,
+          "source_kind": "huggingface"
+        },
+        "deltas_from_previous": {
+          "artifact_compatible": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "difficulty_train_mae": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "edges": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "minimum_context_coverage": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "nodes": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "premise_index_recall_vs_exact": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "premise_recall_at_10": {
+            "absolute": -0.0116763489990441,
+            "relative": -0.09127457845406615
+          },
+          "premises": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "proof_states": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "ready_for_refresh_comparison": {
+            "absolute": 0.0,
+            "relative": 0.0
+          },
+          "theorem_mrr": {
+            "absolute": 0.013541170169129035,
+            "relative": 0.024741209499357045
+          },
+          "theorem_recall_at_10": {
+            "absolute": 0.07074268670025691,
+            "relative": 0.16712636366777486
+          },
+          "theorems": {
+            "absolute": 0.0,
+            "relative": 0.0
+          }
+        },
+        "generated_at": "2026-06-21T01:18:35.905991+00:00",
+        "metrics": {
+          "artifact_compatible": true,
+          "difficulty_train_mae": 0.03893516332772901,
+          "edges": 1385416,
+          "minimum_context_coverage": 1.0,
+          "nodes": 280422,
+          "premise_index_recall_vs_exact": 0.9919999999999999,
+          "premise_recall_at_10": 0.11624918291584951,
+          "premises": 202185,
+          "proof_states": 29598,
+          "ready_for_refresh_comparison": true,
+          "theorem_mrr": 0.5608535466914221,
+          "theorem_recall_at_10": 0.49403129986534694,
+          "theorems": 10000
+        },
+        "quality_gate_changes": {},
+        "quality_gates": {
+          "artifact_compatible": true,
+          "graph_valid": true,
+          "index_benchmark_present": true,
+          "parsing_coverage_present": true,
+          "schema_clean": true,
+          "split_clean": true,
+          "theorem_eval_present": true,
+          "theorem_query_parse_present": true
+        },
+        "ready_for_refresh_comparison": true
       }
     ],
     "entry_count": 20,
     "history_limit": 20,
     "latest": {
       "corpus": {
-        "config_hash": "37ec7d5d3cf4d7b9",
+        "config_hash": "614a66ee7ff568bc",
         "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
         "data_supervision": {
           "has_negative_candidates": true,
@@ -4989,8 +4993,8 @@
           "relative": 0.0
         },
         "premise_recall_at_10": {
-          "absolute": 0.0,
-          "relative": 0.0
+          "absolute": -0.0116763489990441,
+          "relative": -0.09127457845406615
         },
         "premises": {
           "absolute": 0.0,
@@ -5005,26 +5009,26 @@
           "relative": 0.0
         },
         "theorem_mrr": {
-          "absolute": 0.0,
-          "relative": 0.0
+          "absolute": 0.013541170169129035,
+          "relative": 0.024741209499357045
         },
         "theorem_recall_at_10": {
-          "absolute": 0.0,
-          "relative": 0.0
+          "absolute": 0.07074268670025691,
+          "relative": 0.16712636366777486
         },
         "theorems": {
           "absolute": 0.0,
           "relative": 0.0
         }
       },
-      "generated_at": "2026-06-21T00:43:32.137361+00:00",
+      "generated_at": "2026-06-21T01:18:35.905991+00:00",
       "metrics": {
         "artifact_compatible": true,
         "difficulty_train_mae": 0.03893516332772901,
         "edges": 1385416,
         "minimum_context_coverage": 1.0,
         "nodes": 280422,
-        "premise_index_recall_vs_exact": 0.993,
+        "premise_index_recall_vs_exact": 0.9919999999999999,
         "premise_recall_at_10": 0.11624918291584951,
         "premises": 202185,
         "proof_states": 29598,
@@ -5054,7 +5058,7 @@
       "edges": 1385416,
       "minimum_context_coverage": 1.0,
       "nodes": 280422,
-      "premise_index_recall_vs_exact": 0.993,
+      "premise_index_recall_vs_exact": 0.9919999999999999,
       "premise_recall_at_10": 0.11624918291584951,
       "premises": 202185,
       "proof_states": 29598,
@@ -5064,7 +5068,7 @@
       "theorems": 10000
     },
     "current_corpus": {
-      "config_hash": "37ec7d5d3cf4d7b9",
+      "config_hash": "614a66ee7ff568bc",
       "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
       "data_supervision": {
         "has_negative_candidates": true,
@@ -5115,8 +5119,8 @@
         "relative": 0.0
       },
       "premise_recall_at_10": {
-        "absolute": 0.0,
-        "relative": 0.0
+        "absolute": -0.0116763489990441,
+        "relative": -0.09127457845406615
       },
       "premises": {
         "absolute": 0.0,
@@ -5131,12 +5135,12 @@
         "relative": 0.0
       },
       "theorem_mrr": {
-        "absolute": 0.0,
-        "relative": 0.0
+        "absolute": 0.013541170169129035,
+        "relative": 0.024741209499357045
       },
       "theorem_recall_at_10": {
-        "absolute": 0.0,
-        "relative": 0.0
+        "absolute": 0.07074268670025691,
+        "relative": 0.16712636366777486
       },
       "theorems": {
         "absolute": 0.0,
@@ -5150,17 +5154,17 @@
       "edges": 1385416,
       "minimum_context_coverage": 1.0,
       "nodes": 280422,
-      "premise_index_recall_vs_exact": 0.993,
-      "premise_recall_at_10": 0.11624918291584951,
+      "premise_index_recall_vs_exact": 0.9919999999999999,
+      "premise_recall_at_10": 0.12792553191489361,
       "premises": 202185,
       "proof_states": 29598,
       "ready_for_refresh_comparison": true,
-      "theorem_mrr": 0.5608535466914221,
-      "theorem_recall_at_10": 0.49403129986534694,
+      "theorem_mrr": 0.547312376522293,
+      "theorem_recall_at_10": 0.42328861316509003,
       "theorems": 10000
     },
     "previous_corpus": {
-      "config_hash": "37ec7d5d3cf4d7b9",
+      "config_hash": "614a66ee7ff568bc",
       "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
       "data_supervision": {
         "has_negative_candidates": true,

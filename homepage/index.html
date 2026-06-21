@@ -290,7 +290,7 @@
   <section>
     <h2>Retrieval Quality Signals</h2>
     <div class="kpi-grid">
-      <div class="kpi"><div class="label">AUC</div><div class="value">0.821</div><div class="note">Ranker validation</div></div>
+      <div class="kpi"><div class="label">AUC</div><div class="value">0.824</div><div class="note">Ranker validation</div></div>
       <div class="kpi"><div class="label">Recall@10</div><div class="value">0.116</div><div class="note">Gold premise in top 10</div></div>
       <div class="kpi"><div class="label">Theorem Recall@10</div><div class="value">0.494</div><div class="note">1000 held-out theorems</div></div>
       <div class="kpi"><div class="label">Train gold premises</div><div class="value">4881</div><div class="note">546 held-out gold premises missing</div></div>
@@ -308,10 +308,10 @@
       <div class="kpi"><div class="label">Proof-state Recall@100</div><div class="value">0.236</div><div class="note">premise retrieval from proof states</div></div>
       <div class="kpi"><div class="label">Positive premise edges</div><div class="value">69,461</div><div class="note">LeanRank positive supervision</div></div>
       <div class="kpi"><div class="label">Negative candidates</div><div class="value">663,198</div><div class="note">hard-negative ranking pool</div></div>
-      <div class="kpi"><div class="label">Pipeline timing</div><div class="value">499.3s</div><div class="note">20 executed / 0 skipped stages</div></div>
+      <div class="kpi"><div class="label">Pipeline timing</div><div class="value">584.4s</div><div class="note">20 executed / 0 skipped stages</div></div>
       <div class="kpi"><div class="label">Scale estimate reliable</div><div class="value">True</div><div class="note">executed_pipeline_run on cuda</div></div>
-      <div class="kpi"><div class="label">Current eval timing</div><div class="value">59.0s</div><div class="note">standalone held-out evaluation</div></div>
-      <div class="kpi"><div class="label">Pipeline eval timing</div><div class="value">19.5s</div><div class="note">saved full-pipeline evaluate stage</div></div>
+      <div class="kpi"><div class="label">Current eval timing</div><div class="value">58.7s</div><div class="note">standalone held-out evaluation</div></div>
+      <div class="kpi"><div class="label">Pipeline eval timing</div><div class="value">35.0s</div><div class="note">saved full-pipeline evaluate stage</div></div>
     </div>
     <div class="status-row" style="margin-top:12px">
       <div class="status ok"><div class="label">Train positive coverage</div><div class="value">1.000</div><div class="note">proof states with positive premise edges</div></div>
@@ -319,7 +319,7 @@
       <div class="status"><div class="label">Hardness mean</div><div class="value">0.603</div><div class="note">train negative candidate hardness</div></div>
       <div class="status ok"><div class="label">Label disjoint</div><div class="value">True</div><div class="note">4,088 positive/negative overlaps removed</div></div>
       <div class="status ok"><div class="label">Train label overlap</div><div class="value">0</div><div class="note">remaining positive/negative pair overlap after normalization</div></div>
-      <div class="status"><div class="label">Embedding throughput</div><div class="value">489.4</div><div class="note">embedding rows per second</div></div>
+      <div class="status"><div class="label">Embedding throughput</div><div class="value">418.2</div><div class="note">embedding rows per second</div></div>
 
       <div class="status ok"><div class="label">Timing freshness</div><div class="value">current</div><div class="note">pipeline and standalone evaluation timings align</div></div>
 
@@ -329,16 +329,16 @@
 
 
     <div class="status-row" style="margin-top:12px">
-      <div class="status warn"><div class="label">Pipeline bottleneck</div><div class="value">embed</div><div class="note">29.8% of timed production run</div></div>
-      <div class="status"><div class="label">Top-3 timed stages</div><div class="value">56.1%</div><div class="note">combined share of pipeline wall time</div></div>
+      <div class="status warn"><div class="label">Pipeline bottleneck</div><div class="value">embed</div><div class="note">25.4% of timed production run</div></div>
+      <div class="status"><div class="label">Top-3 timed stages</div><div class="value">50.6%</div><div class="note">combined share of pipeline wall time</div></div>
 
-      <div class="status warn"><div class="label">Evaluation bottleneck</div><div class="value">val_proof_state_retrieval</div><div class="note">20.2s inside evaluation</div></div>
-      <div class="status"><div class="label">Eval timed substages</div><div class="value">8</div><div class="note">59.0s measured evaluation total</div></div>
+      <div class="status warn"><div class="label">Evaluation bottleneck</div><div class="value">val_proof_state_retrieval</div><div class="note">20.1s inside evaluation</div></div>
+      <div class="status"><div class="label">Eval timed substages</div><div class="value">8</div><div class="note">58.7s measured evaluation total</div></div>
 
 
-      <div class="status"><div class="label">embed</div><div class="value">148.7s</div><div class="note">29.8% of timed run</div></div>
+      <div class="status"><div class="label">embed</div><div class="value">148.7s</div><div class="note">25.4% of timed run</div></div>
 
-      <div class="status"><div class="label">sample</div><div class="value">80.6s</div><div class="note">16.1% of timed run</div></div>
+      <div class="status"><div class="label">sample</div><div class="value">81.0s</div><div class="note">13.9% of timed run</div></div>
 
     </div>
 
@@ -357,7 +357,7 @@
       <div class="status warn"><div class="label">Proof-state miss top 100</div><div class="value">1,823</div><div class="note">2,832 retrievable proof-state queries</div></div>
       <div class="status"><div class="label">Proof-state no train gold</div><div class="value">221</div><div class="note">held-out queries with no train-side gold premise</div></div>
       <div class="status ok"><div class="label">Theorem miss top 100</div><div class="value">55</div><div class="note">955 retrievable theorem queries</div></div>
-      <div class="status"><div class="label">Rerank miss top 10</div><div class="value">13</div><div class="note">homepage/API-style diagnostic queries</div></div>
+      <div class="status"><div class="label">Rerank miss top 10</div><div class="value">14</div><div class="note">homepage/API-style diagnostic queries</div></div>
       <div class="status warn"><div class="label">Proof-state candidate miss</div><div class="value">1,823</div><div class="note">64.4% of retrievable queries miss top 100</div></div>
       <div class="status"><div class="label">Proof-state rerank headroom</div><div class="value">458</div><div class="note">gold premise appears after rank 10</div></div>
       <div class="status ok"><div class="label">Theorem candidate miss</div><div class="value">55</div><div class="note">5.8% of retrievable theorem queries</div></div>
@@ -404,7 +404,7 @@
 
       <div class="status"><div class="label">Priority 2</div><div class="value">theorem_level_reranking</div><div class="note">theorem_retrieval Recall@10: 0.494</div></div>
 
-      <div class="status"><div class="label">Priority 3</div><div class="value">ranker_feature_iteration</div><div class="note">validation/test Recall@10 and MAP: 0.038</div></div>
+      <div class="status"><div class="label">Priority 3</div><div class="value">ranker_feature_iteration</div><div class="note">validation/test Recall@10 and MAP: 0.032</div></div>
 
       <div class="status"><div class="label">Priority 4</div><div class="value">hard_negative_training</div><div class="note">MRR/MAP after reranking: 9.548</div></div>
 
@@ -438,11 +438,11 @@
       <div class="kpi"><div class="label">Refresh ready</div><div class="value">True</div><div class="note">all dashboard gates passing</div></div>
       <div class="kpi"><div class="label">Supervision</div><div class="value">leanrank_proof_state_rows</div><div class="note">proof traces: True</div></div>
       <div class="kpi"><div class="label">Min parse coverage</div><div class="value">1.000</div><div class="note">context_parse_coverage</div></div>
-      <div class="kpi"><div class="label">Index recall</div><div class="value">0.993</div><div class="note">premise index vs exact cosine</div></div>
+      <div class="kpi"><div class="label">Index recall</div><div class="value">0.992</div><div class="note">premise index vs exact cosine</div></div>
       <div class="kpi"><div class="label">Difficulty MAE</div><div class="value">0.039</div><div class="note">train estimator calibration</div></div>
       <div class="kpi"><div class="label">Trend baseline</div><div class="value">yes</div><div class="note">previous refresh snapshot</div></div>
       <div class="kpi"><div class="label">Theorem delta</div><div class="value">0</div><div class="note">change from previous dashboard</div></div>
-      <div class="kpi"><div class="label">Recall delta</div><div class="value">0.000</div><div class="note">theorem Recall@10 change</div></div>
+      <div class="kpi"><div class="label">Recall delta</div><div class="value">0.071</div><div class="note">theorem Recall@10 change</div></div>
       <div class="kpi"><div class="label">Gate changes</div><div class="value">0</div><div class="note">quality gates changed</div></div>
       <div class="kpi"><div class="label">History entries</div><div class="value">20</div><div class="note">bounded refresh trend history</div></div>
     </div>
@@ -1049,7 +1049,7 @@ X.ρ (f a) ≫ g.hom = g.hom ≫ Y.ρ (f a)</div>
     <div class="status-row">
       <div class="status"><div class="label">Corpus source</div><div class="value">huggingface</div><div class="note">erbacher/LeanRank-data</div></div>
       <div class="status ok"><div class="label">Data supervision</div><div class="value">leanrank_proof_state_rows</div><div class="note">premise labels: True</div></div>
-      <div class="status"><div class="label">Config hash</div><div class="value">37ec7d5d3cf4d7b9</div><div class="note">configs/proofatlas.yaml</div></div>
+      <div class="status"><div class="label">Config hash</div><div class="value">614a66ee7ff568bc</div><div class="note">configs/proofatlas.yaml</div></div>
       <div class="status"><div class="label">Mathlib commit</div><div class="value">unknown</div><div class="note">Lean unknown</div></div>
       <div class="status"><div class="label">Sampled theorems</div><div class="value">10000</div><div class="note">292012 rows</div></div>
     </div>

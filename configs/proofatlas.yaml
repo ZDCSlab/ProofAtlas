@@ -49,6 +49,11 @@ index_benchmark:
 ranker:
   max_train_pairs_per_label: 10000
   max_validation_pairs_per_label: 5000
+  use_candidate_generated_pairs: true
+  candidate_generated_query_limit: 300
+  candidate_generated_embedding_k: 30
+  candidate_generated_lexical_k: 30
+  candidate_generated_batch_size: 256
 validation:
   max_schema_rows_per_table: 2000
 evaluation:

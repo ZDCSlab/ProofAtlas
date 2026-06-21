@@ -5,8 +5,10 @@ from pathlib import Path
 import time
 
 import joblib
+import numpy as np
 import pandas as pd
 from scipy import sparse
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import roc_auc_score
 
@@ -55,6 +57,163 @@ def _sample_pairs_by_label(pairs: pd.DataFrame, *, max_pairs_per_label: int | No
             random_state=random_seed,
         )
     return sampled.sort_values(["label", "ps", "prem"]).reset_index(drop=True)
+
+
+def _lexical_text(*parts: object) -> str:
+    pieces = []
+    for part in parts:
+        if isinstance(part, (list, tuple, set, np.ndarray)):
+            pieces.extend(str(value) for value in part)
+        else:
+            pieces.append(str(part) if part is not None else "")
+    return " ".join(piece for piece in pieces if piece)
+
+
+def _sparse_topk_indices(query_matrix, candidate_matrix, k: int, *, batch_size: int = 256) -> list[list[int]]:
+    if query_matrix.shape[0] == 0 or candidate_matrix.shape[0] == 0:
+        return []
+    k = max(1, min(k, candidate_matrix.shape[0]))
+    candidate_t = candidate_matrix.T.tocsr()
+    out: list[list[int]] = []
+    for start in range(0, query_matrix.shape[0], batch_size):
+        scores = (query_matrix[start : start + batch_size] @ candidate_t).tocsr()
+        for row_idx in range(scores.shape[0]):
+            row = scores.getrow(row_idx)
+            if row.nnz == 0:
+                out.append([])
+                continue
+            if row.nnz <= k:
+                order = np.argsort(-row.data)
+            else:
+                top = np.argpartition(-row.data, kth=k - 1)[:k]
+                order = top[np.argsort(-row.data[top])]
+            out.append(row.indices[order].astype(int).tolist())
+    return out
+
+
+def _embedding_topk_indices(query_matrix, candidate_matrix, k: int, *, batch_size: int = 256) -> list[list[int]]:
+    if query_matrix.shape[0] == 0 or candidate_matrix.shape[0] == 0:
+        return []
+    k = max(1, min(k, candidate_matrix.shape[0]))
+    candidate_t = candidate_matrix.T.tocsr()
+    out: list[list[int]] = []
+    for start in range(0, query_matrix.shape[0], batch_size):
+        scores = (query_matrix[start : start + batch_size] @ candidate_t).toarray()
+        top = np.argpartition(-scores, kth=k - 1, axis=1)[:, :k]
+        top_scores = np.take_along_axis(scores, top, axis=1)
+        order = np.argsort(-top_scores, axis=1)
+        out.extend(np.take_along_axis(top, order, axis=1).astype(int).tolist())
+    return out
+
+
+def _candidate_generated_pairs(
+    split: str,
+    *,
+    max_queries: int,
+    embedding_candidate_k: int,
+    lexical_candidate_k: int,
+    batch_size: int,
+) -> tuple[pd.DataFrame, dict]:
+    positive_edges = pd.read_parquet(f"data/processed/{split}/positive_edges.parquet")
+    proof_states = pd.read_parquet(f"data/processed/{split}/proof_states.parquet")
+    premises = pd.read_parquet(f"data/processed/{split}/premises.parquet")
+    positive_edges["proof_state_id"] = positive_edges["proof_state_id"].astype(str)
+    positive_edges["premise_id"] = positive_edges["premise_id"].astype(str)
+    proof_states["id"] = proof_states["id"].astype(str)
+    premises["id"] = premises["id"].astype(str)
+    proof_states_by_id = proof_states.set_index("id", drop=False)
+    premises_by_id = premises.set_index("id", drop=False)
+    grouped = [
+        (str(proof_state_id), group)
+        for proof_state_id, group in positive_edges.groupby("proof_state_id")
+        if str(proof_state_id) in proof_states_by_id.index
+    ]
+    if max_queries > 0:
+        grouped = grouped[:max_queries]
+    query_ids = [proof_state_id for proof_state_id, _ in grouped]
+    if not query_ids:
+        return pd.DataFrame(columns=["ps", "prem", "label"]), {"enabled": True, "split": split, "query_count": 0}
+
+    ps_x = sparse.load_npz(f"outputs/embeddings/{split}_proof_state_embeddings.npz").tocsr()
+    prem_x = sparse.load_npz(f"outputs/embeddings/{split}_premise_embeddings.npz").tocsr()
+    ps_ids = proof_states["id"].astype(str).tolist()
+    prem_ids = premises["id"].astype(str).tolist()
+    ps_row = {proof_state_id: idx for idx, proof_state_id in enumerate(ps_ids)}
+    query_rows = [ps_row[proof_state_id] for proof_state_id in query_ids if proof_state_id in ps_row]
+    query_ids = [proof_state_id for proof_state_id in query_ids if proof_state_id in ps_row]
+    query_matrix = ps_x[query_rows] if query_rows else ps_x[:0]
+    embedding_neighbors = _embedding_topk_indices(query_matrix, prem_x, embedding_candidate_k, batch_size=batch_size)
+
+    premise_texts = [
+        _lexical_text(row.get("full_name"), row.get("code"), row.get("domain_tag"), row.get("subdomain_tag"), row.get("file_path"))
+        for row in premises.to_dict(orient="records")
+    ]
+    query_texts = [
+        _lexical_text(row.get("full_name"), row.get("context"), row.get("goal_text"), row.get("symbols"), row.get("local_hypotheses"))
+        for row in (proof_states_by_id.loc[proof_state_id] for proof_state_id in query_ids)
+    ]
+    vectorizer = TfidfVectorizer(
+        lowercase=True,
+        token_pattern=r"(?u)\b[\w'.:]+|\S",
+        min_df=1,
+        max_features=300000,
+        sublinear_tf=True,
+        norm="l2",
+    )
+    premise_lexical = vectorizer.fit_transform(premise_texts)
+    query_lexical = vectorizer.transform(query_texts)
+    lexical_neighbors = _sparse_topk_indices(query_lexical, premise_lexical, lexical_candidate_k, batch_size=batch_size)
+
+    gold_by_query = {str(proof_state_id): set(group["premise_id"].astype(str)) for proof_state_id, group in grouped}
+    rows = []
+    lexical_added_gold_queries = 0
+    union_hit_queries = 0
+    for proof_state_id, embedding_idx, lexical_idx in zip(query_ids, embedding_neighbors, lexical_neighbors, strict=True):
+        embedding_ids = [prem_ids[idx] for idx in embedding_idx[:embedding_candidate_k]]
+        lexical_ids = [prem_ids[idx] for idx in lexical_idx[:lexical_candidate_k]]
+        embedding_rank_score = {premise_id: 1.0 / rank for rank, premise_id in enumerate(embedding_ids, start=1)}
+        lexical_rank_score = {premise_id: 1.0 / rank for rank, premise_id in enumerate(lexical_ids, start=1)}
+        candidate_ids = list(dict.fromkeys([*embedding_ids, *lexical_ids]))
+        gold = gold_by_query.get(proof_state_id, set())
+        embedding_hit = bool(set(embedding_ids) & gold)
+        union_hit = bool(set(candidate_ids) & gold)
+        if union_hit:
+            union_hit_queries += 1
+        if gold and not embedding_hit and union_hit:
+            lexical_added_gold_queries += 1
+        for premise_id in candidate_ids:
+            if premise_id not in premises_by_id.index:
+                continue
+            from_embedding = premise_id in embedding_rank_score
+            from_lexical = premise_id in lexical_rank_score
+            rows.append(
+                {
+                    "ps": proof_state_id,
+                    "prem": premise_id,
+                    "label": int(premise_id in gold),
+                    "embedding_candidate_rank_score": float(embedding_rank_score.get(premise_id, 0.0)),
+                    "lexical_candidate_rank_score": float(lexical_rank_score.get(premise_id, 0.0)),
+                    "candidate_source_overlap": float(from_embedding and from_lexical),
+                    "lexical_only_candidate": float(from_lexical and not from_embedding),
+                }
+            )
+    frame = pd.DataFrame(rows)
+    label_counts = frame["label"].value_counts().to_dict() if "label" in frame else {}
+    profile = {
+        "enabled": True,
+        "split": split,
+        "query_count": len(query_ids),
+        "embedding_candidate_k": int(embedding_candidate_k),
+        "lexical_candidate_k": int(lexical_candidate_k),
+        "pair_count": int(len(frame)),
+        "positive_pairs": int(label_counts.get(1, 0)),
+        "negative_pairs": int(label_counts.get(0, 0)),
+        "union_hit_query_share": float(union_hit_queries / max(1, len(query_ids))),
+        "lexical_added_gold_queries": int(lexical_added_gold_queries),
+        "lexical_only_pair_share": float(frame["lexical_only_candidate"].mean()) if not frame.empty else 0.0,
+        "candidate_source_overlap_pair_share": float(frame["candidate_source_overlap"].mean()) if not frame.empty else 0.0,
+    }
+    return frame, profile
 
 
 def _cosine_scores_for_pairs(
@@ -212,10 +371,10 @@ def _features(pairs: pd.DataFrame, split: str, *, max_pairs_per_label: int | Non
                 "symbol_context_overlap": _jaccard(ps_tokens[proof_state_id], premise_context_tokens[premise_id]),
                 "graph_premise_degree": float(theorem_premise_degree.get(premise_id, 0.0)) if not theorem_premise_degree.empty else 0.0,
                 "theorem_neighborhood_premise_score": theorem_neighbor_scores[idx],
-                "embedding_candidate_rank_score": 0.0,
-                "lexical_candidate_rank_score": 0.0,
-                "candidate_source_overlap": 0.0,
-                "lexical_only_candidate": 0.0,
+                "embedding_candidate_rank_score": float(row.get("embedding_candidate_rank_score", 0.0)),
+                "lexical_candidate_rank_score": float(row.get("lexical_candidate_rank_score", 0.0)),
+                "candidate_source_overlap": float(row.get("candidate_source_overlap", 0.0)),
+                "lexical_only_candidate": float(row.get("lexical_only_candidate", 0.0)),
                 "label": row["label"],
             }
         )
@@ -308,10 +467,30 @@ def run(config_path: str) -> None:
     max_validation_pairs_per_label = int(
         ranker_config.get("max_validation_pairs_per_label", max_train_pairs_per_label) or 0
     )
+    use_candidate_generated_pairs = bool(ranker_config.get("use_candidate_generated_pairs", False))
+    candidate_query_limit = int(ranker_config.get("candidate_generated_query_limit", 0) or 0)
+    candidate_embedding_k = int(ranker_config.get("candidate_generated_embedding_k", 50) or 50)
+    candidate_lexical_k = int(ranker_config.get("candidate_generated_lexical_k", candidate_embedding_k) or candidate_embedding_k)
+    candidate_batch_size = int(ranker_config.get("candidate_generated_batch_size", 256) or 256)
     Path("outputs/models").mkdir(parents=True, exist_ok=True)
     Path("outputs/reports").mkdir(parents=True, exist_ok=True)
     started = time.perf_counter()
     raw_train_pairs = _pairs("train")
+    candidate_pair_profiles = {}
+    train_pair_source = "raw_positive_negative_edges"
+    if use_candidate_generated_pairs:
+        candidate_started = time.perf_counter()
+        generated_train, candidate_pair_profiles["train"] = _candidate_generated_pairs(
+            "train",
+            max_queries=candidate_query_limit,
+            embedding_candidate_k=candidate_embedding_k,
+            lexical_candidate_k=candidate_lexical_k,
+            batch_size=candidate_batch_size,
+        )
+        candidate_pair_profiles["train"]["seconds"] = time.perf_counter() - candidate_started
+        if not generated_train.empty and generated_train["label"].nunique() > 1:
+            raw_train_pairs = generated_train
+            train_pair_source = "candidate_generated_embedding_lexical_union"
     train_feature_started = time.perf_counter()
     train = _features(
         raw_train_pairs,
@@ -332,7 +511,14 @@ def run(config_path: str) -> None:
             "max_train_pairs_per_label": max_train_pairs_per_label,
             "max_validation_pairs_per_label": max_validation_pairs_per_label,
             "random_seed": random_seed,
+            "use_candidate_generated_pairs": use_candidate_generated_pairs,
+            "candidate_generated_query_limit": candidate_query_limit,
+            "candidate_generated_embedding_k": candidate_embedding_k,
+            "candidate_generated_lexical_k": candidate_lexical_k,
+            "candidate_generated_batch_size": candidate_batch_size,
         },
+        "training_pair_source": train_pair_source,
+        "candidate_generated_pair_profile": candidate_pair_profiles,
         "feature_columns": X.columns.tolist(),
         "feature_groups": FEATURE_GROUPS,
         "training_pair_utilization": _pair_utilization_profile(raw_train_pairs, train),
@@ -342,9 +528,22 @@ def run(config_path: str) -> None:
         },
     }
     try:
+        raw_val_pairs = _pairs("val")
+        if use_candidate_generated_pairs:
+            candidate_val_started = time.perf_counter()
+            generated_val, candidate_pair_profiles["val"] = _candidate_generated_pairs(
+                "val",
+                max_queries=max(1, candidate_query_limit // 4) if candidate_query_limit > 0 else 0,
+                embedding_candidate_k=candidate_embedding_k,
+                lexical_candidate_k=candidate_lexical_k,
+                batch_size=candidate_batch_size,
+            )
+            candidate_pair_profiles["val"]["seconds"] = time.perf_counter() - candidate_val_started
+            if not generated_val.empty and generated_val["label"].nunique() > 1:
+                raw_val_pairs = generated_val
         validation_feature_started = time.perf_counter()
         val = _features(
-            _pairs("val"),
+            raw_val_pairs,
             "val",
             max_pairs_per_label=max_validation_pairs_per_label,
             random_seed=random_seed,

@@ -1226,6 +1226,9 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     hardness_feature = ranker_utilization.get("hardness_feature", {}) if isinstance(ranker_utilization, dict) else {}
     label_source = ranker_utilization.get("label_source", {}) if isinstance(ranker_utilization, dict) else {}
     ranker_timing = ranker_metrics.get("timing_profile", {}) if isinstance(ranker_metrics, dict) else {}
+    candidate_pair_profile = ranker_metrics.get("candidate_generated_pair_profile", {}) if isinstance(ranker_metrics, dict) else {}
+    candidate_train_profile = candidate_pair_profile.get("train", {}) if isinstance(candidate_pair_profile, dict) else {}
+    candidate_val_profile = candidate_pair_profile.get("val", {}) if isinstance(candidate_pair_profile, dict) else {}
     lines.extend(
         [
             "",
@@ -1293,8 +1296,9 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
             "",
             "### Ranker Training Pair Utilization",
             "",
-            "This profile verifies that the learned premise ranker uses normalized LeanRank-data positive premise edges and hard-negative candidate edges directly, rather than relying only on theorem text similarity.",
+            "This profile verifies that the learned premise ranker uses normalized LeanRank-data premise labels in a retrieval-candidate setting, rather than relying only on theorem text similarity.",
             "",
+            f"- Training pair source: `{ranker_metrics.get('training_pair_source', 'n/a')}`",
             f"- Positive label source: `{label_source.get('positive_pairs', 'n/a')}`",
             f"- Hard-negative label source: `{label_source.get('hard_negative_pairs', 'n/a')}`",
             f"- Raw train positive pairs: `{raw_pair_counts.get('positive', 'n/a')}`",
@@ -1311,6 +1315,40 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
             f"- Model fit seconds: `{ranker_timing.get('model_fit_seconds', 'n/a')}`",
             f"- Feature ablation seconds: `{ranker_timing.get('feature_ablation_seconds', 'n/a')}`",
             f"- Total ranker training seconds: `{ranker_timing.get('total_seconds', 'n/a')}`",
+            "",
+            "Candidate-generated train profile:",
+            "",
+            _metric_table(
+                candidate_train_profile,
+                [
+                    "query_count",
+                    "pair_count",
+                    "positive_pairs",
+                    "negative_pairs",
+                    "union_hit_query_share",
+                    "lexical_added_gold_queries",
+                    "lexical_only_pair_share",
+                    "candidate_source_overlap_pair_share",
+                    "seconds",
+                ],
+            ),
+            "",
+            "Candidate-generated validation profile:",
+            "",
+            _metric_table(
+                candidate_val_profile,
+                [
+                    "query_count",
+                    "pair_count",
+                    "positive_pairs",
+                    "negative_pairs",
+                    "union_hit_query_share",
+                    "lexical_added_gold_queries",
+                    "lexical_only_pair_share",
+                    "candidate_source_overlap_pair_share",
+                    "seconds",
+                ],
+            ),
             "",
             "## Pipeline Timing",
             "",
