@@ -1,4 +1,66 @@
 {
+  "corpus": {
+    "config_hash": "614a66ee7ff568bc",
+    "config_path": "configs/proofatlas.yaml",
+    "corpus": {
+      "corpus_version": "erbacher/LeanRank-data@erbacher/LeanRank-data",
+      "extraction_config_hash": "3e8f863899afdf6c",
+      "extraction_pipeline": "LeanRank Hugging Face dataset",
+      "lean_version": "unknown",
+      "mathlib_commit": "unknown",
+      "mathlib_path": "",
+      "provenance_resolution": {
+        "lean_version": "config/env/lean",
+        "mathlib_commit": "config/env/git",
+        "source_revision": "config/env/git"
+      },
+      "source_path": "",
+      "source_revision": "erbacher/LeanRank-data"
+    },
+    "data_supervision": {
+      "has_negative_candidates": true,
+      "has_real_mathlib_source": true,
+      "has_tactic_states": true,
+      "has_true_positive_premises": true,
+      "kind": "leanrank_proof_state_rows",
+      "limitations": [],
+      "premise_label_semantics": "leanrank_positive_and_negative_candidates",
+      "proof_trace_level": "proof_state_rows",
+      "suitable_for": {
+        "kg_visualization": true,
+        "premise_ranking_training": true,
+        "proof_state_pattern_training": true,
+        "theorem_text_retrieval_demo": true
+      }
+    },
+    "dataset_name": "erbacher/LeanRank-data",
+    "debug_rows": null,
+    "project_name": "ProofAtlas",
+    "random_seed": 42,
+    "sample_plan": {
+      "source_rows": 350000,
+      "target_theorems": 10000,
+      "unit": "theorem"
+    },
+    "sampled_rows": 292012,
+    "sampled_theorems": 10000,
+    "source_kind": "huggingface",
+    "split_counts": {
+      "test": {
+        "rows": 28910,
+        "theorems": 1000
+      },
+      "train": {
+        "rows": 234520,
+        "theorems": 8000
+      },
+      "val": {
+        "rows": 28582,
+        "theorems": 1000
+      }
+    },
+    "use_huggingface_requested": true
+  },
   "difficulty_prediction": {
     "distribution": [
       {
@@ -25337,6 +25399,424 @@
     }
   },
   "processed_data": {
+    "domain_counts": {
+      "test": [
+        {
+          "domain": "Algebra",
+          "share": 0.149,
+          "theorems": 149
+        },
+        {
+          "domain": "Data",
+          "share": 0.146,
+          "theorems": 146
+        },
+        {
+          "domain": "Analysis",
+          "share": 0.116,
+          "theorems": 116
+        },
+        {
+          "domain": "Topology",
+          "share": 0.078,
+          "theorems": 78
+        },
+        {
+          "domain": "RingTheory",
+          "share": 0.07,
+          "theorems": 70
+        },
+        {
+          "domain": "MeasureTheory",
+          "share": 0.066,
+          "theorems": 66
+        },
+        {
+          "domain": "CategoryTheory",
+          "share": 0.054,
+          "theorems": 54
+        },
+        {
+          "domain": "LinearAlgebra",
+          "share": 0.05,
+          "theorems": 50
+        },
+        {
+          "domain": "Order",
+          "share": 0.046,
+          "theorems": 46
+        },
+        {
+          "domain": "NumberTheory",
+          "share": 0.035,
+          "theorems": 35
+        },
+        {
+          "domain": "GroupTheory",
+          "share": 0.027,
+          "theorems": 27
+        },
+        {
+          "domain": "Probability",
+          "share": 0.026,
+          "theorems": 26
+        },
+        {
+          "domain": "Geometry",
+          "share": 0.024,
+          "theorems": 24
+        },
+        {
+          "domain": "AlgebraicGeometry",
+          "share": 0.021,
+          "theorems": 21
+        },
+        {
+          "domain": "Combinatorics",
+          "share": 0.02,
+          "theorems": 20
+        },
+        {
+          "domain": "SetTheory",
+          "share": 0.018,
+          "theorems": 18
+        },
+        {
+          "domain": "AlgebraicTopology",
+          "share": 0.01,
+          "theorems": 10
+        },
+        {
+          "domain": ".lake",
+          "share": 0.009,
+          "theorems": 9
+        },
+        {
+          "domain": "ModelTheory",
+          "share": 0.008,
+          "theorems": 8
+        },
+        {
+          "domain": "FieldTheory",
+          "share": 0.007,
+          "theorems": 7
+        },
+        {
+          "domain": "Logic",
+          "share": 0.006,
+          "theorems": 6
+        },
+        {
+          "domain": "Dynamics",
+          "share": 0.004,
+          "theorems": 4
+        },
+        {
+          "domain": "Tactic",
+          "share": 0.004,
+          "theorems": 4
+        },
+        {
+          "domain": "Computability",
+          "share": 0.002,
+          "theorems": 2
+        },
+        {
+          "domain": "Condensed",
+          "share": 0.002,
+          "theorems": 2
+        },
+        {
+          "domain": "Control",
+          "share": 0.002,
+          "theorems": 2
+        }
+      ],
+      "train": [
+        {
+          "domain": "Algebra",
+          "share": 0.149125,
+          "theorems": 1193
+        },
+        {
+          "domain": "Data",
+          "share": 0.129875,
+          "theorems": 1039
+        },
+        {
+          "domain": "Analysis",
+          "share": 0.12625,
+          "theorems": 1010
+        },
+        {
+          "domain": "RingTheory",
+          "share": 0.07875,
+          "theorems": 630
+        },
+        {
+          "domain": "Topology",
+          "share": 0.0745,
+          "theorems": 596
+        },
+        {
+          "domain": "MeasureTheory",
+          "share": 0.063125,
+          "theorems": 505
+        },
+        {
+          "domain": "LinearAlgebra",
+          "share": 0.054875,
+          "theorems": 439
+        },
+        {
+          "domain": "CategoryTheory",
+          "share": 0.04925,
+          "theorems": 394
+        },
+        {
+          "domain": "Order",
+          "share": 0.045875,
+          "theorems": 367
+        },
+        {
+          "domain": "NumberTheory",
+          "share": 0.039,
+          "theorems": 312
+        },
+        {
+          "domain": "GroupTheory",
+          "share": 0.025625,
+          "theorems": 205
+        },
+        {
+          "domain": "Combinatorics",
+          "share": 0.0255,
+          "theorems": 204
+        },
+        {
+          "domain": "AlgebraicGeometry",
+          "share": 0.02275,
+          "theorems": 182
+        },
+        {
+          "domain": "Probability",
+          "share": 0.022,
+          "theorems": 176
+        },
+        {
+          "domain": "SetTheory",
+          "share": 0.02025,
+          "theorems": 162
+        },
+        {
+          "domain": "Geometry",
+          "share": 0.0165,
+          "theorems": 132
+        },
+        {
+          "domain": "FieldTheory",
+          "share": 0.013375,
+          "theorems": 107
+        },
+        {
+          "domain": ".lake",
+          "share": 0.00975,
+          "theorems": 78
+        },
+        {
+          "domain": "Computability",
+          "share": 0.00675,
+          "theorems": 54
+        },
+        {
+          "domain": "Logic",
+          "share": 0.005125,
+          "theorems": 41
+        },
+        {
+          "domain": "ModelTheory",
+          "share": 0.004625,
+          "theorems": 37
+        },
+        {
+          "domain": "Dynamics",
+          "share": 0.004125,
+          "theorems": 33
+        },
+        {
+          "domain": "AlgebraicTopology",
+          "share": 0.004,
+          "theorems": 32
+        },
+        {
+          "domain": "Tactic",
+          "share": 0.0035,
+          "theorems": 28
+        },
+        {
+          "domain": "RepresentationTheory",
+          "share": 0.002875,
+          "theorems": 23
+        },
+        {
+          "domain": "Control",
+          "share": 0.001125,
+          "theorems": 9
+        },
+        {
+          "domain": "Deprecated",
+          "share": 0.000625,
+          "theorems": 5
+        },
+        {
+          "domain": "Condensed",
+          "share": 0.000375,
+          "theorems": 3
+        },
+        {
+          "domain": "InformationTheory",
+          "share": 0.000375,
+          "theorems": 3
+        },
+        {
+          "domain": "Testing",
+          "share": 0.000125,
+          "theorems": 1
+        }
+      ],
+      "val": [
+        {
+          "domain": "Algebra",
+          "share": 0.146,
+          "theorems": 146
+        },
+        {
+          "domain": "Analysis",
+          "share": 0.131,
+          "theorems": 131
+        },
+        {
+          "domain": "Data",
+          "share": 0.118,
+          "theorems": 118
+        },
+        {
+          "domain": "Topology",
+          "share": 0.075,
+          "theorems": 75
+        },
+        {
+          "domain": "RingTheory",
+          "share": 0.071,
+          "theorems": 71
+        },
+        {
+          "domain": "MeasureTheory",
+          "share": 0.065,
+          "theorems": 65
+        },
+        {
+          "domain": "Order",
+          "share": 0.062,
+          "theorems": 62
+        },
+        {
+          "domain": "CategoryTheory",
+          "share": 0.055,
+          "theorems": 55
+        },
+        {
+          "domain": "LinearAlgebra",
+          "share": 0.053,
+          "theorems": 53
+        },
+        {
+          "domain": "Geometry",
+          "share": 0.029,
+          "theorems": 29
+        },
+        {
+          "domain": "Combinatorics",
+          "share": 0.028,
+          "theorems": 28
+        },
+        {
+          "domain": "GroupTheory",
+          "share": 0.028,
+          "theorems": 28
+        },
+        {
+          "domain": "Probability",
+          "share": 0.025,
+          "theorems": 25
+        },
+        {
+          "domain": "NumberTheory",
+          "share": 0.022,
+          "theorems": 22
+        },
+        {
+          "domain": "AlgebraicGeometry",
+          "share": 0.019,
+          "theorems": 19
+        },
+        {
+          "domain": "SetTheory",
+          "share": 0.014,
+          "theorems": 14
+        },
+        {
+          "domain": "FieldTheory",
+          "share": 0.01,
+          "theorems": 10
+        },
+        {
+          "domain": "Logic",
+          "share": 0.009,
+          "theorems": 9
+        },
+        {
+          "domain": ".lake",
+          "share": 0.008,
+          "theorems": 8
+        },
+        {
+          "domain": "Computability",
+          "share": 0.006,
+          "theorems": 6
+        },
+        {
+          "domain": "Dynamics",
+          "share": 0.006,
+          "theorems": 6
+        },
+        {
+          "domain": "Tactic",
+          "share": 0.006,
+          "theorems": 6
+        },
+        {
+          "domain": "AlgebraicTopology",
+          "share": 0.005,
+          "theorems": 5
+        },
+        {
+          "domain": "ModelTheory",
+          "share": 0.004,
+          "theorems": 4
+        },
+        {
+          "domain": "RepresentationTheory",
+          "share": 0.003,
+          "theorems": 3
+        },
+        {
+          "domain": "Control",
+          "share": 0.002,
+          "theorems": 2
+        }
+      ]
+    },
     "root": "data/processed",
     "splits": {
       "demo": {
@@ -26677,5 +27157,18 @@
         }
       ]
     }
-  ]
+  ],
+  "split_policy": {
+    "has_leakage": false,
+    "overlaps": {
+      "test_vs_train": [],
+      "test_vs_val": [],
+      "train_vs_val": []
+    },
+    "theorem_counts": {
+      "test": 1000,
+      "train": 8000,
+      "val": 1000
+    }
+  }
 }

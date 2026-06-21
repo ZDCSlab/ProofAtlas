@@ -229,6 +229,26 @@ def _processed_counts() -> dict[str, dict[str, int]]:
     return out
 
 
+def _domain_counts() -> dict[str, list[dict[str, Any]]]:
+    out: dict[str, list[dict[str, Any]]] = {}
+    for split in ["train", "val", "test"]:
+        path = Path(f"data/processed/{split}/theorems.parquet")
+        if not path.exists():
+            continue
+        rows = pd.read_parquet(path, columns=["domain_tag"])
+        counts = rows["domain_tag"].fillna("Unknown").astype(str).value_counts()
+        total = int(counts.sum())
+        out[split] = [
+            {"domain": domain, "theorems": int(count), "share": float(count / total) if total else 0.0}
+            for domain, count in counts.items()
+        ]
+    return out
+
+
+def _top_domains(domain_counts: dict[str, list[dict[str, Any]]], split: str = "test", n: int = 10) -> list[dict[str, Any]]:
+    return sorted(domain_counts.get(split, []), key=lambda row: int(row["theorems"]), reverse=True)[:n]
+
+
 def _sample_guidance_cases(limit: int = 3) -> list[dict[str, Any]]:
     cases = read_json("outputs/reports/theorem_retrieval_case_studies.json", [])
     if not isinstance(cases, list):
@@ -268,10 +288,15 @@ def _prediction_bundle() -> dict[str, Any]:
     difficulty_target = read_json("outputs/reports/difficulty_target_report.json", {})
     graph = read_json("outputs/reports/graph_stats_summary.json", {})
     benchmark = read_json("outputs/reports/index_benchmark.json", {})
+    corpus = read_json("outputs/reports/corpus_manifest.json", {})
+    split_leakage = read_json("outputs/reports/split_leakage_report.json", {})
     return {
+        "corpus": corpus,
+        "split_policy": split_leakage,
         "processed_data": {
             "root": "data/processed",
             "splits": _processed_counts(),
+            "domain_counts": _domain_counts(),
         },
         "prediction_artifacts": {
             "embeddings": "outputs/embeddings",
@@ -349,6 +374,9 @@ def _write_markdown(bundle: dict[str, Any], output_path: str | Path) -> None:
     difficulty_rows = bundle["difficulty_prediction"]["distribution"]
     difficulty_retrieval = bundle["difficulty_prediction"].get("retrieval_evaluation", {})
     processed = bundle["processed_data"]["splits"]
+    domain_counts = bundle["processed_data"].get("domain_counts", {})
+    corpus = bundle.get("corpus", {})
+    split_policy = bundle.get("split_policy", {})
 
     md = [
         "# ProofAtlas Research Report",
@@ -370,7 +398,35 @@ def _write_markdown(bundle: dict[str, Any], output_path: str | Path) -> None:
             ],
         ),
         "",
-        "## Dataset Snapshot",
+        "## Dataset",
+        "",
+        _table(
+            ["Field", "Value"],
+            [
+                ["Source", corpus.get("dataset_name", "n/a")],
+                ["Source kind", corpus.get("source_kind", "n/a")],
+                ["Sample unit", (corpus.get("sample_plan") or {}).get("unit", "n/a")],
+                ["Sampled theorems", corpus.get("sampled_theorems", "n/a")],
+                ["Sampled rows", corpus.get("sampled_rows", "n/a")],
+                ["Random seed", corpus.get("random_seed", "n/a")],
+                ["Config hash", corpus.get("config_hash", "n/a")],
+            ],
+        ),
+        "",
+        "The processed dataset contains theorem-level, proof-state-level, premise-level, positive-premise, negative-candidate, strategy-facet, difficulty-feature, embedding, index, and KG artifacts. The split is theorem-disjoint: held-out theorem names do not appear in train, so retrieval is evaluated against unseen theorems while using train premises and train proof states as the historical retrieval corpus.",
+        "",
+        _table(
+            ["Split policy", "Value"],
+            [
+                [
+                    "Train/val/test theorem counts",
+                    ", ".join(f"{split}={count}" for split, count in sorted((split_policy.get("theorem_counts") or {}).items())) or "n/a",
+                ],
+                ["Theorem leakage detected", split_policy.get("has_leakage", "n/a")],
+            ],
+        ),
+        "",
+        "### Split Statistics",
         "",
         _table(
             ["Split", "Theorems", "Proof states", "Premises", "Positive edges", "Negative edges"],
@@ -387,7 +443,35 @@ def _write_markdown(bundle: dict[str, Any], output_path: str | Path) -> None:
             ],
         ),
         "",
+        "### Domain Statistics",
+        "",
+        _table(
+            ["Test domain", "Theorems", "Share"],
+            [[row["domain"], row["theorems"], _fmt(row["share"])] for row in _top_domains(domain_counts, "test", n=12)],
+        ),
+        "",
+        "## Evaluation Metrics",
+        "",
+        _table(
+            ["Metric", "Meaning"],
+            [
+                ["Recall@k", "Fraction of retrievable gold items recovered in the top-k retrieved results."],
+                ["MRR", "Mean reciprocal rank of the first retrieved gold item."],
+                ["MAP", "Mean average precision over ranked retrieved items."],
+                ["nDCG@k", "Rank-sensitive gain that rewards placing gold items earlier in the top-k list."],
+                ["AUC", "Validation discrimination of the learned premise reranker over positive and hard-negative premise pairs."],
+                ["Label Recall@k", "Average fraction of a query proof state's weak strategy facets recovered by the top-k aggregated retrieved facets."],
+                ["Any-label Hit@k", "Fraction of labeled proof states for which at least one weak strategy facet is recovered in the top-k facets."],
+                ["MAE/RMSE", "Absolute and squared-error summaries for retrieved difficulty-profile scores."],
+                ["Bucket accuracy", "Agreement between retrieved difficulty bucket and the query proof state's relative difficulty bucket."],
+            ],
+        ),
+        "",
         "## 1. Premise Retrieval",
+        "",
+        "**Goal.** Given a held-out proof state or theorem, retrieve useful premises from the train premise corpus. This is the main premise-selection benchmark.",
+        "",
+        "**Evaluation.** Proof-state queries use test proof-state embeddings and theorem queries use test theorem embeddings. Retrieved train premise IDs are compared with held-out positive LeanRank premise edges whose premise IDs exist in the train premise index.",
         "",
         _table(
             ["Task", "Queries", "Recall@1", "Recall@5", "Recall@10", "Recall@100", "MRR", "MAP", "nDCG@10"],
@@ -421,7 +505,9 @@ def _write_markdown(bundle: dict[str, Any], output_path: str | Path) -> None:
         "",
         "## 2. Proof Pattern Retrieval",
         "",
-        "Proof-pattern prediction is represented as retrieval: theorem-to-theorem neighbors, proof-state-to-proof-state neighbors, and graph-neighborhood evidence rather than a discrete classifier.",
+        "**Goal.** Retrieve historical proof patterns that can explain or contextualize a new theorem/proof state: similar theorems, similar local proof states, and KG neighborhoods.",
+        "",
+        "**Evaluation.** Similar theorem retrieval is evaluated through theorem-level premise retrieval quality. Proof-state-to-proof-state retrieval is used as the neighbor substrate for strategy-facet and difficulty-profile retrieval below. Index quality is measured against exact cosine retrieval.",
         "",
         _table(
             ["Pattern signal", "Value"],
@@ -450,7 +536,9 @@ def _write_markdown(bundle: dict[str, Any], output_path: str | Path) -> None:
         "",
         "## 3. Strategy Retrieval",
         "",
-        "Strategy is treated as retrieval-grounded hinting. Historical proof states receive weak strategy-facet labels from a curated taxonomy, and a query retrieves similar train proof states before aggregating their facets. This avoids claiming a supervised tactic classifier while still making the strategy signal measurable.",
+        "**Goal.** Retrieve likely proof-strategy facets for a query proof state, such as rewriting/transport, order reasoning, algebraic computation, typeclass-instance reasoning, case analysis, or set-membership reasoning.",
+        "",
+        "**Evaluation.** Historical proof states receive weak strategy-facet labels from a curated taxonomy. A test proof state retrieves similar train proof states, aggregates their facets by embedding-neighbor similarity, and is scored against the test proof state's own weak facets. This is a retrieval-grounded weak-label task, not supervised tactic classification.",
         "",
         _table(
             ["Strategy retrieval metric", "Value"],
@@ -473,7 +561,9 @@ def _write_markdown(bundle: dict[str, Any], output_path: str | Path) -> None:
         "",
         "## 4. Difficulty Retrieval",
         "",
-        "Difficulty is treated as historical profile retrieval. A query proof state retrieves similar train proof states, aggregates their complexity profiles, and reports a calibrated relative score/bucket. Buckets use a split-local distribution policy: easy is the lower 50%, medium is the next 35%, and hard is the top 15%.",
+        "**Goal.** Retrieve historical difficulty profiles for a query proof state and summarize them as a relative complexity score and easy/medium/hard bucket.",
+        "",
+        "**Evaluation.** The target is a relative complexity proxy derived from proof-state and theorem features, including proof length, tactic index, positive-premise count, namespace rarity, and negative-candidate hardness. A test proof state retrieves similar train proof states and aggregates their difficulty profiles. Buckets use a split-local distribution policy: easy is the lower 50%, medium is the next 35%, and hard is the top 15%.",
         "",
         _table(
             ["Difficulty retrieval metric", "Value"],
@@ -510,7 +600,7 @@ def _write_markdown(bundle: dict[str, Any], output_path: str | Path) -> None:
         "",
         "## Interpretation",
         "",
-        "The strongest quantitative result is theorem-level premise retrieval. Proof-state-level premise retrieval is harder and remains candidate-generation limited, but it is still useful as the local-neighbor substrate for strategy retrieval, difficulty-profile retrieval, and explanation. The current theorem-disjoint train/val/test split has no theorem leakage, so the split is suitable for this research framing; future split changes should be motivated by domain-balance or retrieval-coverage studies rather than by leakage repair.",
+        "The dataset and report support a retrieval-centered research claim. Theorem-level premise retrieval is the strongest quantitative result, while proof-state-level premise retrieval remains candidate-generation limited and should be presented as the main open challenge. Proof-state retrieval is still useful as a local-neighbor substrate for strategy-facet retrieval, difficulty-profile retrieval, and explanation. The current theorem-disjoint train/val/test split has no theorem leakage; future split changes should be motivated by domain-balance or retrieval-coverage studies rather than leakage repair.",
         "",
     ]
     Path(output_path).parent.mkdir(parents=True, exist_ok=True)
