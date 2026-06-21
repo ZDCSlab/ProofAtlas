@@ -899,6 +899,52 @@ def get_difficulty_profile(entity_id: str, split: str = "train") -> dict:
     return {}
 
 
+def _technique_hints_for_query(query_text: str, similar_proof_states: list[dict], max_labels: int = 6) -> list[dict[str, Any]]:
+    scores: dict[str, dict[str, Any]] = {}
+    for label in labels_for_text(query_text, max_labels=max_labels):
+        name = str(label["label"])
+        scores[name] = {
+            "label": name,
+            "score": 1.0,
+            "provenance": label.get("provenance", ""),
+            "evidence": [{"source": "query_rule", "match": label.get("provenance", ""), "weight": 1.0}],
+        }
+    for proof_state in similar_proof_states:
+        similarity = max(float(proof_state.get("score", 0.0)), 0.0)
+        for label in proof_state.get("proof_techniques") or []:
+            name = str(label.get("label", ""))
+            if not name:
+                continue
+            weight = similarity
+            item = scores.setdefault(
+                name,
+                {
+                    "label": name,
+                    "score": 0.0,
+                    "provenance": "embedding_neighbor",
+                    "evidence": [],
+                },
+            )
+            item["score"] = float(item["score"]) + weight
+            item["evidence"].append(
+                {
+                    "source": "similar_proof_state_embedding",
+                    "proof_state_id": proof_state.get("proof_state_id", ""),
+                    "full_name": proof_state.get("full_name", ""),
+                    "similarity": similarity,
+                    "match": label.get("provenance", ""),
+                    "weight": weight,
+                }
+            )
+    ranked = sorted(scores.values(), key=lambda row: (-float(row["score"]), str(row["label"])))
+    for row in ranked:
+        row["score"] = float(min(row["score"], 1.0))
+        row["evidence"] = row["evidence"][:5]
+        if any(evidence.get("source") == "similar_proof_state_embedding" for evidence in row["evidence"]):
+            row["provenance"] = "query_rule_and_embedding_neighbors" if any(evidence.get("source") == "query_rule" for evidence in row["evidence"]) else "embedding_neighbors"
+    return ranked[:max_labels]
+
+
 def get_graph_neighborhood(entity_id: str, depth: int = 1, split: str = "train") -> dict:
     edges = _load_split(split)["edges"]
     frontier = {entity_id}
@@ -1235,7 +1281,7 @@ def retrieve_knowledge_for_theorem(
         similar_theorem_ids=[row["theorem_id"] for row in similar_theorems],
         query_context=query.to_dict(),
     )
-    techniques = labels_for_text(query_text)
+    techniques = _technique_hints_for_query(query_text, similar_proof_states)
     proof_patterns = _related_proof_patterns(similar_theorems, index_split=index_split)
     top_entities = [row["theorem_id"] for row in similar_theorems[:2]] + [row["premise_id"] for row in premises[:2]]
     graph_evidence = [get_graph_neighborhood(entity_id, depth=1, split=index_split) for entity_id in top_entities]

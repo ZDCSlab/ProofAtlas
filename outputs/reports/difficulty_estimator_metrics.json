@@ -16,24 +16,24 @@
     "calibration_bins": [
       {
         "bucket": "easy",
-        "count": 2397,
-        "mae": 0.049013906309506756,
-        "mean_prediction": 0.21954992921404975,
-        "mean_target": 0.20417099586362292
+        "count": 1527,
+        "mae": 0.039828068885795556,
+        "mean_prediction": 0.1896512662405318,
+        "mean_target": 0.17981334903385707
       },
       {
         "bucket": "medium",
-        "count": 656,
-        "mae": 0.1326655060889921,
-        "mean_prediction": 0.4274186536310005,
-        "mean_target": 0.4256730956247773
+        "count": 1068,
+        "mae": 0.07219190224798894,
+        "mean_prediction": 0.2889379793907656,
+        "mean_target": 0.25889461379252326
       },
       {
         "bucket": "hard",
-        "count": 0,
-        "mae": null,
-        "mean_prediction": null,
-        "mean_target": null
+        "count": 458,
+        "mae": 0.14540718914586145,
+        "mean_prediction": 0.45516282002048886,
+        "mean_target": 0.47503274303459275
       }
     ],
     "mae": 0.06698817733975321,
@@ -52,24 +52,24 @@
     "calibration_bins": [
       {
         "bucket": "easy",
-        "count": 22041,
-        "mae": 0.036482384805407275,
-        "mean_prediction": 0.20303236302656896,
-        "mean_target": 0.2025525528343334
+        "count": 11862,
+        "mae": 0.03057251802119738,
+        "mean_prediction": 0.16999109866592693,
+        "mean_target": 0.16786693393090574
       },
       {
         "bucket": "medium",
-        "count": 1675,
-        "mae": 0.07103469553763624,
-        "mean_prediction": 0.4243557506223534,
-        "mean_target": 0.43190694982508043
+        "count": 8302,
+        "mae": 0.040783872152193666,
+        "mean_prediction": 0.22812910503935951,
+        "mean_target": 0.229442019231408
       },
       {
         "bucket": "hard",
-        "count": 7,
-        "mae": 0.08107444317039643,
-        "mean_prediction": 0.678092800323152,
-        "mean_target": 0.7591672434935484
+        "count": 3559,
+        "mae": 0.06249507284314698,
+        "mean_prediction": 0.3597124481459182,
+        "mean_target": 0.3644714567955755
       }
     ],
     "mae": 0.03893516332772901,
@@ -88,24 +88,24 @@
     "calibration_bins": [
       {
         "bucket": "easy",
-        "count": 2341,
-        "mae": 0.04546128213550164,
-        "mean_prediction": 0.21571830193635627,
-        "mean_target": 0.19184448088293737
+        "count": 1411,
+        "mae": 0.03623712564680326,
+        "mean_prediction": 0.18607829204104898,
+        "mean_target": 0.17037948633102198
       },
       {
         "bucket": "medium",
-        "count": 481,
-        "mae": 0.1531500763830997,
-        "mean_prediction": 0.42414400622634163,
-        "mean_target": 0.4172392130648043
+        "count": 987,
+        "mae": 0.06237963929928021,
+        "mean_prediction": 0.26569914878159856,
+        "mean_target": 0.22849282218979275
       },
       {
         "bucket": "hard",
-        "count": 0,
-        "mae": null,
-        "mean_prediction": null,
-        "mean_target": null
+        "count": 424,
+        "mae": 0.1589404715647437,
+        "mean_prediction": 0.4344534950719867,
+        "mean_target": 0.43366066159606115
       }
     ],
     "mae": 0.06381645932653449,

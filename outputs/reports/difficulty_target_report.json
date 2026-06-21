@@ -6,9 +6,19 @@
       "mean_num_proof_states": 2.965375,
       "mean_num_unique_positive_premises": 5.359375,
       "mean_theorem_complexity_score": 0.16649370623449108,
+      "proof_state_bucket_policy": "relative_quantiles_easy_50_medium_35_hard_15",
+      "proof_state_bucket_thresholds": {
+        "easy_max": 0.2332834776007491,
+        "medium_max": 0.27464325147086605
+      },
       "split": "train",
       "target": "theorem_features.theorem_complexity_score",
       "target_source": "proof_length_tactic_count_premise_count_negative_candidates",
+      "theorem_bucket_policy": "relative_quantiles_easy_50_medium_35_hard_15",
+      "theorem_bucket_thresholds": {
+        "easy_max": 0.16522848697486942,
+        "medium_max": 0.20501374978199682
+      },
       "theorems": 8000
     },
     {
@@ -17,9 +27,19 @@
       "mean_num_proof_states": 2.822,
       "mean_num_unique_positive_premises": 5.087,
       "mean_theorem_complexity_score": 0.16791680557603092,
+      "proof_state_bucket_policy": "relative_quantiles_easy_50_medium_35_hard_15",
+      "proof_state_bucket_thresholds": {
+        "easy_max": 0.26227757077729535,
+        "medium_max": 0.31681294820372824
+      },
       "split": "val",
       "target": "theorem_features.theorem_complexity_score",
       "target_source": "proof_length_tactic_count_premise_count_negative_candidates",
+      "theorem_bucket_policy": "relative_quantiles_easy_50_medium_35_hard_15",
+      "theorem_bucket_thresholds": {
+        "easy_max": 0.16698131822130421,
+        "medium_max": 0.2060177893092661
+      },
       "theorems": 1000
     },
     {
@@ -28,9 +48,19 @@
       "mean_num_proof_states": 3.053,
       "mean_num_unique_positive_premises": 5.427,
       "mean_theorem_complexity_score": 0.17498160213726724,
+      "proof_state_bucket_policy": "relative_quantiles_easy_50_medium_35_hard_15",
+      "proof_state_bucket_thresholds": {
+        "easy_max": 0.26799675519610566,
+        "medium_max": 0.3223927131341839
+      },
       "split": "test",
       "target": "theorem_features.theorem_complexity_score",
       "target_source": "proof_length_tactic_count_premise_count_negative_candidates",
+      "theorem_bucket_policy": "relative_quantiles_easy_50_medium_35_hard_15",
+      "theorem_bucket_thresholds": {
+        "easy_max": 0.1692228161427694,
+        "medium_max": 0.2156960572335263
+      },
       "theorems": 1000
     },
     {
@@ -39,9 +69,19 @@
       "mean_num_proof_states": 3.0821917808219177,
       "mean_num_unique_positive_premises": 2.3219178082191783,
       "mean_theorem_complexity_score": 0.04467986867269544,
+      "proof_state_bucket_policy": "relative_quantiles_easy_50_medium_35_hard_15",
+      "proof_state_bucket_thresholds": {
+        "easy_max": 0.11800781586233083,
+        "medium_max": 0.23936261455703808
+      },
       "split": "demo",
       "target": "theorem_features.theorem_complexity_score",
       "target_source": "proof_length_tactic_count_premise_count_negative_candidates",
+      "theorem_bucket_policy": "relative_quantiles_easy_50_medium_35_hard_15",
+      "theorem_bucket_thresholds": {
+        "easy_max": 0.024838047132927317,
+        "medium_max": 0.07389364155068902
+      },
       "theorems": 292
     }
   ],

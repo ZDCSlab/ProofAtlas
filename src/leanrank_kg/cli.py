@@ -8,7 +8,7 @@ import typer
 from rich.console import Console
 from rich.table import Table
 
-from . import audit, augment_graph, benchmark_index, build_graph, build_index, compute_difficulty, deployment_security, download_or_sample, embed, evaluate, experiment_report, homepage, lean_diagnostic_report, normalize, pipeline_profile, premise_trace_supervision, report, train_difficulty, train_ranker, validate, weak_label_proof_technique
+from . import audit, augment_graph, benchmark_index, build_graph, build_index, compute_difficulty, deployment_security, download_or_sample, embed, evaluate, experiment_report, homepage, lean_diagnostic_report, normalize, pipeline_profile, premise_trace_supervision, report, research_report, train_difficulty, train_ranker, validate, weak_label_proof_technique
 from .pipeline_timing import PipelineTimer
 from .retrieve import (
     explain_premise_match,
@@ -69,6 +69,7 @@ def _stage_artifacts() -> dict[str, list[str]]:
         "deployment_security": ["outputs/reports/deployment_security_review.json"],
         "pipeline_profile": ["outputs/reports/pipeline_performance_report.json"],
         "experiment_report": ["outputs/reports/experiment_report.md"],
+        "research_report": ["outputs/reports/research_report.md", "outputs/predictions/research_prediction_results.json"],
         "audit": ["outputs/reports/mvp_completion_audit.json"],
     }
 
@@ -210,6 +211,15 @@ def build_experiment_report_cmd(
     console.print_json(data=result)
 
 
+@app.command("build-research-report")
+def build_research_report_cmd(
+    config: str = "configs/proofatlas.yaml",
+    output_path: str = "outputs/reports/research_report.md",
+) -> None:
+    result = research_report.run(config, output_path=output_path)
+    console.print_json(data=result)
+
+
 @app.command("serve")
 def serve(host: str = "127.0.0.1", port: int = 8000, reload: bool = False, require_ready: bool = False, startup_index_split: str = "train") -> None:
     try:
@@ -263,6 +273,7 @@ def full_pipeline(
         _run_or_skip(timer, "pipeline_profile", pipeline_profile.run, config, force=force, force_stages=forced)
         timer.write()
         _run_or_skip(timer, "experiment_report", experiment_report.run, config, force=force, force_stages=forced)
+        _run_or_skip(timer, "research_report", research_report.run, config, force=force, force_stages=forced)
         _run_or_skip(timer, "audit", audit.run, config, force=force, force_stages=forced)
     finally:
         timer.write()

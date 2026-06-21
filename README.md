@@ -126,6 +126,7 @@ leanrank-kg serve --host 127.0.0.1 --port 8000 --require-ready --startup-index-s
 leanrank-kg explain-premise-match --proof-state-id "<id>" --premise-id "<id>"
 leanrank-kg build-report --config configs/sample.yaml
 leanrank-kg build-experiment-report --config configs/proofatlas.yaml
+leanrank-kg build-research-report --config configs/proofatlas.yaml
 leanrank-kg audit --config configs/sample.yaml
 ```
 
@@ -144,6 +145,8 @@ The text-query commands reuse the saved embedding artifacts in `outputs/embeddin
 `leanrank-kg lean-diagnostic-extraction-report` writes `outputs/reports/lean_diagnostic_extraction_report.json`. It is a query-time diagnostic evidence report: fixed Lean `unsolved goals` fixtures validate proof-state extraction, ordered tactic-state trace metadata, adjacent-goal splitting, theorem-statement initial-goal skeleton fallback, duplicate-goal rejection, timeout-stderr extraction, failure explanations, stable IDs, and retrieval text without adding a custom corpus extractor to the default LeanRank-data pipeline.
 
 `leanrank-kg build-experiment-report --config configs/proofatlas.yaml` writes `outputs/reports/experiment_report.md`. This is the quantitative ML report deliverable: it treats ProofAtlas as a ranking/retrieval task on `erbacher/LeanRank-data`, uses the held-out test split for final metrics, and reports proof-state-level and theorem-level Recall@k, MRR, MAP, nDCG, gold-premise coverage, domain-level metric breakdowns, index benchmark results, pipeline timings, and scale-up notes.
+
+`leanrank-kg build-research-report --config configs/proofatlas.yaml` writes `outputs/reports/research_report.md` and `outputs/predictions/research_prediction_results.json`. This is the compact research-facing deliverable: it frames ProofAtlas as a processed dataset plus prediction artifacts, and summarizes premise prediction, proof-pattern prediction, proof-strategy hinting, and difficulty prediction without presenting the system as production proof automation.
 
 The default index backend remains sklearn for lightweight local demos and tests. Installing `pip install -e ".[ann]"` enables `hnswlib`, `pip install -e ".[faiss]"` enables FAISS, and `pip install -e ".[lancedb]"` enables an optional LanceDB vector-store backend. Set `index.backend: lancedb` to write LanceDB tables under `outputs/indexes/`; set `index.create_vector_index: true` for LanceDB to build a vector index when the installed LanceDB version supports it.
 

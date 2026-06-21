@@ -4,7 +4,7 @@ from difflib import SequenceMatcher
 
 import pandas as pd
 
-from .utils import SPLITS, bucket, minmax, namespace, write_json, write_parquet
+from .utils import SPLITS, minmax, namespace, write_json, write_parquet
 
 
 def _name_similarity(left: str, right: str) -> float:
@@ -116,9 +116,26 @@ def _build_theorem_complexity_features(feat: pd.DataFrame, pos: pd.DataFrame, ne
             "max_proof_state_difficulty",
         ]
     ].mean(axis=1)
-    thm["difficulty_bucket"] = thm["theorem_complexity_score"].map(bucket)
     thm["difficulty_target_source"] = "proof_length_tactic_count_premise_count_negative_candidates"
     return thm
+
+
+def _relative_difficulty_buckets(scores: pd.Series) -> tuple[pd.Series, dict[str, float]]:
+    scores = scores.fillna(0.0).astype(float)
+    if scores.empty:
+        return pd.Series(dtype="object", index=scores.index), {"easy_max": 0.0, "medium_max": 0.0}
+    easy_max = float(scores.quantile(0.50))
+    medium_max = float(scores.quantile(0.85))
+    if medium_max <= easy_max:
+        ranked = scores.rank(method="first", pct=True)
+        buckets = pd.Series("easy", index=scores.index, dtype="object")
+        buckets[ranked > 0.50] = "medium"
+        buckets[ranked > 0.85] = "hard"
+        return buckets, {"easy_max": easy_max, "medium_max": medium_max}
+    buckets = pd.Series("easy", index=scores.index, dtype="object")
+    buckets[scores > easy_max] = "medium"
+    buckets[scores > medium_max] = "hard"
+    return buckets, {"easy_max": easy_max, "medium_max": medium_max}
 
 
 def run(config_path: str) -> None:
@@ -168,8 +185,9 @@ def run(config_path: str) -> None:
             "negative_candidate_hardness",
         ]
         feat["difficulty_score"] = feat[cols].mean(axis=1)
-        feat["difficulty_bucket"] = feat["difficulty_score"].map(bucket)
         thm = _build_theorem_complexity_features(feat, pos, neg, ps)
+        feat["difficulty_bucket"], proof_state_thresholds = _relative_difficulty_buckets(feat["difficulty_score"])
+        thm["difficulty_bucket"], theorem_thresholds = _relative_difficulty_buckets(thm["theorem_complexity_score"])
         feat = feat.join(thm.set_index("theorem_id")[["theorem_complexity_score", "difficulty_target_source"]], on="theorem_id")
         write_parquet(
             feat.drop(columns=["context", "local_hypotheses", "num_positive_premises_raw", "avg_positive_premise_length_raw"]),
@@ -191,6 +209,10 @@ def run(config_path: str) -> None:
                 "mean_num_proof_states": float(thm["num_proof_states"].mean()) if not thm.empty else 0.0,
                 "mean_num_unique_positive_premises": float(thm["num_unique_positive_premises"].mean()) if not thm.empty else 0.0,
                 "mean_num_failed_negative_candidates": float(thm["num_failed_negative_candidates"].mean()) if not thm.empty else 0.0,
+                "proof_state_bucket_policy": "relative_quantiles_easy_50_medium_35_hard_15",
+                "proof_state_bucket_thresholds": proof_state_thresholds,
+                "theorem_bucket_policy": "relative_quantiles_easy_50_medium_35_hard_15",
+                "theorem_bucket_thresholds": theorem_thresholds,
             }
         )
     if reports:

@@ -60,7 +60,20 @@ def _evaluate(model: RandomForestRegressor, split: str) -> dict[str, Any]:
 
 def _calibration_bins(y_true: pd.Series, y_pred) -> list[dict[str, Any]]:
     pred = pd.Series(y_pred, index=y_true.index).clip(0.0, 1.0)
-    bins = pd.cut(pred, bins=[0.0, 0.34, 0.67, 1.0], labels=["easy", "medium", "hard"], include_lowest=True)
+    if pred.empty:
+        bins = pd.Series(dtype="object", index=pred.index)
+    else:
+        easy_max = float(pred.quantile(0.50))
+        medium_max = float(pred.quantile(0.85))
+        if medium_max <= easy_max:
+            ranked = pred.rank(method="first", pct=True)
+            bins = pd.Series("easy", index=pred.index, dtype="object")
+            bins[ranked > 0.50] = "medium"
+            bins[ranked > 0.85] = "hard"
+        else:
+            bins = pd.Series("easy", index=pred.index, dtype="object")
+            bins[pred > easy_max] = "medium"
+            bins[pred > medium_max] = "hard"
     rows = []
     for bucket in ["easy", "medium", "hard"]:
         mask = bins == bucket
