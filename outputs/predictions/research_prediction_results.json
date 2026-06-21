@@ -26803,6 +26803,7 @@
           }
         ]
       },
+      "domain": "CategoryTheory",
       "goal_text": "X.\u03c1 (f a) \u226b g.hom = g.hom \u226b Y.\u03c1 (f a)\nX.\u03c1 (f a) \u226b g.hom = g.hom \u226b Y.\u03c1 (f a)",
       "gold_positive_premise_count": 4,
       "gold_premise_train_coverage": 1.0,
@@ -26851,6 +26852,7 @@
         }
       ],
       "split": "test",
+      "subdomain": "Action",
       "techniques": [
         {
           "confidence": 0.77,
@@ -26915,164 +26917,166 @@
     {
       "difficulty": {
         "difficulty_bucket": "easy",
-        "difficulty_score": 0.1766337044436844,
+        "difficulty_score": 0.3251334015704664,
         "signals": {
           "calibrated_by": "query_heuristic_and_similar_theorem_prior_and_trained_estimator",
-          "heuristic_difficulty_score": 0.20523622961294966,
-          "historical_prior_confidence": 0.8804308176040649,
-          "historical_prior_score": 0.15817991277869647,
-          "hypothesis_count_score": 0.4166666666666667,
-          "premise_retrieval_uncertainty": 0.1799452990021464,
-          "query_length_score": 0.15166666666666667,
-          "similar_theorem_uncertainty": 0.11956918239593506,
-          "symbol_density_score": 0.15833333333333333,
+          "heuristic_difficulty_score": 0.44206606299773715,
+          "historical_prior_confidence": 0.8674905300140381,
+          "historical_prior_score": 0.2946352927661083,
+          "hypothesis_count_score": 0.0,
+          "premise_retrieval_uncertainty": 0.45032084500272407,
+          "query_length_score": 0.6275,
+          "similar_theorem_uncertainty": 0.13250946998596191,
+          "symbol_density_score": 1.0,
           "trained_estimator_available": true,
           "trained_estimator_confidence_interval": {
-            "high": 0.204498284841517,
-            "low": 0.09407835488795946,
+            "high": 0.21064224018373348,
+            "low": 0.10092692221754532,
             "residual_quantile": "p80"
           },
-          "trained_estimator_score": 0.14928831986473823,
-          "trained_estimator_uncertainty": 0.05520996497677877
+          "trained_estimator_score": 0.1557845812006394,
+          "trained_estimator_uncertainty": 0.054857658983094075
         },
         "similar_theorem_difficulty_neighbors": [
           {
-            "difficulty_bucket": "easy",
-            "difficulty_score": 0.18541470928727521,
+            "difficulty_bucket": "hard",
+            "difficulty_score": 0.28805102135801125,
             "difficulty_target_source": "proof_length_tactic_count_premise_count_negative_candidates",
-            "full_name": "Plausible.TotalFunction.apply_eq_dlookup",
-            "similarity": 0.8804308176040649,
-            "theorem_id": "thm:Plausible.TotalFunction.apply_eq_dlookup"
+            "full_name": "affineCombination_mem_affineSpan",
+            "similarity": 0.8674905300140381,
+            "theorem_id": "thm:affineCombination_mem_affineSpan"
           },
           {
-            "difficulty_bucket": "easy",
-            "difficulty_score": 0.09771552546135266,
+            "difficulty_bucket": "hard",
+            "difficulty_score": 0.3906133962236915,
             "difficulty_target_source": "proof_length_tactic_count_premise_count_negative_candidates",
-            "full_name": "AList.toFinmap_eq",
-            "similarity": 0.8739723563194275,
-            "theorem_id": "thm:AList.toFinmap_eq"
+            "full_name": "sbtw_of_sbtw_of_sbtw_of_mem_affineSpan_pair",
+            "similarity": 0.8665186166763306,
+            "theorem_id": "thm:sbtw_of_sbtw_of_sbtw_of_mem_affineSpan_pair"
           },
           {
-            "difficulty_bucket": "easy",
-            "difficulty_score": 0.18518219393026636,
+            "difficulty_bucket": "hard",
+            "difficulty_score": 0.24976269092056236,
             "difficulty_target_source": "proof_length_tactic_count_premise_count_negative_candidates",
-            "full_name": "AList.insertRec_insert",
-            "similarity": 0.8728408813476562,
-            "theorem_id": "thm:AList.insertRec_insert"
+            "full_name": "Affine.Simplex.reflection_circumcenter_eq_affineCombination_of_pointsWithCircumcenter",
+            "similarity": 0.859906792640686,
+            "theorem_id": "thm:Affine.Simplex.reflection_circumcenter_eq_affineCombination_of_pointsWithCircumcenter"
           },
           {
-            "difficulty_bucket": "easy",
-            "difficulty_score": 0.1589257232868403,
+            "difficulty_bucket": "hard",
+            "difficulty_score": 0.33595202177294486,
             "difficulty_target_source": "proof_length_tactic_count_premise_count_negative_candidates",
-            "full_name": "List.mem_orderedInsert",
-            "similarity": 0.8607473969459534,
-            "theorem_id": "thm:List.mem_orderedInsert"
+            "full_name": "Affine.Simplex.eq_mongePoint_of_forall_mem_mongePlane",
+            "similarity": 0.8580671548843384,
+            "theorem_id": "thm:Affine.Simplex.eq_mongePoint_of_forall_mem_mongePlane"
           },
           {
-            "difficulty_bucket": "easy",
-            "difficulty_score": 0.16358987920410725,
+            "difficulty_bucket": "hard",
+            "difficulty_score": 0.20764605769073644,
             "difficulty_target_source": "proof_length_tactic_count_premise_count_negative_candidates",
-            "full_name": "List.idxOf_cons_eq",
-            "similarity": 0.860485851764679,
-            "theorem_id": "thm:List.idxOf_cons_eq"
+            "full_name": "mem_affineSpan_iff_eq_weightedVSubOfPoint_vadd",
+            "similarity": 0.8543734550476074,
+            "theorem_id": "thm:mem_affineSpan_iff_eq_weightedVSubOfPoint_vadd"
           }
         ],
         "trained_estimator_calibration_bins": [
           {
             "bucket": "easy",
-            "count": 22045,
-            "mae": 0.03652704999103804,
-            "mean_prediction": 0.20321864553098629,
-            "mean_target": 0.2027481500828809
+            "count": 11862,
+            "mae": 0.03057251802119738,
+            "mean_prediction": 0.16999109866592693,
+            "mean_target": 0.16786693393090574
           },
           {
             "bucket": "medium",
-            "count": 1671,
-            "mae": 0.07119060523852852,
-            "mean_prediction": 0.4246939224529047,
-            "mean_target": 0.43223385990724195
+            "count": 8302,
+            "mae": 0.040783872152193666,
+            "mean_prediction": 0.22812910503935951,
+            "mean_target": 0.229442019231408
           },
           {
             "bucket": "hard",
-            "count": 7,
-            "mae": 0.07766092319165037,
-            "mean_prediction": 0.6816282957798739,
-            "mean_target": 0.7592892189715242
+            "count": 3559,
+            "mae": 0.06249507284314698,
+            "mean_prediction": 0.3597124481459182,
+            "mean_target": 0.3644714567955755
           }
         ]
       },
-      "goal_text": "lookup a s.toAList = dlookup a s\nlookup a s.toAList = dlookup a s",
-      "gold_positive_premise_count": 3,
+      "domain": "LinearAlgebra",
+      "goal_text": "(affineCombination k univ s.points) w \u2208 s.interior \u2194 \u2200 (i : Fin (n + 1)), w i \u2208 Set.Ioo 0 1\n(affineCombination k univ s.points) w \u2208 s.interior \u2194 \u2200 (i : Fin (n + 1)), w i \u2208 Set.Ioo 0 1\nk : Type u_1\nV : Type u_2\nP : Type u_3\ninst\u271d\u2074 : Ring k\ninst\u271d\u00b3 : PartialOrder k\ninst\u271d\u00b2 : AddCommGroup V\ninst\u271d\u00b9 : Modu",
+      "gold_positive_premise_count": 2,
       "gold_premise_train_coverage": 1.0,
       "similar_proof_states": [
         {
-          "full_name": "Plausible.TotalFunction.apply_eq_dlookup",
-          "goal_text": "(withDefault m y).apply x = (List.dlookup x m).getD y",
-          "score": 0.8834206461906433
+          "full_name": "sbtw_of_sbtw_of_sbtw_of_mem_affineSpan_pair",
+          "goal_text": "Sbtw R ((Finset.affineCombination R Finset.univ t.points) (Finset.affineCombinationSingleWeights R i\u2081))\n    ((Finset.affineCombination R Fin",
+          "score": 0.880577802658081
         },
         {
-          "full_name": "Finmap.keys_union",
-          "goal_text": "\u2200 (a : \u03b1), a \u2208 (\u27e6s\u2081\u27e7 \u222a \u27e6s\u2082\u27e7).keys \u2194 a \u2208 \u27e6s\u2081\u27e7.keys \u222a \u27e6s\u2082\u27e7.keys",
-          "score": 0.8816091418266296
+          "full_name": "mem_affineSpan_iff_eq_weightedVSubOfPoint_vadd",
+          "goal_text": "(Finset.affineCombination k (insert j s) p) w' \u2208 affineSpan k (Set.range p)",
+          "score": 0.8715108633041382
         },
         {
-          "full_name": "AList.insertRec_insert",
-          "goal_text": "HEq (insertRec H0 IH { entries := c :: l, nodupKeys := \u22ef })\n    (IH c.fst c.snd { entries := l, nodupKeys := hl } h (insertRec H0 IH { entri",
-          "score": 0.8815569877624512
+          "full_name": "affineCombination_mem_affineSpan",
+          "goal_text": "(Finset.affineCombination k s p) w -\u1d65 p i1 \u2208 (affineSpan k (Set.range p)).direction",
+          "score": 0.8703128099441528
         },
         {
-          "full_name": "List.kreplace_nodupKeys",
-          "goal_text": "(kreplace a b l).NodupKeys \u2194 l.NodupKeys",
-          "score": 0.8813640475273132
+          "full_name": "affineCombination_mem_affineSpan",
+          "goal_text": "((Finset.affineCombination k s p) w -\u1d65 p i1) +\u1d65 p i1 \u2208 affineSpan k (Set.range p)",
+          "score": 0.8691102862358093
         }
       ],
       "similar_theorems": [
         {
-          "full_name": "Plausible.TotalFunction.apply_eq_dlookup",
-          "score": 0.8804308176040649
+          "full_name": "affineCombination_mem_affineSpan",
+          "score": 0.8674905300140381
         },
         {
-          "full_name": "AList.toFinmap_eq",
-          "score": 0.8739723563194275
+          "full_name": "sbtw_of_sbtw_of_sbtw_of_mem_affineSpan_pair",
+          "score": 0.8665186166763306
         },
         {
-          "full_name": "AList.insertRec_insert",
-          "score": 0.8728408813476562
+          "full_name": "Affine.Simplex.reflection_circumcenter_eq_affineCombination_of_pointsWithCircumcenter",
+          "score": 0.859906792640686
         },
         {
-          "full_name": "List.mem_orderedInsert",
-          "score": 0.8607473969459534
+          "full_name": "Affine.Simplex.eq_mongePoint_of_forall_mem_mongePlane",
+          "score": 0.8580671548843384
         },
         {
-          "full_name": "List.idxOf_cons_eq",
-          "score": 0.860485851764679
+          "full_name": "mem_affineSpan_iff_eq_weightedVSubOfPoint_vadd",
+          "score": 0.8543734550476074
         }
       ],
       "split": "test",
+      "subdomain": "AffineSpace",
       "techniques": [
         {
-          "confidence": 0.72,
+          "confidence": 0.76,
           "evidence_source": "goal_or_statement_shape",
           "label": "rewrite_transport",
-          "provenance": "goal_or_statement_shape:="
+          "provenance": "goal_or_statement_shape:\u2194;="
         },
         {
-          "confidence": 0.7,
-          "evidence_source": "lemma_name_or_statement",
-          "label": "simplification_normalization",
-          "provenance": "lemma_name_or_statement:\\bto[A-Z]"
+          "confidence": 0.74,
+          "evidence_source": "goal_symbols_and_names",
+          "label": "set_membership_reasoning",
+          "provenance": "goal_symbols_and_names:\u2208;\\bSet\\."
         },
         {
-          "confidence": 0.66,
-          "evidence_source": "name_context_or_statement",
-          "label": "induction_recursion",
-          "provenance": "name_context_or_statement:\\bList\\b"
+          "confidence": 0.7200000000000001,
+          "evidence_source": "goal_symbols_and_names",
+          "label": "algebraic_computation",
+          "provenance": "goal_symbols_and_names:\\bring\\b;[+*/^]"
         },
         {
-          "confidence": 0.66,
+          "confidence": 0.7000000000000001,
           "evidence_source": "context_typeclass_bindings",
           "label": "typeclass_instance_resolution",
-          "provenance": "context_typeclass_bindings:\\binst[^\\s:]*\\s*:"
+          "provenance": "context_typeclass_bindings:\\binst[^\\s:]*\\s*:;\\bRing\\b"
         },
         {
           "confidence": 0.62,
@@ -27081,224 +27085,232 @@
           "provenance": "statement_connectives:\u2192"
         }
       ],
-      "theorem": "AList.lookup_to_alist",
+      "theorem": "Affine.Simplex.affineCombination_mem_interior_iff",
       "top_premises": [
         {
-          "full_name": "List.toAList",
-          "reason": "high query-premise embedding similarity (0.865); learned premise ranker score 0.937",
-          "score": 0.8200547009978536
+          "full_name": "Affine.Simplex.centroid_eq_affineCombination_of_pointsWithCircumcenter",
+          "reason": "high query-premise embedding similarity (0.799); learned premise ranker score 0.373",
+          "score": 0.4886804056502075
         },
         {
-          "full_name": "List.lookupAll_eq_dlookup",
-          "reason": "high query-premise embedding similarity (0.793); learned premise ranker score 0.883",
-          "score": 0.7677301675358789
+          "full_name": "Affine.Simplex.eq_mongePoint_of_forall_mem_mongePlane",
+          "reason": "high query-premise embedding similarity (0.820); learned premise ranker score 0.382",
+          "score": 0.46819582270533766
         },
         {
-          "full_name": "List.dlookup",
-          "reason": "high query-premise embedding similarity (0.777); learned premise ranker score 0.873",
-          "score": 0.757445275244663
+          "full_name": "Affine.Simplex.face_centroid_eq_iff",
+          "reason": "high query-premise embedding similarity (0.820); learned premise ranker score 0.378",
+          "score": 0.4659602576745233
         },
         {
-          "full_name": "AList.lookup_to_alist",
-          "reason": "high query-premise embedding similarity (0.850); learned premise ranker score 0.892",
-          "score": 0.7550723420608944
+          "full_name": "Affine.Simplex.reflection_circumcenter_eq_affineCombination_of_pointsWithCircumcenter",
+          "reason": "high query-premise embedding similarity (0.812); learned premise ranker score 0.377",
+          "score": 0.46428296292036153
         },
         {
-          "full_name": "List.dlookup_kunion_eq_some",
-          "reason": "high query-premise embedding similarity (0.791); learned premise ranker score 0.860",
-          "score": 0.7545195347849429
+          "full_name": "Affine.Simplex.point_eq_affineCombination_of_pointsWithCircumcenter",
+          "reason": "high query-premise embedding similarity (0.801); learned premise ranker score 0.380",
+          "score": 0.4642480568466024
         }
       ]
     },
     {
       "difficulty": {
         "difficulty_bucket": "easy",
-        "difficulty_score": 0.24470903173207503,
+        "difficulty_score": 0.3264069176908456,
         "signals": {
           "calibrated_by": "query_heuristic_and_similar_theorem_prior_and_trained_estimator",
-          "heuristic_difficulty_score": 0.34825141897115636,
-          "historical_prior_confidence": 0.8744534850120544,
-          "historical_prior_score": 0.1740637254236785,
-          "hypothesis_count_score": 0.75,
-          "premise_retrieval_uncertainty": 0.17071057986783633,
-          "query_length_score": 0.30333333333333334,
-          "similar_theorem_uncertainty": 0.12554651498794556,
-          "symbol_density_score": 0.39166666666666666,
+          "heuristic_difficulty_score": 0.4578638159081298,
+          "historical_prior_confidence": 0.8767013549804688,
+          "historical_prior_score": 0.27479676764084504,
+          "hypothesis_count_score": 0.0,
+          "premise_retrieval_uncertainty": 0.5235204345211179,
+          "query_length_score": 0.6758333333333333,
+          "similar_theorem_uncertainty": 0.12329864501953125,
+          "symbol_density_score": 0.9666666666666667,
           "trained_estimator_available": true,
           "trained_estimator_confidence_interval": {
-            "high": 0.20476342918989837,
-            "low": 0.09434349923634083,
+            "high": 0.2137196700837484,
+            "low": 0.10400435211756023,
             "residual_quantile": "p80"
           },
-          "trained_estimator_score": 0.1495534642131196,
-          "trained_estimator_uncertainty": 0.05520996497677877
+          "trained_estimator_score": 0.15886201110065432,
+          "trained_estimator_uncertainty": 0.054857658983094075
         },
         "similar_theorem_difficulty_neighbors": [
           {
             "difficulty_bucket": "easy",
-            "difficulty_score": 0.08869397792247831,
+            "difficulty_score": 0.1457519843425981,
             "difficulty_target_source": "proof_length_tactic_count_premise_count_negative_candidates",
-            "full_name": "WithAbs.uniformSpace_comap_eq_of_comp",
-            "similarity": 0.8744534850120544,
-            "theorem_id": "thm:WithAbs.uniformSpace_comap_eq_of_comp"
+            "full_name": "IsUniformGroup.uniformContinuous_iff_isOpen_ker",
+            "similarity": 0.8767013549804688,
+            "theorem_id": "thm:IsUniformGroup.uniformContinuous_iff_isOpen_ker"
+          },
+          {
+            "difficulty_bucket": "hard",
+            "difficulty_score": 0.2453651153339893,
+            "difficulty_target_source": "proof_length_tactic_count_premise_count_negative_candidates",
+            "full_name": "HurwitzZeta.continuousOn_oddKernel",
+            "similarity": 0.8710401058197021,
+            "theorem_id": "thm:HurwitzZeta.continuousOn_oddKernel"
+          },
+          {
+            "difficulty_bucket": "hard",
+            "difficulty_score": 0.39989999306403834,
+            "difficulty_target_source": "proof_length_tactic_count_premise_count_negative_candidates",
+            "full_name": "continuous_equivFun_basis_aux",
+            "similarity": 0.8691204786300659,
+            "theorem_id": "thm:continuous_equivFun_basis_aux"
           },
           {
             "difficulty_bucket": "easy",
-            "difficulty_score": 0.1887452737166541,
+            "difficulty_score": 0.15749180933462126,
             "difficulty_target_source": "proof_length_tactic_count_premise_count_negative_candidates",
-            "full_name": "VectorField.pullbackWithin_lieBracketWithin_of_isSymmSndFDerivWithinAt_of_eventuallyEq",
-            "similarity": 0.8719772696495056,
-            "theorem_id": "thm:VectorField.pullbackWithin_lieBracketWithin_of_isSymmSndFDerivWithinAt_of_eventuallyEq"
+            "full_name": "Real.continuousAt_rpow_const",
+            "similarity": 0.8652843832969666,
+            "theorem_id": "thm:Real.continuousAt_rpow_const"
           },
           {
-            "difficulty_bucket": "easy",
-            "difficulty_score": 0.20583079796028972,
+            "difficulty_bucket": "hard",
+            "difficulty_score": 0.42686092517310703,
             "difficulty_target_source": "proof_length_tactic_count_premise_count_negative_candidates",
-            "full_name": "NumberField.mixedEmbedding.fundamentalCone.mem_of_normAtPlace_eq",
-            "similarity": 0.8685294985771179,
-            "theorem_id": "thm:NumberField.mixedEmbedding.fundamentalCone.mem_of_normAtPlace_eq"
-          },
-          {
-            "difficulty_bucket": "easy",
-            "difficulty_score": 0.17124649293545546,
-            "difficulty_target_source": "proof_length_tactic_count_premise_count_negative_candidates",
-            "full_name": "LaurentSeries.valuation_LaurentSeries_equal_extension",
-            "similarity": 0.8657737374305725,
-            "theorem_id": "thm:LaurentSeries.valuation_LaurentSeries_equal_extension"
-          },
-          {
-            "difficulty_bucket": "easy",
-            "difficulty_score": 0.21649765757928865,
-            "difficulty_target_source": "proof_length_tactic_count_premise_count_negative_candidates",
-            "full_name": "riesz_lemma_of_norm_lt",
-            "similarity": 0.8648348450660706,
-            "theorem_id": "thm:riesz_lemma_of_norm_lt"
+            "full_name": "Real.fourierCoeff_tsum_comp_add",
+            "similarity": 0.8650444746017456,
+            "theorem_id": "thm:Real.fourierCoeff_tsum_comp_add"
           }
         ],
         "trained_estimator_calibration_bins": [
           {
             "bucket": "easy",
-            "count": 22045,
-            "mae": 0.03652704999103804,
-            "mean_prediction": 0.20321864553098629,
-            "mean_target": 0.2027481500828809
+            "count": 11862,
+            "mae": 0.03057251802119738,
+            "mean_prediction": 0.16999109866592693,
+            "mean_target": 0.16786693393090574
           },
           {
             "bucket": "medium",
-            "count": 1671,
-            "mae": 0.07119060523852852,
-            "mean_prediction": 0.4246939224529047,
-            "mean_target": 0.43223385990724195
+            "count": 8302,
+            "mae": 0.040783872152193666,
+            "mean_prediction": 0.22812910503935951,
+            "mean_target": 0.229442019231408
           },
           {
             "bucket": "hard",
-            "count": 7,
-            "mae": 0.07766092319165037,
-            "mean_prediction": 0.6816282957798739,
-            "mean_target": 0.7592892189715242
+            "count": 3559,
+            "mae": 0.06249507284314698,
+            "mean_prediction": 0.3597124481459182,
+            "mean_target": 0.3644714567955755
           }
         ]
       },
-      "goal_text": "(extensionEmbedding_of_comp h) \u2191x = f x\n(extensionEmbedding_of_comp h) \u2191x = f x",
-      "gold_positive_premise_count": 2,
-      "gold_premise_train_coverage": 0.0,
+      "domain": "Topology",
+      "goal_text": "ContinuousAt (\u21d1(equivIoc p a)) x\nContinuousAt (\u21d1(equivIoc p a)) x\ncase H\n\ud835\udd5c : Type u_1\ninst\u271d\u2075 : AddCommGroup \ud835\udd5c\np : \ud835\udd5c\ninst\u271d\u2074 : LinearOrder \ud835\udd5c\ninst\u271d\u00b3 : IsOrderedAddMonoid \ud835\udd5c\nhp : Fact (0 < p)\na : \ud835\udd5c\ninst\u271d\u00b2 : Archimedean \ud835\udd5c\ninst\u271d\u00b9 : TopologicalSpace \ud835\udd5c\ninst\u271d : OrderTopology \ud835\udd5c\nx : AddCircle p\nz\u271d : \ud835\udd5c\nhx : \u2191z\u271d ",
+      "gold_positive_premise_count": 6,
+      "gold_premise_train_coverage": 0.8333333333333334,
       "similar_proof_states": [
         {
-          "full_name": "WithAbs.uniformSpace_comap_eq_of_comp",
-          "goal_text": "UniformSpace.comap (\u21d1f) inferInstance = PseudoMetricSpace.toUniformSpace",
-          "score": 0.9151363968849182
+          "full_name": "IsUniformGroup.uniformContinuous_iff_isOpen_ker",
+          "goal_text": "ContinuousAt (\u21d1f) 1",
+          "score": 0.8545736074447632
         },
         {
-          "full_name": "ContinuousMultilinearMap.completeSpace",
-          "goal_text": "CompleteSpace (ContinuousMultilinearMap \ud835\udd5c E F)",
-          "score": 0.8849577903747559
+          "full_name": "contMDiffOn_continuousLinearMapCoordChange",
+          "goal_text": "ContMDiffOn IB \ud835\udcd8(\ud835\udd5c, (F\u2081 \u2192L[\ud835\udd5c] F\u2082) \u2192L[\ud835\udd5c] F\u2081 \u2192L[\ud835\udd5c] F\u2082) n (continuousLinearMapCoordChange (RingHom.id \ud835\udd5c) e\u2081 e\u2081' e\u2082 e\u2082')\n    (e\u2081.baseSet \u2229 e\u2082.ba",
+          "score": 0.8541345596313477
         },
         {
-          "full_name": "ImplicitFunctionData.implicitFunction_hasStrictFDerivAt",
-          "goal_text": "g'inv =\n    (\u2191(\u03c6.leftDeriv.equivProdOfSurjectiveOfIsCompl \u03c6.rightDeriv \u22ef \u22ef \u22ef).symm).comp\n      (ContinuousLinearMap.prod 0 (ContinuousLinear",
-          "score": 0.8814493417739868
+          "full_name": "contMDiffOn_continuousLinearMapCoordChange",
+          "goal_text": "ContMDiffOn IB \ud835\udcd8(\ud835\udd5c, (F\u2081 \u2192L[\ud835\udd5c] F\u2082) \u2192L[\ud835\udd5c] F\u2081 \u2192L[\ud835\udd5c] F\u2082) n (continuousLinearMapCoordChange (RingHom.id \ud835\udd5c) e\u2081 e\u2081' e\u2082 e\u2082')\n    (e\u2081.baseSet \u2229 e\u2082.ba",
+          "score": 0.8541345596313477
         },
         {
-          "full_name": "isClosed_setOf_isCompactOperator",
-          "goal_text": "IsCompactOperator \u21d1\u2191u",
-          "score": 0.8814404606819153
+          "full_name": "contMDiffOn_continuousLinearMapCoordChange",
+          "goal_text": "ContMDiffOn IB \ud835\udcd8(\ud835\udd5c, (F\u2081 \u2192L[\ud835\udd5c] F\u2082) \u2192L[\ud835\udd5c] F\u2081 \u2192L[\ud835\udd5c] F\u2082) n (continuousLinearMapCoordChange (RingHom.id \ud835\udd5c) e\u2081 e\u2081' e\u2082 e\u2082')\n    (e\u2081.baseSet \u2229 e\u2082.ba",
+          "score": 0.8541345596313477
         }
       ],
       "similar_theorems": [
         {
-          "full_name": "WithAbs.uniformSpace_comap_eq_of_comp",
-          "score": 0.8744534850120544
+          "full_name": "IsUniformGroup.uniformContinuous_iff_isOpen_ker",
+          "score": 0.8767013549804688
         },
         {
-          "full_name": "VectorField.pullbackWithin_lieBracketWithin_of_isSymmSndFDerivWithinAt_of_eventuallyEq",
-          "score": 0.8719772696495056
+          "full_name": "HurwitzZeta.continuousOn_oddKernel",
+          "score": 0.8710401058197021
         },
         {
-          "full_name": "NumberField.mixedEmbedding.fundamentalCone.mem_of_normAtPlace_eq",
-          "score": 0.8685294985771179
+          "full_name": "continuous_equivFun_basis_aux",
+          "score": 0.8691204786300659
         },
         {
-          "full_name": "LaurentSeries.valuation_LaurentSeries_equal_extension",
-          "score": 0.8657737374305725
+          "full_name": "Real.continuousAt_rpow_const",
+          "score": 0.8652843832969666
         },
         {
-          "full_name": "riesz_lemma_of_norm_lt",
-          "score": 0.8648348450660706
+          "full_name": "Real.fourierCoeff_tsum_comp_add",
+          "score": 0.8650444746017456
         }
       ],
       "split": "test",
+      "subdomain": "Instances",
       "techniques": [
         {
-          "confidence": 0.74,
-          "evidence_source": "context_typeclass_bindings",
-          "label": "typeclass_instance_resolution",
-          "provenance": "context_typeclass_bindings:\\binst[^\\s:]*\\s*:;\\bField\\b;\\bNormedField\\b"
+          "confidence": 0.8099999999999999,
+          "evidence_source": "domain_specific_goal",
+          "label": "topology_filter_limit",
+          "provenance": "domain_specific_goal:\\bContinuous;\\bFilter\\b;\ud835\udcdd"
+        },
+        {
+          "confidence": 0.78,
+          "evidence_source": "goal_symbols",
+          "label": "order_inequality_reasoning",
+          "provenance": "goal_symbols:\u2264;<"
+        },
+        {
+          "confidence": 0.73,
+          "evidence_source": "context_case_marker",
+          "label": "case_analysis",
+          "provenance": "context_case_marker:^case\\s+;\\bcase\\s+"
+        },
+        {
+          "confidence": 0.72,
+          "evidence_source": "goal_or_context_shape",
+          "label": "contradiction_negation",
+          "provenance": "goal_or_context_shape:\u2260"
         },
         {
           "confidence": 0.72,
           "evidence_source": "goal_or_statement_shape",
           "label": "rewrite_transport",
-          "provenance": "goal_or_statement_shape:="
-        },
-        {
-          "confidence": 0.68,
-          "evidence_source": "goal_symbols_and_names",
-          "label": "algebraic_computation",
-          "provenance": "goal_symbols_and_names:[+*/^]"
-        },
-        {
-          "confidence": 0.62,
-          "evidence_source": "statement_connectives",
-          "label": "theorem_application",
-          "provenance": "statement_connectives:\u2192"
+          "provenance": "goal_or_statement_shape:\\bmap\\b"
         }
       ],
-      "theorem": "AbsoluteValue.Completion.extensionEmbedding_of_comp_coe",
+      "theorem": "AddCircle.continuousAt_equivIoc",
       "top_premises": [
         {
-          "full_name": "WithAbs.pseudoMetricSpace_induced_of_comp",
-          "reason": "high query-premise embedding similarity (0.797); learned premise ranker score 0.940",
-          "score": 0.8292894201321637
+          "full_name": "AddCircle.continuousAt_equivIco",
+          "reason": "high query-premise embedding similarity (0.844); learned premise ranker score 0.361",
+          "score": 0.4630773817422469
         },
         {
-          "full_name": "UniformSpace.Completion.extension_comp_coe",
-          "reason": "high query-premise embedding similarity (0.830); learned premise ranker score 0.953",
-          "score": 0.8190525209759605
+          "full_name": "AddCircle.homeoIccQuot",
+          "reason": "high query-premise embedding similarity (0.868); learned premise ranker score 0.347",
+          "score": 0.4595280588342955
         },
         {
-          "full_name": "WithAbs.normedField",
-          "reason": "high query-premise embedding similarity (0.795); learned premise ranker score 0.944",
-          "score": 0.8015726086149593
+          "full_name": "AddCircle.continuous_equivIoc_symm",
+          "reason": "high query-premise embedding similarity (0.826); learned premise ranker score 0.358",
+          "score": 0.4579389271413259
         },
         {
-          "full_name": "Valued.closure_coe_completion_v_lt",
-          "reason": "high query-premise embedding similarity (0.814); learned premise ranker score 0.932",
-          "score": 0.7999910254678012
+          "full_name": "AddCircle.continuous_mk'",
+          "reason": "high query-premise embedding similarity (0.839); learned premise ranker score 0.343",
+          "score": 0.4507496549535515
         },
         {
-          "full_name": "AbsoluteValue.comp",
-          "reason": "high query-premise embedding similarity (0.810); learned premise ranker score 0.923",
-          "score": 0.7939230735582385
+          "full_name": "AddCircle.equivAddCircle",
+          "reason": "high query-premise embedding similarity (0.822); learned premise ranker score 0.348",
+          "score": 0.44754807451847156
         }
       ]
     }

@@ -208,6 +208,7 @@ This query is a categorical/action morphism equality. The important proof shape 
 | Field | Value |
 | --- | --- |
 | Split | test |
+| Domain | CategoryTheory / Action |
 | Goal/query text | X.ρ (f a) ≫ g.hom = g.hom ≫ Y.ρ (f a) X.ρ (f a) ≫ g.hom = g.hom ≫ Y.ρ (f a) |
 | Gold premise train coverage | 1.0000 |
 | Gold positive premise count | 4 |
@@ -254,29 +255,30 @@ How to read these neighbors: similar theorems give theorem-level proof templates
 
 Takeaway: the user would first inspect `CategoryTheory.Category, CategoryTheory.MonoidalCategory, CategoryTheory.rightAdjointMate` as candidate dependencies, then compare the query against historical neighbors such as `CategoryTheory.comp_rightAdjointMate, CategoryTheory.comp_leftAdjointMate`. The top strategy facets (`category_morphism_reasoning, case_analysis, rewrite_transport`) summarize the likely proof mode, while the difficulty profile (`easy` / `0.2686`) indicates that this case is expected to be relatively lightweight in the current corpus.
 
-### Case 2: `AList.lookup_to_alist`
+### Case 2: `Affine.Simplex.affineCombination_mem_interior_iff`
 
 This is a held-out theorem-guidance example showing how the retrieval bundle is meant to be used: inspect candidate premises, compare nearby historical theorems/proof states, read strategy facets, and use the difficulty profile as calibration.
 
-This query is a data-structure lookup equality. The useful proof context is concentrated around list/AList conversion, lookup/dlookup lemmas, and historical proofs that normalize finite-map or association-list representations.
+This query is an affine-geometry theorem. The useful proof context is about affine combinations and interior membership, so relevant neighbors should involve affine independence, convex/affine coordinates, and geometric membership conditions.
 
 | Field | Value |
 | --- | --- |
 | Split | test |
-| Goal/query text | lookup a s.toAList = dlookup a s lookup a s.toAList = dlookup a s |
+| Domain | LinearAlgebra / AffineSpace |
+| Goal/query text | (affineCombination k univ s.points) w ∈ s.interior ↔ ∀ (i : Fin (n + 1)), w i ∈ Set.Ioo 0 1 (affineCombination k univ s.points) w ∈ s.interior ↔ ∀ (i : Fin (n + 1)), w i ∈ Set.Ioo 0 1 k : Type u_1 V : Type u_2 P : Type u_3 inst✝⁴ : Ring k inst✝³ : PartialOrder k inst✝² : AddCommGroup V inst✝¹ : Modu |
 | Gold premise train coverage | 1.0000 |
-| Gold positive premise count | 3 |
-| Difficulty | easy / 0.1766 |
+| Gold positive premise count | 2 |
+| Difficulty | easy / 0.3251 |
 
 **Retrieved premises.**
 
 | Rank | Premise | Score | Why it appears |
 | --- | --- | --- | --- |
-| 1 | List.toAList | 0.8201 | high query-premise embedding similarity (0.865); learned premise ranker score 0.937 |
-| 2 | List.lookupAll_eq_dlookup | 0.7677 | high query-premise embedding similarity (0.793); learned premise ranker score 0.883 |
-| 3 | List.dlookup | 0.7574 | high query-premise embedding similarity (0.777); learned premise ranker score 0.873 |
-| 4 | AList.lookup_to_alist | 0.7551 | high query-premise embedding similarity (0.850); learned premise ranker score 0.892 |
-| 5 | List.dlookup_kunion_eq_some | 0.7545 | high query-premise embedding similarity (0.791); learned premise ranker score 0.860 |
+| 1 | Affine.Simplex.centroid_eq_affineCombination_of_pointsWithCircumcenter | 0.4887 | high query-premise embedding similarity (0.799); learned premise ranker score 0.373 |
+| 2 | Affine.Simplex.eq_mongePoint_of_forall_mem_mongePlane | 0.4682 | high query-premise embedding similarity (0.820); learned premise ranker score 0.382 |
+| 3 | Affine.Simplex.face_centroid_eq_iff | 0.4660 | high query-premise embedding similarity (0.820); learned premise ranker score 0.378 |
+| 4 | Affine.Simplex.reflection_circumcenter_eq_affineCombination_of_pointsWithCircumcenter | 0.4643 | high query-premise embedding similarity (0.812); learned premise ranker score 0.377 |
+| 5 | Affine.Simplex.point_eq_affineCombination_of_pointsWithCircumcenter | 0.4642 | high query-premise embedding similarity (0.801); learned premise ranker score 0.380 |
 
 How to read this table: these are candidate dependencies a user would inspect first. The score combines embedding similarity and reranker signals; the reason column shows why the system surfaced each premise.
 
@@ -284,16 +286,16 @@ How to read this table: these are candidate dependencies a user would inspect fi
 
 | Rank | Similar theorem | Score |
 | --- | --- | --- |
-| 1 | Plausible.TotalFunction.apply_eq_dlookup | 0.8804 |
-| 2 | AList.toFinmap_eq | 0.8740 |
-| 3 | AList.insertRec_insert | 0.8728 |
-| 4 | List.mem_orderedInsert | 0.8607 |
+| 1 | affineCombination_mem_affineSpan | 0.8675 |
+| 2 | sbtw_of_sbtw_of_sbtw_of_mem_affineSpan_pair | 0.8665 |
+| 3 | Affine.Simplex.reflection_circumcenter_eq_affineCombination_of_pointsWithCircumcenter | 0.8599 |
+| 4 | Affine.Simplex.eq_mongePoint_of_forall_mem_mongePlane | 0.8581 |
 
 | Rank | Similar proof state | Score | Neighbor goal |
 | --- | --- | --- | --- |
-| 1 | Plausible.TotalFunction.apply_eq_dlookup | 0.8834 | (withDefault m y).apply x = (List.dlookup x m).getD y |
-| 2 | Finmap.keys_union | 0.8816 | ∀ (a : α), a ∈ (⟦s₁⟧ ∪ ⟦s₂⟧).keys ↔ a ∈ ⟦s₁⟧.keys ∪ ⟦s₂⟧.keys |
-| 3 | AList.insertRec_insert | 0.8816 | HEq (insertRec H0 IH { entries := c :: l, nodupKeys := ⋯ })     (IH c.fst c.snd { entries := l, nodupKeys := hl } h (insertRec H0 IH { entri |
+| 1 | sbtw_of_sbtw_of_sbtw_of_mem_affineSpan_pair | 0.8806 | Sbtw R ((Finset.affineCombination R Finset.univ t.points) (Finset.affineCombinationSingleWeights R i₁))     ((Finset.affineCombination R Fin |
+| 2 | mem_affineSpan_iff_eq_weightedVSubOfPoint_vadd | 0.8715 | (Finset.affineCombination k (insert j s) p) w' ∈ affineSpan k (Set.range p) |
+| 3 | affineCombination_mem_affineSpan | 0.8703 | (Finset.affineCombination k s p) w -ᵥ p i1 ∈ (affineSpan k (Set.range p)).direction |
 
 How to read these neighbors: similar theorems give theorem-level proof templates, while similar proof states show local goal shapes that appeared in historical proofs.
 
@@ -301,13 +303,13 @@ How to read these neighbors: similar theorems give theorem-level proof templates
 
 | Rank | Facet | Confidence | Evidence |
 | --- | --- | --- | --- |
-| 1 | rewrite_transport | 0.7200 | goal_or_statement_shape:= |
-| 2 | simplification_normalization | 0.7000 | lemma_name_or_statement:\bto[A-Z] |
-| 3 | induction_recursion | 0.6600 | name_context_or_statement:\bList\b |
-| 4 | typeclass_instance_resolution | 0.6600 | context_typeclass_bindings:\binst[^\s:]*\s*: |
+| 1 | rewrite_transport | 0.7600 | goal_or_statement_shape:↔;= |
+| 2 | set_membership_reasoning | 0.7400 | goal_symbols_and_names:∈;\bSet\. |
+| 3 | algebraic_computation | 0.7200 | goal_symbols_and_names:\bring\b;[+*/^] |
+| 4 | typeclass_instance_resolution | 0.7000 | context_typeclass_bindings:\binst[^\s:]*\s*:;\bRing\b |
 | 5 | theorem_application | 0.6200 | statement_connectives:→ |
 
-Takeaway: the user would first inspect `List.toAList, List.lookupAll_eq_dlookup, List.dlookup` as candidate dependencies, then compare the query against historical neighbors such as `Plausible.TotalFunction.apply_eq_dlookup, AList.toFinmap_eq`. The top strategy facets (`rewrite_transport, simplification_normalization, induction_recursion`) summarize the likely proof mode, while the difficulty profile (`easy` / `0.1766`) indicates that this case is expected to be relatively lightweight in the current corpus.
+Takeaway: the user would first inspect `Affine.Simplex.centroid_eq_affineCombination_of_pointsWithCircumcenter, Affine.Simplex.eq_mongePoint_of_forall_mem_mongePlane, Affine.Simplex.face_centroid_eq_iff` as candidate dependencies, then compare the query against historical neighbors such as `affineCombination_mem_affineSpan, sbtw_of_sbtw_of_sbtw_of_mem_affineSpan_pair`. The top strategy facets (`rewrite_transport, set_membership_reasoning, algebraic_computation`) summarize the likely proof mode, while the difficulty profile (`easy` / `0.3251`) indicates that this case is expected to be relatively lightweight in the current corpus.
 
 ## Interpretation
 

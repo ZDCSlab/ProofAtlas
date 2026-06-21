@@ -254,27 +254,72 @@ def _top_domains(domain_counts: dict[str, list[dict[str, Any]]], split: str = "t
     return sorted(domain_counts.get(split, []), key=lambda row: int(row["theorems"]), reverse=True)[:n]
 
 
+def _theorem_domain_lookup(split: str = "test") -> dict[str, dict[str, str]]:
+    path = Path(f"data/processed/{split}/theorems.parquet")
+    if not path.exists():
+        return {}
+    rows = pd.read_parquet(path, columns=["full_name", "domain_tag", "subdomain_tag"])
+    return {
+        str(row["full_name"]): {
+            "domain_tag": str(row.get("domain_tag") or ""),
+            "subdomain_tag": str(row.get("subdomain_tag") or ""),
+        }
+        for row in rows.to_dict(orient="records")
+    }
+
+
 def _sample_guidance_cases(limit: int = 3) -> list[dict[str, Any]]:
     cases = read_json("outputs/reports/theorem_retrieval_case_studies.json", [])
     if not isinstance(cases, list):
         return []
     compact = []
-    ranked_cases = sorted(
-        cases,
-        key=lambda row: (
+    domain_lookup = _theorem_domain_lookup("test")
+    preferred_domains = {
+        "CategoryTheory",
+        "Analysis",
+        "Topology",
+        "Algebra",
+        "LinearAlgebra",
+        "MeasureTheory",
+        "RingTheory",
+        "NumberTheory",
+        "Geometry",
+        "GroupTheory",
+        "Probability",
+        "Order",
+        "FieldTheory",
+    }
+
+    def priority(row: dict[str, Any]) -> tuple[int, float, int, str]:
+        name = str(row.get("full_name") or row.get("theorem_id") or "")
+        domain = str(row.get("domain_tag") or domain_lookup.get(name, {}).get("domain_tag") or "")
+        return (
+            0 if domain in preferred_domains else 1,
             -float(row.get("gold_premise_train_coverage") or 0.0),
             -int(row.get("gold_positive_premise_count") or 0),
-            str(row.get("full_name") or row.get("theorem_id") or ""),
-        ),
+            name,
+        )
+
+    ranked_cases = sorted(
+        cases,
+        key=priority,
     )
     for case in ranked_cases[:limit]:
         guidance = case.get("guidance", {}) if isinstance(case, dict) else {}
         query = guidance.get("query", {}) if isinstance(guidance, dict) else {}
         query_text = "\n".join([str(query.get("full_name") or ""), str(query.get("goal_text") or ""), str(query.get("retrieval_text") or "")])
+        theorem_name = str(case.get("full_name") or case.get("theorem_id") or "")
+        domain_info = domain_lookup.get(theorem_name, {})
+        ranked_premises = [
+            row for row in (guidance.get("ranked_premises") or [])
+            if isinstance(row, dict) and str(row.get("full_name") or "") != theorem_name
+        ]
         compact.append(
             {
-                "theorem": case.get("full_name") or case.get("theorem_id"),
+                "theorem": theorem_name,
                 "split": case.get("split", ""),
+                "domain": case.get("domain_tag") or domain_info.get("domain_tag", ""),
+                "subdomain": case.get("subdomain_tag") or domain_info.get("subdomain_tag", ""),
                 "goal_text": str(query.get("goal_text") or "")[:300],
                 "gold_positive_premise_count": case.get("gold_positive_premise_count"),
                 "gold_premise_train_coverage": case.get("gold_premise_train_coverage"),
@@ -284,7 +329,7 @@ def _sample_guidance_cases(limit: int = 3) -> list[dict[str, Any]]:
                         "score": row.get("score"),
                         "reason": "; ".join((row.get("ranking_reasons") or [])[:2]) or str(row.get("explanation") or "")[:140],
                     }
-                    for row in (guidance.get("ranked_premises") or [])[:5]
+                    for row in ranked_premises[:5]
                 ],
                 "similar_theorems": [
                     {
@@ -325,6 +370,21 @@ def _case_overview(case: dict[str, Any]) -> str:
             "This query is a data-structure lookup equality. The useful proof context is concentrated around list/AList conversion, "
             "lookup/dlookup lemmas, and historical proofs that normalize finite-map or association-list representations."
         )
+    if "Continuous" in text or "continuous" in text or "𝓝" in text or "Filter" in text:
+        return (
+            "This query is a topology/continuity theorem. The useful proof context is about transporting continuity through a specific equivalence or map, "
+            "so the retrieved neighbors should surface continuity, neighborhood/filter, and map-composition proof patterns."
+        )
+    if "Simplex" in text or "affineCombination" in text or "interior" in text or "Affine" in text:
+        return (
+            "This query is an affine-geometry theorem. The useful proof context is about affine combinations and interior membership, "
+            "so relevant neighbors should involve affine independence, convex/affine coordinates, and geometric membership conditions."
+        )
+    if "Etale" in text or "algEquiv" in text or "Algebra." in text:
+        return (
+            "This query is an algebra/ring-theory theorem about structural equivalences. The useful proof context should emphasize algebra maps, "
+            "equivalences, product decompositions, and transport of algebraic properties."
+        )
     return (
         "This query illustrates the general theorem-guidance workflow: retrieve candidate premises, inspect nearby historical theorem/proof-state "
         "patterns, then use strategy facets and difficulty as calibration rather than as a generated proof."
@@ -362,6 +422,7 @@ def _case_study_markdown(cases: list[dict[str, Any]]) -> list[str]:
                     ["Field", "Value"],
                     [
                         ["Split", case.get("split", "n/a")],
+                        ["Domain", f"{case.get('domain', 'n/a')} / {case.get('subdomain', 'n/a')}"],
                         ["Goal/query text", str(case.get("goal_text") or "n/a").replace("\n", " ")],
                         ["Gold premise train coverage", _fmt(case.get("gold_premise_train_coverage"))],
                         ["Gold positive premise count", case.get("gold_positive_premise_count", "n/a")],
