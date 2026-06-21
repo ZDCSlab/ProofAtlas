@@ -3,8 +3,10 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
+import numpy as np
 import pandas as pd
 import pyarrow.parquet as pq
+from scipy import sparse
 
 from .utils import read_json, write_json
 
@@ -41,6 +43,167 @@ def _table(headers: list[str], rows: list[list[Any]]) -> str:
 def _top_by_split(rows: list[dict[str, Any]], split: str, key: str, n: int = 8) -> list[dict[str, Any]]:
     filtered = [row for row in rows if str(row.get("split")) == split]
     return sorted(filtered, key=lambda row: float(row.get(key, 0)), reverse=True)[:n]
+
+
+def _load_embedding(split: str, kind: str) -> np.ndarray:
+    matrix = sparse.load_npz(f"outputs/embeddings/{split}_{kind}_embeddings.npz")
+    if sparse.issparse(matrix):
+        matrix = matrix.toarray()
+    matrix = np.asarray(matrix, dtype=np.float32)
+    norms = np.linalg.norm(matrix, axis=1, keepdims=True)
+    return matrix / np.maximum(norms, 1e-12)
+
+
+def _embedding_ids(split: str, entity_type: str) -> list[str]:
+    meta = pd.read_parquet(f"outputs/embeddings/{split}_embedding_metadata.parquet")
+    rows = meta[meta["entity_type"] == entity_type].sort_values("row_index")
+    return [str(value) for value in rows["entity_id"].tolist()]
+
+
+def _topk_neighbors(query: np.ndarray, candidates: np.ndarray, k: int = 10, batch_size: int = 256) -> tuple[np.ndarray, np.ndarray]:
+    all_idx = []
+    all_scores = []
+    top_k = min(k, len(candidates))
+    for start in range(0, len(query), batch_size):
+        sims = query[start : start + batch_size] @ candidates.T
+        idx = np.argpartition(-sims, kth=top_k - 1, axis=1)[:, :top_k]
+        scores = np.take_along_axis(sims, idx, axis=1)
+        order = np.argsort(-scores, axis=1)
+        all_idx.append(np.take_along_axis(idx, order, axis=1))
+        all_scores.append(np.take_along_axis(scores, order, axis=1))
+    return np.vstack(all_idx), np.vstack(all_scores)
+
+
+def _labels_by_proof_state(split: str) -> dict[str, set[str]]:
+    path = Path(f"data/processed/{split}/proof_state_techniques.parquet")
+    if not path.exists():
+        return {}
+    rows = pd.read_parquet(path)
+    if rows.empty:
+        return {}
+    rows["proof_state_id"] = rows["proof_state_id"].astype(str)
+    rows["label"] = rows["label"].astype(str)
+    return {proof_state_id: set(group["label"]) for proof_state_id, group in rows.groupby("proof_state_id")}
+
+
+def _features_by_proof_state(split: str) -> pd.DataFrame:
+    path = Path(f"data/processed/{split}/proof_state_features.parquet")
+    if not path.exists():
+        return pd.DataFrame()
+    frame = pd.read_parquet(path)
+    if "id" in frame.columns:
+        frame["id"] = frame["id"].astype(str)
+        frame = frame.set_index("id", drop=False)
+    return frame
+
+
+def _strategy_retrieval_evaluation(k: int = 10) -> dict[str, Any]:
+    try:
+        train_ids = _embedding_ids("train", "ProofState")
+        test_ids = _embedding_ids("test", "ProofState")
+        train_x = _load_embedding("train", "proof_state")
+        test_x = _load_embedding("test", "proof_state")
+    except FileNotFoundError:
+        return {"available": False, "reason": "missing_embedding_artifacts"}
+    train_labels = _labels_by_proof_state("train")
+    test_labels = _labels_by_proof_state("test")
+    neighbor_idx, neighbor_scores = _topk_neighbors(test_x, train_x, k=k)
+    label_recall_at_1 = []
+    label_recall_at_3 = []
+    label_recall_at_5 = []
+    label_recall_at_10 = []
+    any_hit_at_1 = []
+    any_hit_at_3 = []
+    any_hit_at_5 = []
+    any_hit_at_10 = []
+    for row_idx, proof_state_id in enumerate(test_ids):
+        gold = test_labels.get(proof_state_id, set())
+        if not gold:
+            continue
+        scored: dict[str, float] = {}
+        for col_idx, train_row in enumerate(neighbor_idx[row_idx]):
+            labels = train_labels.get(train_ids[int(train_row)], set())
+            weight = max(float(neighbor_scores[row_idx, col_idx]), 0.0)
+            for label in labels:
+                scored[label] = scored.get(label, 0.0) + weight
+        ranked = [label for label, _ in sorted(scored.items(), key=lambda item: (-item[1], item[0]))]
+        for cutoff, recalls, hits in [
+            (1, label_recall_at_1, any_hit_at_1),
+            (3, label_recall_at_3, any_hit_at_3),
+            (5, label_recall_at_5, any_hit_at_5),
+            (10, label_recall_at_10, any_hit_at_10),
+        ]:
+            pred = set(ranked[:cutoff])
+            recalls.append(len(gold & pred) / len(gold))
+            hits.append(float(bool(gold & pred)))
+    evaluated = len(label_recall_at_1)
+    return {
+        "available": True,
+        "task": "test_proof_state_to_train_proof_state_strategy_label_retrieval",
+        "neighbor_k": k,
+        "evaluated_queries": evaluated,
+        "label_recall@1": float(np.mean(label_recall_at_1)) if evaluated else 0.0,
+        "label_recall@3": float(np.mean(label_recall_at_3)) if evaluated else 0.0,
+        "label_recall@5": float(np.mean(label_recall_at_5)) if evaluated else 0.0,
+        "label_recall@10": float(np.mean(label_recall_at_10)) if evaluated else 0.0,
+        "any_label_hit@1": float(np.mean(any_hit_at_1)) if evaluated else 0.0,
+        "any_label_hit@3": float(np.mean(any_hit_at_3)) if evaluated else 0.0,
+        "any_label_hit@5": float(np.mean(any_hit_at_5)) if evaluated else 0.0,
+        "any_label_hit@10": float(np.mean(any_hit_at_10)) if evaluated else 0.0,
+    }
+
+
+def _difficulty_retrieval_evaluation(k: int = 10) -> dict[str, Any]:
+    try:
+        train_ids = _embedding_ids("train", "ProofState")
+        test_ids = _embedding_ids("test", "ProofState")
+        train_x = _load_embedding("train", "proof_state")
+        test_x = _load_embedding("test", "proof_state")
+    except FileNotFoundError:
+        return {"available": False, "reason": "missing_embedding_artifacts"}
+    train_features = _features_by_proof_state("train")
+    test_features = _features_by_proof_state("test")
+    if train_features.empty or test_features.empty:
+        return {"available": False, "reason": "missing_difficulty_features"}
+    neighbor_idx, neighbor_scores = _topk_neighbors(test_x, train_x, k=k)
+    y_true = []
+    y_pred = []
+    bucket_hits = []
+    for row_idx, proof_state_id in enumerate(test_ids):
+        if proof_state_id not in test_features.index:
+            continue
+        neighbor_ids = [train_ids[int(i)] for i in neighbor_idx[row_idx]]
+        neighbor_rows = train_features.reindex(neighbor_ids).dropna(subset=["theorem_complexity_score", "difficulty_bucket"])
+        if neighbor_rows.empty:
+            continue
+        scores = np.maximum(neighbor_scores[row_idx, : len(neighbor_ids)], 0.0)
+        scores = scores[[neighbor_id in neighbor_rows.index for neighbor_id in neighbor_ids]]
+        if float(scores.sum()) <= 0:
+            scores = np.ones(len(neighbor_rows), dtype=np.float32)
+        pred_score = float(np.average(neighbor_rows["theorem_complexity_score"].astype(float).to_numpy(), weights=scores))
+        bucket_votes: dict[str, float] = {}
+        for bucket, weight in zip(neighbor_rows["difficulty_bucket"].astype(str), scores, strict=False):
+            bucket_votes[bucket] = bucket_votes.get(bucket, 0.0) + float(weight)
+        pred_bucket = max(bucket_votes.items(), key=lambda item: (item[1], item[0]))[0]
+        test_row = test_features.loc[proof_state_id]
+        y_true.append(float(test_row["theorem_complexity_score"]))
+        y_pred.append(pred_score)
+        bucket_hits.append(float(pred_bucket == str(test_row["difficulty_bucket"])))
+    if not y_true:
+        return {"available": True, "task": "test_proof_state_to_train_proof_state_difficulty_profile_retrieval", "evaluated_queries": 0}
+    true = np.asarray(y_true, dtype=float)
+    pred = np.asarray(y_pred, dtype=float)
+    return {
+        "available": True,
+        "task": "test_proof_state_to_train_proof_state_difficulty_profile_retrieval",
+        "neighbor_k": k,
+        "evaluated_queries": int(len(true)),
+        "retrieved_profile_mae": float(np.mean(np.abs(true - pred))),
+        "retrieved_profile_rmse": float(np.sqrt(np.mean((true - pred) ** 2))),
+        "bucket_accuracy": float(np.mean(bucket_hits)),
+        "mean_retrieved_score": float(pred.mean()),
+        "mean_target_score": float(true.mean()),
+    }
 
 
 def _processed_counts() -> dict[str, dict[str, int]]:
@@ -146,16 +309,18 @@ def _prediction_bundle() -> dict[str, Any]:
             "index_benchmark": benchmark.get("entities", {}),
         },
         "proof_strategy_hinting": {
-            "method": "query rule labels plus embedding-neighbor aggregation from retrieved similar proof states",
+            "method": "retrieve similar train proof states and aggregate their weak strategy labels; query rule labels are retained as evidence when available",
             "label_distribution": _csv_records("outputs/reports/proof_technique_distribution.csv"),
             "candidate_pool": read_json("outputs/reports/proof_technique_candidate_pool.json", []),
             "label_coverage": metrics.get("proof_technique_label_coverage"),
+            "retrieval_evaluation": _strategy_retrieval_evaluation(),
         },
         "difficulty_prediction": {
-            "method": "relative complexity score from proof length, tactic index, premise counts, namespace rarity, and negative-candidate hardness",
+            "method": "retrieve historical difficulty profiles from similar train proof states and calibrate them against relative complexity buckets",
             "distribution": _csv_records("outputs/reports/difficulty_distribution.csv"),
             "target_report": difficulty_target,
             "estimator_metrics": difficulty,
+            "retrieval_evaluation": _difficulty_retrieval_evaluation(),
         },
         "sample_prediction_cases": _sample_guidance_cases(),
     }
@@ -170,7 +335,9 @@ def _write_markdown(bundle: dict[str, Any], output_path: str | Path) -> None:
     graph_train = bundle["proof_pattern_prediction"]["graph_stats"].get("train", {})
     index_entities = bundle["proof_pattern_prediction"]["index_benchmark"]
     technique_rows = _top_by_split(bundle["proof_strategy_hinting"]["label_distribution"], "test", "count", n=10)
+    strategy_retrieval = bundle["proof_strategy_hinting"].get("retrieval_evaluation", {})
     difficulty_rows = bundle["difficulty_prediction"]["distribution"]
+    difficulty_retrieval = bundle["difficulty_prediction"].get("retrieval_evaluation", {})
     processed = bundle["processed_data"]["splits"]
 
     md = [
@@ -178,7 +345,7 @@ def _write_markdown(bundle: dict[str, Any], output_path: str | Path) -> None:
         "",
         "## Research Framing",
         "",
-        "ProofAtlas is framed as a research dataset and retrieval study for LeanRank-style formal proof guidance. The deliverable is not a production proof assistant; it is a processed theorem/proof-state/premise dataset plus prediction artifacts for premise retrieval, proof-pattern retrieval, proof-strategy hinting, and difficulty estimation.",
+        "ProofAtlas is framed as a research dataset and retrieval study for LeanRank-style formal proof guidance. The deliverable is not a production proof assistant; it is a processed theorem/proof-state/premise dataset plus retrieval-grounded prediction artifacts for premise retrieval, proof-pattern retrieval, strategy retrieval, and difficulty-profile retrieval.",
         "",
         "## Local Deliverables",
         "",
@@ -210,7 +377,7 @@ def _write_markdown(bundle: dict[str, Any], output_path: str | Path) -> None:
             ],
         ),
         "",
-        "## 1. Premise Prediction",
+        "## 1. Premise Retrieval",
         "",
         _table(
             ["Task", "Queries", "Recall@1", "Recall@5", "Recall@10", "Recall@100", "MRR", "MAP", "nDCG@10"],
@@ -242,9 +409,9 @@ def _write_markdown(bundle: dict[str, Any], output_path: str | Path) -> None:
         "",
         f"The learned premise reranker reaches validation AUC `{_fmt(reranker.get('validation_auc'))}`. On the small full-rerank diagnostic sample, reranked proof-state Recall@10 is `{_fmt(reranker.get('reranked_Recall@10'))}` and hybrid candidate reranking reaches `{_fmt(reranker.get('hybrid_reranked_Recall@10'))}`.",
         "",
-        "## 2. Proof Pattern Prediction",
+        "## 2. Proof Pattern Retrieval",
         "",
-        "Proof-pattern prediction is represented by similar theorem retrieval, similar proof-state retrieval, and graph-neighborhood evidence rather than a discrete classifier.",
+        "Proof-pattern prediction is represented as retrieval: theorem-to-theorem neighbors, proof-state-to-proof-state neighbors, and graph-neighborhood evidence rather than a discrete classifier.",
         "",
         _table(
             ["Pattern signal", "Value"],
@@ -271,20 +438,44 @@ def _write_markdown(bundle: dict[str, Any], output_path: str | Path) -> None:
             ],
         ),
         "",
-        "## 3. Proof Strategy Hinting",
+        "## 3. Strategy Retrieval",
         "",
-        "Proof strategy hinting now combines deterministic rule labels with embedding-similarity evidence from retrieved similar proof states. This is intentionally reported as weak strategy hinting, not as a supervised strategy classifier.",
+        "Strategy is treated as retrieval-grounded hinting. Historical proof states receive weak technique labels, and a query retrieves similar train proof states before aggregating their labels. This avoids claiming a supervised strategy classifier while still making the strategy signal measurable.",
+        "",
+        _table(
+            ["Strategy retrieval metric", "Value"],
+            [
+                ["Evaluated test proof states", strategy_retrieval.get("evaluated_queries", "n/a")],
+                ["Label Recall@1", _fmt(strategy_retrieval.get("label_recall@1"))],
+                ["Label Recall@3", _fmt(strategy_retrieval.get("label_recall@3"))],
+                ["Label Recall@5", _fmt(strategy_retrieval.get("label_recall@5"))],
+                ["Any-label Hit@1", _fmt(strategy_retrieval.get("any_label_hit@1"))],
+                ["Any-label Hit@3", _fmt(strategy_retrieval.get("any_label_hit@3"))],
+            ],
+        ),
         "",
         _table(
             ["Technique label", "Test count"],
             [[row.get("label"), row.get("count")] for row in technique_rows],
         ),
         "",
-        f"Proof-technique label coverage is `{_fmt(bundle['proof_strategy_hinting'].get('label_coverage'))}`. The labels are used as interpretable guidance and as a reranker feature; the ablation shows they are auxiliary rather than the main retrieval signal.",
+        f"Proof-technique label coverage is `{_fmt(bundle['proof_strategy_hinting'].get('label_coverage'))}`. These labels are weak supervision for retrieval evidence, not ground-truth proof-strategy annotations.",
         "",
-        "## 4. Difficulty Prediction",
+        "## 4. Difficulty Retrieval",
         "",
-        "Difficulty is a relative research proxy derived from proof-state and theorem complexity signals. Buckets use a split-local distribution policy: easy is the lower 50%, medium is the next 35%, and hard is the top 15%.",
+        "Difficulty is treated as historical profile retrieval. A query proof state retrieves similar train proof states, aggregates their complexity profiles, and reports a calibrated relative score/bucket. Buckets use a split-local distribution policy: easy is the lower 50%, medium is the next 35%, and hard is the top 15%.",
+        "",
+        _table(
+            ["Difficulty retrieval metric", "Value"],
+            [
+                ["Evaluated test proof states", difficulty_retrieval.get("evaluated_queries", "n/a")],
+                ["Retrieved-profile MAE", _fmt(difficulty_retrieval.get("retrieved_profile_mae"))],
+                ["Retrieved-profile RMSE", _fmt(difficulty_retrieval.get("retrieved_profile_rmse"))],
+                ["Bucket accuracy", _fmt(difficulty_retrieval.get("bucket_accuracy"))],
+                ["Mean retrieved score", _fmt(difficulty_retrieval.get("mean_retrieved_score"))],
+                ["Mean target score", _fmt(difficulty_retrieval.get("mean_target_score"))],
+            ],
+        ),
         "",
         _table(
             ["Split", "Bucket", "Count"],
@@ -309,7 +500,7 @@ def _write_markdown(bundle: dict[str, Any], output_path: str | Path) -> None:
         "",
         "## Interpretation",
         "",
-        "The strongest quantitative result is theorem-level premise retrieval. Proof-state-level premise retrieval is harder and remains candidate-generation limited, so it should be presented as a baseline and diagnostic target rather than as a solved proof-step predictor. Proof strategies and difficulty are research-facing guidance signals: useful for explanation, slicing, and retrieval policy, but not claims of verified proof synthesis.",
+        "The strongest quantitative result is theorem-level premise retrieval. Proof-state-level premise retrieval is harder and remains candidate-generation limited, but it is still useful as the local-neighbor substrate for strategy retrieval, difficulty-profile retrieval, and explanation. The current theorem-disjoint train/val/test split has no theorem leakage, so the split is suitable for this research framing; future split changes should be motivated by domain-balance or retrieval-coverage studies rather than by leakage repair.",
         "",
     ]
     Path(output_path).parent.mkdir(parents=True, exist_ok=True)

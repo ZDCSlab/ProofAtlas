@@ -184,7 +184,18 @@
         "rows": 2822
       }
     },
-    "method": "relative complexity score from proof length, tactic index, premise counts, namespace rarity, and negative-candidate hardness",
+    "method": "retrieve historical difficulty profiles from similar train proof states and calibrate them against relative complexity buckets",
+    "retrieval_evaluation": {
+      "available": true,
+      "bucket_accuracy": 0.5230920406157877,
+      "evaluated_queries": 3053,
+      "mean_retrieved_score": 0.205024210731232,
+      "mean_target_score": 0.2517652891631045,
+      "neighbor_k": 10,
+      "retrieved_profile_mae": 0.0819019205195455,
+      "retrieved_profile_rmse": 0.1278442930285584,
+      "task": "test_proof_state_to_train_proof_state_difficulty_profile_retrieval"
+    },
     "target_report": {
       "splits": [
         {
@@ -25889,7 +25900,21 @@
         "split": "demo"
       }
     ],
-    "method": "query rule labels plus embedding-neighbor aggregation from retrieved similar proof states"
+    "method": "retrieve similar train proof states and aggregate their weak strategy labels; query rule labels are retained as evidence when available",
+    "retrieval_evaluation": {
+      "any_label_hit@1": 0.9025522041763341,
+      "any_label_hit@10": 0.9876256767208044,
+      "any_label_hit@3": 0.9787316318638825,
+      "any_label_hit@5": 0.9876256767208044,
+      "available": true,
+      "evaluated_queries": 2586,
+      "label_recall@1": 0.47815158546017017,
+      "label_recall@10": 0.9482147460685743,
+      "label_recall@3": 0.902700438257283,
+      "label_recall@5": 0.9467839649394173,
+      "neighbor_k": 10,
+      "task": "test_proof_state_to_train_proof_state_strategy_label_retrieval"
+    }
   },
   "sample_prediction_cases": [
     {

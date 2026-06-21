@@ -2,7 +2,7 @@
 
 ## Research Framing
 
-ProofAtlas is framed as a research dataset and retrieval study for LeanRank-style formal proof guidance. The deliverable is not a production proof assistant; it is a processed theorem/proof-state/premise dataset plus prediction artifacts for premise retrieval, proof-pattern retrieval, proof-strategy hinting, and difficulty estimation.
+ProofAtlas is framed as a research dataset and retrieval study for LeanRank-style formal proof guidance. The deliverable is not a production proof assistant; it is a processed theorem/proof-state/premise dataset plus retrieval-grounded prediction artifacts for premise retrieval, proof-pattern retrieval, strategy retrieval, and difficulty-profile retrieval.
 
 ## Local Deliverables
 
@@ -23,7 +23,7 @@ ProofAtlas is framed as a research dataset and retrieval study for LeanRank-styl
 | test | 1000 | 3053 | 38332 | 7054 | 68132 |
 | demo | 292 | 900 | 1416 | 900 | 900 |
 
-## 1. Premise Prediction
+## 1. Premise Retrieval
 
 | Task | Queries | Recall@1 | Recall@5 | Recall@10 | Recall@100 | MRR | MAP | nDCG@10 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -32,9 +32,9 @@ ProofAtlas is framed as a research dataset and retrieval study for LeanRank-styl
 
 The learned premise reranker reaches validation AUC `0.8237`. On the small full-rerank diagnostic sample, reranked proof-state Recall@10 is `0.1250` and hybrid candidate reranking reaches `0.1557`.
 
-## 2. Proof Pattern Prediction
+## 2. Proof Pattern Retrieval
 
-Proof-pattern prediction is represented by similar theorem retrieval, similar proof-state retrieval, and graph-neighborhood evidence rather than a discrete classifier.
+Proof-pattern prediction is represented as retrieval: theorem-to-theorem neighbors, proof-state-to-proof-state neighbors, and graph-neighborhood evidence rather than a discrete classifier.
 
 | Pattern signal | Value |
 | --- | --- |
@@ -50,9 +50,18 @@ Proof-pattern prediction is represented by similar theorem retrieval, similar pr
 | proof_state | 23723 | hnswlib | 0.7790 | 0.9520 |
 | theorem | 8000 | hnswlib | 0.2248 | 0.9900 |
 
-## 3. Proof Strategy Hinting
+## 3. Strategy Retrieval
 
-Proof strategy hinting now combines deterministic rule labels with embedding-similarity evidence from retrieved similar proof states. This is intentionally reported as weak strategy hinting, not as a supervised strategy classifier.
+Strategy is treated as retrieval-grounded hinting. Historical proof states receive weak technique labels, and a query retrieves similar train proof states before aggregating their labels. This avoids claiming a supervised strategy classifier while still making the strategy signal measurable.
+
+| Strategy retrieval metric | Value |
+| --- | --- |
+| Evaluated test proof states | 2586 |
+| Label Recall@1 | 0.4782 |
+| Label Recall@3 | 0.9027 |
+| Label Recall@5 | 0.9468 |
+| Any-label Hit@1 | 0.9026 |
+| Any-label Hit@3 | 0.9787 |
 
 | Technique label | Test count |
 | --- | --- |
@@ -67,11 +76,20 @@ Proof strategy hinting now combines deterministic rule labels with embedding-sim
 | induction | 9 |
 | automation | 3 |
 
-Proof-technique label coverage is `0.8546`. The labels are used as interpretable guidance and as a reranker feature; the ablation shows they are auxiliary rather than the main retrieval signal.
+Proof-technique label coverage is `0.8546`. These labels are weak supervision for retrieval evidence, not ground-truth proof-strategy annotations.
 
-## 4. Difficulty Prediction
+## 4. Difficulty Retrieval
 
-Difficulty is a relative research proxy derived from proof-state and theorem complexity signals. Buckets use a split-local distribution policy: easy is the lower 50%, medium is the next 35%, and hard is the top 15%.
+Difficulty is treated as historical profile retrieval. A query proof state retrieves similar train proof states, aggregates their complexity profiles, and reports a calibrated relative score/bucket. Buckets use a split-local distribution policy: easy is the lower 50%, medium is the next 35%, and hard is the top 15%.
+
+| Difficulty retrieval metric | Value |
+| --- | --- |
+| Evaluated test proof states | 3053 |
+| Retrieved-profile MAE | 0.0819 |
+| Retrieved-profile RMSE | 0.1278 |
+| Bucket accuracy | 0.5231 |
+| Mean retrieved score | 0.2050 |
+| Mean target score | 0.2518 |
 
 | Split | Bucket | Count |
 | --- | --- | --- |
@@ -96,4 +114,4 @@ Difficulty is a relative research proxy derived from proof-state and theorem com
 
 ## Interpretation
 
-The strongest quantitative result is theorem-level premise retrieval. Proof-state-level premise retrieval is harder and remains candidate-generation limited, so it should be presented as a baseline and diagnostic target rather than as a solved proof-step predictor. Proof strategies and difficulty are research-facing guidance signals: useful for explanation, slicing, and retrieval policy, but not claims of verified proof synthesis.
+The strongest quantitative result is theorem-level premise retrieval. Proof-state-level premise retrieval is harder and remains candidate-generation limited, but it is still useful as the local-neighbor substrate for strategy retrieval, difficulty-profile retrieval, and explanation. The current theorem-disjoint train/val/test split has no theorem leakage, so the split is suitable for this research framing; future split changes should be motivated by domain-balance or retrieval-coverage studies rather than by leakage repair.
