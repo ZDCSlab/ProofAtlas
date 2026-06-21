@@ -110,6 +110,23 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                         "full_name_goal": {"metrics": {"Recall@50": 0.45, "Recall@100": 0.55, "MRR": 0.25, "MAP": 0.15}},
                     },
                 },
+                "proof_state_hybrid_candidate_reranked_retrieval": {
+                    "metrics": {"evaluated_queries": 3, "Recall@10": 0.6, "MRR": 0.45, "MAP": 0.35, "nDCG@10": 0.5},
+                    "backend_info": {
+                        "actual_backend": "hybrid_embedding_lexical_union_then_rerank_torch_cuda",
+                        "candidate_k": 50,
+                        "lexical_candidate_k": 50,
+                        "evaluated_queries": 3,
+                    },
+                    "candidate_pool_summary": {
+                        "retrievable_queries": 2,
+                        "embedding_hit_query_share": 0.4,
+                        "lexical_hit_query_share": 0.5,
+                        "union_hit_query_share": 0.7,
+                        "lexical_added_gold_queries": 1,
+                        "mean_union_candidate_count": 83.0,
+                    },
+                },
                 "theorem_retrieval": {
                     "metrics": {"theorem_retrieval_evaluated_theorems": 2, "theorem_retrieval_Recall@10": 0.25},
                     "domain_breakdown": [{"domain_tag": "Algebra", "metrics": {"theorem_retrieval_evaluated_queries": 1, "theorem_retrieval_Recall@10": 0.25}}],
@@ -967,6 +984,10 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "Proof-State Hybrid Candidate Generation Diagnostic" in text
     assert "embedding_topk_vs_lexical_topk_candidate_union" in text
     assert "evaluate_hybrid_lexical_embedding_candidate_union" in text
+    assert "Hybrid Candidate Reranked Retrieval" in text
+    assert "hybrid_embedding_lexical_union_then_rerank_torch_cuda" in text
+    assert "Lexical candidate k: `50`" in text
+    assert "lexical_added_gold_queries" in text
     assert "Theorem candidate-miss diagnosis" in text
     assert "same namespace share" in text
     assert "Mathlib.Algebra.Group.mul_left_cancel" in text

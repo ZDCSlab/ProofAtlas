@@ -676,6 +676,12 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     reranked_proof_metrics = reranked_proof_state.get("metrics", {})
     reranked_backend = reranked_proof_state.get("backend_info", {})
     reranked_candidate_k_ablation = reranked_proof_state.get("candidate_k_ablation", [])
+    hybrid_reranked_proof_state = (
+        test_eval.get("test", {}).get("proof_state_hybrid_candidate_reranked_retrieval", {}) if isinstance(test_eval, dict) else {}
+    )
+    hybrid_reranked_proof_metrics = hybrid_reranked_proof_state.get("metrics", {})
+    hybrid_reranked_backend = hybrid_reranked_proof_state.get("backend_info", {})
+    hybrid_candidate_pool_summary = hybrid_reranked_proof_state.get("candidate_pool_summary", {})
     query_representation_diagnostic = test_eval.get("test", {}).get("proof_state_query_representation_diagnostic", {}) if isinstance(test_eval, dict) else {}
     validation_query_representation_diagnostic = (
         test_eval.get("validation", {}).get("proof_state_query_representation_diagnostic", {}) if isinstance(test_eval, dict) else {}
@@ -1019,6 +1025,31 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
         f"- Evaluated queries: `{reranked_backend.get('evaluated_queries', 'n/a')}`",
         "",
         _metric_table(reranked_proof_metrics, proof_keys),
+        "",
+        "### Hybrid Candidate Reranked Retrieval",
+        "",
+        "This diagnostic turns the lexical+embedding candidate-pool oracle into an actual ranked sample: embedding candidates and lexical TF-IDF candidates are unioned, rescored with embedding similarity, then passed through the existing learned/fixed premise reranker.",
+        "",
+        f"- Backend: `{hybrid_reranked_backend.get('actual_backend', 'n/a')}`",
+        f"- Embedding candidate k: `{hybrid_reranked_backend.get('candidate_k', 'n/a')}`",
+        f"- Lexical candidate k: `{hybrid_reranked_backend.get('lexical_candidate_k', 'n/a')}`",
+        f"- Evaluated queries: `{hybrid_reranked_backend.get('evaluated_queries', 'n/a')}`",
+        "",
+        _metric_table(hybrid_reranked_proof_metrics, proof_keys),
+        "",
+        "Hybrid candidate pool summary:",
+        "",
+        _metric_table(
+            hybrid_candidate_pool_summary,
+            [
+                "retrievable_queries",
+                "embedding_hit_query_share",
+                "lexical_hit_query_share",
+                "union_hit_query_share",
+                "lexical_added_gold_queries",
+                "mean_union_candidate_count",
+            ],
+        ),
         "",
         "#### Rerank Candidate-Depth Ablation",
         "",

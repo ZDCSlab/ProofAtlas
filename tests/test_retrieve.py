@@ -172,7 +172,7 @@ def test_text_query_retrieval_and_theorem_guidance_are_json_serializable(tmp_pat
     monkeypatch.chdir(tmp_path)
     (tmp_path / "configs").mkdir()
     (tmp_path / "configs/sample.yaml").write_text(
-        "dataset_name: erbacher/LeanRank-data\nrandom_seed: 15\nuse_huggingface: false\nsample: {total_rows: 100, small_debug_rows: 100, committed_demo_rows: 100}\nsplit: {train_ratio: 0.8, val_ratio: 0.1, test_ratio: 0.1}\nretrieval: {top_k: [1, 5, 10]}\nsimilarity: {theorem_top_k: 3}\nproof_techniques: {max_labels_per_state: 5, minimum_support: 1}\nembedding: {backend: tfidf}\n",
+        "dataset_name: erbacher/LeanRank-data\nrandom_seed: 15\nuse_huggingface: false\nsample: {total_rows: 100, small_debug_rows: 100, committed_demo_rows: 100}\nsplit: {train_ratio: 0.8, val_ratio: 0.1, test_ratio: 0.1}\nretrieval: {top_k: [1, 5, 10]}\nsimilarity: {theorem_top_k: 3}\nproof_techniques: {max_labels_per_state: 5, minimum_support: 1}\nembedding: {backend: tfidf}\nevaluation: {rerank_max_test_proof_states: 2, rerank_candidate_k: 10, hybrid_rerank_lexical_candidate_k: 10}\n",
         encoding="utf-8",
     )
     cfg = "configs/sample.yaml"
@@ -317,6 +317,9 @@ def test_text_query_retrieval_and_theorem_guidance_are_json_serializable(tmp_pat
     assert "primary_failure_mode" in test_eval["test"]["proof_state_retrieval"]["candidate_miss_diagnosis"]
     assert test_eval["test"]["proof_state_retrieval"]["candidate_generation_diagnostic"]["method"] == "embedding_topk_vs_lexical_topk_candidate_union"
     assert "embedding_lexical_union_candidate_recall" in test_eval["test"]["proof_state_retrieval"]["candidate_generation_diagnostic"]["metrics"]
+    hybrid_rerank = test_eval["test"]["proof_state_hybrid_candidate_reranked_retrieval"]
+    assert hybrid_rerank["backend_info"]["actual_backend"].startswith("hybrid_embedding_lexical_union_then_rerank")
+    assert "lexical_added_gold_queries" in hybrid_rerank["candidate_pool_summary"]
     assert "zero_recall_at_max_k" in test_eval["test"]["proof_state_retrieval"]["failure_profile"]
     assert test_eval["test"]["proof_state_retrieval"]["worst_cases"]
     assert test_eval["test"]["theorem_retrieval"]["worst_cases"]

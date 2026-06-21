@@ -151,6 +151,12 @@ Interpretation:
   is 0.2494 versus embedding top-100 recall 0.2362, and the embedding+lexical
   union candidate oracle reaches 0.3266. Lexical retrieval adds gold premises
   for 367 retrievable proof-state queries that embedding top-100 missed.
+- The first actual hybrid rerank sample now unions embedding and lexical
+  candidates before the existing learned/fixed reranker. On 20 sampled test
+  queries it adds one gold candidate after an embedding miss, but Recall@10
+  remains tied with embedding-only rerank at 0.1689. This means candidate union
+  is useful, but the next accuracy work needs lexical-source/rank features so
+  added candidates are promoted into the top-k output.
 - Reranking helps user-facing examples, but the broad accuracy ceiling is still
   controlled by embedding candidate generation and gold-premise availability in
   the train premise index.

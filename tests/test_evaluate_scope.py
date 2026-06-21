@@ -62,6 +62,11 @@ def test_full_heldout_override_removes_core_evaluation_limits(tmp_path, monkeypa
         "_evaluate_reranked_proof_state_retrieval_split",
         lambda *args, **kwargs: {"metrics": {}, "backend_info": {}, "candidate_k_ablation": [], "examples": [], "per_query": []},
     )
+    monkeypatch.setattr(
+        evaluate,
+        "_evaluate_hybrid_candidate_reranked_proof_state_retrieval_split",
+        lambda *args, **kwargs: {"metrics": {}, "backend_info": {}, "candidate_pool_summary": {}, "examples": [], "per_query": []},
+    )
     monkeypatch.setattr(evaluate, "_evaluate_proof_state_query_representations", lambda *args, **kwargs: {})
 
     evaluate.run("configs/proofatlas.yaml", full_heldout=True)
@@ -79,6 +84,7 @@ def test_full_heldout_override_removes_core_evaluation_limits(tmp_path, monkeypa
         "val_theorem_retrieval",
         "test_theorem_retrieval",
         "test_reranked_proof_state_retrieval",
+        "test_hybrid_candidate_reranked_proof_state_retrieval",
         "val_proof_state_query_representation_diagnostic",
         "test_proof_state_query_representation_diagnostic",
     ]

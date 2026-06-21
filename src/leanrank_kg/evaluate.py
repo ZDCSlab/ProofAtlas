@@ -313,6 +313,47 @@ def _sparse_topk_indices(query_matrix, candidate_matrix, k: int, *, batch_size: 
     return out
 
 
+def _lexical_premise_neighbors(
+    *,
+    query_ids: list[str],
+    proof_states: pd.DataFrame,
+    train_premises_frame: pd.DataFrame,
+    train_premise_ids: list[str],
+    top_k: int,
+    batch_size: int,
+) -> dict[str, list[str]]:
+    premise_by_id = train_premises_frame.copy()
+    premise_by_id["id"] = premise_by_id["id"].astype(str)
+    premise_by_id = premise_by_id.set_index("id", drop=False)
+    ordered_premises = premise_by_id.reindex(train_premise_ids).dropna(subset=["id"])
+    if not query_ids or ordered_premises.empty:
+        return {query_id: [] for query_id in query_ids}
+    ordered_premise_ids = [str(value) for value in ordered_premises["id"].tolist()]
+    premise_texts = [
+        _lexical_text(row.get("full_name"), row.get("code"), row.get("domain_tag"), row.get("subdomain_tag"), row.get("file_path"))
+        for row in ordered_premises.to_dict(orient="records")
+    ]
+    query_texts = [
+        _lexical_text(row.get("full_name"), row.get("context"), row.get("goal_text"), row.get("symbols"), row.get("local_hypotheses"))
+        for row in (proof_states.loc[query_id] for query_id in query_ids)
+    ]
+    vectorizer = TfidfVectorizer(
+        lowercase=True,
+        token_pattern=r"(?u)\b[\w'.:]+|\S",
+        min_df=1,
+        max_features=300000,
+        sublinear_tf=True,
+        norm="l2",
+    )
+    premise_matrix = vectorizer.fit_transform(premise_texts)
+    query_matrix = vectorizer.transform(query_texts)
+    lexical_neighbor_rows = _sparse_topk_indices(query_matrix, premise_matrix, top_k, batch_size=batch_size)
+    return {
+        query_id: [ordered_premise_ids[idx] for idx in indices]
+        for query_id, indices in zip(query_ids, lexical_neighbor_rows, strict=True)
+    }
+
+
 def _candidate_pool_generation_diagnostic(
     *,
     query_ids: list[str],
@@ -335,11 +376,8 @@ def _candidate_pool_generation_diagnostic(
             "added_gold_queries": 0,
             "top_added_gold_domains": [],
         }
-    premise_by_id = train_premises_frame.copy()
-    premise_by_id["id"] = premise_by_id["id"].astype(str)
-    premise_by_id = premise_by_id.set_index("id", drop=False)
-    ordered_premises = premise_by_id.reindex(train_premise_ids).dropna(subset=["id"])
-    if ordered_premises.empty:
+    missing_query_ids = [query_id for query_id in query_ids if query_id not in proof_states.index]
+    if missing_query_ids:
         return {
             "method": "embedding_topk_vs_lexical_topk_candidate_union",
             "evaluated_queries": len(query_ids),
@@ -348,37 +386,24 @@ def _candidate_pool_generation_diagnostic(
             "metrics": {},
             "added_gold_queries": 0,
             "top_added_gold_domains": [],
-            "failure_reason": "empty_train_premise_frame",
+            "failure_reason": "missing_query_rows",
+            "missing_query_count": len(missing_query_ids),
         }
-    ordered_premise_ids = [str(value) for value in ordered_premises["id"].tolist()]
-    premise_texts = [
-        _lexical_text(row.get("full_name"), row.get("code"), row.get("domain_tag"), row.get("subdomain_tag"), row.get("file_path"))
-        for row in ordered_premises.to_dict(orient="records")
-    ]
-    query_texts = []
     query_info = {}
     for query_id in query_ids:
         row = proof_states.loc[query_id]
-        query_texts.append(_lexical_text(row.get("full_name"), row.get("context"), row.get("goal_text"), row.get("symbols"), row.get("local_hypotheses")))
         query_info[query_id] = {
             "domain_tag": str(row.get("domain_tag", "Unknown") or "Unknown"),
             "subdomain_tag": str(row.get("subdomain_tag", "Unknown") or "Unknown"),
         }
-    vectorizer = TfidfVectorizer(
-        lowercase=True,
-        token_pattern=r"(?u)\b[\w'.:]+|\S",
-        min_df=1,
-        max_features=300000,
-        sublinear_tf=True,
-        norm="l2",
+    lexical_by_query = _lexical_premise_neighbors(
+        query_ids=query_ids,
+        proof_states=proof_states,
+        train_premises_frame=train_premises_frame,
+        train_premise_ids=train_premise_ids,
+        top_k=top_k,
+        batch_size=batch_size,
     )
-    premise_matrix = vectorizer.fit_transform(premise_texts)
-    query_matrix = vectorizer.transform(query_texts)
-    lexical_neighbor_rows = _sparse_topk_indices(query_matrix, premise_matrix, top_k, batch_size=batch_size)
-    lexical_by_query = {
-        query_id: [ordered_premise_ids[idx] for idx in indices]
-        for query_id, indices in zip(query_ids, lexical_neighbor_rows, strict=True)
-    }
 
     def _recall(candidate_ids: list[str], gold: set[str]) -> float:
         gold_in_index = gold & train_premises
@@ -1000,6 +1025,165 @@ def _evaluate_reranked_proof_state_retrieval_split(
     }
 
 
+def _evaluate_hybrid_candidate_reranked_proof_state_retrieval_split(
+    split: str,
+    top_ks: list[int],
+    train_premises: set[str],
+    *,
+    max_examples: int,
+    candidate_k: int = 100,
+    lexical_candidate_k: int | None = None,
+    batch_size: int = 256,
+    use_gpu: bool = False,
+    gpu_device: str = "cuda:0",
+) -> dict:
+    if max_examples <= 0:
+        return {"split": split, "metrics": _metric_summary([], top_ks), "examples": [], "per_query": [], "backend_info": {"actual_backend": "disabled"}}
+    try:
+        positive_edges = pd.read_parquet(f"data/processed/{split}/positive_edges.parquet")
+        proof_states = pd.read_parquet(f"data/processed/{split}/proof_states.parquet")
+    except FileNotFoundError:
+        return {"split": split, "metrics": _metric_summary([], top_ks), "examples": [], "per_query": [], "backend_info": {"actual_backend": "missing_artifacts"}}
+    positive_edges["proof_state_id"] = positive_edges["proof_state_id"].astype(str)
+    positive_edges["premise_id"] = positive_edges["premise_id"].astype(str)
+    proof_states["id"] = proof_states["id"].astype(str)
+    proof_states_by_id = proof_states.set_index("id")
+    grouped_items = [(str(proof_state_id), group) for proof_state_id, group in positive_edges.groupby("proof_state_id") if str(proof_state_id) in proof_states_by_id.index]
+    grouped_items = grouped_items[:max_examples]
+    query_ids = [proof_state_id for proof_state_id, _ in grouped_items]
+    query_texts = []
+    for proof_state_id in query_ids:
+        pstate = proof_states_by_id.loc[proof_state_id]
+        query_texts.append("\n".join(part for part in [str(pstate.get("full_name", "")), str(pstate.get("goal_text", ""))] if part))
+    query_matrix = _encode_diagnostic_queries(query_texts) if query_texts else np.zeros((0, _load_embedding("train", "premise").shape[1]), dtype=np.float32)
+    train_premise_matrix = _load_embedding("train", "premise")
+    train_premise_ids = _embedding_ids("train", "Premise")
+    premise_row_by_id = {premise_id: idx for idx, premise_id in enumerate(train_premise_ids)}
+    max_candidate_k = max(candidate_k, max(top_ks))
+    embedding_neighbor_rows, embedding_backend = _batched_topk(
+        query_matrix,
+        train_premise_matrix,
+        max_candidate_k,
+        batch_size=batch_size,
+        use_gpu=use_gpu,
+        gpu_device=gpu_device,
+    )
+    lexical_candidate_k = int(lexical_candidate_k or candidate_k)
+    lexical_by_query = _lexical_premise_neighbors(
+        query_ids=query_ids,
+        proof_states=proof_states_by_id,
+        train_premises_frame=pd.read_parquet("data/processed/train/premises.parquet"),
+        train_premise_ids=train_premise_ids,
+        top_k=max(lexical_candidate_k, max(top_ks)),
+        batch_size=batch_size,
+    )
+    index_data = _load_split("train")
+    premise_frame_by_id = index_data["premises"].copy()
+    premise_frame_by_id["id"] = premise_frame_by_id["id"].astype(str)
+    premise_frame_by_id = premise_frame_by_id.set_index("id", drop=False)
+    rows = []
+    examples = []
+    candidate_pool_rows = []
+    for query_idx, (proof_state_id, group) in enumerate(grouped_items):
+        pstate = proof_states_by_id.loc[proof_state_id]
+        query_text = query_texts[query_idx]
+        embedding_ids = [train_premise_ids[idx] for idx in (embedding_neighbor_rows[query_idx] if query_idx < len(embedding_neighbor_rows) else [])[:candidate_k]]
+        lexical_ids = lexical_by_query.get(proof_state_id, [])[:lexical_candidate_k]
+        candidate_ids = list(dict.fromkeys([*embedding_ids, *lexical_ids]))
+        candidate_rows = [premise_row_by_id[premise_id] for premise_id in candidate_ids if premise_id in premise_row_by_id]
+        candidate_ids = [train_premise_ids[idx] for idx in candidate_rows]
+        candidates = premise_frame_by_id.reindex(candidate_ids).dropna(subset=["id"]).copy()
+        if not candidates.empty:
+            candidate_scores = query_matrix[query_idx] @ train_premise_matrix[candidate_rows].T
+            score_by_id = {
+                premise_id: float(score)
+                for premise_id, score in zip(candidate_ids, np.asarray(candidate_scores, dtype=np.float32).ravel(), strict=True)
+            }
+            candidates["score"] = candidates["id"].map(score_by_id).astype(float)
+            candidates["embedding_score"] = candidates["score"]
+            candidates["retrieval_backend"] = "hybrid_embedding_lexical_union"
+        reranked = _rerank_premise_candidates(
+            query_text,
+            candidates,
+            index_data,
+            "train",
+            query_context=_query_context_from_proof_state(pstate),
+        ).head(max(top_ks))
+        retrieved_ids = [str(row["id"]) for row in reranked.to_dict(orient="records")]
+        gold = set(group["premise_id"])
+        gold_in_index = gold & train_premises
+        embedding_hits = set(embedding_ids) & gold_in_index
+        lexical_hits = set(lexical_ids) & gold_in_index
+        union_hits = set(candidate_ids) & gold_in_index
+        rows.append(
+            {
+                "split": split,
+                "proof_state_id": proof_state_id,
+                "domain_tag": str(pstate.get("domain_tag", "Unknown")),
+                "subdomain_tag": str(pstate.get("subdomain_tag", "Unknown")),
+                **_ranking_row(retrieved_ids, gold, train_premises, top_ks),
+            }
+        )
+        candidate_pool_rows.append(
+            {
+                "proof_state_id": proof_state_id,
+                "gold_in_train_index_count": len(gold_in_index),
+                "embedding_candidate_count": len(embedding_ids),
+                "lexical_candidate_count": len(lexical_ids),
+                "union_candidate_count": len(candidate_ids),
+                "embedding_hit": bool(embedding_hits),
+                "lexical_hit": bool(lexical_hits),
+                "union_hit": bool(union_hits),
+                "lexical_added_gold_after_embedding_miss": bool(gold_in_index and not embedding_hits and union_hits),
+            }
+        )
+        if len(examples) < 10:
+            examples.append(
+                {
+                    "split": split,
+                    "proof_state_id": proof_state_id,
+                    "gold_positive_premises": sorted(gold)[:20],
+                    "candidate_pool": candidate_pool_rows[-1],
+                    "top_retrieved_premises": [
+                        {
+                            "premise_id": str(row["id"]),
+                            "full_name": str(row.get("full_name", "")),
+                            "score": float(row.get("score", 0.0)),
+                            "embedding_score": float(row.get("embedding_score", 0.0)),
+                            "learned_ranker_score": None
+                            if pd.isna(row.get("learned_ranker_score"))
+                            else float(row.get("learned_ranker_score")),
+                        }
+                        for row in reranked.head(5).to_dict(orient="records")
+                    ],
+                }
+            )
+    retrievable_pool_rows = [row for row in candidate_pool_rows if int(row["gold_in_train_index_count"]) > 0]
+    pool_denominator = max(1, len(retrievable_pool_rows))
+    candidate_pool_summary = {
+        "retrievable_queries": len(retrievable_pool_rows),
+        "embedding_hit_query_share": float(sum(1 for row in retrievable_pool_rows if row["embedding_hit"]) / pool_denominator),
+        "lexical_hit_query_share": float(sum(1 for row in retrievable_pool_rows if row["lexical_hit"]) / pool_denominator),
+        "union_hit_query_share": float(sum(1 for row in retrievable_pool_rows if row["union_hit"]) / pool_denominator),
+        "lexical_added_gold_queries": int(sum(1 for row in retrievable_pool_rows if row["lexical_added_gold_after_embedding_miss"])),
+        "mean_union_candidate_count": float(sum(row["union_candidate_count"] for row in retrievable_pool_rows) / pool_denominator),
+    }
+    return {
+        "split": split,
+        "metrics": _metric_summary(rows, top_ks),
+        "examples": examples,
+        "per_query": rows,
+        "backend_info": {
+            **embedding_backend,
+            "actual_backend": f"hybrid_embedding_lexical_union_then_rerank_{embedding_backend.get('actual_backend', 'topk')}",
+            "candidate_k": int(candidate_k),
+            "lexical_candidate_k": int(lexical_candidate_k),
+            "evaluated_queries": len(rows),
+        },
+        "candidate_pool_summary": candidate_pool_summary,
+    }
+
+
 def _evaluate_proof_state_query_representations(
     split: str,
     top_ks: list[int],
@@ -1197,6 +1381,7 @@ def run(config_path: str, full_heldout: bool = False) -> None:
         for value in eval_config.get("rerank_candidate_k_values", [rerank_candidate_k])
         if int(value) > 0
     ]
+    hybrid_rerank_lexical_candidate_k = int(eval_config.get("hybrid_rerank_lexical_candidate_k", rerank_candidate_k) or rerank_candidate_k)
     query_representation_diagnostic_examples = int(eval_config.get("query_representation_diagnostic_examples", 0) or 0)
     proof_state_query_representation = str(eval_config.get("proof_state_query_representation", "stored_embedding"))
     proof_state_limits = {
@@ -1315,6 +1500,27 @@ def run(config_path: str, full_heldout: bool = False) -> None:
         actual_backend=reranked_proof_state_eval.get("backend_info", {}).get("actual_backend"),
         candidate_k=reranked_proof_state_eval.get("backend_info", {}).get("candidate_k"),
     )
+    stage_started = time.perf_counter()
+    hybrid_reranked_proof_state_eval = _evaluate_hybrid_candidate_reranked_proof_state_retrieval_split(
+        "test",
+        report_top_ks,
+        train_premises,
+        max_examples=rerank_max_test_proof_states,
+        candidate_k=rerank_candidate_k,
+        lexical_candidate_k=hybrid_rerank_lexical_candidate_k,
+        batch_size=batch_size,
+        use_gpu=use_gpu,
+        gpu_device=gpu_device,
+    )
+    _record_substage(
+        "test_hybrid_candidate_reranked_proof_state_retrieval",
+        stage_started,
+        split="test",
+        evaluated_queries=hybrid_reranked_proof_state_eval.get("metrics", {}).get("evaluated_queries"),
+        actual_backend=hybrid_reranked_proof_state_eval.get("backend_info", {}).get("actual_backend"),
+        candidate_k=hybrid_reranked_proof_state_eval.get("backend_info", {}).get("candidate_k"),
+        lexical_candidate_k=hybrid_reranked_proof_state_eval.get("backend_info", {}).get("lexical_candidate_k"),
+    )
     query_representation_diagnostics = {}
     for split in ["val", "test"]:
         stage_started = time.perf_counter()
@@ -1336,6 +1542,8 @@ def run(config_path: str, full_heldout: bool = False) -> None:
         )
     for key, value in reranked_proof_state_eval.get("metrics", {}).items():
         metrics[f"reranked_proof_state_{key}"] = value
+    for key, value in hybrid_reranked_proof_state_eval.get("metrics", {}).items():
+        metrics[f"hybrid_reranked_proof_state_{key}"] = value
     case_studies = theorem_eval["case_studies"]
     if not case_studies and case_study_limit == 0:
         case_studies = read_json("outputs/reports/theorem_retrieval_case_studies.json", [])
@@ -1368,6 +1576,7 @@ def run(config_path: str, full_heldout: bool = False) -> None:
             "rerank_max_test_proof_states": rerank_max_test_proof_states,
             "rerank_candidate_k": rerank_candidate_k,
             "rerank_candidate_k_values": rerank_candidate_k_values,
+            "hybrid_rerank_lexical_candidate_k": hybrid_rerank_lexical_candidate_k,
             "query_representation_diagnostic_examples": query_representation_diagnostic_examples,
             "query_representation_diagnostic_splits": sorted(query_representation_diagnostics),
             "proof_state_query_representation": proof_state_query_representation,
@@ -1396,6 +1605,16 @@ def run(config_path: str, full_heldout: bool = False) -> None:
                 "candidate_miss_diagnosis": _candidate_miss_diagnosis(reranked_proof_state_eval.get("per_query", []), top_ks),
                 "worst_cases": _worst_cases(reranked_proof_state_eval.get("per_query", []), top_ks, id_keys=["proof_state_id"]),
                 "examples": reranked_proof_state_eval["examples"],
+            },
+            "proof_state_hybrid_candidate_reranked_retrieval": {
+                "metrics": hybrid_reranked_proof_state_eval["metrics"],
+                "backend_info": hybrid_reranked_proof_state_eval["backend_info"],
+                "candidate_pool_summary": hybrid_reranked_proof_state_eval.get("candidate_pool_summary", {}),
+                "domain_breakdown": _domain_breakdown(hybrid_reranked_proof_state_eval.get("per_query", []), top_ks),
+                "failure_profile": _failure_profile(hybrid_reranked_proof_state_eval.get("per_query", []), top_ks),
+                "candidate_miss_diagnosis": _candidate_miss_diagnosis(hybrid_reranked_proof_state_eval.get("per_query", []), top_ks),
+                "worst_cases": _worst_cases(hybrid_reranked_proof_state_eval.get("per_query", []), top_ks, id_keys=["proof_state_id"]),
+                "examples": hybrid_reranked_proof_state_eval["examples"],
             },
             "proof_state_query_representation_diagnostic": query_representation_diagnostics.get("test", {}),
             "theorem_retrieval": {

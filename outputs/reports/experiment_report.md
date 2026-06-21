@@ -310,6 +310,38 @@ This smaller diagnostic uses the same retrieval path as the homepage/API: query 
 | `MAP` | 0.0765 |
 | `nDCG@10` | 0.1238 |
 
+### Hybrid Candidate Reranked Retrieval
+
+This diagnostic turns the lexical+embedding candidate-pool oracle into an actual ranked sample: embedding candidates and lexical TF-IDF candidates are unioned, rescored with embedding similarity, then passed through the existing learned/fixed premise reranker.
+
+- Backend: `hybrid_embedding_lexical_union_then_rerank_torch_cuda`
+- Embedding candidate k: `50`
+- Lexical candidate k: `50`
+- Evaluated queries: `20`
+
+| Metric | Value |
+| --- | ---: |
+| `evaluated_queries` | 20 |
+| `evaluated_retrievable_queries` | 19 |
+| `gold_premise_coverage` | 0.8772 |
+| `Recall@1` | 0.0329 |
+| `Recall@5` | 0.1338 |
+| `Recall@10` | 0.1689 |
+| `MRR` | 0.1754 |
+| `MAP` | 0.0748 |
+| `nDCG@10` | 0.1219 |
+
+Hybrid candidate pool summary:
+
+| Metric | Value |
+| --- | ---: |
+| `retrievable_queries` | 19 |
+| `embedding_hit_query_share` | 0.3158 |
+| `lexical_hit_query_share` | 0.3684 |
+| `union_hit_query_share` | 0.3684 |
+| `lexical_added_gold_queries` | 1 |
+| `mean_union_candidate_count` | 88.1053 |
+
 #### Rerank Candidate-Depth Ablation
 
 This ablation uses the same held-out rerank diagnostic queries and changes only the number of embedding candidates passed into the learned/fixed reranker.
@@ -781,8 +813,8 @@ This profile verifies that the learned premise ranker uses normalized LeanRank-d
 - Timing config matches current report config: `True`
 - Timing generated at: `2026-06-20T22:46:12.435080+00:00`
 - Timing report: `outputs/reports/pipeline_run_timings.json`
-- Evaluation internal total seconds: `53.46015711291693`
-- Evaluation timed substages: `7`
+- Evaluation internal total seconds: `58.46033638087101`
+- Evaluation timed substages: `8`
 
 | Stage | Seconds |
 | --- | ---: |
@@ -803,13 +835,14 @@ These timings split the `evaluate` pipeline stage into proof-state retrieval, th
 
 | Evaluation substage | Seconds | Queries | Backend |
 | --- | ---: | ---: | --- |
-| `val_proof_state_retrieval` | 20.0775 | 2822 | torch_cuda |
-| `test_proof_state_retrieval` | 14.8363 | 3053 | torch_cuda |
-| `test_reranked_proof_state_retrieval` | 14.4291 | 20 | batched_torch_cuda_then_rerank |
-| `val_proof_state_query_representation_diagnostic` | 1.5792 | 50 | n/a |
-| `test_proof_state_query_representation_diagnostic` | 1.1219 | 50 | n/a |
-| `test_theorem_retrieval` | 0.4634 | 1000 | torch_cuda |
-| `val_theorem_retrieval` | 0.4385 | 1000 | torch_cuda |
+| `val_proof_state_retrieval` | 19.9984 | 2822 | torch_cuda |
+| `test_proof_state_retrieval` | 15.0069 | 3053 | torch_cuda |
+| `test_reranked_proof_state_retrieval` | 13.8456 | 20 | batched_torch_cuda_then_rerank |
+| `test_hybrid_candidate_reranked_proof_state_retrieval` | 5.6494 | 20 | hybrid_embedding_lexical_union_then_rerank_torch_cuda |
+| `val_proof_state_query_representation_diagnostic` | 1.7019 | 50 | n/a |
+| `test_proof_state_query_representation_diagnostic` | 0.8912 | 50 | n/a |
+| `test_theorem_retrieval` | 0.4561 | 1000 | torch_cuda |
+| `val_theorem_retrieval` | 0.4389 | 1000 | torch_cuda |
 
 ### Rerank Evaluation Cost Profile
 
@@ -821,11 +854,11 @@ The reranked proof-state diagnostic follows the slower homepage/API-style path. 
 - Sampled rerank queries: `20`
 - Full proof-state queries: `3053`
 - Sampled fraction of full proof-state eval: `0.006550933508024894`
-- Rerank seconds/query: `0.7214550746488385`
-- Batched embedding seconds/query: `0.0048595931211836045`
-- Rerank/batched seconds per query: `148.45997528145332`
-- Projected full rerank seconds: `2202.602342902904`
-- Projected full rerank minutes: `36.71003904838174`
+- Rerank seconds/query: `0.6922798993531615`
+- Batched embedding seconds/query: `0.004915459019300042`
+- Rerank/batched seconds per query: `140.83728429735575`
+- Projected full rerank seconds: `2113.530532725202`
+- Projected full rerank minutes: `35.22550887875337`
 - Sampled rerank Recall@10 delta: `0.0526104662069575`
 - Policy: keep reranked proof-state evaluation sampled for development and use full batched embedding evaluation for final held-out coverage
 
@@ -905,7 +938,7 @@ This plan turns the timed LeanRank-data run into concrete optimization actions. 
 | 1 | `embedding_reuse` | `reuse_saved_embeddings_for_report_rerank_and_homepage_refreshes` | 148.6884 | none_when_embedding_inputs_are_unchanged |
 | 2 | `cpu_io_stage` | `optimize_sample_stage_vectorization_or_io` | 20.1418 | none_if_outputs_are_schema_and_artifact_compatible |
 | 3 | `ann_candidate_generation` | `keep_ann_index_for_interactive_retrieval_and_large_refreshes` | n/a | monitor_recall_vs_exact_gate |
-| 4 | `rerank_evaluation_policy` | `keep_expensive_reranked_proof_state_evaluation_sampled_during_development` | 2188.1732 | use_full_batched_embedding_eval_for_final_metrics_and_sampled_rerank_only_as_diagnostic |
+| 4 | `rerank_evaluation_policy` | `keep_expensive_reranked_proof_state_evaluation_sampled_during_development` | 2099.6849 | use_full_batched_embedding_eval_for_final_metrics_and_sampled_rerank_only_as_diagnostic |
 
 ### Performance Acceptance Gates
 
@@ -953,8 +986,8 @@ These gates summarize whether the committed performance evidence is strong enoug
 - Pipeline seconds per 100k processed rows: `170.99914395400992`
 - Slowest timed stage: `embed`
 - Saved pipeline evaluate seconds: `19.468068956863135`
-- Current standalone evaluation seconds: `53.46015711291693`
-- Timed/current evaluation ratio: `0.36416033936719017`
+- Current standalone evaluation seconds: `58.46033638087101`
+- Timed/current evaluation ratio: `0.3330132900712036`
 - Primary bottleneck share: `0.2977710478575022`
 - Top-3 timed-stage share: `0.561019378074775`
 - Mean index speedup vs exact: `17.07151721843473`
@@ -990,17 +1023,17 @@ These linear projections use the current timed pipeline as a capacity-planning b
 This profile records the local footprint of generated LeanRank-data artifacts. It is a practical scale-up signal because embeddings and ANN indexes can dominate disk usage before model training becomes the bottleneck.
 
 - Method: `filesystem_artifact_footprint_with_linear_scale_projection`
-- Total artifact bytes: `3052822341`
-- Total artifact GiB: `2.8431623624637723`
-- Bytes per processed row: `10454.44139624399`
+- Total artifact bytes: `3052867420`
+- Total artifact GiB: `2.8432043455541134`
+- Bytes per processed row: `10454.595770036847`
 - Unreferenced index artifact bytes: `1502501178`
 - Unreferenced index artifact count: `12`
 
 | Projection | Target rows | Scale factor | Artifact GiB |
 | --- | ---: | ---: | ---: |
 | `current_1x` | 292012 | 1.0000 | 2.8432 |
-| `current_2x` | 584024 | 2.0000 | 5.6863 |
-| `current_5x` | 1460060 | 5.0000 | 14.2158 |
+| `current_2x` | 584024 | 2.0000 | 5.6864 |
+| `current_5x` | 1460060 | 5.0000 | 14.2160 |
 | `configured_source_rows` | 350000 | 1.1986 | 3.4078 |
 
 Largest generated artifact files:
