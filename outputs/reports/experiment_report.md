@@ -169,7 +169,8 @@ This plan connects the held-out retrieval metrics, reranked diagnostic, ranker a
 | 1 | `proof_state_query_and_embedding` | proof_state Recall@100 | 0.2362 | Proof-state gold premises are often absent from the top-100 candidate pool, so top-k reranking cannot recover them. Validation query diagnostic currently favors `stored_plus_goal_only`. |
 | 2 | `theorem_level_reranking` | theorem_retrieval Recall@10 | 0.4940 | Theorem-level Recall@100 is substantially higher than Recall@10, leaving useful headroom for ordering candidates already in the pool. |
 | 3 | `ranker_feature_iteration` | validation/test Recall@10 and MAP | 0.0320 | Ranker ablation says `candidate_source` is the strongest currently measured feature group by delta_without_group. |
-| 4 | `hard_negative_training` | MRR/MAP after reranking | 9.5478 | LeanRank-data already provides positive premises and hard negative candidates, so training/evaluation changes can reuse existing labels without extracting new data. |
+| 4 | `candidate_generated_hybrid_reranking` | hybrid proof-state rerank Recall@10 | 0.1557 | Candidate-generated ranker training turns lexical+embedding union candidates into a positive sampled rerank delta over embedding-only rerank (0.0307 Recall@10). |
+| 5 | `hard_negative_training` | MRR/MAP after reranking | 9.5478 | LeanRank-data already provides positive premises and hard negative candidates, so training/evaluation changes can reuse existing labels without extracting new data. |
 
 Accuracy snapshot:
 
@@ -181,6 +182,8 @@ Accuracy snapshot:
 | `theorem_recall_at_100` | 0.6889 |
 | `reranked_proof_state_recall_at_10` | 0.1250 |
 | `reranked_minus_embedding_recall_at_10` | 0.0088 |
+| `hybrid_reranked_proof_state_recall_at_10` | 0.1557 |
+| `hybrid_minus_embedding_rerank_recall_at_10` | 0.0307 |
 
 Headroom:
 
@@ -219,6 +222,21 @@ Strongest ranker feature groups:
 | `difficulty` | 0.0107 | 0.5751 | `proof_state_difficulty`, `negative_candidate_hardness` |
 | `namespace_domain` | 0.0032 | 0.7216 | `same_namespace`, `same_domain` |
 | `embedding_similarity` | 0.0020 | 0.7566 | `cosine_similarity` |
+
+Candidate-generated ranker summary:
+
+| Metric | Value |
+| --- | ---: |
+| `training_pair_source` | candidate_generated_embedding_lexical_union |
+| `validation_auc` | 0.8237 |
+
+Candidate-generated hybrid rerank sample:
+
+| Metric | Value |
+| --- | ---: |
+| `embedding_only_recall_at_10` | 0.1250 |
+| `hybrid_recall_at_10` | 0.1557 |
+| `hybrid_minus_embedding_only_recall_at_10` | 0.0307 |
 
 ### Proof-State Query Representation Diagnostic
 
@@ -1054,9 +1072,9 @@ These linear projections use the current timed pipeline as a capacity-planning b
 This profile records the local footprint of generated LeanRank-data artifacts. It is a practical scale-up signal because embeddings and ANN indexes can dominate disk usage before model training becomes the bottleneck.
 
 - Method: `filesystem_artifact_footprint_with_linear_scale_projection`
-- Total artifact bytes: `3052851361`
-- Total artifact GiB: `2.8431893894448876`
-- Bytes per processed row: `10454.540775721545`
+- Total artifact bytes: `3052885560`
+- Total artifact GiB: `2.843221239745617`
+- Bytes per processed row: `10454.657890771612`
 - Unreferenced index artifact bytes: `1502501178`
 - Unreferenced index artifact count: `12`
 
@@ -1064,7 +1082,7 @@ This profile records the local footprint of generated LeanRank-data artifacts. I
 | --- | ---: | ---: | ---: |
 | `current_1x` | 292012 | 1.0000 | 2.8432 |
 | `current_2x` | 584024 | 2.0000 | 5.6864 |
-| `current_5x` | 1460060 | 5.0000 | 14.2159 |
+| `current_5x` | 1460060 | 5.0000 | 14.2161 |
 | `configured_source_rows` | 350000 | 1.1986 | 3.4078 |
 
 Largest generated artifact files:

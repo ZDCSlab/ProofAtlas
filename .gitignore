@@ -52,8 +52,11 @@ dist/
 *.parquet
 *.pkl
 .DS_Store
+Thumbs.db
+desktop.ini
 *.swp
 *.swo
+.pdm-python
 .idea/
 .vscode/
 node_modules/

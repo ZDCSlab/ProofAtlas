@@ -141,6 +141,13 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
                         {"candidate_k": 100, "metrics": {"Recall@10": 0.12, "MRR": 0.10, "MAP": 0.07}},
                     ],
                 },
+                "proof_state_hybrid_candidate_reranked_retrieval": {
+                    "metrics": {"Recall@10": 0.18},
+                    "candidate_pool_summary": {
+                        "lexical_added_gold_queries": 2,
+                        "mean_lexical_only_candidate_count": 8.0,
+                    },
+                },
             },
             "validation": {
                 "proof_state_query_representation_diagnostic": {
@@ -158,6 +165,27 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
     write_json(
         "outputs/reports/ranker_validation_metrics.json",
         {
+            "training_pair_source": "candidate_generated_embedding_lexical_union",
+            "validation_auc": 0.82,
+            "ranker_config": {"use_candidate_generated_pairs": True},
+            "candidate_generated_pair_profile": {
+                "train": {
+                    "query_count": 10,
+                    "pair_count": 100,
+                    "positive_pairs": 12,
+                    "negative_pairs": 88,
+                    "union_hit_query_share": 0.7,
+                    "lexical_added_gold_queries": 3,
+                },
+                "val": {
+                    "query_count": 4,
+                    "pair_count": 40,
+                    "positive_pairs": 5,
+                    "negative_pairs": 35,
+                    "union_hit_query_share": 0.5,
+                    "lexical_added_gold_queries": 1,
+                },
+            },
             "feature_ablation": {
                 "groups": {
                     "symbol_overlap": {
@@ -300,7 +328,12 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
     assert report["throughput_profile"]["retrieval_bottleneck_profile"]["theorem"]["primary_accuracy_bottleneck"] == "top10_reranking_or_candidate_ordering"
     rapid = report["throughput_profile"]["rapid_convergence_profile"]
     assert rapid["accuracy_snapshot"]["reranked_minus_embedding_recall_at_10"] == 0.04999999999999999
+    assert rapid["accuracy_snapshot"]["hybrid_reranked_proof_state_recall_at_10"] == 0.18
+    assert round(rapid["accuracy_snapshot"]["hybrid_minus_embedding_rerank_recall_at_10"], 3) == 0.03
     assert rapid["rerank_candidate_depth"]["best_by_recall_at_10"]["candidate_k"] == 50
+    assert rapid["candidate_generated_ranker"]["training_pair_source"] == "candidate_generated_embedding_lexical_union"
+    assert rapid["candidate_generated_ranker"]["hybrid_rerank_sample"]["hybrid_recall_at_10"] == 0.18
+    assert rapid["candidate_generated_ranker"]["train"]["lexical_added_gold_queries"] == 3
     assert rapid["strongest_ranker_feature_groups"][0]["group"] == "symbol_overlap"
     assert rapid["label_supervision"]["negative_to_positive_edge_ratio"] == 9.0
     assert rapid["query_representation_diagnostic"]["validation"]["best_variant_by_recall"] == "goal_only"

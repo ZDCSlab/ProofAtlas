@@ -261,6 +261,8 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                         "theorem_recall_at_100": 0.7,
                         "reranked_proof_state_recall_at_10": 0.25,
                         "reranked_minus_embedding_recall_at_10": 0.05,
+                        "hybrid_reranked_proof_state_recall_at_10": 0.3,
+                        "hybrid_minus_embedding_rerank_recall_at_10": 0.05,
                     },
                     "headroom": {
                         "proof_state_missing_from_top100": 0.7,
@@ -315,6 +317,15 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                             "columns": ["symbol_name_overlap"],
                         }
                     ],
+                    "candidate_generated_ranker": {
+                        "training_pair_source": "candidate_generated_embedding_lexical_union",
+                        "validation_auc": 0.82,
+                        "hybrid_rerank_sample": {
+                            "embedding_only_recall_at_10": 0.25,
+                            "hybrid_recall_at_10": 0.3,
+                            "hybrid_minus_embedding_only_recall_at_10": 0.05,
+                        },
+                    },
                     "recommended_sequence": [
                         {
                             "priority": 1,
@@ -992,6 +1003,9 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "same namespace share" in text
     assert "Mathlib.Algebra.Group.mul_left_cancel" in text
     assert "Ranker Training Pair Utilization" in text
+    assert "Candidate-generated ranker summary" in text
+    assert "candidate_generated_embedding_lexical_union" in text
+    assert "hybrid_minus_embedding_only_recall_at_10" in text
     assert "data/processed/train/negative_edges.parquet label=0" in text
     assert "Training hard-negative/positive ratio: `9.0`" in text
     assert "Hard-negative pairs with nonzero hardness: `850`" in text

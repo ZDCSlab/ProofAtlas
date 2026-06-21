@@ -245,6 +245,7 @@ def _evaluation_stage() -> dict[str, Any]:
     theorem_test_metrics = test_set_evaluation.get("test", {}).get("theorem_retrieval", {}).get("metrics", {})
     theorem_candidate_miss = test_set_evaluation.get("test", {}).get("theorem_retrieval", {}).get("candidate_miss_diagnosis", {})
     reranked_proof_state = test_set_evaluation.get("test", {}).get("proof_state_reranked_retrieval", {})
+    hybrid_reranked_proof_state = test_set_evaluation.get("test", {}).get("proof_state_hybrid_candidate_reranked_retrieval", {})
     proof_state_test_total = int(_parquet_rows("data/processed/test/proof_states.parquet").get("rows") or 0)
     theorem_test_total = int(_parquet_rows("data/processed/test/theorems.parquet").get("rows") or 0)
     proof_state_test_evaluated = proof_test_metrics.get("evaluated_queries")
@@ -295,6 +296,7 @@ def _evaluation_stage() -> dict[str, Any]:
             },
             "test": {
                 "proof_state_reranked_retrieval": reranked_proof_state,
+                "proof_state_hybrid_candidate_reranked_retrieval": hybrid_reranked_proof_state,
                 "proof_state_query_representation_diagnostic": test_set_evaluation.get("test", {}).get(
                     "proof_state_query_representation_diagnostic",
                     {},
@@ -802,6 +804,9 @@ def _rapid_convergence_profile(
     proof_metrics = test_eval.get("test_metrics", {}).get("proof_state_retrieval", {})
     theorem_metrics = test_eval.get("test_metrics", {}).get("theorem_retrieval", {})
     reranked_metrics = test.get("proof_state_reranked_retrieval", {}).get("metrics", {}) if isinstance(test, dict) else {}
+    hybrid_reranked = test.get("proof_state_hybrid_candidate_reranked_retrieval", {}) if isinstance(test, dict) else {}
+    hybrid_reranked_metrics = hybrid_reranked.get("metrics", {}) if isinstance(hybrid_reranked, dict) else {}
+    hybrid_candidate_pool = hybrid_reranked.get("candidate_pool_summary", {}) if isinstance(hybrid_reranked, dict) else {}
     candidate_k_ablation = test.get("proof_state_reranked_retrieval", {}).get("candidate_k_ablation", []) if isinstance(test, dict) else []
     validation = test_eval.get("validation", {}) if isinstance(test_eval, dict) else {}
     validation_query_representation = (
@@ -814,6 +819,9 @@ def _rapid_convergence_profile(
     premise_trace = readiness.get("premise_trace_supervision", {}).get("current_artifact_supervision", {}) if isinstance(readiness, dict) else {}
     ranker_validation = evaluation.get("ranker_validation", {}) if isinstance(evaluation, dict) else {}
     feature_groups = (ranker_validation.get("feature_ablation", {}) or {}).get("groups", {}) if isinstance(ranker_validation, dict) else {}
+    candidate_ranker_profile = ranker_validation.get("candidate_generated_pair_profile", {}) if isinstance(ranker_validation, dict) else {}
+    candidate_ranker_train = candidate_ranker_profile.get("train", {}) if isinstance(candidate_ranker_profile, dict) else {}
+    candidate_ranker_val = candidate_ranker_profile.get("val", {}) if isinstance(candidate_ranker_profile, dict) else {}
 
     def _float(value: Any) -> float | None:
         return float(value) if value is not None else None
@@ -894,7 +902,13 @@ def _rapid_convergence_profile(
     theorem_recall10 = _float(theorem_metrics.get("theorem_retrieval_Recall@10"))
     theorem_recall100 = _float(theorem_metrics.get("theorem_retrieval_Recall@100"))
     reranked_recall10 = _float(reranked_metrics.get("Recall@10"))
+    hybrid_reranked_recall10 = _float(hybrid_reranked_metrics.get("Recall@10"))
     rerank_delta = (reranked_recall10 - proof_recall10) if reranked_recall10 is not None and proof_recall10 is not None else None
+    hybrid_vs_embedding_rerank_delta = (
+        hybrid_reranked_recall10 - reranked_recall10
+        if hybrid_reranked_recall10 is not None and reranked_recall10 is not None
+        else None
+    )
 
     recommended_sequence: list[dict[str, Any]] = []
     proof_bottleneck = (retrieval_profile.get("proof_state") or {}).get("primary_accuracy_bottleneck")
@@ -934,10 +948,23 @@ def _rapid_convergence_profile(
                 "reason": f"Ranker ablation says `{strongest.get('group')}` is the strongest currently measured feature group by delta_without_group.",
             }
         )
-    if premise_trace.get("has_negative_candidates") and premise_trace.get("has_positive_edges"):
+    if hybrid_vs_embedding_rerank_delta is not None and hybrid_vs_embedding_rerank_delta > 0:
         recommended_sequence.append(
             {
                 "priority": 4,
+                "area": "candidate_generated_hybrid_reranking",
+                "target_metric": "hybrid proof-state rerank Recall@10",
+                "current_value": hybrid_reranked_recall10,
+                "reason": (
+                    "Candidate-generated ranker training turns lexical+embedding union candidates into a positive sampled rerank delta "
+                    f"over embedding-only rerank ({hybrid_vs_embedding_rerank_delta:.4f} Recall@10)."
+                ),
+            }
+        )
+    if premise_trace.get("has_negative_candidates") and premise_trace.get("has_positive_edges"):
+        recommended_sequence.append(
+            {
+                "priority": 5,
                 "area": "hard_negative_training",
                 "target_metric": "MRR/MAP after reranking",
                 "current_value": premise_trace.get("negative_to_positive_edge_ratio"),
@@ -953,6 +980,8 @@ def _rapid_convergence_profile(
             "theorem_recall_at_100": theorem_recall100,
             "reranked_proof_state_recall_at_10": reranked_recall10,
             "reranked_minus_embedding_recall_at_10": rerank_delta,
+            "hybrid_reranked_proof_state_recall_at_10": hybrid_reranked_recall10,
+            "hybrid_minus_embedding_rerank_recall_at_10": hybrid_vs_embedding_rerank_delta,
         },
         "headroom": {
             "proof_state_missing_from_top100": (1.0 - proof_recall100) if proof_recall100 is not None else None,
@@ -988,6 +1017,19 @@ def _rapid_convergence_profile(
             },
         },
         "strongest_ranker_feature_groups": ranked_feature_groups[:5],
+        "candidate_generated_ranker": {
+            "training_pair_source": ranker_validation.get("training_pair_source"),
+            "validation_auc": ranker_validation.get("validation_auc"),
+            "ranker_config": ranker_validation.get("ranker_config", {}),
+            "train": candidate_ranker_train,
+            "validation": candidate_ranker_val,
+            "hybrid_rerank_sample": {
+                "embedding_only_recall_at_10": reranked_recall10,
+                "hybrid_recall_at_10": hybrid_reranked_recall10,
+                "hybrid_minus_embedding_only_recall_at_10": hybrid_vs_embedding_rerank_delta,
+                "candidate_pool": hybrid_candidate_pool,
+            },
+        },
         "label_supervision": {
             "has_positive_edges": premise_trace.get("has_positive_edges"),
             "has_negative_candidates": premise_trace.get("has_negative_candidates"),

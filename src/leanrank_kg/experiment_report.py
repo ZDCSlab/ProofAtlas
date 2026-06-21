@@ -945,6 +945,8 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
                 "theorem_recall_at_100",
                 "reranked_proof_state_recall_at_10",
                 "reranked_minus_embedding_recall_at_10",
+                "hybrid_reranked_proof_state_recall_at_10",
+                "hybrid_minus_embedding_rerank_recall_at_10",
             ],
         ),
         "",
@@ -982,6 +984,29 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
         "Strongest ranker feature groups:",
         "",
         _ranker_feature_group_table(rapid_convergence.get("strongest_ranker_feature_groups", []) if isinstance(rapid_convergence, dict) else []),
+        "",
+        "Candidate-generated ranker summary:",
+        "",
+        _metric_table(
+            rapid_convergence.get("candidate_generated_ranker", {}) if isinstance(rapid_convergence, dict) else {},
+            [
+                "training_pair_source",
+                "validation_auc",
+            ],
+        ),
+        "",
+        "Candidate-generated hybrid rerank sample:",
+        "",
+        _metric_table(
+            (rapid_convergence.get("candidate_generated_ranker", {}) or {}).get("hybrid_rerank_sample", {})
+            if isinstance(rapid_convergence, dict)
+            else {},
+            [
+                "embedding_only_recall_at_10",
+                "hybrid_recall_at_10",
+                "hybrid_minus_embedding_only_recall_at_10",
+            ],
+        ),
         "",
         "### Proof-State Query Representation Diagnostic",
         "",
