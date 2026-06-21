@@ -197,6 +197,102 @@ Difficulty buckets use a split-local distribution policy: easy is the lower 50%,
 | train | 23723 | 0.0389 | 0.6388 | 0.2188 | 0.2189 |
 | val | 2822 | 0.0638 | 0.5119 | 0.2512 | 0.2303 |
 
+## Case Studies
+
+### Case 1: `Action.full_res`
+
+This is a held-out theorem-guidance example showing how the retrieval bundle is meant to be used: inspect candidate premises, compare nearby historical theorems/proof states, read strategy facets, and use the difficulty profile as calibration.
+
+| Field | Value |
+| --- | --- |
+| Split | test |
+| Goal/query text | X.ρ (f a) ≫ g.hom = g.hom ≫ Y.ρ (f a) X.ρ (f a) ≫ g.hom = g.hom ≫ Y.ρ (f a) |
+| Gold premise train coverage | 1.0000 |
+| Gold positive premise count | 4 |
+| Difficulty | easy / 0.2686 |
+
+**Retrieved premises.**
+
+| Rank | Premise | Score | Why it appears |
+| --- | --- | --- | --- |
+| 1 | CategoryTheory.Category | 0.8885 | high query-premise embedding similarity (0.803); learned premise ranker score 0.999 |
+| 2 | CategoryTheory.MonoidalCategory | 0.8378 | high query-premise embedding similarity (0.808); learned premise ranker score 0.951 |
+| 3 | CategoryTheory.rightAdjointMate | 0.8233 | high query-premise embedding similarity (0.793); learned premise ranker score 0.936 |
+| 4 | Action.resEquiv | 0.8172 | high query-premise embedding similarity (0.857); learned premise ranker score 0.941 |
+| 5 | Monoid.PushoutI.hom_ext | 0.8130 | high query-premise embedding similarity (0.817); learned premise ranker score 0.954 |
+
+**Historical proof neighbors.**
+
+| Rank | Similar theorem | Score |
+| --- | --- | --- |
+| 1 | CategoryTheory.comp_rightAdjointMate | 0.9088 |
+| 2 | CategoryTheory.comp_leftAdjointMate | 0.9080 |
+| 3 | CategoryTheory.MonoOver.isIso_left_iff_subobjectMk_eq | 0.8998 |
+| 4 | Mathlib.Tactic.Bicategory.of_normalize_eq | 0.8975 |
+
+| Rank | Similar proof state | Score | Neighbor goal |
+| --- | --- | --- | --- |
+| 1 | groupCohomology.resolution.d_comp_ε | 0.9286 | ((resolution k G).d 1 0 ≫ ε k G).hom = Action.Hom.hom 0 |
+| 2 | groupCohomology.resolution.d_comp_ε | 0.9241 | (ModuleCat.Hom.hom ((resolution k G).d 1 0 ≫ ε k G).hom) x = (ModuleCat.Hom.hom (Action.Hom.hom 0)) x |
+| 3 | groupCohomology.resolution.d_comp_ε | 0.9201 | (ModuleCat.Hom.hom ((resolution k G).d 1 0 ≫ ε k G).hom) x = (ModuleCat.Hom.hom (Action.Hom.hom 0)) x |
+
+**Strategy facets.**
+
+| Rank | Facet | Confidence | Evidence |
+| --- | --- | --- | --- |
+| 1 | category_morphism_reasoning | 0.7700 | domain_specific_goal:≫;\bhom\b |
+| 2 | case_analysis | 0.7300 | context_case_marker:^case\s+;\bcase\s+ |
+| 3 | rewrite_transport | 0.7200 | goal_or_statement_shape:= |
+| 4 | typeclass_instance_resolution | 0.7000 | context_typeclass_bindings:\binst[^\s:]*\s*:;\bCategory\b |
+| 5 | algebraic_computation | 0.6800 | goal_symbols_and_names:[+*/^] |
+
+### Case 2: `AList.lookup_to_alist`
+
+This is a held-out theorem-guidance example showing how the retrieval bundle is meant to be used: inspect candidate premises, compare nearby historical theorems/proof states, read strategy facets, and use the difficulty profile as calibration.
+
+| Field | Value |
+| --- | --- |
+| Split | test |
+| Goal/query text | lookup a s.toAList = dlookup a s lookup a s.toAList = dlookup a s |
+| Gold premise train coverage | 1.0000 |
+| Gold positive premise count | 3 |
+| Difficulty | easy / 0.1766 |
+
+**Retrieved premises.**
+
+| Rank | Premise | Score | Why it appears |
+| --- | --- | --- | --- |
+| 1 | List.toAList | 0.8201 | high query-premise embedding similarity (0.865); learned premise ranker score 0.937 |
+| 2 | List.lookupAll_eq_dlookup | 0.7677 | high query-premise embedding similarity (0.793); learned premise ranker score 0.883 |
+| 3 | List.dlookup | 0.7574 | high query-premise embedding similarity (0.777); learned premise ranker score 0.873 |
+| 4 | AList.lookup_to_alist | 0.7551 | high query-premise embedding similarity (0.850); learned premise ranker score 0.892 |
+| 5 | List.dlookup_kunion_eq_some | 0.7545 | high query-premise embedding similarity (0.791); learned premise ranker score 0.860 |
+
+**Historical proof neighbors.**
+
+| Rank | Similar theorem | Score |
+| --- | --- | --- |
+| 1 | Plausible.TotalFunction.apply_eq_dlookup | 0.8804 |
+| 2 | AList.toFinmap_eq | 0.8740 |
+| 3 | AList.insertRec_insert | 0.8728 |
+| 4 | List.mem_orderedInsert | 0.8607 |
+
+| Rank | Similar proof state | Score | Neighbor goal |
+| --- | --- | --- | --- |
+| 1 | Plausible.TotalFunction.apply_eq_dlookup | 0.8834 | (withDefault m y).apply x = (List.dlookup x m).getD y |
+| 2 | Finmap.keys_union | 0.8816 | ∀ (a : α), a ∈ (⟦s₁⟧ ∪ ⟦s₂⟧).keys ↔ a ∈ ⟦s₁⟧.keys ∪ ⟦s₂⟧.keys |
+| 3 | AList.insertRec_insert | 0.8816 | HEq (insertRec H0 IH { entries := c :: l, nodupKeys := ⋯ })     (IH c.fst c.snd { entries := l, nodupKeys := hl } h (insertRec H0 IH { entri |
+
+**Strategy facets.**
+
+| Rank | Facet | Confidence | Evidence |
+| --- | --- | --- | --- |
+| 1 | rewrite_transport | 0.7200 | goal_or_statement_shape:= |
+| 2 | simplification_normalization | 0.7000 | lemma_name_or_statement:\bto[A-Z] |
+| 3 | induction_recursion | 0.6600 | name_context_or_statement:\bList\b |
+| 4 | typeclass_instance_resolution | 0.6600 | context_typeclass_bindings:\binst[^\s:]*\s*: |
+| 5 | theorem_application | 0.6200 | statement_connectives:→ |
+
 ## Interpretation
 
 The dataset and report support a retrieval-centered research claim. Theorem-level premise retrieval is the strongest quantitative result, while proof-state-level premise retrieval remains candidate-generation limited and should be presented as the main open challenge. Proof-state retrieval is still useful as a local-neighbor substrate for strategy-facet retrieval, difficulty-profile retrieval, and explanation. The current theorem-disjoint train/val/test split has no theorem leakage; future split changes should be motivated by domain-balance or retrieval-coverage studies rather than leakage repair.

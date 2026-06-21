@@ -9,6 +9,7 @@ import pyarrow.parquet as pq
 from scipy import sparse
 
 from .utils import read_json, write_json
+from .weak_label_proof_technique import labels_for_text
 
 
 REPORT_PATH = Path("outputs/reports/research_report.md")
@@ -258,15 +259,30 @@ def _sample_guidance_cases(limit: int = 3) -> list[dict[str, Any]]:
     if not isinstance(cases, list):
         return []
     compact = []
-    for case in cases[:limit]:
+    ranked_cases = sorted(
+        cases,
+        key=lambda row: (
+            -float(row.get("gold_premise_train_coverage") or 0.0),
+            -int(row.get("gold_positive_premise_count") or 0),
+            str(row.get("full_name") or row.get("theorem_id") or ""),
+        ),
+    )
+    for case in ranked_cases[:limit]:
         guidance = case.get("guidance", {}) if isinstance(case, dict) else {}
+        query = guidance.get("query", {}) if isinstance(guidance, dict) else {}
+        query_text = "\n".join([str(query.get("full_name") or ""), str(query.get("goal_text") or ""), str(query.get("retrieval_text") or "")])
         compact.append(
             {
                 "theorem": case.get("full_name") or case.get("theorem_id"),
+                "split": case.get("split", ""),
+                "goal_text": str(query.get("goal_text") or "")[:300],
+                "gold_positive_premise_count": case.get("gold_positive_premise_count"),
+                "gold_premise_train_coverage": case.get("gold_premise_train_coverage"),
                 "top_premises": [
                     {
                         "full_name": row.get("full_name"),
                         "score": row.get("score"),
+                        "reason": "; ".join((row.get("ranking_reasons") or [])[:2]) or str(row.get("explanation") or "")[:140],
                     }
                     for row in (guidance.get("ranked_premises") or [])[:5]
                 ],
@@ -277,11 +293,85 @@ def _sample_guidance_cases(limit: int = 3) -> list[dict[str, Any]]:
                     }
                     for row in (guidance.get("similar_theorems") or [])[:5]
                 ],
-                "techniques": guidance.get("likely_proof_techniques", [])[:5],
+                "similar_proof_states": [
+                    {
+                        "full_name": row.get("full_name"),
+                        "score": row.get("score"),
+                        "goal_text": str(row.get("goal_text") or "")[:140],
+                    }
+                    for row in (guidance.get("similar_proof_states") or [])[:4]
+                ],
+                "techniques": labels_for_text(query_text, max_labels=5),
                 "difficulty": guidance.get("difficulty_profile", {}),
             }
         )
     return compact
+
+
+def _case_study_markdown(cases: list[dict[str, Any]]) -> list[str]:
+    if not cases:
+        return []
+    lines = ["## Case Studies", ""]
+    for idx, case in enumerate(cases[:2], start=1):
+        difficulty = case.get("difficulty") or {}
+        lines.extend(
+            [
+                f"### Case {idx}: `{case.get('theorem', 'unknown')}`",
+                "",
+                "This is a held-out theorem-guidance example showing how the retrieval bundle is meant to be used: inspect candidate premises, compare nearby historical theorems/proof states, read strategy facets, and use the difficulty profile as calibration.",
+                "",
+                _table(
+                    ["Field", "Value"],
+                    [
+                        ["Split", case.get("split", "n/a")],
+                        ["Goal/query text", str(case.get("goal_text") or "n/a").replace("\n", " ")],
+                        ["Gold premise train coverage", _fmt(case.get("gold_premise_train_coverage"))],
+                        ["Gold positive premise count", case.get("gold_positive_premise_count", "n/a")],
+                        ["Difficulty", f"{difficulty.get('difficulty_bucket', 'n/a')} / {_fmt(difficulty.get('difficulty_score'))}"],
+                    ],
+                ),
+                "",
+                "**Retrieved premises.**",
+                "",
+                _table(
+                    ["Rank", "Premise", "Score", "Why it appears"],
+                    [
+                        [rank, row.get("full_name", "n/a"), _fmt(row.get("score")), row.get("reason", "")]
+                        for rank, row in enumerate(case.get("top_premises", [])[:5], start=1)
+                    ],
+                ),
+                "",
+                "**Historical proof neighbors.**",
+                "",
+                _table(
+                    ["Rank", "Similar theorem", "Score"],
+                    [
+                        [rank, row.get("full_name", "n/a"), _fmt(row.get("score"))]
+                        for rank, row in enumerate(case.get("similar_theorems", [])[:4], start=1)
+                    ],
+                ),
+                "",
+                _table(
+                    ["Rank", "Similar proof state", "Score", "Neighbor goal"],
+                    [
+                        [rank, row.get("full_name", "n/a"), _fmt(row.get("score")), str(row.get("goal_text", "")).replace("\n", " ")]
+                        for rank, row in enumerate(case.get("similar_proof_states", [])[:3], start=1)
+                    ],
+                ),
+                "",
+                "**Strategy facets.**",
+                "",
+                _table(
+                    ["Rank", "Facet", "Confidence", "Evidence"],
+                    [
+                        [rank, row.get("label", "n/a"), _fmt(row.get("confidence")), row.get("provenance", "")]
+                        for rank, row in enumerate(case.get("techniques", [])[:5], start=1)
+                    ],
+                ),
+                "",
+            ]
+        )
+    return lines
 
 
 def _prediction_bundle() -> dict[str, Any]:
@@ -624,6 +714,7 @@ def _write_markdown(bundle: dict[str, Any], output_path: str | Path) -> None:
             ],
         ),
         "",
+        *_case_study_markdown(bundle.get("sample_prediction_cases", [])),
         "## Interpretation",
         "",
         "The dataset and report support a retrieval-centered research claim. Theorem-level premise retrieval is the strongest quantitative result, while proof-state-level premise retrieval remains candidate-generation limited and should be presented as the main open challenge. Proof-state retrieval is still useful as a local-neighbor substrate for strategy-facet retrieval, difficulty-profile retrieval, and explanation. The current theorem-disjoint train/val/test split has no theorem leakage; future split changes should be motivated by domain-balance or retrieval-coverage studies rather than leakage repair.",

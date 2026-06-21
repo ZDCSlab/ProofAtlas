@@ -26717,6 +26717,204 @@
     {
       "difficulty": {
         "difficulty_bucket": "easy",
+        "difficulty_score": 0.2685629982719117,
+        "signals": {
+          "calibrated_by": "query_heuristic_and_similar_theorem_prior_and_trained_estimator",
+          "heuristic_difficulty_score": 0.38204475493476847,
+          "historical_prior_confidence": 0.9087842702865601,
+          "historical_prior_score": 0.2073979251979519,
+          "hypothesis_count_score": 0.9166666666666666,
+          "premise_retrieval_uncertainty": 0.11150804496040245,
+          "query_length_score": 0.27416666666666667,
+          "similar_theorem_uncertainty": 0.09121572971343994,
+          "symbol_density_score": 0.5166666666666667,
+          "trained_estimator_available": true,
+          "trained_estimator_confidence_interval": {
+            "high": 0.20476342918989837,
+            "low": 0.09434349923634083,
+            "residual_quantile": "p80"
+          },
+          "trained_estimator_score": 0.1495534642131196,
+          "trained_estimator_uncertainty": 0.05520996497677877
+        },
+        "similar_theorem_difficulty_neighbors": [
+          {
+            "difficulty_bucket": "easy",
+            "difficulty_score": 0.2644396390496443,
+            "difficulty_target_source": "proof_length_tactic_count_premise_count_negative_candidates",
+            "full_name": "CategoryTheory.comp_rightAdjointMate",
+            "similarity": 0.9087842702865601,
+            "theorem_id": "thm:CategoryTheory.comp_rightAdjointMate"
+          },
+          {
+            "difficulty_bucket": "easy",
+            "difficulty_score": 0.25853649102756976,
+            "difficulty_target_source": "proof_length_tactic_count_premise_count_negative_candidates",
+            "full_name": "CategoryTheory.comp_leftAdjointMate",
+            "similarity": 0.9079543352127075,
+            "theorem_id": "thm:CategoryTheory.comp_leftAdjointMate"
+          },
+          {
+            "difficulty_bucket": "easy",
+            "difficulty_score": 0.16513040158599965,
+            "difficulty_target_source": "proof_length_tactic_count_premise_count_negative_candidates",
+            "full_name": "CategoryTheory.MonoOver.isIso_left_iff_subobjectMk_eq",
+            "similarity": 0.8998295664787292,
+            "theorem_id": "thm:CategoryTheory.MonoOver.isIso_left_iff_subobjectMk_eq"
+          },
+          {
+            "difficulty_bucket": "easy",
+            "difficulty_score": 0.14942190472020497,
+            "difficulty_target_source": "proof_length_tactic_count_premise_count_negative_candidates",
+            "full_name": "Mathlib.Tactic.Bicategory.of_normalize_eq",
+            "similarity": 0.8974626064300537,
+            "theorem_id": "thm:Mathlib.Tactic.Bicategory.of_normalize_eq"
+          },
+          {
+            "difficulty_bucket": "easy",
+            "difficulty_score": 0.1982522540498961,
+            "difficulty_target_source": "proof_length_tactic_count_premise_count_negative_candidates",
+            "full_name": "CategoryTheory.cancel_mono_assoc_iff",
+            "similarity": 0.8971694707870483,
+            "theorem_id": "thm:CategoryTheory.cancel_mono_assoc_iff"
+          }
+        ],
+        "trained_estimator_calibration_bins": [
+          {
+            "bucket": "easy",
+            "count": 22045,
+            "mae": 0.03652704999103804,
+            "mean_prediction": 0.20321864553098629,
+            "mean_target": 0.2027481500828809
+          },
+          {
+            "bucket": "medium",
+            "count": 1671,
+            "mae": 0.07119060523852852,
+            "mean_prediction": 0.4246939224529047,
+            "mean_target": 0.43223385990724195
+          },
+          {
+            "bucket": "hard",
+            "count": 7,
+            "mae": 0.07766092319165037,
+            "mean_prediction": 0.6816282957798739,
+            "mean_target": 0.7592892189715242
+          }
+        ]
+      },
+      "goal_text": "X.\u03c1 (f a) \u226b g.hom = g.hom \u226b Y.\u03c1 (f a)\nX.\u03c1 (f a) \u226b g.hom = g.hom \u226b Y.\u03c1 (f a)",
+      "gold_positive_premise_count": 4,
+      "gold_premise_train_coverage": 1.0,
+      "similar_proof_states": [
+        {
+          "full_name": "groupCohomology.resolution.d_comp_\u03b5",
+          "goal_text": "((resolution k G).d 1 0 \u226b \u03b5 k G).hom = Action.Hom.hom 0",
+          "score": 0.9286173582077026
+        },
+        {
+          "full_name": "groupCohomology.resolution.d_comp_\u03b5",
+          "goal_text": "(ModuleCat.Hom.hom ((resolution k G).d 1 0 \u226b \u03b5 k G).hom) x = (ModuleCat.Hom.hom (Action.Hom.hom 0)) x",
+          "score": 0.9241082072257996
+        },
+        {
+          "full_name": "groupCohomology.resolution.d_comp_\u03b5",
+          "goal_text": "(ModuleCat.Hom.hom ((resolution k G).d 1 0 \u226b \u03b5 k G).hom) x = (ModuleCat.Hom.hom (Action.Hom.hom 0)) x",
+          "score": 0.9201058745384216
+        },
+        {
+          "full_name": "CategoryTheory.comp_rightAdjointMate",
+          "goal_text": "(f \u226b g)\u1601 = (\u03c1_ Z\u1601).inv \u226b Z\u1601 \u25c1 \u03b7_ Y Y\u1601 \u226b Z\u1601 \u25c1 (g \u2297 f\u1601) \u226b (\u03b1_ Z\u1601 Z X\u1601).inv \u226b \u03b5_ Z Z\u1601 \u25b7 X\u1601 \u226b (\u03bb_ X\u1601).hom",
+          "score": 0.9177033305168152
+        }
+      ],
+      "similar_theorems": [
+        {
+          "full_name": "CategoryTheory.comp_rightAdjointMate",
+          "score": 0.9087842702865601
+        },
+        {
+          "full_name": "CategoryTheory.comp_leftAdjointMate",
+          "score": 0.9079543352127075
+        },
+        {
+          "full_name": "CategoryTheory.MonoOver.isIso_left_iff_subobjectMk_eq",
+          "score": 0.8998295664787292
+        },
+        {
+          "full_name": "Mathlib.Tactic.Bicategory.of_normalize_eq",
+          "score": 0.8974626064300537
+        },
+        {
+          "full_name": "CategoryTheory.cancel_mono_assoc_iff",
+          "score": 0.8971694707870483
+        }
+      ],
+      "split": "test",
+      "techniques": [
+        {
+          "confidence": 0.77,
+          "evidence_source": "domain_specific_goal",
+          "label": "category_morphism_reasoning",
+          "provenance": "domain_specific_goal:\u226b;\\bhom\\b"
+        },
+        {
+          "confidence": 0.73,
+          "evidence_source": "context_case_marker",
+          "label": "case_analysis",
+          "provenance": "context_case_marker:^case\\s+;\\bcase\\s+"
+        },
+        {
+          "confidence": 0.72,
+          "evidence_source": "goal_or_statement_shape",
+          "label": "rewrite_transport",
+          "provenance": "goal_or_statement_shape:="
+        },
+        {
+          "confidence": 0.7000000000000001,
+          "evidence_source": "context_typeclass_bindings",
+          "label": "typeclass_instance_resolution",
+          "provenance": "context_typeclass_bindings:\\binst[^\\s:]*\\s*:;\\bCategory\\b"
+        },
+        {
+          "confidence": 0.68,
+          "evidence_source": "goal_symbols_and_names",
+          "label": "algebraic_computation",
+          "provenance": "goal_symbols_and_names:[+*/^]"
+        }
+      ],
+      "theorem": "Action.full_res",
+      "top_premises": [
+        {
+          "full_name": "CategoryTheory.Category",
+          "reason": "high query-premise embedding similarity (0.803); learned premise ranker score 0.999",
+          "score": 0.8884919550395975
+        },
+        {
+          "full_name": "CategoryTheory.MonoidalCategory",
+          "reason": "high query-premise embedding similarity (0.808); learned premise ranker score 0.951",
+          "score": 0.8378273293683077
+        },
+        {
+          "full_name": "CategoryTheory.rightAdjointMate",
+          "reason": "high query-premise embedding similarity (0.793); learned premise ranker score 0.936",
+          "score": 0.8233430499194048
+        },
+        {
+          "full_name": "Action.resEquiv",
+          "reason": "high query-premise embedding similarity (0.857); learned premise ranker score 0.941",
+          "score": 0.8171594008619452
+        },
+        {
+          "full_name": "Monoid.PushoutI.hom_ext",
+          "reason": "high query-premise embedding similarity (0.817); learned premise ranker score 0.954",
+          "score": 0.8130140077285277
+        }
+      ]
+    },
+    {
+      "difficulty": {
+        "difficulty_bucket": "easy",
         "difficulty_score": 0.1766337044436844,
         "signals": {
           "calibrated_by": "query_heuristic_and_similar_theorem_prior_and_trained_estimator",
@@ -26803,6 +27001,31 @@
           }
         ]
       },
+      "goal_text": "lookup a s.toAList = dlookup a s\nlookup a s.toAList = dlookup a s",
+      "gold_positive_premise_count": 3,
+      "gold_premise_train_coverage": 1.0,
+      "similar_proof_states": [
+        {
+          "full_name": "Plausible.TotalFunction.apply_eq_dlookup",
+          "goal_text": "(withDefault m y).apply x = (List.dlookup x m).getD y",
+          "score": 0.8834206461906433
+        },
+        {
+          "full_name": "Finmap.keys_union",
+          "goal_text": "\u2200 (a : \u03b1), a \u2208 (\u27e6s\u2081\u27e7 \u222a \u27e6s\u2082\u27e7).keys \u2194 a \u2208 \u27e6s\u2081\u27e7.keys \u222a \u27e6s\u2082\u27e7.keys",
+          "score": 0.8816091418266296
+        },
+        {
+          "full_name": "AList.insertRec_insert",
+          "goal_text": "HEq (insertRec H0 IH { entries := c :: l, nodupKeys := \u22ef })\n    (IH c.fst c.snd { entries := l, nodupKeys := hl } h (insertRec H0 IH { entri",
+          "score": 0.8815569877624512
+        },
+        {
+          "full_name": "List.kreplace_nodupKeys",
+          "goal_text": "(kreplace a b l).NodupKeys \u2194 l.NodupKeys",
+          "score": 0.8813640475273132
+        }
+      ],
       "similar_theorems": [
         {
           "full_name": "Plausible.TotalFunction.apply_eq_dlookup",
@@ -26825,36 +27048,64 @@
           "score": 0.860485851764679
         }
       ],
+      "split": "test",
       "techniques": [
         {
-          "label": "rewriting_or_coercion",
-          "provenance": "Eq"
+          "confidence": 0.72,
+          "evidence_source": "goal_or_statement_shape",
+          "label": "rewrite_transport",
+          "provenance": "goal_or_statement_shape:="
         },
         {
-          "label": "typeclass_resolution",
-          "provenance": "inst"
+          "confidence": 0.7,
+          "evidence_source": "lemma_name_or_statement",
+          "label": "simplification_normalization",
+          "provenance": "lemma_name_or_statement:\\bto[A-Z]"
+        },
+        {
+          "confidence": 0.66,
+          "evidence_source": "name_context_or_statement",
+          "label": "induction_recursion",
+          "provenance": "name_context_or_statement:\\bList\\b"
+        },
+        {
+          "confidence": 0.66,
+          "evidence_source": "context_typeclass_bindings",
+          "label": "typeclass_instance_resolution",
+          "provenance": "context_typeclass_bindings:\\binst[^\\s:]*\\s*:"
+        },
+        {
+          "confidence": 0.62,
+          "evidence_source": "statement_connectives",
+          "label": "theorem_application",
+          "provenance": "statement_connectives:\u2192"
         }
       ],
       "theorem": "AList.lookup_to_alist",
       "top_premises": [
         {
           "full_name": "List.toAList",
+          "reason": "high query-premise embedding similarity (0.865); learned premise ranker score 0.937",
           "score": 0.8200547009978536
         },
         {
           "full_name": "List.lookupAll_eq_dlookup",
+          "reason": "high query-premise embedding similarity (0.793); learned premise ranker score 0.883",
           "score": 0.7677301675358789
         },
         {
           "full_name": "List.dlookup",
+          "reason": "high query-premise embedding similarity (0.777); learned premise ranker score 0.873",
           "score": 0.757445275244663
         },
         {
           "full_name": "AList.lookup_to_alist",
+          "reason": "high query-premise embedding similarity (0.850); learned premise ranker score 0.892",
           "score": 0.7550723420608944
         },
         {
           "full_name": "List.dlookup_kunion_eq_some",
+          "reason": "high query-premise embedding similarity (0.791); learned premise ranker score 0.860",
           "score": 0.7545195347849429
         }
       ]
@@ -26948,6 +27199,31 @@
           }
         ]
       },
+      "goal_text": "(extensionEmbedding_of_comp h) \u2191x = f x\n(extensionEmbedding_of_comp h) \u2191x = f x",
+      "gold_positive_premise_count": 2,
+      "gold_premise_train_coverage": 0.0,
+      "similar_proof_states": [
+        {
+          "full_name": "WithAbs.uniformSpace_comap_eq_of_comp",
+          "goal_text": "UniformSpace.comap (\u21d1f) inferInstance = PseudoMetricSpace.toUniformSpace",
+          "score": 0.9151363968849182
+        },
+        {
+          "full_name": "ContinuousMultilinearMap.completeSpace",
+          "goal_text": "CompleteSpace (ContinuousMultilinearMap \ud835\udd5c E F)",
+          "score": 0.8849577903747559
+        },
+        {
+          "full_name": "ImplicitFunctionData.implicitFunction_hasStrictFDerivAt",
+          "goal_text": "g'inv =\n    (\u2191(\u03c6.leftDeriv.equivProdOfSurjectiveOfIsCompl \u03c6.rightDeriv \u22ef \u22ef \u22ef).symm).comp\n      (ContinuousLinearMap.prod 0 (ContinuousLinear",
+          "score": 0.8814493417739868
+        },
+        {
+          "full_name": "isClosed_setOf_isCompactOperator",
+          "goal_text": "IsCompactOperator \u21d1\u2191u",
+          "score": 0.8814404606819153
+        }
+      ],
       "similar_theorems": [
         {
           "full_name": "WithAbs.uniformSpace_comap_eq_of_comp",
@@ -26970,190 +27246,59 @@
           "score": 0.8648348450660706
         }
       ],
+      "split": "test",
       "techniques": [
         {
-          "label": "rewriting_or_coercion",
-          "provenance": "coe"
+          "confidence": 0.74,
+          "evidence_source": "context_typeclass_bindings",
+          "label": "typeclass_instance_resolution",
+          "provenance": "context_typeclass_bindings:\\binst[^\\s:]*\\s*:;\\bField\\b;\\bNormedField\\b"
         },
         {
-          "label": "typeclass_resolution",
-          "provenance": "inst"
+          "confidence": 0.72,
+          "evidence_source": "goal_or_statement_shape",
+          "label": "rewrite_transport",
+          "provenance": "goal_or_statement_shape:="
         },
         {
-          "label": "extensionality",
-          "provenance": "ext"
+          "confidence": 0.68,
+          "evidence_source": "goal_symbols_and_names",
+          "label": "algebraic_computation",
+          "provenance": "goal_symbols_and_names:[+*/^]"
         },
         {
-          "label": "logical_reasoning",
-          "provenance": "or"
+          "confidence": 0.62,
+          "evidence_source": "statement_connectives",
+          "label": "theorem_application",
+          "provenance": "statement_connectives:\u2192"
         }
       ],
       "theorem": "AbsoluteValue.Completion.extensionEmbedding_of_comp_coe",
       "top_premises": [
         {
           "full_name": "WithAbs.pseudoMetricSpace_induced_of_comp",
+          "reason": "high query-premise embedding similarity (0.797); learned premise ranker score 0.940",
           "score": 0.8292894201321637
         },
         {
           "full_name": "UniformSpace.Completion.extension_comp_coe",
+          "reason": "high query-premise embedding similarity (0.830); learned premise ranker score 0.953",
           "score": 0.8190525209759605
         },
         {
           "full_name": "WithAbs.normedField",
+          "reason": "high query-premise embedding similarity (0.795); learned premise ranker score 0.944",
           "score": 0.8015726086149593
         },
         {
           "full_name": "Valued.closure_coe_completion_v_lt",
+          "reason": "high query-premise embedding similarity (0.814); learned premise ranker score 0.932",
           "score": 0.7999910254678012
         },
         {
           "full_name": "AbsoluteValue.comp",
+          "reason": "high query-premise embedding similarity (0.810); learned premise ranker score 0.923",
           "score": 0.7939230735582385
-        }
-      ]
-    },
-    {
-      "difficulty": {
-        "difficulty_bucket": "easy",
-        "difficulty_score": 0.2685629982719117,
-        "signals": {
-          "calibrated_by": "query_heuristic_and_similar_theorem_prior_and_trained_estimator",
-          "heuristic_difficulty_score": 0.38204475493476847,
-          "historical_prior_confidence": 0.9087842702865601,
-          "historical_prior_score": 0.2073979251979519,
-          "hypothesis_count_score": 0.9166666666666666,
-          "premise_retrieval_uncertainty": 0.11150804496040245,
-          "query_length_score": 0.27416666666666667,
-          "similar_theorem_uncertainty": 0.09121572971343994,
-          "symbol_density_score": 0.5166666666666667,
-          "trained_estimator_available": true,
-          "trained_estimator_confidence_interval": {
-            "high": 0.20476342918989837,
-            "low": 0.09434349923634083,
-            "residual_quantile": "p80"
-          },
-          "trained_estimator_score": 0.1495534642131196,
-          "trained_estimator_uncertainty": 0.05520996497677877
-        },
-        "similar_theorem_difficulty_neighbors": [
-          {
-            "difficulty_bucket": "easy",
-            "difficulty_score": 0.2644396390496443,
-            "difficulty_target_source": "proof_length_tactic_count_premise_count_negative_candidates",
-            "full_name": "CategoryTheory.comp_rightAdjointMate",
-            "similarity": 0.9087842702865601,
-            "theorem_id": "thm:CategoryTheory.comp_rightAdjointMate"
-          },
-          {
-            "difficulty_bucket": "easy",
-            "difficulty_score": 0.25853649102756976,
-            "difficulty_target_source": "proof_length_tactic_count_premise_count_negative_candidates",
-            "full_name": "CategoryTheory.comp_leftAdjointMate",
-            "similarity": 0.9079543352127075,
-            "theorem_id": "thm:CategoryTheory.comp_leftAdjointMate"
-          },
-          {
-            "difficulty_bucket": "easy",
-            "difficulty_score": 0.16513040158599965,
-            "difficulty_target_source": "proof_length_tactic_count_premise_count_negative_candidates",
-            "full_name": "CategoryTheory.MonoOver.isIso_left_iff_subobjectMk_eq",
-            "similarity": 0.8998295664787292,
-            "theorem_id": "thm:CategoryTheory.MonoOver.isIso_left_iff_subobjectMk_eq"
-          },
-          {
-            "difficulty_bucket": "easy",
-            "difficulty_score": 0.14942190472020497,
-            "difficulty_target_source": "proof_length_tactic_count_premise_count_negative_candidates",
-            "full_name": "Mathlib.Tactic.Bicategory.of_normalize_eq",
-            "similarity": 0.8974626064300537,
-            "theorem_id": "thm:Mathlib.Tactic.Bicategory.of_normalize_eq"
-          },
-          {
-            "difficulty_bucket": "easy",
-            "difficulty_score": 0.1982522540498961,
-            "difficulty_target_source": "proof_length_tactic_count_premise_count_negative_candidates",
-            "full_name": "CategoryTheory.cancel_mono_assoc_iff",
-            "similarity": 0.8971694707870483,
-            "theorem_id": "thm:CategoryTheory.cancel_mono_assoc_iff"
-          }
-        ],
-        "trained_estimator_calibration_bins": [
-          {
-            "bucket": "easy",
-            "count": 22045,
-            "mae": 0.03652704999103804,
-            "mean_prediction": 0.20321864553098629,
-            "mean_target": 0.2027481500828809
-          },
-          {
-            "bucket": "medium",
-            "count": 1671,
-            "mae": 0.07119060523852852,
-            "mean_prediction": 0.4246939224529047,
-            "mean_target": 0.43223385990724195
-          },
-          {
-            "bucket": "hard",
-            "count": 7,
-            "mae": 0.07766092319165037,
-            "mean_prediction": 0.6816282957798739,
-            "mean_target": 0.7592892189715242
-          }
-        ]
-      },
-      "similar_theorems": [
-        {
-          "full_name": "CategoryTheory.comp_rightAdjointMate",
-          "score": 0.9087842702865601
-        },
-        {
-          "full_name": "CategoryTheory.comp_leftAdjointMate",
-          "score": 0.9079543352127075
-        },
-        {
-          "full_name": "CategoryTheory.MonoOver.isIso_left_iff_subobjectMk_eq",
-          "score": 0.8998295664787292
-        },
-        {
-          "full_name": "Mathlib.Tactic.Bicategory.of_normalize_eq",
-          "score": 0.8974626064300537
-        },
-        {
-          "full_name": "CategoryTheory.cancel_mono_assoc_iff",
-          "score": 0.8971694707870483
-        }
-      ],
-      "techniques": [
-        {
-          "label": "typeclass_resolution",
-          "provenance": "inst"
-        },
-        {
-          "label": "logical_reasoning",
-          "provenance": "intro"
-        }
-      ],
-      "theorem": "Action.full_res",
-      "top_premises": [
-        {
-          "full_name": "CategoryTheory.Category",
-          "score": 0.8884919550395975
-        },
-        {
-          "full_name": "CategoryTheory.MonoidalCategory",
-          "score": 0.8378273293683077
-        },
-        {
-          "full_name": "CategoryTheory.rightAdjointMate",
-          "score": 0.8233430499194048
-        },
-        {
-          "full_name": "Action.resEquiv",
-          "score": 0.8171594008619452
-        },
-        {
-          "full_name": "Monoid.PushoutI.hom_ext",
-          "score": 0.8130140077285277
         }
       ]
     }
