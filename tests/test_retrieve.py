@@ -1,5 +1,6 @@
 import json
 
+import numpy as np
 import pandas as pd
 
 from leanrank_kg import augment_graph, build_graph, build_index, compute_difficulty, download_or_sample, embed, evaluate, homepage, normalize, report, train_difficulty, train_ranker, weak_label_proof_technique
@@ -51,6 +52,66 @@ def test_adaptive_retrieval_policy_expands_candidate_depth_by_difficulty():
     assert hard["difficulty_bucket"] == "hard"
     assert easy["candidate_k"] < medium["candidate_k"] < hard["candidate_k"]
     assert hard["candidate_k"] <= 500
+
+
+def test_rerank_scores_premise_ranker_in_one_batch(monkeypatch):
+    class DummyRanker:
+        feature_names_in_ = np.array(
+            [
+                "cosine_similarity",
+                "same_namespace",
+                "same_domain",
+                "proof_technique_overlap",
+                "proof_state_difficulty",
+                "negative_candidate_hardness",
+                "premise_frequency",
+                "symbol_name_overlap",
+                "symbol_context_overlap",
+                "graph_premise_degree",
+                "theorem_neighborhood_premise_score",
+                "embedding_candidate_rank_score",
+                "lexical_candidate_rank_score",
+                "candidate_source_overlap",
+                "lexical_only_candidate",
+            ]
+        )
+
+        def __init__(self):
+            self.calls = 0
+            self.batch_sizes = []
+
+        def predict_proba(self, frame):
+            self.calls += 1
+            self.batch_sizes.append(len(frame))
+            positive = np.linspace(0.2, 0.8, len(frame))
+            return np.column_stack([1.0 - positive, positive])
+
+    ranker = DummyRanker()
+    monkeypatch.setattr(retrieve_module, "_load_premise_ranker", lambda: ranker)
+    monkeypatch.setattr(retrieve_module, "_premise_labels", lambda split: {})
+    monkeypatch.setattr(retrieve_module, "_premise_frequency", lambda split: pd.Series(dtype=float))
+    monkeypatch.setattr(retrieve_module, "_invokes_premise_edges", lambda split: pd.DataFrame())
+    monkeypatch.setattr(retrieve_module, "_premise_degree", lambda split: pd.Series(dtype=float))
+    candidates = pd.DataFrame(
+        [
+            {"id": "premise:A.foo", "full_name": "A.foo", "code": "foo", "score": 0.1, "domain_tag": "A"},
+            {"id": "premise:A.bar", "full_name": "A.bar", "code": "bar", "score": 0.2, "domain_tag": "A"},
+            {"id": "premise:B.baz", "full_name": "B.baz", "code": "baz", "score": 0.3, "domain_tag": "B"},
+        ]
+    )
+
+    ranked = retrieve_module._rerank_premise_candidates(
+        "theorem A.query : foo := by",
+        candidates,
+        {},
+        "train",
+        query_context={"full_name": "A.query", "domain_hint": "A"},
+    )
+
+    assert ranker.calls == 1
+    assert ranker.batch_sizes == [3]
+    assert ranked["learned_ranker_score"].notna().all()
+    assert ranked.iloc[0]["score"] >= ranked.iloc[-1]["score"]
 
 
 def test_retrieval_artifact_cache_can_be_cleared(tmp_path, monkeypatch):

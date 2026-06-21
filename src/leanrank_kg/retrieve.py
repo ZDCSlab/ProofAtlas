@@ -490,6 +490,7 @@ def _rerank_premise_candidates(
     proof_state_difficulty = _query_difficulty_score(query_text, query_context)
     ranker_model = _load_premise_ranker()
     rows = []
+    ranker_feature_rows: list[dict[str, float]] = []
     for row in candidates.to_dict(orient="records"):
         full_name = str(row.get("full_name", ""))
         premise_namespace = namespace(full_name)
@@ -517,26 +518,23 @@ def _rerank_premise_candidates(
         )
         same_namespace = float(bool(query_namespace and query_namespace == premise_namespace) or premise_namespace in query_namespaces)
         same_domain = float(bool(query_domain and query_domain == str(row.get("domain_tag", ""))))
-        learned_ranker_score = _score_with_premise_ranker(
-            ranker_model,
-            {
-                "cosine_similarity": embedding_score,
-                "same_namespace": same_namespace,
-                "same_domain": same_domain,
-                "proof_technique_overlap": technique_score,
-                "proof_state_difficulty": proof_state_difficulty,
-                "negative_candidate_hardness": 0.0,
-                "premise_frequency": frequency_score,
-                "symbol_name_overlap": symbol_name_overlap,
-                "symbol_context_overlap": symbol_context_overlap,
-                "graph_premise_degree": graph_premise_degree,
-                "theorem_neighborhood_premise_score": theorem_neighborhood_score,
-                "embedding_candidate_rank_score": embedding_candidate_rank_score,
-                "lexical_candidate_rank_score": lexical_candidate_rank_score,
-                "candidate_source_overlap": candidate_source_overlap,
-                "lexical_only_candidate": lexical_only_candidate,
-            },
-        )
+        ranker_features = {
+            "cosine_similarity": embedding_score,
+            "same_namespace": same_namespace,
+            "same_domain": same_domain,
+            "proof_technique_overlap": technique_score,
+            "proof_state_difficulty": proof_state_difficulty,
+            "negative_candidate_hardness": 0.0,
+            "premise_frequency": frequency_score,
+            "symbol_name_overlap": symbol_name_overlap,
+            "symbol_context_overlap": symbol_context_overlap,
+            "graph_premise_degree": graph_premise_degree,
+            "theorem_neighborhood_premise_score": theorem_neighborhood_score,
+            "embedding_candidate_rank_score": embedding_candidate_rank_score,
+            "lexical_candidate_rank_score": lexical_candidate_rank_score,
+            "candidate_source_overlap": candidate_source_overlap,
+            "lexical_only_candidate": lexical_only_candidate,
+        }
         fixed_score = (
             0.59 * embedding_score
             + 0.10 * frequency_score
@@ -550,12 +548,10 @@ def _rerank_premise_candidates(
             + 0.05 * lexical_candidate_rank_score
             + 0.01 * candidate_source_overlap
         )
-        rerank_score = 0.55 * learned_ranker_score + 0.45 * fixed_score if learned_ranker_score is not None else fixed_score
         enriched = dict(row)
         enriched.update(
             {
                 "embedding_score": embedding_score,
-                "learned_ranker_score": learned_ranker_score,
                 "same_namespace_score": same_namespace,
                 "same_domain_score": same_domain,
                 "premise_frequency_score": frequency_score,
@@ -572,10 +568,16 @@ def _rerank_premise_candidates(
                 "candidate_source_overlap_score": candidate_source_overlap,
                 "lexical_only_candidate_score": lexical_only_candidate,
                 "fixed_rerank_score": fixed_score,
-                "score": rerank_score,
             }
         )
+        ranker_feature_rows.append(ranker_features)
         rows.append(enriched)
+    learned_scores = _score_with_premise_ranker_batch(ranker_model, ranker_feature_rows)
+    for enriched, learned_ranker_score in zip(rows, learned_scores, strict=True):
+        fixed_score = float(enriched["fixed_rerank_score"])
+        rerank_score = 0.55 * learned_ranker_score + 0.45 * fixed_score if learned_ranker_score is not None else fixed_score
+        enriched["learned_ranker_score"] = learned_ranker_score
+        enriched["score"] = rerank_score
     return pd.DataFrame(rows).sort_values("score", ascending=False)
 
 
@@ -631,12 +633,24 @@ def clear_retrieval_caches() -> None:
 def _score_with_premise_ranker(model, features: dict[str, float]) -> float | None:
     if model is None:
         return None
-    columns = list(getattr(model, "feature_names_in_", features.keys()))
-    frame = pd.DataFrame([{col: float(features.get(col, 0.0)) for col in columns}])
+    scores = _score_with_premise_ranker_batch(model, [features])
+    return scores[0] if scores else None
+
+
+def _score_with_premise_ranker_batch(model, feature_rows: list[dict[str, float]]) -> list[float | None]:
+    if model is None:
+        return [None] * len(feature_rows)
+    if not feature_rows:
+        return []
+    columns = list(getattr(model, "feature_names_in_", feature_rows[0].keys()))
+    frame = pd.DataFrame(
+        [{col: float(features.get(col, 0.0)) for col in columns} for features in feature_rows],
+        columns=columns,
+    )
     try:
-        return float(model.predict_proba(frame)[:, 1][0])
+        return [float(value) for value in model.predict_proba(frame)[:, 1]]
     except Exception:
-        return None
+        return [None] * len(feature_rows)
 
 
 def _ranking_reasons(row: dict[str, Any], explanation: dict[str, Any]) -> list[str]:
