@@ -40,6 +40,10 @@ def _table(headers: list[str], rows: list[list[Any]]) -> str:
     return "\n".join(lines)
 
 
+def _task_spec_table(rows: list[tuple[str, str]]) -> str:
+    return _table(["Field", "Description"], [[field, description] for field, description in rows])
+
+
 def _top_by_split(rows: list[dict[str, Any]], split: str, key: str, n: int = 8) -> list[dict[str, Any]]:
     filtered = [row for row in rows if str(row.get("split")) == split]
     return sorted(filtered, key=lambda row: float(row.get(key, 0)), reverse=True)[:n]
@@ -468,9 +472,17 @@ def _write_markdown(bundle: dict[str, Any], output_path: str | Path) -> None:
         "",
         "## 1. Theorem-Level Premise Retrieval",
         "",
-        "**Goal.** Given a held-out theorem statement, retrieve useful premises from the train premise corpus. This is the headline premise-retrieval benchmark because it matches the end-to-end theorem-guidance setting and is substantially more reliable than direct local premise prediction.",
-        "",
-        "**Evaluation.** Test theorem embeddings query the train premise index. Retrieved train premise IDs are compared with all held-out positive LeanRank premises attached to proof states of the theorem whose premise IDs exist in the train premise index.",
+        _task_spec_table(
+            [
+                ("Task definition", "Retrieve premises that are useful for proving a held-out theorem."),
+                ("Input", "A test theorem represented by its theorem-level text embedding."),
+                ("Retrieval corpus", "Train-split premise embeddings and metadata."),
+                ("Output", "A ranked list of premise IDs/names with retrieval scores."),
+                ("Evaluation target", "Positive LeanRank premises used by any proof state of the held-out theorem, restricted to gold premises present in the train premise index."),
+                ("Metrics", "Recall@1/5/10/100, MRR, MAP, and nDCG@10."),
+                ("Role in report", "Headline premise-retrieval benchmark for theorem guidance."),
+            ]
+        ),
         "",
         _table(
             ["Task", "Queries", "Recall@1", "Recall@5", "Recall@10", "Recall@100", "MRR", "MAP", "nDCG@10"],
@@ -493,9 +505,17 @@ def _write_markdown(bundle: dict[str, Any], output_path: str | Path) -> None:
         "",
         "## 2. Proof Pattern Retrieval",
         "",
-        "**Goal.** Retrieve historical proof patterns that can explain or contextualize a new theorem/proof state: similar theorems, similar local proof states, and KG neighborhoods.",
-        "",
-        "**Evaluation.** Similar theorem retrieval is evaluated through theorem-level premise retrieval quality. Proof-state-to-proof-state retrieval is used as the neighbor substrate for strategy-facet and difficulty-profile retrieval below. Index quality is measured against exact cosine retrieval.",
+        _task_spec_table(
+            [
+                ("Task definition", "Retrieve historical neighbors that provide proof-pattern evidence for a query theorem or proof state."),
+                ("Input", "A theorem embedding for theorem-neighbor retrieval, or a proof-state embedding for local proof-state-neighbor retrieval."),
+                ("Retrieval corpus", "Train theorem embeddings, train proof-state embeddings, and the enriched proof KG."),
+                ("Output", "Similar theorems, similar proof states, and graph-neighborhood evidence such as similar_to_theorem and premise/strategy edges."),
+                ("Evaluation target", "No standalone human-labeled proof-pattern pairs are available; theorem-neighbor quality is proxied by theorem-level premise retrieval, while proof-state-neighbor quality is evaluated through the strategy and difficulty tasks below."),
+                ("Metrics", "Theorem retrieval Recall/MRR proxy plus HNSW index recall@10 versus exact cosine for theorem/proof-state/premise indexes."),
+                ("Role in report", "Evidence layer that supports strategy-facet retrieval, difficulty-profile retrieval, and interpretability."),
+            ]
+        ),
         "",
         _table(
             ["Pattern signal", "Value"],
@@ -524,9 +544,17 @@ def _write_markdown(bundle: dict[str, Any], output_path: str | Path) -> None:
         "",
         "## 3. Strategy Retrieval",
         "",
-        "**Goal.** Retrieve likely proof-strategy facets for a query proof state, such as rewriting/transport, order reasoning, algebraic computation, typeclass-instance reasoning, case analysis, or set-membership reasoning.",
-        "",
-        "**Evaluation.** Historical proof states receive weak strategy-facet labels from a curated taxonomy. A test proof state retrieves similar train proof states, aggregates their facets by embedding-neighbor similarity, and is scored against the test proof state's own weak facets. This is a retrieval-grounded weak-label task, not supervised tactic classification.",
+        _task_spec_table(
+            [
+                ("Task definition", "Retrieve likely proof-strategy facets for a query proof state."),
+                ("Input", "A test proof-state embedding."),
+                ("Retrieval corpus", "Train proof-state embeddings whose proof states are weakly labeled with curated strategy facets."),
+                ("Output", "A ranked set of strategy facets, e.g. rewrite_transport, order_inequality_reasoning, algebraic_computation, typeclass_instance_resolution, case_analysis, and set_membership_reasoning."),
+                ("Evaluation target", "The query proof state's own weak strategy facets from the same taxonomy. This is a retrieval-grounded weak-label evaluation, not supervised tactic classification."),
+                ("Metrics", "Label Recall@1/3/5 and Any-label Hit@1/3."),
+                ("Role in report", "Auxiliary guidance task showing whether local proof-state neighbors recover useful strategy facets."),
+            ]
+        ),
         "",
         _table(
             ["Strategy retrieval metric", "Value"],
@@ -549,9 +577,19 @@ def _write_markdown(bundle: dict[str, Any], output_path: str | Path) -> None:
         "",
         "## 4. Difficulty Retrieval",
         "",
-        "**Goal.** Retrieve historical difficulty profiles for a query proof state and summarize them as a relative complexity score and easy/medium/hard bucket.",
+        _task_spec_table(
+            [
+                ("Task definition", "Retrieve historical difficulty profiles for a query proof state and summarize them as a relative complexity score/bucket."),
+                ("Input", "A test proof-state embedding."),
+                ("Retrieval corpus", "Train proof-state embeddings with precomputed difficulty features and relative difficulty buckets."),
+                ("Output", "A retrieved-neighbor difficulty score, easy/medium/hard bucket, and calibration diagnostics."),
+                ("Evaluation target", "The query proof state's relative complexity proxy, derived from proof length, tactic index, positive-premise count, namespace rarity, and negative-candidate hardness."),
+                ("Metrics", "Retrieved-profile MAE/RMSE, bucket accuracy, mean retrieved score, and mean target score."),
+                ("Role in report", "Auxiliary retrieval task for estimating whether a query resembles historically easier or harder proof states."),
+            ]
+        ),
         "",
-        "**Evaluation.** The target is a relative complexity proxy derived from proof-state and theorem features, including proof length, tactic index, positive-premise count, namespace rarity, and negative-candidate hardness. A test proof state retrieves similar train proof states and aggregates their difficulty profiles. Buckets use a split-local distribution policy: easy is the lower 50%, medium is the next 35%, and hard is the top 15%.",
+        "Difficulty buckets use a split-local distribution policy: easy is the lower 50%, medium is the next 35%, and hard is the top 15%.",
         "",
         _table(
             ["Difficulty retrieval metric", "Value"],
