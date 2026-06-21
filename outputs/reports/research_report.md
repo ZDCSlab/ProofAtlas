@@ -2,7 +2,7 @@
 
 ## Research Framing
 
-ProofAtlas is framed as a research dataset and retrieval study for LeanRank-style formal proof guidance. The deliverable is not a production proof assistant; it is a processed theorem/proof-state/premise dataset plus retrieval-grounded prediction artifacts for premise retrieval, proof-pattern retrieval, strategy retrieval, and difficulty-profile retrieval.
+ProofAtlas is framed as a research dataset and retrieval study for LeanRank-style formal proof guidance. The deliverable is not a production proof assistant; it is a processed theorem/proof-state/premise dataset plus retrieval-grounded prediction artifacts for theorem-level premise retrieval, proof-pattern retrieval, strategy retrieval, and difficulty-profile retrieval.
 
 ## Local Deliverables
 
@@ -73,18 +73,23 @@ The processed dataset contains theorem-level, proof-state-level, premise-level, 
 | MAE/RMSE | Absolute and squared-error summaries for retrieved difficulty-profile scores. |
 | Bucket accuracy | Agreement between retrieved difficulty bucket and the query proof state's relative difficulty bucket. |
 
-## 1. Premise Retrieval
+## 1. Theorem-Level Premise Retrieval
 
-**Goal.** Given a held-out proof state or theorem, retrieve useful premises from the train premise corpus. This is the main premise-selection benchmark.
+**Goal.** Given a held-out theorem statement, retrieve useful premises from the train premise corpus. This is the headline premise-retrieval benchmark because it matches the end-to-end theorem-guidance setting and is substantially more reliable than direct local premise prediction.
 
-**Evaluation.** Proof-state queries use test proof-state embeddings and theorem queries use test theorem embeddings. Retrieved train premise IDs are compared with held-out positive LeanRank premise edges whose premise IDs exist in the train premise index.
+**Evaluation.** Test theorem embeddings query the train premise index. Retrieved train premise IDs are compared with all held-out positive LeanRank premises attached to proof states of the theorem whose premise IDs exist in the train premise index.
 
 | Task | Queries | Recall@1 | Recall@5 | Recall@10 | Recall@100 | MRR | MAP | nDCG@10 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Proof-state premise retrieval | 3053 | 0.0148 | 0.0798 | 0.1162 | 0.2362 | 0.0783 | 0.0494 | 0.0697 |
 | Theorem-level premise retrieval | 1000 | 0.2271 | 0.4284 | 0.4940 | 0.6889 | 0.5609 | 0.3741 | 0.4452 |
 
-The learned premise reranker reaches validation AUC `0.8157`. On the small full-rerank diagnostic sample, reranked proof-state Recall@10 is `0.1250` and hybrid candidate reranking reaches `0.1557`.
+The learned premise reranker reaches validation AUC `0.8157` over positive and hard-negative premise pairs.
+
+Diagnostic note: direct proof-state-to-premise retrieval is retained as a failure-analysis task rather than a headline result because it is candidate-generation limited.
+
+| Diagnostic task | Queries | Recall@10 | Recall@100 | MRR | MAP |
+| --- | --- | --- | --- | --- | --- |
+| Direct proof-state-to-premise retrieval | 3053 | 0.1162 | 0.2362 | 0.0783 | 0.0494 |
 
 ## 2. Proof Pattern Retrieval
 
