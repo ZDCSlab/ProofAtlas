@@ -2,6 +2,8 @@
 
 Date: 2026-06-20
 
+Status: archived planning note. The current research-facing narrative is in `README.md`, `docs/proofatlas_project_summary_en.md`, and `outputs/reports/research_report.md`. API, deployment, profiling, and audit items below are engineering extras rather than the main project contribution.
+
 ## Project Goal
 
 ProofAtlas has two core goals:

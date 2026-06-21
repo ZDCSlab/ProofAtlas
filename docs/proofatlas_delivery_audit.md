@@ -2,6 +2,8 @@
 
 Date: 2026-06-20
 
+Status: archived engineering audit. The current research-facing narrative is in `README.md`, `docs/proofatlas_project_summary_en.md`, and `outputs/reports/research_report.md`. This audit is kept for reproducibility and artifact tracking; it should not be read as the main project framing.
+
 This audit maps the current ProofAtlas deliverables to concrete artifacts and verification evidence. It follows the current project scope: the production experiment uses `erbacher/LeanRank-data` directly, without reintroducing a custom Lean server/source extractor.
 
 ## Scope

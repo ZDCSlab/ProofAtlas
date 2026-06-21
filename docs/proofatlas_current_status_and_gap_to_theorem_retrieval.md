@@ -2,6 +2,8 @@
 
 Date: 2026-06-20
 
+Status: archived engineering/status note. The current research-facing narrative is in `README.md`, `docs/proofatlas_project_summary_en.md`, and `outputs/reports/research_report.md`. API, deployment, profiling, and audit details below are engineering extras rather than the main project contribution.
+
 ## Current Goal
 
 ProofAtlas is now scoped as an ML ranking/retrieval project built directly on

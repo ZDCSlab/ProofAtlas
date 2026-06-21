@@ -2,6 +2,8 @@
 
 Date: 2026-06-20
 
+Status: engineering extra. The current project is framed as a research dataset plus retrieval report; `homepage/index.html` is a static visual report. The API/server material below is kept for local inspection and reproducibility, not as the central research deliverable.
+
 This guide describes reproducible ways to run the ProofAtlas demo after the pipeline has generated artifacts. It covers static homepage review, local interactive API review, server deployment, and notebook use.
 
 ## Prerequisites
