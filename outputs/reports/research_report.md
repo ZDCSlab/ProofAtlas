@@ -108,7 +108,7 @@ The learned premise reranker reaches validation AUC `0.8157` over positive and h
 | Input | A theorem embedding for theorem-neighbor retrieval, or a proof-state embedding for local proof-state-neighbor retrieval. |
 | Retrieval corpus | Train theorem embeddings, train proof-state embeddings, and the enriched proof KG. |
 | Output | Similar theorems, similar proof states, and graph-neighborhood evidence such as similar_to_theorem and premise/strategy edges. |
-| Evaluation target | The dataset does not include a separate proof-pattern-neighbor benchmark; theorem-neighbor quality is reflected through theorem-level premise retrieval, while proof-state-neighbor utility is evaluated through the strategy and difficulty tasks below. |
+| Evaluation target | We do not evaluate proof-pattern neighbors directly. Instead, their utility is measured indirectly through downstream strategy-facet recovery and difficulty-profile recovery; theorem-neighbor quality is also reflected through theorem-level premise retrieval. |
 | Metrics | Theorem retrieval Recall/MRR proxy plus HNSW index recall@10 versus exact cosine for theorem/proof-state/premise indexes. |
 | Role in report | Evidence layer that supports strategy-facet retrieval, difficulty-profile retrieval, and interpretability. |
 
