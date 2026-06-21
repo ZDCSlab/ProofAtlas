@@ -320,7 +320,7 @@ conda activate leanrank_kg
 make refresh-production-report
 ```
 
-This runs `evaluate`, `profile-pipeline`, `build-experiment-report`, `build-homepage`, and `audit` with `configs/proofatlas.yaml`. Override the production config with `make refresh-production-report PRODUCTION_CONFIG=<path>`.
+This runs `evaluate --full-heldout`, `profile-pipeline`, `build-experiment-report`, `build-homepage`, and `audit` with `configs/proofatlas.yaml`. Override the production config with `make refresh-production-report PRODUCTION_CONFIG=<path>`.
 By default it executes Python commands through `conda run -n leanrank_kg`; override that with `make refresh-production-report PIPELINE_RUN=` if your environment is already activated.
 
 To refresh a reliable end-to-end production timing baseline for scale-up planning:
@@ -331,13 +331,13 @@ make refresh-production-timing
 
 This runs `leanrank-kg full-pipeline --config configs/proofatlas.yaml --force`, then refreshes the full held-out evaluation report, homepage, and audit against the newly written timing artifact.
 
-To refresh full held-out production evaluation metrics instead of the sampled test-set metrics:
+The explicit full-eval alias is kept for scripts that already call it:
 
 ```bash
 make refresh-production-full-eval
 ```
 
-This runs `leanrank-kg evaluate --config configs/proofatlas.yaml --full-heldout`, then refreshes the profile, experiment report, homepage, and audit. The reranked proof-state diagnostic and case-study limits still follow `configs/proofatlas.yaml`; the override applies to the core proof-state-level and theorem-level held-out retrieval metrics.
+This runs the same full held-out evaluation/report/homepage/audit refresh as `make refresh-production-report`. The reranked proof-state diagnostic and case-study limits still follow `configs/proofatlas.yaml`; the override applies to the core proof-state-level and theorem-level held-out retrieval metrics.
 
 To verify the delivery after refreshing artifacts:
 

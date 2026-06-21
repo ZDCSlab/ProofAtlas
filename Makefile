@@ -23,7 +23,7 @@ help:
 	@echo "  make experiment-report Build held-out test-set experiment report"
 	@echo "  make homepage       Generate static homepage"
 	@echo "  make audit          Run MVP completion audit"
-	@echo "  make refresh-production-report Refresh proofatlas evaluation/report/homepage/audit"
+	@echo "  make refresh-production-report Refresh full held-out proofatlas evaluation/report/homepage/audit"
 	@echo "  make refresh-production-timing Run forced production pipeline timing, then refresh reports"
 	@echo "  make refresh-production-full-eval Run full held-out production evaluation, then refresh reports"
 	@echo "  make verify-delivery Run tests, production audit, and diff whitespace check"
@@ -95,7 +95,7 @@ audit:
 	leanrank-kg audit --config $(CONFIG)
 
 refresh-production-report:
-	$(PIPELINE_RUN) leanrank-kg evaluate --config $(PRODUCTION_CONFIG)
+	$(PIPELINE_RUN) leanrank-kg evaluate --config $(PRODUCTION_CONFIG) --full-heldout
 	$(PIPELINE_RUN) leanrank-kg profile-pipeline --config $(PRODUCTION_CONFIG)
 	$(PIPELINE_RUN) leanrank-kg build-experiment-report --config $(PRODUCTION_CONFIG)
 	$(PIPELINE_RUN) leanrank-kg build-homepage --config $(PRODUCTION_CONFIG)
