@@ -363,7 +363,6 @@ def _prediction_bundle() -> dict[str, Any]:
 
 def _write_markdown(bundle: dict[str, Any], output_path: str | Path) -> None:
     metrics = bundle["premise_prediction"]
-    ps = metrics["proof_state"]
     thm = metrics["theorem"]
     reranker = metrics["reranker"]
     diff_metrics = bundle["difficulty_prediction"]["estimator_metrics"]
@@ -491,22 +490,6 @@ def _write_markdown(bundle: dict[str, Any], output_path: str | Path) -> None:
         ),
         "",
         f"The learned premise reranker reaches validation AUC `{_fmt(reranker.get('validation_auc'))}` over positive and hard-negative premise pairs.",
-        "",
-        "Diagnostic note: direct proof-state-to-premise retrieval is retained as a failure-analysis task rather than a headline result because it is candidate-generation limited.",
-        "",
-        _table(
-            ["Diagnostic task", "Queries", "Recall@10", "Recall@100", "MRR", "MAP"],
-            [
-                [
-                    "Direct proof-state-to-premise retrieval",
-                    ps.get("evaluated_queries"),
-                    _fmt(ps.get("Recall@10")),
-                    _fmt(ps.get("Recall@100")),
-                    _fmt(ps.get("MRR")),
-                    _fmt(ps.get("MAP")),
-                ]
-            ],
-        ),
         "",
         "## 2. Proof Pattern Retrieval",
         "",

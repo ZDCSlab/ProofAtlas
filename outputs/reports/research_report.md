@@ -85,12 +85,6 @@ The processed dataset contains theorem-level, proof-state-level, premise-level, 
 
 The learned premise reranker reaches validation AUC `0.8157` over positive and hard-negative premise pairs.
 
-Diagnostic note: direct proof-state-to-premise retrieval is retained as a failure-analysis task rather than a headline result because it is candidate-generation limited.
-
-| Diagnostic task | Queries | Recall@10 | Recall@100 | MRR | MAP |
-| --- | --- | --- | --- | --- | --- |
-| Direct proof-state-to-premise retrieval | 3053 | 0.1162 | 0.2362 | 0.0783 | 0.0494 |
-
 ## 2. Proof Pattern Retrieval
 
 **Goal.** Retrieve historical proof patterns that can explain or contextualize a new theorem/proof state: similar theorems, similar local proof states, and KG neighborhoods.
