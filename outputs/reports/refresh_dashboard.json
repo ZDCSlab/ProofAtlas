@@ -440,8 +440,8 @@
         "relative": 0.0
       },
       "premise_recall_at_10": {
-        "absolute": 0.0,
-        "relative": 0.0
+        "absolute": -0.0116763489990441,
+        "relative": -0.09127457845406615
       },
       "premises": {
         "absolute": 0.0,
@@ -456,12 +456,12 @@
         "relative": 0.0
       },
       "theorem_mrr": {
-        "absolute": 0.0,
-        "relative": 0.0
+        "absolute": 0.013541170169129035,
+        "relative": 0.024741209499357045
       },
       "theorem_recall_at_10": {
-        "absolute": 0.0,
-        "relative": 0.0
+        "absolute": 0.07074268670025691,
+        "relative": 0.16712636366777486
       },
       "theorems": {
         "absolute": 0.0,

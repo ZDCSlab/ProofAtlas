@@ -81,14 +81,14 @@
         "actual_backend": "torch_cuda",
         "evaluated_queries": 2822,
         "name": "val_proof_state_retrieval",
-        "seconds": 20.125107486033812,
+        "seconds": 20.012461978010833,
         "split": "val"
       },
       {
         "actual_backend": "torch_cuda",
         "evaluated_queries": 3053,
         "name": "test_proof_state_retrieval",
-        "seconds": 14.948849298991263,
+        "seconds": 14.956324729137123,
         "split": "test"
       },
       {
@@ -96,7 +96,7 @@
         "case_study_limit": 0,
         "evaluated_queries": 1000,
         "name": "val_theorem_retrieval",
-        "seconds": 0.4313128918875009,
+        "seconds": 0.44218218396417797,
         "split": "val"
       },
       {
@@ -104,7 +104,7 @@
         "case_study_limit": 0,
         "evaluated_queries": 1000,
         "name": "test_theorem_retrieval",
-        "seconds": 0.46141390316188335,
+        "seconds": 0.4520345898345113,
         "split": "test"
       },
       {
@@ -112,7 +112,7 @@
         "candidate_k": 50,
         "evaluated_queries": 20,
         "name": "test_reranked_proof_state_retrieval",
-        "seconds": 13.90791777195409,
+        "seconds": 11.529592511011288,
         "split": "test"
       },
       {
@@ -121,21 +121,21 @@
         "evaluated_queries": 20,
         "lexical_candidate_k": 50,
         "name": "test_hybrid_candidate_reranked_proof_state_retrieval",
-        "seconds": 5.743927045026794,
+        "seconds": 4.469662721967325,
         "split": "test"
       },
       {
         "best_variant_by_recall": "stored_plus_goal_only",
         "evaluated_queries": 50,
         "name": "val_proof_state_query_representation_diagnostic",
-        "seconds": 1.6981809849385172,
+        "seconds": 1.7090422890614718,
         "split": "val"
       },
       {
         "best_variant_by_recall": "stored_plus_full_name_context_goal",
         "evaluated_queries": 50,
         "name": "test_proof_state_query_representation_diagnostic",
-        "seconds": 0.90008874097839,
+        "seconds": 0.8911283190827817,
         "split": "test"
       }
     ],
@@ -143,7 +143,7 @@
       "test": null,
       "val": null
     },
-    "total_seconds": 58.69010592997074,
+    "total_seconds": 54.94258901197463,
     "use_gpu": true
   },
   "label_policy": "held-out test positive_edges are used only for evaluation",
@@ -902,10 +902,10 @@
               "from_embedding_candidate": true,
               "from_lexical_candidate": false,
               "full_name": "AddCircle.continuous_equivIoc_symm",
-              "learned_ranker_score": 0.5452309792963642,
+              "learned_ranker_score": 0.5452309792963643,
               "lexical_candidate_rank_score": 0.0,
               "premise_id": "premise:AddCircle.continuous_equivIoc_symm",
-              "score": 0.5689007114559798
+              "score": 0.5689007114559799
             },
             {
               "embedding_candidate_rank_score": 0.0,
@@ -1121,10 +1121,10 @@
               "from_embedding_candidate": true,
               "from_lexical_candidate": true,
               "full_name": "toIcoDiv_sub_eq_toIcoDiv_add",
-              "learned_ranker_score": 0.7479229260692861,
+              "learned_ranker_score": 0.7479229260692862,
               "lexical_candidate_rank_score": 0.021739130434782608,
               "premise_id": "premise:toIcoDiv_sub_eq_toIcoDiv_add",
-              "score": 0.6869851803340674
+              "score": 0.6869851803340675
             },
             {
               "embedding_candidate_rank_score": 0.16666666666666666,
@@ -2194,16 +2194,16 @@
             {
               "embedding_score": 0.761119544506073,
               "full_name": "AList.lookup_isSome",
-              "learned_ranker_score": 0.4889076918126892,
+              "learned_ranker_score": 0.4889076918126891,
               "premise_id": "premise:AList.lookup_isSome",
-              "score": 0.4747264695633415
+              "score": 0.4747264695633414
             },
             {
               "embedding_score": 0.7671421766281128,
               "full_name": "AList.perm_lookup",
-              "learned_ranker_score": 0.46375432330792704,
+              "learned_ranker_score": 0.46375432330792693,
               "premise_id": "premise:AList.perm_lookup",
-              "score": 0.4619911257141238
+              "score": 0.46199112571412376
             }
           ]
         },
@@ -2272,7 +2272,7 @@
             {
               "embedding_score": 0.8208795785903931,
               "full_name": "Action.id_hom",
-              "learned_ranker_score": 0.5259781430716883,
+              "learned_ranker_score": 0.5259781430716882,
               "premise_id": "premise:Action.id_hom",
               "score": 0.510981506805178
             },
@@ -2407,16 +2407,16 @@
             {
               "embedding_score": 0.8531449437141418,
               "full_name": "AddCircle.continuousAt_equivIco",
-              "learned_ranker_score": 0.46554661890485555,
+              "learned_ranker_score": 0.46554661890485566,
               "premise_id": "premise:AddCircle.continuousAt_equivIco",
-              "score": 0.5218106229537752
+              "score": 0.5218106229537753
             },
             {
               "embedding_score": 0.807059645652771,
               "full_name": "AddCircle.equivIoc",
-              "learned_ranker_score": 0.47591136759765174,
+              "learned_ranker_score": 0.4759113675976516,
               "premise_id": "premise:AddCircle.equivIoc",
-              "score": 0.5151755880995192
+              "score": 0.5151755880995191
             },
             {
               "embedding_score": 0.8389780521392822,
@@ -2475,9 +2475,9 @@
             {
               "embedding_score": 0.8287752866744995,
               "full_name": "AddCircle.continuous_equivIco_symm",
-              "learned_ranker_score": 0.3712133619067335,
+              "learned_ranker_score": 0.37121336190673365,
               "premise_id": "premise:AddCircle.continuous_equivIco_symm",
-              "score": 0.4628662785698739
+              "score": 0.46286627856987395
             }
           ]
         },

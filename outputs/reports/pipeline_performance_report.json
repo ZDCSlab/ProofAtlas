@@ -395,14 +395,14 @@
             "actual_backend": "torch_cuda",
             "evaluated_queries": 2822,
             "name": "val_proof_state_retrieval",
-            "seconds": 20.125107486033812,
+            "seconds": 20.012461978010833,
             "split": "val"
           },
           {
             "actual_backend": "torch_cuda",
             "evaluated_queries": 3053,
             "name": "test_proof_state_retrieval",
-            "seconds": 14.948849298991263,
+            "seconds": 14.956324729137123,
             "split": "test"
           },
           {
@@ -410,7 +410,7 @@
             "candidate_k": 50,
             "evaluated_queries": 20,
             "name": "test_reranked_proof_state_retrieval",
-            "seconds": 13.90791777195409,
+            "seconds": 11.529592511011288,
             "split": "test"
           },
           {
@@ -419,21 +419,21 @@
             "evaluated_queries": 20,
             "lexical_candidate_k": 50,
             "name": "test_hybrid_candidate_reranked_proof_state_retrieval",
-            "seconds": 5.743927045026794,
+            "seconds": 4.469662721967325,
             "split": "test"
           },
           {
             "best_variant_by_recall": "stored_plus_goal_only",
             "evaluated_queries": 50,
             "name": "val_proof_state_query_representation_diagnostic",
-            "seconds": 1.6981809849385172,
+            "seconds": 1.7090422890614718,
             "split": "val"
           },
           {
             "best_variant_by_recall": "stored_plus_full_name_context_goal",
             "evaluated_queries": 50,
             "name": "test_proof_state_query_representation_diagnostic",
-            "seconds": 0.90008874097839,
+            "seconds": 0.8911283190827817,
             "split": "test"
           },
           {
@@ -441,7 +441,7 @@
             "case_study_limit": 0,
             "evaluated_queries": 1000,
             "name": "test_theorem_retrieval",
-            "seconds": 0.46141390316188335,
+            "seconds": 0.4520345898345113,
             "split": "test"
           },
           {
@@ -449,13 +449,13 @@
             "case_study_limit": 0,
             "evaluated_queries": 1000,
             "name": "val_theorem_retrieval",
-            "seconds": 0.4313128918875009,
+            "seconds": 0.44218218396417797,
             "split": "val"
           }
         ],
         "substage_count": 8,
-        "substage_seconds_total": 58.21679812297225,
-        "total_seconds": 58.69010592997074
+        "substage_seconds_total": 54.46242932206951,
+        "total_seconds": 54.94258901197463
       },
       "held_out_test_coverage": {
         "proof_state_configured_limit": null,
@@ -1083,14 +1083,14 @@
               "actual_backend": "torch_cuda",
               "evaluated_queries": 2822,
               "name": "val_proof_state_retrieval",
-              "seconds": 20.125107486033812,
+              "seconds": 20.012461978010833,
               "split": "val"
             },
             {
               "actual_backend": "torch_cuda",
               "evaluated_queries": 3053,
               "name": "test_proof_state_retrieval",
-              "seconds": 14.948849298991263,
+              "seconds": 14.956324729137123,
               "split": "test"
             },
             {
@@ -1098,7 +1098,7 @@
               "case_study_limit": 0,
               "evaluated_queries": 1000,
               "name": "val_theorem_retrieval",
-              "seconds": 0.4313128918875009,
+              "seconds": 0.44218218396417797,
               "split": "val"
             },
             {
@@ -1106,7 +1106,7 @@
               "case_study_limit": 0,
               "evaluated_queries": 1000,
               "name": "test_theorem_retrieval",
-              "seconds": 0.46141390316188335,
+              "seconds": 0.4520345898345113,
               "split": "test"
             },
             {
@@ -1114,7 +1114,7 @@
               "candidate_k": 50,
               "evaluated_queries": 20,
               "name": "test_reranked_proof_state_retrieval",
-              "seconds": 13.90791777195409,
+              "seconds": 11.529592511011288,
               "split": "test"
             },
             {
@@ -1123,21 +1123,21 @@
               "evaluated_queries": 20,
               "lexical_candidate_k": 50,
               "name": "test_hybrid_candidate_reranked_proof_state_retrieval",
-              "seconds": 5.743927045026794,
+              "seconds": 4.469662721967325,
               "split": "test"
             },
             {
               "best_variant_by_recall": "stored_plus_goal_only",
               "evaluated_queries": 50,
               "name": "val_proof_state_query_representation_diagnostic",
-              "seconds": 1.6981809849385172,
+              "seconds": 1.7090422890614718,
               "split": "val"
             },
             {
               "best_variant_by_recall": "stored_plus_full_name_context_goal",
               "evaluated_queries": 50,
               "name": "test_proof_state_query_representation_diagnostic",
-              "seconds": 0.90008874097839,
+              "seconds": 0.8911283190827817,
               "split": "test"
             }
           ],
@@ -1145,7 +1145,7 @@
             "test": null,
             "val": null
           },
-          "total_seconds": 58.69010592997074,
+          "total_seconds": 54.94258901197463,
           "use_gpu": true
         },
         "label_policy": "held-out test positive_edges are used only for evaluation",
@@ -1899,10 +1899,10 @@
                     "from_embedding_candidate": true,
                     "from_lexical_candidate": false,
                     "full_name": "AddCircle.continuous_equivIoc_symm",
-                    "learned_ranker_score": 0.5452309792963642,
+                    "learned_ranker_score": 0.5452309792963643,
                     "lexical_candidate_rank_score": 0.0,
                     "premise_id": "premise:AddCircle.continuous_equivIoc_symm",
-                    "score": 0.5689007114559798
+                    "score": 0.5689007114559799
                   },
                   {
                     "embedding_candidate_rank_score": 0.0,
@@ -2118,10 +2118,10 @@
                     "from_embedding_candidate": true,
                     "from_lexical_candidate": true,
                     "full_name": "toIcoDiv_sub_eq_toIcoDiv_add",
-                    "learned_ranker_score": 0.7479229260692861,
+                    "learned_ranker_score": 0.7479229260692862,
                     "lexical_candidate_rank_score": 0.021739130434782608,
                     "premise_id": "premise:toIcoDiv_sub_eq_toIcoDiv_add",
-                    "score": 0.6869851803340674
+                    "score": 0.6869851803340675
                   },
                   {
                     "embedding_candidate_rank_score": 0.16666666666666666,
@@ -3191,16 +3191,16 @@
                   {
                     "embedding_score": 0.761119544506073,
                     "full_name": "AList.lookup_isSome",
-                    "learned_ranker_score": 0.4889076918126892,
+                    "learned_ranker_score": 0.4889076918126891,
                     "premise_id": "premise:AList.lookup_isSome",
-                    "score": 0.4747264695633415
+                    "score": 0.4747264695633414
                   },
                   {
                     "embedding_score": 0.7671421766281128,
                     "full_name": "AList.perm_lookup",
-                    "learned_ranker_score": 0.46375432330792704,
+                    "learned_ranker_score": 0.46375432330792693,
                     "premise_id": "premise:AList.perm_lookup",
-                    "score": 0.4619911257141238
+                    "score": 0.46199112571412376
                   }
                 ]
               },
@@ -3269,7 +3269,7 @@
                   {
                     "embedding_score": 0.8208795785903931,
                     "full_name": "Action.id_hom",
-                    "learned_ranker_score": 0.5259781430716883,
+                    "learned_ranker_score": 0.5259781430716882,
                     "premise_id": "premise:Action.id_hom",
                     "score": 0.510981506805178
                   },
@@ -3404,16 +3404,16 @@
                   {
                     "embedding_score": 0.8531449437141418,
                     "full_name": "AddCircle.continuousAt_equivIco",
-                    "learned_ranker_score": 0.46554661890485555,
+                    "learned_ranker_score": 0.46554661890485566,
                     "premise_id": "premise:AddCircle.continuousAt_equivIco",
-                    "score": 0.5218106229537752
+                    "score": 0.5218106229537753
                   },
                   {
                     "embedding_score": 0.807059645652771,
                     "full_name": "AddCircle.equivIoc",
-                    "learned_ranker_score": 0.47591136759765174,
+                    "learned_ranker_score": 0.4759113675976516,
                     "premise_id": "premise:AddCircle.equivIoc",
-                    "score": 0.5151755880995192
+                    "score": 0.5151755880995191
                   },
                   {
                     "embedding_score": 0.8389780521392822,
@@ -3472,9 +3472,9 @@
                   {
                     "embedding_score": 0.8287752866744995,
                     "full_name": "AddCircle.continuous_equivIco_symm",
-                    "learned_ranker_score": 0.3712133619067335,
+                    "learned_ranker_score": 0.37121336190673365,
                     "premise_id": "premise:AddCircle.continuous_equivIco_symm",
-                    "score": 0.4628662785698739
+                    "score": 0.46286627856987395
                   }
                 ]
               },
@@ -6336,7 +6336,7 @@
         "outputs/reports",
         "homepage/assets"
       ],
-      "bytes_per_processed_row": 10454.657890771612,
+      "bytes_per_processed_row": 10454.77826938619,
       "directories": {
         "data/processed": {
           "bytes": 46533700,
@@ -6345,7 +6345,7 @@
           "path": "data/processed"
         },
         "homepage/assets": {
-          "bytes": 2056012,
+          "bytes": 2057983,
           "exists": true,
           "file_count": 11,
           "path": "homepage/assets"
@@ -6363,7 +6363,7 @@
           "path": "outputs/indexes"
         },
         "outputs/reports": {
-          "bytes": 19455032,
+          "bytes": 19488213,
           "exists": true,
           "file_count": 39,
           "path": "outputs/reports"
@@ -6419,36 +6419,36 @@
       ],
       "projections": [
         {
-          "estimated_artifact_bytes": 3052885560.0,
-          "estimated_artifact_gib": 2.843221239745617,
+          "estimated_artifact_bytes": 3052920712.0,
+          "estimated_artifact_gib": 2.84325397759676,
           "label": "current_1x",
           "scale_factor_vs_current": 1.0,
           "target_processed_rows": 292012
         },
         {
-          "estimated_artifact_bytes": 6105771120.0,
-          "estimated_artifact_gib": 5.686442479491234,
+          "estimated_artifact_bytes": 6105841424.0,
+          "estimated_artifact_gib": 5.68650795519352,
           "label": "current_2x",
           "scale_factor_vs_current": 2.0,
           "target_processed_rows": 584024
         },
         {
-          "estimated_artifact_bytes": 15264427800.0,
-          "estimated_artifact_gib": 14.216106198728085,
+          "estimated_artifact_bytes": 15264603560.0,
+          "estimated_artifact_gib": 14.216269887983799,
           "label": "current_5x",
           "scale_factor_vs_current": 5.0,
           "target_processed_rows": 1460060
         },
         {
-          "estimated_artifact_bytes": 3659130261.7700644,
-          "estimated_artifact_gib": 3.407830616245106,
+          "estimated_artifact_bytes": 3659172394.2851663,
+          "estimated_artifact_gib": 3.407869855207546,
           "label": "configured_source_rows",
           "scale_factor_vs_current": 1.1985808802377984,
           "target_processed_rows": 350000
         }
       ],
-      "total_artifact_bytes": 3052885560,
-      "total_artifact_gib": 2.843221239745617,
+      "total_artifact_bytes": 3052920712,
+      "total_artifact_gib": 2.84325397759676,
       "unreferenced_index_artifact_bytes": 1502501178,
       "unreferenced_index_artifact_count": 12,
       "unreferenced_index_artifact_gib": 1.3993132654577494,
@@ -6614,10 +6614,10 @@
     "embedding_rows_per_second": 418.2059738073865,
     "estimated_seconds_at_requested_source_rows": 700.4261016058736,
     "evaluation_timing_delta": {
-      "current_evaluation_seconds": 58.69010592997074,
+      "current_evaluation_seconds": 54.94258901197463,
       "current_faster_than_pipeline_timing": false,
       "timed_pipeline_evaluate_seconds": 34.968471507076174,
-      "timed_to_current_ratio": 0.5958154437274434
+      "timed_to_current_ratio": 0.6364547455063477
     },
     "execution_mode_summary": {
       "ann_index_active": true,
@@ -7005,7 +7005,7 @@
           "area": "rerank_evaluation_policy",
           "basis": "full rerank cost is projected from the sampled rerank diagnostic",
           "estimated_pipeline_seconds_after_action": null,
-          "estimated_seconds_saved": 2109.1357301168377,
+          "estimated_seconds_saved": 1748.4627042948619,
           "priority": 4
         }
       ],
@@ -7456,8 +7456,8 @@
     "requested_source_rows": 350000,
     "rerank_evaluation_cost_profile": {
       "batched_embedding_recall_at_10": 0.11624918291584951,
-      "batched_embedding_seconds": 14.948849298991263,
-      "batched_embedding_seconds_per_query": 0.0048964458889588156,
+      "batched_embedding_seconds": 14.956324729137123,
+      "batched_embedding_seconds_per_query": 0.004898894441250285,
       "candidate_k": 50,
       "candidate_k_values": [
         50,
@@ -7466,13 +7466,13 @@
       "full_proof_state_queries": 3053,
       "method": "project_full_rerank_cost_from_user_facing_sampled_rerank_diagnostic",
       "policy": "keep reranked proof-state evaluation sampled for development and use full batched embedding evaluation for final held-out coverage",
-      "projected_full_rerank_minutes": 35.38406079814653,
-      "projected_full_rerank_seconds": 2123.043647888792,
+      "projected_full_rerank_minutes": 29.333204946764553,
+      "projected_full_rerank_seconds": 1759.9922968058731,
       "rerank_backend": "batched_torch_cuda_then_rerank",
-      "rerank_seconds": 13.90791777195409,
-      "rerank_seconds_per_query": 0.6953958885977045,
+      "rerank_seconds": 11.529592511011288,
+      "rerank_seconds_per_query": 0.5764796255505644,
       "rerank_stage_name": "test_reranked_proof_state_retrieval",
-      "rerank_to_batched_seconds_per_query_ratio": 142.02053987072122,
+      "rerank_to_batched_seconds_per_query_ratio": 117.67545360774022,
       "reranked_recall_at_10": 0.125,
       "sampled_fraction_of_full_proof_state_eval": 0.006550933508024894,
       "sampled_rerank_queries": 20,
@@ -7851,7 +7851,7 @@
       },
       "rerank_sample": {
         "policy": "keep reranked proof-state evaluation sampled for development and use full batched embedding evaluation for final held-out coverage",
-        "projected_full_seconds": 2123.043647888792,
+        "projected_full_seconds": 1759.9922968058731,
         "recall_at_10_delta": 0.008750817084150486,
         "sampled_queries": 20
       },
