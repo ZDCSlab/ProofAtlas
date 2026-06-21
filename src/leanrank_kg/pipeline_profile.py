@@ -1271,6 +1271,15 @@ def _resource_parallelism_profile(
             if isinstance(row, dict) and row.get("actual_backend")
         }
     )
+    candidate_tensor_cache_rows = [
+        row
+        for task in actual_backend_info.values()
+        if isinstance(task, dict)
+        for row in task.values()
+        if isinstance(row, dict) and row.get("candidate_tensor_cache_hit") is not None
+    ]
+    candidate_tensor_cache_hits = sum(1 for row in candidate_tensor_cache_rows if row.get("candidate_tensor_cache_hit") is True)
+    candidate_tensor_cache_observations = len(candidate_tensor_cache_rows)
     test_proof_backend = (actual_backend_info.get("proof_state") or {}).get("test", {}) if isinstance(actual_backend_info, dict) else {}
     test_theorem_backend = (actual_backend_info.get("theorem") or {}).get("test", {}) if isinstance(actual_backend_info, dict) else {}
     benchmark_entities = benchmark.get("entities", {}) if isinstance(benchmark, dict) else {}
@@ -1306,6 +1315,17 @@ def _resource_parallelism_profile(
             "test_proof_state_queries": test_proof_backend.get("query_count"),
             "test_theorem_queries": test_theorem_backend.get("query_count"),
             "candidate_count": test_proof_backend.get("candidate_count") or test_theorem_backend.get("candidate_count"),
+            "candidate_tensor_cache_hits": candidate_tensor_cache_hits,
+            "candidate_tensor_cache_misses": candidate_tensor_cache_observations - candidate_tensor_cache_hits,
+            "candidate_tensor_cache_hit_share": (
+                candidate_tensor_cache_hits / candidate_tensor_cache_observations
+                if candidate_tensor_cache_observations
+                else None
+            ),
+            "candidate_tensor_cache_max_size": max(
+                (int(row.get("candidate_tensor_cache_size") or 0) for row in candidate_tensor_cache_rows),
+                default=0,
+            ),
             "fallback_reasons": sorted(
                 {
                     str(row.get("fallback_reason"))

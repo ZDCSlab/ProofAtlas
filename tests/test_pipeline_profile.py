@@ -98,6 +98,8 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
                             "actual_backend": "torch_cuda",
                             "actual_gpu_device": "cuda:0",
                             "candidate_count": 6000,
+                            "candidate_tensor_cache_hit": False,
+                            "candidate_tensor_cache_size": 1,
                             "query_count": 10,
                             "requested_gpu_device": "cuda:0",
                             "requested_use_gpu": True,
@@ -108,6 +110,8 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
                             "actual_backend": "torch_cuda",
                             "actual_gpu_device": "cuda:0",
                             "candidate_count": 6000,
+                            "candidate_tensor_cache_hit": True,
+                            "candidate_tensor_cache_size": 1,
                             "query_count": 5,
                             "requested_gpu_device": "cuda:0",
                             "requested_use_gpu": True,
@@ -393,6 +397,10 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
     assert resources["evaluation_parallelism"]["actual_backends"] == ["torch_cuda"]
     assert resources["evaluation_parallelism"]["proof_state_query_representation"] == "full_name_goal"
     assert resources["evaluation_parallelism"]["test_proof_state_backend"] == "torch_cuda"
+    assert resources["evaluation_parallelism"]["candidate_tensor_cache_hits"] == 1
+    assert resources["evaluation_parallelism"]["candidate_tensor_cache_misses"] == 1
+    assert resources["evaluation_parallelism"]["candidate_tensor_cache_hit_share"] == 0.5
+    assert resources["evaluation_parallelism"]["candidate_tensor_cache_max_size"] == 1
     assert resources["index_parallelism"]["backend"] == "sklearn"
     assert resources["index_parallelism"]["indexed_entities"] == ["premise"]
     execution_mode = report["throughput_profile"]["execution_mode_summary"]

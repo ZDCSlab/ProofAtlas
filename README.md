@@ -198,18 +198,18 @@ Current production run coverage and timing:
 | Pipeline timing | throughput basis | executed_pipeline_run |
 | Pipeline timing | scale estimate reliable | True |
 | Pipeline timing | saved evaluate seconds | 34.9685 |
-| Pipeline timing | current standalone evaluation seconds | 54.9426 |
-| Pipeline timing | timed/current evaluation ratio | 0.6365 |
+| Pipeline timing | current standalone evaluation seconds | 54.9609 |
+| Pipeline timing | timed/current evaluation ratio | 0.6362 |
 | Rerank diagnostic cost | sampled/full proof-state queries | 20 / 3053 |
 | Rerank diagnostic cost | sampled fraction | 0.0066 |
-| Rerank diagnostic cost | projected full rerank seconds | 1759.9923 |
-| Rerank diagnostic cost | rerank/batched seconds per query | 117.6755 |
+| Rerank diagnostic cost | projected full rerank seconds | 1843.7316 |
+| Rerank diagnostic cost | rerank/batched seconds per query | 123.9145 |
 | Artifact storage | total GiB | 2.8433 |
-| Artifact storage | bytes per processed row | 10454.7783 |
+| Artifact storage | bytes per processed row | 10454.9205 |
 | Artifact storage | index bytes | 2295000620 |
 | Artifact storage | unreferenced index bytes | 1502501178 |
 | Artifact storage | unreferenced index GiB | 1.3993 |
-| Artifact storage | current_5x projected GiB | 14.2163 |
+| Artifact storage | current_5x projected GiB | 14.2165 |
 
 Current production performance snapshot:
 
@@ -239,6 +239,8 @@ Current resource and parallelism profile:
 | Embedding | rows/sec during embed stage | 1643.5845 |
 | Evaluation | actual backends | torch_cuda |
 | Evaluation | candidate count | 127,561 |
+| Evaluation | candidate tensor cache hits | 3 / 4 |
+| Evaluation | candidate tensor cache hit share | 0.7500 |
 | Indexing | backend | hnswlib |
 | Indexing | hnswlib parameters | M=16, ef_construction=200, ef_search=100 |
 | Indexing | min recall vs exact | 0.9520 |

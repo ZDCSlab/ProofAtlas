@@ -4,9 +4,26 @@ import json
 
 import numpy as np
 import pandas as pd
+import pytest
 
 from leanrank_kg import evaluate
 from leanrank_kg.utils import write_json, write_parquet
+
+
+def test_candidate_tensor_cache_reuses_same_embedding_matrix():
+    torch = pytest.importorskip("torch")
+    evaluate._GPU_CANDIDATE_TENSOR_CACHE.clear()
+    matrix = np.eye(4, dtype=np.float32)
+    device = torch.device("cpu")
+
+    first, first_hit = evaluate._cached_candidate_tensor(matrix, torch, device)
+    second, second_hit = evaluate._cached_candidate_tensor(matrix, torch, device)
+
+    assert first_hit is False
+    assert second_hit is True
+    assert first.data_ptr() == second.data_ptr()
+    assert len(evaluate._GPU_CANDIDATE_TENSOR_CACHE) == 1
+    evaluate._GPU_CANDIDATE_TENSOR_CACHE.clear()
 
 
 def test_full_heldout_override_removes_core_evaluation_limits(tmp_path, monkeypatch):

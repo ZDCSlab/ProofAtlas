@@ -545,6 +545,25 @@ def _load_diagnostic_sentence_transformer(model_name: str, device: str):
     return SentenceTransformer(model_name, device=device or None)
 
 
+_GPU_CANDIDATE_TENSOR_CACHE: dict[tuple[int, tuple[int, ...], tuple[int, ...], str, str], Any] = {}
+
+
+def _cached_candidate_tensor(candidate_matrix: np.ndarray, torch_module: Any, device: Any) -> tuple[Any, bool]:
+    key = (
+        int(candidate_matrix.__array_interface__["data"][0]),
+        tuple(int(value) for value in candidate_matrix.shape),
+        tuple(int(value) for value in candidate_matrix.strides),
+        str(candidate_matrix.dtype),
+        str(device),
+    )
+    cached = _GPU_CANDIDATE_TENSOR_CACHE.get(key)
+    if cached is not None:
+        return cached, True
+    tensor = torch_module.from_numpy(candidate_matrix).to(device=device, dtype=torch_module.float32)
+    _GPU_CANDIDATE_TENSOR_CACHE[key] = tensor
+    return tensor, False
+
+
 def _proof_state_query_variants(row: pd.Series) -> dict[str, str]:
     full_name = str(row.get("full_name", "") or "")
     context = str(row.get("context", "") or "")
@@ -588,7 +607,7 @@ def _batched_topk(
 
             if torch.cuda.is_available():
                 device = torch.device(gpu_device)
-                candidates = torch.from_numpy(candidate_matrix).to(device=device, dtype=torch.float32)
+                candidates, cache_hit = _cached_candidate_tensor(candidate_matrix, torch, device)
                 out: list[list[int]] = []
                 with torch.no_grad():
                     for start in range(0, query_matrix.shape[0], batch_size):
@@ -598,6 +617,8 @@ def _batched_topk(
                         out.extend(indices.cpu().numpy().astype(int).tolist())
                 backend_info["actual_backend"] = "torch_cuda"
                 backend_info["actual_gpu_device"] = str(device)
+                backend_info["candidate_tensor_cache_hit"] = cache_hit
+                backend_info["candidate_tensor_cache_size"] = len(_GPU_CANDIDATE_TENSOR_CACHE)
                 return out, backend_info
             backend_info["fallback_reason"] = "torch_cuda_unavailable"
         except Exception as exc:
@@ -1369,6 +1390,7 @@ def run(config_path: str, full_heldout: bool = False) -> None:
     _embedding_ids.cache_clear()
     _load_embedding.cache_clear()
     _load_diagnostic_sentence_transformer.cache_clear()
+    _GPU_CANDIDATE_TENSOR_CACHE.clear()
     config = load_config(config_path)
     report_top_ks = sorted({int(k) for k in config.get("retrieval", {}).get("top_k", [1, 5, 10])})
     train_premises = set(pd.read_parquet("data/processed/train/premises.parquet")["id"].astype(str))

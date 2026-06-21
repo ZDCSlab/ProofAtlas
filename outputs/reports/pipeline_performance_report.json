@@ -395,14 +395,14 @@
             "actual_backend": "torch_cuda",
             "evaluated_queries": 2822,
             "name": "val_proof_state_retrieval",
-            "seconds": 20.012461978010833,
+            "seconds": 20.249301095027477,
             "split": "val"
           },
           {
             "actual_backend": "torch_cuda",
             "evaluated_queries": 3053,
             "name": "test_proof_state_retrieval",
-            "seconds": 14.956324729137123,
+            "seconds": 14.87906001904048,
             "split": "test"
           },
           {
@@ -410,7 +410,7 @@
             "candidate_k": 50,
             "evaluated_queries": 20,
             "name": "test_reranked_proof_state_retrieval",
-            "seconds": 11.529592511011288,
+            "seconds": 12.078162990976125,
             "split": "test"
           },
           {
@@ -419,21 +419,21 @@
             "evaluated_queries": 20,
             "lexical_candidate_k": 50,
             "name": "test_hybrid_candidate_reranked_proof_state_retrieval",
-            "seconds": 4.469662721967325,
+            "seconds": 4.415081331972033,
             "split": "test"
           },
           {
             "best_variant_by_recall": "stored_plus_goal_only",
             "evaluated_queries": 50,
             "name": "val_proof_state_query_representation_diagnostic",
-            "seconds": 1.7090422890614718,
+            "seconds": 1.4833626698236912,
             "split": "val"
           },
           {
             "best_variant_by_recall": "stored_plus_full_name_context_goal",
             "evaluated_queries": 50,
             "name": "test_proof_state_query_representation_diagnostic",
-            "seconds": 0.8911283190827817,
+            "seconds": 0.6278421061579138,
             "split": "test"
           },
           {
@@ -441,7 +441,7 @@
             "case_study_limit": 0,
             "evaluated_queries": 1000,
             "name": "test_theorem_retrieval",
-            "seconds": 0.4520345898345113,
+            "seconds": 0.44106667512096465,
             "split": "test"
           },
           {
@@ -449,13 +449,13 @@
             "case_study_limit": 0,
             "evaluated_queries": 1000,
             "name": "val_theorem_retrieval",
-            "seconds": 0.44218218396417797,
+            "seconds": 0.31603604508563876,
             "split": "val"
           }
         ],
         "substage_count": 8,
-        "substage_seconds_total": 54.46242932206951,
-        "total_seconds": 54.94258901197463
+        "substage_seconds_total": 54.48991293320432,
+        "total_seconds": 54.96088143088855
       },
       "held_out_test_coverage": {
         "proof_state_configured_limit": null,
@@ -1013,6 +1013,8 @@
                 "actual_backend": "torch_cuda",
                 "actual_gpu_device": "cuda:0",
                 "candidate_count": 127561,
+                "candidate_tensor_cache_hit": true,
+                "candidate_tensor_cache_size": 1,
                 "fallback_reason": null,
                 "query_count": 3053,
                 "query_representation": "stored_embedding",
@@ -1024,6 +1026,8 @@
                 "actual_backend": "torch_cuda",
                 "actual_gpu_device": "cuda:0",
                 "candidate_count": 127561,
+                "candidate_tensor_cache_hit": false,
+                "candidate_tensor_cache_size": 1,
                 "fallback_reason": null,
                 "query_count": 2822,
                 "query_representation": "stored_embedding",
@@ -1037,6 +1041,8 @@
                 "actual_backend": "torch_cuda",
                 "actual_gpu_device": "cuda:0",
                 "candidate_count": 127561,
+                "candidate_tensor_cache_hit": true,
+                "candidate_tensor_cache_size": 1,
                 "fallback_reason": null,
                 "query_count": 1000,
                 "requested_gpu_device": "cuda:0",
@@ -1047,6 +1053,8 @@
                 "actual_backend": "torch_cuda",
                 "actual_gpu_device": "cuda:0",
                 "candidate_count": 127561,
+                "candidate_tensor_cache_hit": true,
+                "candidate_tensor_cache_size": 1,
                 "fallback_reason": null,
                 "query_count": 1000,
                 "requested_gpu_device": "cuda:0",
@@ -1083,14 +1091,14 @@
               "actual_backend": "torch_cuda",
               "evaluated_queries": 2822,
               "name": "val_proof_state_retrieval",
-              "seconds": 20.012461978010833,
+              "seconds": 20.249301095027477,
               "split": "val"
             },
             {
               "actual_backend": "torch_cuda",
               "evaluated_queries": 3053,
               "name": "test_proof_state_retrieval",
-              "seconds": 14.956324729137123,
+              "seconds": 14.87906001904048,
               "split": "test"
             },
             {
@@ -1098,7 +1106,7 @@
               "case_study_limit": 0,
               "evaluated_queries": 1000,
               "name": "val_theorem_retrieval",
-              "seconds": 0.44218218396417797,
+              "seconds": 0.31603604508563876,
               "split": "val"
             },
             {
@@ -1106,7 +1114,7 @@
               "case_study_limit": 0,
               "evaluated_queries": 1000,
               "name": "test_theorem_retrieval",
-              "seconds": 0.4520345898345113,
+              "seconds": 0.44106667512096465,
               "split": "test"
             },
             {
@@ -1114,7 +1122,7 @@
               "candidate_k": 50,
               "evaluated_queries": 20,
               "name": "test_reranked_proof_state_retrieval",
-              "seconds": 11.529592511011288,
+              "seconds": 12.078162990976125,
               "split": "test"
             },
             {
@@ -1123,21 +1131,21 @@
               "evaluated_queries": 20,
               "lexical_candidate_k": 50,
               "name": "test_hybrid_candidate_reranked_proof_state_retrieval",
-              "seconds": 4.469662721967325,
+              "seconds": 4.415081331972033,
               "split": "test"
             },
             {
               "best_variant_by_recall": "stored_plus_goal_only",
               "evaluated_queries": 50,
               "name": "val_proof_state_query_representation_diagnostic",
-              "seconds": 1.7090422890614718,
+              "seconds": 1.4833626698236912,
               "split": "val"
             },
             {
               "best_variant_by_recall": "stored_plus_full_name_context_goal",
               "evaluated_queries": 50,
               "name": "test_proof_state_query_representation_diagnostic",
-              "seconds": 0.8911283190827817,
+              "seconds": 0.6278421061579138,
               "split": "test"
             }
           ],
@@ -1145,7 +1153,7 @@
             "test": null,
             "val": null
           },
-          "total_seconds": 54.94258901197463,
+          "total_seconds": 54.96088143088855,
           "use_gpu": true
         },
         "label_policy": "held-out test positive_edges are used only for evaluation",
@@ -1157,6 +1165,8 @@
               "actual_gpu_device": "cuda:0",
               "candidate_count": 127561,
               "candidate_k": 50,
+              "candidate_tensor_cache_hit": true,
+              "candidate_tensor_cache_size": 1,
               "evaluated_queries": 20,
               "fallback_reason": null,
               "lexical_candidate_k": 50,
@@ -2421,6 +2431,8 @@
                   "actual_backend": "torch_cuda",
                   "actual_gpu_device": "cuda:0",
                   "candidate_count": 127561,
+                  "candidate_tensor_cache_hit": true,
+                  "candidate_tensor_cache_size": 1,
                   "fallback_reason": null,
                   "query_count": 50,
                   "requested_gpu_device": "cuda:0",
@@ -2447,6 +2459,8 @@
                   "actual_backend": "torch_cuda",
                   "actual_gpu_device": "cuda:0",
                   "candidate_count": 127561,
+                  "candidate_tensor_cache_hit": true,
+                  "candidate_tensor_cache_size": 1,
                   "fallback_reason": null,
                   "query_count": 50,
                   "requested_gpu_device": "cuda:0",
@@ -2473,6 +2487,8 @@
                   "actual_backend": "torch_cuda",
                   "actual_gpu_device": "cuda:0",
                   "candidate_count": 127561,
+                  "candidate_tensor_cache_hit": true,
+                  "candidate_tensor_cache_size": 1,
                   "fallback_reason": null,
                   "query_count": 50,
                   "requested_gpu_device": "cuda:0",
@@ -2499,6 +2515,8 @@
                   "actual_backend": "torch_cuda",
                   "actual_gpu_device": "cuda:0",
                   "candidate_count": 127561,
+                  "candidate_tensor_cache_hit": true,
+                  "candidate_tensor_cache_size": 1,
                   "fallback_reason": null,
                   "query_count": 50,
                   "requested_gpu_device": "cuda:0",
@@ -2525,6 +2543,8 @@
                   "actual_backend": "torch_cuda",
                   "actual_gpu_device": "cuda:0",
                   "candidate_count": 127561,
+                  "candidate_tensor_cache_hit": true,
+                  "candidate_tensor_cache_size": 1,
                   "fallback_reason": null,
                   "query_count": 50,
                   "query_representation": "stored_embedding",
@@ -2552,6 +2572,8 @@
                   "actual_backend": "fused_torch_cuda_torch_cuda",
                   "actual_gpu_device": "cuda:0",
                   "candidate_count": 127561,
+                  "candidate_tensor_cache_hit": true,
+                  "candidate_tensor_cache_size": 1,
                   "fallback_reason": null,
                   "fused_representations": [
                     "stored_embedding",
@@ -2565,6 +2587,8 @@
                     "actual_backend": "torch_cuda",
                     "actual_gpu_device": "cuda:0",
                     "candidate_count": 127561,
+                    "candidate_tensor_cache_hit": true,
+                    "candidate_tensor_cache_size": 1,
                     "fallback_reason": null,
                     "query_count": 50,
                     "requested_gpu_device": "cuda:0",
@@ -2576,6 +2600,8 @@
                     "actual_backend": "torch_cuda",
                     "actual_gpu_device": "cuda:0",
                     "candidate_count": 127561,
+                    "candidate_tensor_cache_hit": true,
+                    "candidate_tensor_cache_size": 1,
                     "fallback_reason": null,
                     "query_count": 50,
                     "requested_gpu_device": "cuda:0",
@@ -2603,6 +2629,8 @@
                   "actual_backend": "fused_torch_cuda_torch_cuda",
                   "actual_gpu_device": "cuda:0",
                   "candidate_count": 127561,
+                  "candidate_tensor_cache_hit": true,
+                  "candidate_tensor_cache_size": 1,
                   "fallback_reason": null,
                   "fused_representations": [
                     "stored_embedding",
@@ -2616,6 +2644,8 @@
                     "actual_backend": "torch_cuda",
                     "actual_gpu_device": "cuda:0",
                     "candidate_count": 127561,
+                    "candidate_tensor_cache_hit": true,
+                    "candidate_tensor_cache_size": 1,
                     "fallback_reason": null,
                     "query_count": 50,
                     "requested_gpu_device": "cuda:0",
@@ -2627,6 +2657,8 @@
                     "actual_backend": "torch_cuda",
                     "actual_gpu_device": "cuda:0",
                     "candidate_count": 127561,
+                    "candidate_tensor_cache_hit": true,
+                    "candidate_tensor_cache_size": 1,
                     "fallback_reason": null,
                     "query_count": 50,
                     "requested_gpu_device": "cuda:0",
@@ -2654,6 +2686,8 @@
                   "actual_backend": "fused_torch_cuda_torch_cuda",
                   "actual_gpu_device": "cuda:0",
                   "candidate_count": 127561,
+                  "candidate_tensor_cache_hit": true,
+                  "candidate_tensor_cache_size": 1,
                   "fallback_reason": null,
                   "fused_representations": [
                     "stored_embedding",
@@ -2667,6 +2701,8 @@
                     "actual_backend": "torch_cuda",
                     "actual_gpu_device": "cuda:0",
                     "candidate_count": 127561,
+                    "candidate_tensor_cache_hit": true,
+                    "candidate_tensor_cache_size": 1,
                     "fallback_reason": null,
                     "query_count": 50,
                     "requested_gpu_device": "cuda:0",
@@ -2678,6 +2714,8 @@
                     "actual_backend": "torch_cuda",
                     "actual_gpu_device": "cuda:0",
                     "candidate_count": 127561,
+                    "candidate_tensor_cache_hit": true,
+                    "candidate_tensor_cache_size": 1,
                     "fallback_reason": null,
                     "query_count": 50,
                     "requested_gpu_device": "cuda:0",
@@ -2705,6 +2743,8 @@
                   "actual_backend": "fused_torch_cuda_torch_cuda",
                   "actual_gpu_device": "cuda:0",
                   "candidate_count": 127561,
+                  "candidate_tensor_cache_hit": true,
+                  "candidate_tensor_cache_size": 1,
                   "fallback_reason": null,
                   "fused_representations": [
                     "stored_embedding",
@@ -2718,6 +2758,8 @@
                     "actual_backend": "torch_cuda",
                     "actual_gpu_device": "cuda:0",
                     "candidate_count": 127561,
+                    "candidate_tensor_cache_hit": true,
+                    "candidate_tensor_cache_size": 1,
                     "fallback_reason": null,
                     "query_count": 50,
                     "requested_gpu_device": "cuda:0",
@@ -2729,6 +2771,8 @@
                     "actual_backend": "torch_cuda",
                     "actual_gpu_device": "cuda:0",
                     "candidate_count": 127561,
+                    "candidate_tensor_cache_hit": true,
+                    "candidate_tensor_cache_size": 1,
                     "fallback_reason": null,
                     "query_count": 50,
                     "requested_gpu_device": "cuda:0",
@@ -2756,6 +2800,8 @@
                   "actual_backend": "fused_torch_cuda_torch_cuda",
                   "actual_gpu_device": "cuda:0",
                   "candidate_count": 127561,
+                  "candidate_tensor_cache_hit": true,
+                  "candidate_tensor_cache_size": 1,
                   "fallback_reason": null,
                   "fused_representations": [
                     "stored_embedding",
@@ -2769,6 +2815,8 @@
                     "actual_backend": "torch_cuda",
                     "actual_gpu_device": "cuda:0",
                     "candidate_count": 127561,
+                    "candidate_tensor_cache_hit": true,
+                    "candidate_tensor_cache_size": 1,
                     "fallback_reason": null,
                     "query_count": 50,
                     "requested_gpu_device": "cuda:0",
@@ -2780,6 +2828,8 @@
                     "actual_backend": "torch_cuda",
                     "actual_gpu_device": "cuda:0",
                     "candidate_count": 127561,
+                    "candidate_tensor_cache_hit": true,
+                    "candidate_tensor_cache_size": 1,
                     "fallback_reason": null,
                     "query_count": 50,
                     "requested_gpu_device": "cuda:0",
@@ -2807,6 +2857,8 @@
                   "actual_backend": "torch_cuda",
                   "actual_gpu_device": "cuda:0",
                   "candidate_count": 127561,
+                  "candidate_tensor_cache_hit": true,
+                  "candidate_tensor_cache_size": 1,
                   "fallback_reason": null,
                   "query_count": 50,
                   "requested_gpu_device": "cuda:0",
@@ -2840,6 +2892,8 @@
                 50,
                 100
               ],
+              "candidate_tensor_cache_hit": true,
+              "candidate_tensor_cache_size": 1,
               "evaluated_queries": 20,
               "fallback_reason": null,
               "query_count": 20,
@@ -3854,6 +3908,8 @@
                   "actual_backend": "torch_cuda",
                   "actual_gpu_device": "cuda:0",
                   "candidate_count": 127561,
+                  "candidate_tensor_cache_hit": true,
+                  "candidate_tensor_cache_size": 1,
                   "fallback_reason": null,
                   "query_count": 50,
                   "requested_gpu_device": "cuda:0",
@@ -3880,6 +3936,8 @@
                   "actual_backend": "torch_cuda",
                   "actual_gpu_device": "cuda:0",
                   "candidate_count": 127561,
+                  "candidate_tensor_cache_hit": true,
+                  "candidate_tensor_cache_size": 1,
                   "fallback_reason": null,
                   "query_count": 50,
                   "requested_gpu_device": "cuda:0",
@@ -3906,6 +3964,8 @@
                   "actual_backend": "torch_cuda",
                   "actual_gpu_device": "cuda:0",
                   "candidate_count": 127561,
+                  "candidate_tensor_cache_hit": true,
+                  "candidate_tensor_cache_size": 1,
                   "fallback_reason": null,
                   "query_count": 50,
                   "requested_gpu_device": "cuda:0",
@@ -3932,6 +3992,8 @@
                   "actual_backend": "torch_cuda",
                   "actual_gpu_device": "cuda:0",
                   "candidate_count": 127561,
+                  "candidate_tensor_cache_hit": true,
+                  "candidate_tensor_cache_size": 1,
                   "fallback_reason": null,
                   "query_count": 50,
                   "requested_gpu_device": "cuda:0",
@@ -3958,6 +4020,8 @@
                   "actual_backend": "torch_cuda",
                   "actual_gpu_device": "cuda:0",
                   "candidate_count": 127561,
+                  "candidate_tensor_cache_hit": true,
+                  "candidate_tensor_cache_size": 1,
                   "fallback_reason": null,
                   "query_count": 50,
                   "query_representation": "stored_embedding",
@@ -3985,6 +4049,8 @@
                   "actual_backend": "fused_torch_cuda_torch_cuda",
                   "actual_gpu_device": "cuda:0",
                   "candidate_count": 127561,
+                  "candidate_tensor_cache_hit": true,
+                  "candidate_tensor_cache_size": 1,
                   "fallback_reason": null,
                   "fused_representations": [
                     "stored_embedding",
@@ -3998,6 +4064,8 @@
                     "actual_backend": "torch_cuda",
                     "actual_gpu_device": "cuda:0",
                     "candidate_count": 127561,
+                    "candidate_tensor_cache_hit": true,
+                    "candidate_tensor_cache_size": 1,
                     "fallback_reason": null,
                     "query_count": 50,
                     "requested_gpu_device": "cuda:0",
@@ -4009,6 +4077,8 @@
                     "actual_backend": "torch_cuda",
                     "actual_gpu_device": "cuda:0",
                     "candidate_count": 127561,
+                    "candidate_tensor_cache_hit": true,
+                    "candidate_tensor_cache_size": 1,
                     "fallback_reason": null,
                     "query_count": 50,
                     "requested_gpu_device": "cuda:0",
@@ -4036,6 +4106,8 @@
                   "actual_backend": "fused_torch_cuda_torch_cuda",
                   "actual_gpu_device": "cuda:0",
                   "candidate_count": 127561,
+                  "candidate_tensor_cache_hit": true,
+                  "candidate_tensor_cache_size": 1,
                   "fallback_reason": null,
                   "fused_representations": [
                     "stored_embedding",
@@ -4049,6 +4121,8 @@
                     "actual_backend": "torch_cuda",
                     "actual_gpu_device": "cuda:0",
                     "candidate_count": 127561,
+                    "candidate_tensor_cache_hit": true,
+                    "candidate_tensor_cache_size": 1,
                     "fallback_reason": null,
                     "query_count": 50,
                     "requested_gpu_device": "cuda:0",
@@ -4060,6 +4134,8 @@
                     "actual_backend": "torch_cuda",
                     "actual_gpu_device": "cuda:0",
                     "candidate_count": 127561,
+                    "candidate_tensor_cache_hit": true,
+                    "candidate_tensor_cache_size": 1,
                     "fallback_reason": null,
                     "query_count": 50,
                     "requested_gpu_device": "cuda:0",
@@ -4087,6 +4163,8 @@
                   "actual_backend": "fused_torch_cuda_torch_cuda",
                   "actual_gpu_device": "cuda:0",
                   "candidate_count": 127561,
+                  "candidate_tensor_cache_hit": true,
+                  "candidate_tensor_cache_size": 1,
                   "fallback_reason": null,
                   "fused_representations": [
                     "stored_embedding",
@@ -4100,6 +4178,8 @@
                     "actual_backend": "torch_cuda",
                     "actual_gpu_device": "cuda:0",
                     "candidate_count": 127561,
+                    "candidate_tensor_cache_hit": true,
+                    "candidate_tensor_cache_size": 1,
                     "fallback_reason": null,
                     "query_count": 50,
                     "requested_gpu_device": "cuda:0",
@@ -4111,6 +4191,8 @@
                     "actual_backend": "torch_cuda",
                     "actual_gpu_device": "cuda:0",
                     "candidate_count": 127561,
+                    "candidate_tensor_cache_hit": true,
+                    "candidate_tensor_cache_size": 1,
                     "fallback_reason": null,
                     "query_count": 50,
                     "requested_gpu_device": "cuda:0",
@@ -4138,6 +4220,8 @@
                   "actual_backend": "fused_torch_cuda_torch_cuda",
                   "actual_gpu_device": "cuda:0",
                   "candidate_count": 127561,
+                  "candidate_tensor_cache_hit": true,
+                  "candidate_tensor_cache_size": 1,
                   "fallback_reason": null,
                   "fused_representations": [
                     "stored_embedding",
@@ -4151,6 +4235,8 @@
                     "actual_backend": "torch_cuda",
                     "actual_gpu_device": "cuda:0",
                     "candidate_count": 127561,
+                    "candidate_tensor_cache_hit": true,
+                    "candidate_tensor_cache_size": 1,
                     "fallback_reason": null,
                     "query_count": 50,
                     "requested_gpu_device": "cuda:0",
@@ -4162,6 +4248,8 @@
                     "actual_backend": "torch_cuda",
                     "actual_gpu_device": "cuda:0",
                     "candidate_count": 127561,
+                    "candidate_tensor_cache_hit": true,
+                    "candidate_tensor_cache_size": 1,
                     "fallback_reason": null,
                     "query_count": 50,
                     "requested_gpu_device": "cuda:0",
@@ -4189,6 +4277,8 @@
                   "actual_backend": "fused_torch_cuda_torch_cuda",
                   "actual_gpu_device": "cuda:0",
                   "candidate_count": 127561,
+                  "candidate_tensor_cache_hit": true,
+                  "candidate_tensor_cache_size": 1,
                   "fallback_reason": null,
                   "fused_representations": [
                     "stored_embedding",
@@ -4202,6 +4292,8 @@
                     "actual_backend": "torch_cuda",
                     "actual_gpu_device": "cuda:0",
                     "candidate_count": 127561,
+                    "candidate_tensor_cache_hit": true,
+                    "candidate_tensor_cache_size": 1,
                     "fallback_reason": null,
                     "query_count": 50,
                     "requested_gpu_device": "cuda:0",
@@ -4213,6 +4305,8 @@
                     "actual_backend": "torch_cuda",
                     "actual_gpu_device": "cuda:0",
                     "candidate_count": 127561,
+                    "candidate_tensor_cache_hit": true,
+                    "candidate_tensor_cache_size": 1,
                     "fallback_reason": null,
                     "query_count": 50,
                     "requested_gpu_device": "cuda:0",
@@ -4240,6 +4334,8 @@
                   "actual_backend": "torch_cuda",
                   "actual_gpu_device": "cuda:0",
                   "candidate_count": 127561,
+                  "candidate_tensor_cache_hit": true,
+                  "candidate_tensor_cache_size": 1,
                   "fallback_reason": null,
                   "query_count": 50,
                   "requested_gpu_device": "cuda:0",
@@ -6336,7 +6432,7 @@
         "outputs/reports",
         "homepage/assets"
       ],
-      "bytes_per_processed_row": 10454.77826938619,
+      "bytes_per_processed_row": 10454.920472446338,
       "directories": {
         "data/processed": {
           "bytes": 46533700,
@@ -6345,7 +6441,7 @@
           "path": "data/processed"
         },
         "homepage/assets": {
-          "bytes": 2057983,
+          "bytes": 2058859,
           "exists": true,
           "file_count": 11,
           "path": "homepage/assets"
@@ -6363,7 +6459,7 @@
           "path": "outputs/indexes"
         },
         "outputs/reports": {
-          "bytes": 19488213,
+          "bytes": 19528862,
           "exists": true,
           "file_count": 39,
           "path": "outputs/reports"
@@ -6419,36 +6515,36 @@
       ],
       "projections": [
         {
-          "estimated_artifact_bytes": 3052920712.0,
-          "estimated_artifact_gib": 2.84325397759676,
+          "estimated_artifact_bytes": 3052962237.0,
+          "estimated_artifact_gib": 2.8432926507666707,
           "label": "current_1x",
           "scale_factor_vs_current": 1.0,
           "target_processed_rows": 292012
         },
         {
-          "estimated_artifact_bytes": 6105841424.0,
-          "estimated_artifact_gib": 5.68650795519352,
+          "estimated_artifact_bytes": 6105924474.0,
+          "estimated_artifact_gib": 5.686585301533341,
           "label": "current_2x",
           "scale_factor_vs_current": 2.0,
           "target_processed_rows": 584024
         },
         {
-          "estimated_artifact_bytes": 15264603560.0,
-          "estimated_artifact_gib": 14.216269887983799,
+          "estimated_artifact_bytes": 15264811185.0,
+          "estimated_artifact_gib": 14.216463253833354,
           "label": "current_5x",
           "scale_factor_vs_current": 5.0,
           "target_processed_rows": 1460060
         },
         {
-          "estimated_artifact_bytes": 3659172394.2851663,
-          "estimated_artifact_gib": 3.407869855207546,
+          "estimated_artifact_bytes": 3659222165.3562183,
+          "estimated_artifact_gib": 3.4079162081295795,
           "label": "configured_source_rows",
           "scale_factor_vs_current": 1.1985808802377984,
           "target_processed_rows": 350000
         }
       ],
-      "total_artifact_bytes": 3052920712,
-      "total_artifact_gib": 2.84325397759676,
+      "total_artifact_bytes": 3052962237,
+      "total_artifact_gib": 2.8432926507666707,
       "unreferenced_index_artifact_bytes": 1502501178,
       "unreferenced_index_artifact_count": 12,
       "unreferenced_index_artifact_gib": 1.3993132654577494,
@@ -6614,10 +6710,10 @@
     "embedding_rows_per_second": 418.2059738073865,
     "estimated_seconds_at_requested_source_rows": 700.4261016058736,
     "evaluation_timing_delta": {
-      "current_evaluation_seconds": 54.94258901197463,
+      "current_evaluation_seconds": 54.96088143088855,
       "current_faster_than_pipeline_timing": false,
       "timed_pipeline_evaluate_seconds": 34.968471507076174,
-      "timed_to_current_ratio": 0.6364547455063477
+      "timed_to_current_ratio": 0.6362429167197372
     },
     "execution_mode_summary": {
       "ann_index_active": true,
@@ -7005,7 +7101,7 @@
           "area": "rerank_evaluation_policy",
           "basis": "full rerank cost is projected from the sampled rerank diagnostic",
           "estimated_pipeline_seconds_after_action": null,
-          "estimated_seconds_saved": 1748.4627042948619,
+          "estimated_seconds_saved": 1831.6534175815293,
           "priority": 4
         }
       ],
@@ -7456,8 +7552,8 @@
     "requested_source_rows": 350000,
     "rerank_evaluation_cost_profile": {
       "batched_embedding_recall_at_10": 0.11624918291584951,
-      "batched_embedding_seconds": 14.956324729137123,
-      "batched_embedding_seconds_per_query": 0.004898894441250285,
+      "batched_embedding_seconds": 14.87906001904048,
+      "batched_embedding_seconds_per_query": 0.00487358664233229,
       "candidate_k": 50,
       "candidate_k_values": [
         50,
@@ -7466,13 +7562,13 @@
       "full_proof_state_queries": 3053,
       "method": "project_full_rerank_cost_from_user_facing_sampled_rerank_diagnostic",
       "policy": "keep reranked proof-state evaluation sampled for development and use full batched embedding evaluation for final held-out coverage",
-      "projected_full_rerank_minutes": 29.333204946764553,
-      "projected_full_rerank_seconds": 1759.9922968058731,
+      "projected_full_rerank_minutes": 30.728859676208423,
+      "projected_full_rerank_seconds": 1843.7315805725054,
       "rerank_backend": "batched_torch_cuda_then_rerank",
-      "rerank_seconds": 11.529592511011288,
-      "rerank_seconds_per_query": 0.5764796255505644,
+      "rerank_seconds": 12.078162990976125,
+      "rerank_seconds_per_query": 0.6039081495488062,
       "rerank_stage_name": "test_reranked_proof_state_retrieval",
-      "rerank_to_batched_seconds_per_query_ratio": 117.67545360774022,
+      "rerank_to_batched_seconds_per_query_ratio": 123.91452001760281,
       "reranked_recall_at_10": 0.125,
       "sampled_fraction_of_full_proof_state_eval": 0.006550933508024894,
       "sampled_rerank_queries": 20,
@@ -7527,6 +7623,10 @@
         ],
         "batch_size": 256,
         "candidate_count": 127561,
+        "candidate_tensor_cache_hit_share": 0.75,
+        "candidate_tensor_cache_hits": 3,
+        "candidate_tensor_cache_max_size": 1,
+        "candidate_tensor_cache_misses": 1,
         "fallback_reasons": [],
         "proof_state_query_representation": "stored_embedding",
         "ranking_backend": "batched_embedding_topk",
@@ -7851,7 +7951,7 @@
       },
       "rerank_sample": {
         "policy": "keep reranked proof-state evaluation sampled for development and use full batched embedding evaluation for final held-out coverage",
-        "projected_full_seconds": 1759.9922968058731,
+        "projected_full_seconds": 1843.7315805725054,
         "recall_at_10_delta": 0.008750817084150486,
         "sampled_queries": 20
       },

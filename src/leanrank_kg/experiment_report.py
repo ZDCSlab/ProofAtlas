@@ -740,6 +740,13 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
     embedding_parallel = resource_parallelism.get("embedding_parallelism", {}) if isinstance(resource_parallelism, dict) else {}
     evaluation_parallel = resource_parallelism.get("evaluation_parallelism", {}) if isinstance(resource_parallelism, dict) else {}
     index_parallel = resource_parallelism.get("index_parallelism", {}) if isinstance(resource_parallelism, dict) else {}
+    candidate_tensor_cache_hits = evaluation_parallel.get("candidate_tensor_cache_hits")
+    candidate_tensor_cache_misses = evaluation_parallel.get("candidate_tensor_cache_misses")
+    candidate_tensor_cache_total = (
+        candidate_tensor_cache_hits + candidate_tensor_cache_misses
+        if isinstance(candidate_tensor_cache_hits, int) and isinstance(candidate_tensor_cache_misses, int)
+        else "n/a"
+    )
     bench_entities = benchmark.get("entities", {}) if isinstance(benchmark, dict) else {}
     actual_backend_info = evaluation_scope.get("actual_backend_info", {}) if isinstance(evaluation_scope, dict) else {}
     actual_proof_backend = actual_backend_info.get("proof_state", {}).get("test", {}).get("actual_backend", "n/a")
@@ -1461,6 +1468,9 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
             f"- Test proof-state backend: `{evaluation_parallel.get('test_proof_state_backend', 'n/a')}`",
             f"- Test theorem backend: `{evaluation_parallel.get('test_theorem_backend', 'n/a')}`",
             f"- Candidate count: `{evaluation_parallel.get('candidate_count', 'n/a')}`",
+            f"- Candidate tensor cache hits: `{evaluation_parallel.get('candidate_tensor_cache_hits', 'n/a')}` / `{candidate_tensor_cache_total}`",
+            f"- Candidate tensor cache hit share: `{evaluation_parallel.get('candidate_tensor_cache_hit_share', 'n/a')}`",
+            f"- Candidate tensor cache max size: `{evaluation_parallel.get('candidate_tensor_cache_max_size', 'n/a')}`",
             f"- Fallback reasons: `{evaluation_parallel.get('fallback_reasons', [])}`",
             "",
             "### Indexing",

@@ -200,6 +200,12 @@ def test_readme_resource_parallelism_profile_matches_committed_profile() -> None
     )
     assert _readme_table_row(readme, "Evaluation", "actual backends")[2] == ", ".join(evaluation["actual_backends"])
     assert _readme_table_row(readme, "Evaluation", "candidate count")[2] == f"{int(evaluation['candidate_count']):,}"
+    assert _readme_table_row(readme, "Evaluation", "candidate tensor cache hits")[2] == (
+        f"{evaluation['candidate_tensor_cache_hits']} / {evaluation['candidate_tensor_cache_hits'] + evaluation['candidate_tensor_cache_misses']}"
+    )
+    assert _readme_table_row(readme, "Evaluation", "candidate tensor cache hit share")[2] == (
+        f"{float(evaluation['candidate_tensor_cache_hit_share']):.4f}"
+    )
     assert _readme_table_row(readme, "Indexing", "backend")[2] == indexing["backend"]
     assert _readme_table_row(readme, "Indexing", "hnswlib parameters")[2] == (
         f"M={indexing['hnsw_M']}, ef_construction={indexing['hnsw_ef_construction']}, ef_search={indexing['hnsw_ef_search']}"
