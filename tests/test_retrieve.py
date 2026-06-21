@@ -212,6 +212,10 @@ def test_text_query_retrieval_and_theorem_guidance_are_json_serializable(tmp_pat
         "theorem_neighborhood_premise_score",
         "symbol_name_overlap",
         "symbol_context_overlap",
+        "embedding_candidate_rank_score",
+        "lexical_candidate_rank_score",
+        "candidate_source_overlap_score",
+        "lexical_only_candidate_score",
     } <= set(premises[0]["signals"])
     assert premises[0]["signals"]["learned_ranker_score"] is not None
     assert premises[0]["ranking_reasons"]
@@ -320,6 +324,7 @@ def test_text_query_retrieval_and_theorem_guidance_are_json_serializable(tmp_pat
     hybrid_rerank = test_eval["test"]["proof_state_hybrid_candidate_reranked_retrieval"]
     assert hybrid_rerank["backend_info"]["actual_backend"].startswith("hybrid_embedding_lexical_union_then_rerank")
     assert "lexical_added_gold_queries" in hybrid_rerank["candidate_pool_summary"]
+    assert "mean_lexical_only_candidate_count" in hybrid_rerank["candidate_pool_summary"]
     assert "zero_recall_at_max_k" in test_eval["test"]["proof_state_retrieval"]["failure_profile"]
     assert test_eval["test"]["proof_state_retrieval"]["worst_cases"]
     assert test_eval["test"]["theorem_retrieval"]["worst_cases"]

@@ -1089,6 +1089,8 @@ def _evaluate_hybrid_candidate_reranked_proof_state_retrieval_split(
         query_text = query_texts[query_idx]
         embedding_ids = [train_premise_ids[idx] for idx in (embedding_neighbor_rows[query_idx] if query_idx < len(embedding_neighbor_rows) else [])[:candidate_k]]
         lexical_ids = lexical_by_query.get(proof_state_id, [])[:lexical_candidate_k]
+        embedding_rank_score = {premise_id: 1.0 / rank for rank, premise_id in enumerate(embedding_ids, start=1)}
+        lexical_rank_score = {premise_id: 1.0 / rank for rank, premise_id in enumerate(lexical_ids, start=1)}
         candidate_ids = list(dict.fromkeys([*embedding_ids, *lexical_ids]))
         candidate_rows = [premise_row_by_id[premise_id] for premise_id in candidate_ids if premise_id in premise_row_by_id]
         candidate_ids = [train_premise_ids[idx] for idx in candidate_rows]
@@ -1101,6 +1103,10 @@ def _evaluate_hybrid_candidate_reranked_proof_state_retrieval_split(
             }
             candidates["score"] = candidates["id"].map(score_by_id).astype(float)
             candidates["embedding_score"] = candidates["score"]
+            candidates["from_embedding_candidate"] = candidates["id"].isin(embedding_rank_score)
+            candidates["from_lexical_candidate"] = candidates["id"].isin(lexical_rank_score)
+            candidates["embedding_candidate_rank_score"] = candidates["id"].map(embedding_rank_score).fillna(0.0).astype(float)
+            candidates["lexical_candidate_rank_score"] = candidates["id"].map(lexical_rank_score).fillna(0.0).astype(float)
             candidates["retrieval_backend"] = "hybrid_embedding_lexical_union"
         reranked = _rerank_premise_candidates(
             query_text,
@@ -1135,6 +1141,8 @@ def _evaluate_hybrid_candidate_reranked_proof_state_retrieval_split(
                 "lexical_hit": bool(lexical_hits),
                 "union_hit": bool(union_hits),
                 "lexical_added_gold_after_embedding_miss": bool(gold_in_index and not embedding_hits and union_hits),
+                "lexical_only_candidate_count": len(set(lexical_ids) - set(embedding_ids)),
+                "embedding_lexical_overlap_count": len(set(embedding_ids) & set(lexical_ids)),
             }
         )
         if len(examples) < 10:
@@ -1153,6 +1161,10 @@ def _evaluate_hybrid_candidate_reranked_proof_state_retrieval_split(
                             "learned_ranker_score": None
                             if pd.isna(row.get("learned_ranker_score"))
                             else float(row.get("learned_ranker_score")),
+                            "from_embedding_candidate": bool(row.get("from_embedding_candidate", False)),
+                            "from_lexical_candidate": bool(row.get("from_lexical_candidate", False)),
+                            "embedding_candidate_rank_score": float(row.get("embedding_candidate_rank_score", 0.0)),
+                            "lexical_candidate_rank_score": float(row.get("lexical_candidate_rank_score", 0.0)),
                         }
                         for row in reranked.head(5).to_dict(orient="records")
                     ],
@@ -1167,6 +1179,8 @@ def _evaluate_hybrid_candidate_reranked_proof_state_retrieval_split(
         "union_hit_query_share": float(sum(1 for row in retrievable_pool_rows if row["union_hit"]) / pool_denominator),
         "lexical_added_gold_queries": int(sum(1 for row in retrievable_pool_rows if row["lexical_added_gold_after_embedding_miss"])),
         "mean_union_candidate_count": float(sum(row["union_candidate_count"] for row in retrievable_pool_rows) / pool_denominator),
+        "mean_lexical_only_candidate_count": float(sum(row["lexical_only_candidate_count"] for row in retrievable_pool_rows) / pool_denominator),
+        "mean_embedding_lexical_overlap_count": float(sum(row["embedding_lexical_overlap_count"] for row in retrievable_pool_rows) / pool_denominator),
     }
     return {
         "split": split,

@@ -1048,6 +1048,8 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
                 "union_hit_query_share",
                 "lexical_added_gold_queries",
                 "mean_union_candidate_count",
+                "mean_lexical_only_candidate_count",
+                "mean_embedding_lexical_overlap_count",
             ],
         ),
         "",

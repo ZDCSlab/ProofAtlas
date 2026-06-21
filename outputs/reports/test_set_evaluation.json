@@ -81,14 +81,14 @@
         "actual_backend": "torch_cuda",
         "evaluated_queries": 2822,
         "name": "val_proof_state_retrieval",
-        "seconds": 19.998351047048345,
+        "seconds": 20.166608758969232,
         "split": "val"
       },
       {
         "actual_backend": "torch_cuda",
         "evaluated_queries": 3053,
         "name": "test_proof_state_retrieval",
-        "seconds": 15.006896385923028,
+        "seconds": 15.028629810083658,
         "split": "test"
       },
       {
@@ -96,7 +96,7 @@
         "case_study_limit": 0,
         "evaluated_queries": 1000,
         "name": "val_theorem_retrieval",
-        "seconds": 0.4388749049976468,
+        "seconds": 0.44639771222136915,
         "split": "val"
       },
       {
@@ -104,7 +104,7 @@
         "case_study_limit": 0,
         "evaluated_queries": 1000,
         "name": "test_theorem_retrieval",
-        "seconds": 0.4561456609517336,
+        "seconds": 0.47176785906776786,
         "split": "test"
       },
       {
@@ -112,7 +112,7 @@
         "candidate_k": 50,
         "evaluated_queries": 20,
         "name": "test_reranked_proof_state_retrieval",
-        "seconds": 13.845597987063229,
+        "seconds": 14.105458579026163,
         "split": "test"
       },
       {
@@ -121,21 +121,21 @@
         "evaluated_queries": 20,
         "lexical_candidate_k": 50,
         "name": "test_hybrid_candidate_reranked_proof_state_retrieval",
-        "seconds": 5.649393198080361,
+        "seconds": 5.646435401169583,
         "split": "test"
       },
       {
         "best_variant_by_recall": "stored_plus_goal_only",
         "evaluated_queries": 50,
         "name": "val_proof_state_query_representation_diagnostic",
-        "seconds": 1.7019459521397948,
+        "seconds": 1.7435622399207205,
         "split": "val"
       },
       {
         "best_variant_by_recall": "stored_plus_full_name_context_goal",
         "evaluated_queries": 50,
         "name": "test_proof_state_query_representation_diagnostic",
-        "seconds": 0.891223237849772,
+        "seconds": 0.8969280230812728,
         "split": "test"
       }
     ],
@@ -143,7 +143,7 @@
       "test": null,
       "val": null
     },
-    "total_seconds": 58.46033638087101,
+    "total_seconds": 59.025652127107605,
     "use_gpu": true
   },
   "label_policy": "held-out test positive_edges are used only for evaluation",
@@ -231,6 +231,8 @@
         "embedding_hit_query_share": 0.3157894736842105,
         "lexical_added_gold_queries": 1,
         "lexical_hit_query_share": 0.3684210526315789,
+        "mean_embedding_lexical_overlap_count": 11.894736842105264,
+        "mean_lexical_only_candidate_count": 38.10526315789474,
         "mean_union_candidate_count": 88.10526315789474,
         "retrievable_queries": 19,
         "union_hit_query_share": 0.3684210526315789
@@ -396,7 +398,7 @@
         {
           "domain_tag": "Data",
           "metrics": {
-            "MAP": 0.2333333333333333,
+            "MAP": 0.25,
             "MRR": 0.5,
             "Recall@1": 0.0,
             "Recall@10": 0.6666666666666666,
@@ -410,7 +412,7 @@
             "gold_premises_missing_from_train_index": 0,
             "gold_premises_total": 3,
             "nDCG@1": 0.0,
-            "nDCG@10": 0.431733884398313,
+            "nDCG@10": 0.4441228664487979,
             "nDCG@100": 0.0,
             "nDCG@5": 0.2960819109658652,
             "nDCG@50": 0.0
@@ -451,10 +453,12 @@
           "candidate_pool": {
             "embedding_candidate_count": 50,
             "embedding_hit": true,
+            "embedding_lexical_overlap_count": 14,
             "gold_in_train_index_count": 3,
             "lexical_added_gold_after_embedding_miss": false,
             "lexical_candidate_count": 50,
             "lexical_hit": true,
+            "lexical_only_candidate_count": 36,
             "proof_state_id": "ps:AList.lookup_to_alist:0:308b5669ece7",
             "union_candidate_count": 86,
             "union_hit": true
@@ -468,39 +472,59 @@
           "split": "test",
           "top_retrieved_premises": [
             {
+              "embedding_candidate_rank_score": 1.0,
               "embedding_score": 0.8204599022865295,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": true,
               "full_name": "AList.lookup_to_alist",
               "learned_ranker_score": 0.910783177066932,
+              "lexical_candidate_rank_score": 1.0,
               "premise_id": "premise:AList.lookup_to_alist",
-              "score": 0.7560414774864908
+              "score": 0.7678128514438862
             },
             {
+              "embedding_candidate_rank_score": 0.5,
               "embedding_score": 0.8012900352478027,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": true,
               "full_name": "AList.lookup",
               "learned_ranker_score": 0.91409748037254,
+              "lexical_candidate_rank_score": 0.058823529411764705,
               "premise_id": "premise:AList.lookup",
-              "score": 0.7521269364192962
+              "score": 0.7344982194035248
             },
             {
+              "embedding_candidate_rank_score": 0.1111111111111111,
               "embedding_score": 0.7629333138465881,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": true,
               "full_name": "AList.lookup_eq_none",
               "learned_ranker_score": 0.78877753557787,
+              "lexical_candidate_rank_score": 0.038461538461538464,
               "premise_id": "premise:AList.lookup_eq_none",
-              "score": 0.6710352386048846
+              "score": 0.6475018240094823
             },
             {
+              "embedding_candidate_rank_score": 0.1,
               "embedding_score": 0.761119544506073,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": false,
               "full_name": "AList.lookup_isSome",
               "learned_ranker_score": 0.7865381794282186,
+              "lexical_candidate_rank_score": 0.0,
               "premise_id": "premise:AList.lookup_isSome",
-              "score": 0.6692485793043785
+              "score": 0.6402232377518826
             },
             {
+              "embedding_candidate_rank_score": 0.2,
               "embedding_score": 0.7671421766281128,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": false,
               "full_name": "AList.perm_lookup",
               "learned_ranker_score": 0.6540697317579951,
+              "lexical_candidate_rank_score": 0.0,
               "premise_id": "premise:AList.perm_lookup",
-              "score": 0.5977338585150999
+              "score": 0.5702646003616613
             }
           ]
         },
@@ -508,10 +532,12 @@
           "candidate_pool": {
             "embedding_candidate_count": 50,
             "embedding_hit": false,
+            "embedding_lexical_overlap_count": 0,
             "gold_in_train_index_count": 0,
             "lexical_added_gold_after_embedding_miss": false,
             "lexical_candidate_count": 50,
             "lexical_hit": false,
+            "lexical_only_candidate_count": 50,
             "proof_state_id": "ps:AbsoluteValue.Completion.extensionEmbedding_of_comp_coe:0:7b7f180d15af",
             "union_candidate_count": 100,
             "union_hit": false
@@ -524,39 +550,59 @@
           "split": "test",
           "top_retrieved_premises": [
             {
+              "embedding_candidate_rank_score": 1.0,
               "embedding_score": 0.8516644239425659,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": false,
               "full_name": "UniformSpace.Completion.extension_comp_coe",
               "learned_ranker_score": 0.8819457450129092,
+              "lexical_candidate_rank_score": 0.0,
               "premise_id": "premise:UniformSpace.Completion.extension_comp_coe",
-              "score": 0.7872179350219868
+              "score": 0.7707255258523129
             },
             {
+              "embedding_candidate_rank_score": 0.05263157894736842,
               "embedding_score": 0.7989178895950317,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": false,
               "full_name": "BoundedLatticeHom.coe_comp",
               "learned_ranker_score": 0.8068024751454759,
+              "lexical_candidate_rank_score": 0.0,
               "premise_id": "premise:BoundedLatticeHom.coe_comp",
-              "score": 0.7274602355460915
+              "score": 0.6960514294385453
             },
             {
+              "embedding_candidate_rank_score": 0.08333333333333333,
               "embedding_score": 0.8061606287956238,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": false,
               "full_name": "Valued.closure_coe_completion_v_lt",
               "learned_ranker_score": 0.7149395718756243,
+              "lexical_candidate_rank_score": 0.0,
               "premise_id": "premise:Valued.closure_coe_completion_v_lt",
-              "score": 0.6787947740859114
+              "score": 0.6476452686196886
             },
             {
-              "embedding_score": 0.7981046438217163,
-              "full_name": "Valued.extension",
-              "learned_ranker_score": 0.6165696826566139,
-              "premise_id": "premise:Valued.extension",
-              "score": 0.62110120361344
-            },
-            {
+              "embedding_candidate_rank_score": 0.5,
               "embedding_score": 0.8272745609283447,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": false,
               "full_name": "UniformSpace.Completion.extensionHom",
               "learned_ranker_score": 0.595215747192222,
+              "lexical_candidate_rank_score": 0.0,
               "premise_id": "premise:UniformSpace.Completion.extensionHom",
-              "score": 0.6179331548606652
+              "score": 0.5934285351430673
+            },
+            {
+              "embedding_candidate_rank_score": 0.047619047619047616,
+              "embedding_score": 0.7981046438217163,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": false,
+              "full_name": "Valued.extension",
+              "learned_ranker_score": 0.6165696826566139,
+              "lexical_candidate_rank_score": 0.0,
+              "premise_id": "premise:Valued.extension",
+              "score": 0.5896351083958034
             }
           ]
         },
@@ -564,10 +610,12 @@
           "candidate_pool": {
             "embedding_candidate_count": 50,
             "embedding_hit": true,
+            "embedding_lexical_overlap_count": 4,
             "gold_in_train_index_count": 4,
             "lexical_added_gold_after_embedding_miss": false,
             "lexical_candidate_count": 50,
             "lexical_hit": true,
+            "lexical_only_candidate_count": 46,
             "proof_state_id": "ps:Action.full_res:4:d6f01be8f029",
             "union_candidate_count": 96,
             "union_hit": true
@@ -582,39 +630,59 @@
           "split": "test",
           "top_retrieved_premises": [
             {
+              "embedding_candidate_rank_score": 0.0,
               "embedding_score": 0.7204346656799316,
+              "from_embedding_candidate": false,
+              "from_lexical_candidate": true,
               "full_name": "CategoryTheory.Category",
               "learned_ranker_score": 0.9998321953148723,
+              "lexical_candidate_rank_score": 0.2,
               "premise_id": "premise:CategoryTheory.Category",
-              "score": 0.7913994519633443
+              "score": 0.7667218480033069
             },
             {
+              "embedding_candidate_rank_score": 0.5,
               "embedding_score": 0.8352179527282715,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": false,
               "full_name": "Action.Hom.id",
               "learned_ranker_score": 0.8822449581791327,
+              "lexical_candidate_rank_score": 0.0,
               "premise_id": "premise:Action.Hom.id",
-              "score": 0.7443471348190884
+              "score": 0.7195208077335934
             },
             {
+              "embedding_candidate_rank_score": 0.14285714285714285,
               "embedding_score": 0.8208795785903931,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": false,
               "full_name": "Action.id_hom",
               "learned_ranker_score": 0.8697578271585034,
+              "lexical_candidate_rank_score": 0.0,
               "premise_id": "premise:Action.id_hom",
-              "score": 0.7333059559858371
+              "score": 0.7026317616243548
             },
             {
+              "embedding_candidate_rank_score": 0.125,
               "embedding_score": 0.819179892539978,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": true,
               "full_name": "Action.res",
               "learned_ranker_score": 0.754688042813852,
+              "lexical_candidate_rank_score": 0.5,
               "premise_id": "premise:Action.res",
-              "score": 0.6689617563791377
+              "score": 0.6537849707312686
             },
             {
-              "embedding_score": 0.8228293657302856,
-              "full_name": "Action.hom_ext",
-              "learned_ranker_score": 0.7403024949812577,
-              "premise_id": "premise:Action.hom_ext",
-              "score": 0.6622021581531592
+              "embedding_candidate_rank_score": 0.25,
+              "embedding_score": 0.826767086982727,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": true,
+              "full_name": "Action.full_res",
+              "learned_ranker_score": 0.7117635446397802,
+              "lexical_candidate_rank_score": 1.0,
+              "premise_id": "premise:Action.full_res",
+              "score": 0.6463516111457932
             }
           ]
         },
@@ -622,10 +690,12 @@
           "candidate_pool": {
             "embedding_candidate_count": 50,
             "embedding_hit": true,
+            "embedding_lexical_overlap_count": 10,
             "gold_in_train_index_count": 1,
             "lexical_added_gold_after_embedding_miss": false,
             "lexical_candidate_count": 50,
             "lexical_hit": true,
+            "lexical_only_candidate_count": 40,
             "proof_state_id": "ps:AddChar.to_mulShift_inj_of_isPrimitive:1:014ac10cbfd3",
             "union_candidate_count": 90,
             "union_hit": true
@@ -637,39 +707,59 @@
           "split": "test",
           "top_retrieved_premises": [
             {
+              "embedding_candidate_rank_score": 1.0,
               "embedding_score": 0.8418198823928833,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": true,
               "full_name": "AddChar.to_mulShift_inj_of_isPrimitive",
               "learned_ranker_score": 0.9715421227073046,
+              "lexical_candidate_rank_score": 1.0,
               "premise_id": "premise:AddChar.to_mulShift_inj_of_isPrimitive",
-              "score": 0.7984450515012399
+              "score": 0.8093513462643281
             },
             {
+              "embedding_candidate_rank_score": 0.5,
               "embedding_score": 0.817188560962677,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": true,
               "full_name": "AddChar.IsPrimitive",
               "learned_ranker_score": 0.8941464191187701,
+              "lexical_candidate_rank_score": 0.25,
               "premise_id": "premise:AddChar.IsPrimitive",
-              "score": 0.7457777301699028
+              "score": 0.7318065934509144
             },
             {
+              "embedding_candidate_rank_score": 0.25,
               "embedding_score": 0.7919825315475464,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": true,
               "full_name": "AddChar.mulShift",
               "learned_ranker_score": 0.8203553706213093,
+              "lexical_candidate_rank_score": 0.05,
               "premise_id": "premise:AddChar.mulShift",
-              "score": 0.6969171084952692
+              "score": 0.6749668159675937
             },
             {
+              "embedding_candidate_rank_score": 0.037037037037037035,
               "embedding_score": 0.7528934478759766,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": true,
               "full_name": "AddChar.mulShift_mul",
               "learned_ranker_score": 0.8334040009826019,
+              "lexical_candidate_rank_score": 0.09090909090909091,
               "premise_id": "premise:AddChar.mulShift_mul",
-              "score": 0.6936325955904799
+              "score": 0.6703525321636241
             },
             {
+              "embedding_candidate_rank_score": 0.02564102564102564,
               "embedding_score": 0.7474581003189087,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": true,
               "full_name": "AddChar.mulShift_spec'",
               "learned_ranker_score": 0.8362984624568188,
+              "lexical_candidate_rank_score": 0.043478260869565216,
               "premise_id": "premise:AddChar.mulShift_spec'",
-              "score": 0.692548052347082
+              "score": 0.6682157986152699
             }
           ]
         },
@@ -677,10 +767,12 @@
           "candidate_pool": {
             "embedding_candidate_count": 50,
             "embedding_hit": true,
+            "embedding_lexical_overlap_count": 10,
             "gold_in_train_index_count": 3,
             "lexical_added_gold_after_embedding_miss": false,
             "lexical_candidate_count": 50,
             "lexical_hit": true,
+            "lexical_only_candidate_count": 40,
             "proof_state_id": "ps:AddChar.to_mulShift_inj_of_isPrimitive:2:38a6493b46d4",
             "union_candidate_count": 90,
             "union_hit": true
@@ -695,39 +787,59 @@
           "split": "test",
           "top_retrieved_premises": [
             {
+              "embedding_candidate_rank_score": 1.0,
               "embedding_score": 0.8418198823928833,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": true,
               "full_name": "AddChar.to_mulShift_inj_of_isPrimitive",
               "learned_ranker_score": 0.9715421227073046,
+              "lexical_candidate_rank_score": 1.0,
               "premise_id": "premise:AddChar.to_mulShift_inj_of_isPrimitive",
-              "score": 0.7984450515012399
+              "score": 0.8093513462643281
             },
             {
+              "embedding_candidate_rank_score": 0.5,
               "embedding_score": 0.817188560962677,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": true,
               "full_name": "AddChar.IsPrimitive",
               "learned_ranker_score": 0.8941464191187701,
+              "lexical_candidate_rank_score": 0.2,
               "premise_id": "premise:AddChar.IsPrimitive",
-              "score": 0.7457777301699028
+              "score": 0.7306815934509143
             },
             {
+              "embedding_candidate_rank_score": 0.25,
               "embedding_score": 0.7919825315475464,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": true,
               "full_name": "AddChar.mulShift",
               "learned_ranker_score": 0.8203553706213093,
+              "lexical_candidate_rank_score": 0.045454545454545456,
               "premise_id": "premise:AddChar.mulShift",
-              "score": 0.6969171084952692
+              "score": 0.674864543240321
             },
             {
+              "embedding_candidate_rank_score": 0.037037037037037035,
               "embedding_score": 0.7528934478759766,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": true,
               "full_name": "AddChar.mulShift_mul",
               "learned_ranker_score": 0.8334040009826019,
+              "lexical_candidate_rank_score": 0.07142857142857142,
               "premise_id": "premise:AddChar.mulShift_mul",
-              "score": 0.6936325955904799
+              "score": 0.6699142204753123
             },
             {
+              "embedding_candidate_rank_score": 0.02564102564102564,
               "embedding_score": 0.7474581003189087,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": true,
               "full_name": "AddChar.mulShift_spec'",
               "learned_ranker_score": 0.8362984624568188,
+              "lexical_candidate_rank_score": 0.043478260869565216,
               "premise_id": "premise:AddChar.mulShift_spec'",
-              "score": 0.692548052347082
+              "score": 0.6682157986152699
             }
           ]
         },
@@ -735,10 +847,12 @@
           "candidate_pool": {
             "embedding_candidate_count": 50,
             "embedding_hit": false,
+            "embedding_lexical_overlap_count": 3,
             "gold_in_train_index_count": 1,
             "lexical_added_gold_after_embedding_miss": false,
             "lexical_candidate_count": 50,
             "lexical_hit": false,
+            "lexical_only_candidate_count": 47,
             "proof_state_id": "ps:AddCircle.continuousAt_equivIoc:0:dffa12740580",
             "union_candidate_count": 97,
             "union_hit": false
@@ -750,39 +864,59 @@
           "split": "test",
           "top_retrieved_premises": [
             {
+              "embedding_candidate_rank_score": 1.0,
               "embedding_score": 0.8644944429397583,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": true,
               "full_name": "AddCircle.continuousAt_equivIoc",
               "learned_ranker_score": 0.9354874943876442,
+              "lexical_candidate_rank_score": 1.0,
               "premise_id": "premise:AddCircle.continuousAt_equivIoc",
-              "score": 0.8201159214527705
+              "score": 0.8301038965137102
             },
             {
+              "embedding_candidate_rank_score": 0.5,
               "embedding_score": 0.8531449437141418,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": false,
               "full_name": "AddCircle.continuousAt_equivIco",
               "learned_ranker_score": 0.7687391531048166,
+              "lexical_candidate_rank_score": 0.0,
               "premise_id": "premise:AddCircle.continuousAt_equivIco",
-              "score": 0.7231188869841765
+              "score": 0.6975665167637538
             },
             {
+              "embedding_candidate_rank_score": 0.3333333333333333,
               "embedding_score": 0.8389780521392822,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": false,
               "full_name": "AddCircle.continuous_equivIoc_symm",
               "learned_ranker_score": 0.7070205201158047,
+              "lexical_candidate_rank_score": 0.0,
               "premise_id": "premise:AddCircle.continuous_equivIoc_symm",
-              "score": 0.685863570018313
+              "score": 0.657884958906672
             },
             {
+              "embedding_candidate_rank_score": 0.14285714285714285,
               "embedding_score": 0.807059645652771,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": true,
               "full_name": "AddCircle.equivIoc",
               "learned_ranker_score": 0.6945215617863462,
+              "lexical_candidate_rank_score": 0.08333333333333333,
               "premise_id": "premise:AddCircle.equivIoc",
-              "score": 0.6680971105522384
+              "score": 0.6443576234747297
             },
             {
+              "embedding_candidate_rank_score": 0.1111111111111111,
               "embedding_score": 0.8048856258392334,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": false,
               "full_name": "Continuous.continuousAt",
               "learned_ranker_score": 0.6692631712275648,
+              "lexical_candidate_rank_score": 0.0,
               "premise_id": "premise:Continuous.continuousAt",
-              "score": 0.6183363772609135
+              "score": 0.5877385094144245
             }
           ]
         },
@@ -790,10 +924,12 @@
           "candidate_pool": {
             "embedding_candidate_count": 50,
             "embedding_hit": false,
+            "embedding_lexical_overlap_count": 3,
             "gold_in_train_index_count": 3,
             "lexical_added_gold_after_embedding_miss": false,
             "lexical_candidate_count": 50,
             "lexical_hit": false,
+            "lexical_only_candidate_count": 47,
             "proof_state_id": "ps:AddCircle.continuousAt_equivIoc:1:8e4f460e0671",
             "union_candidate_count": 97,
             "union_hit": false
@@ -808,39 +944,59 @@
           "split": "test",
           "top_retrieved_premises": [
             {
+              "embedding_candidate_rank_score": 1.0,
               "embedding_score": 0.8470081090927124,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": true,
               "full_name": "AddCircle.continuousAt_equivIoc",
               "learned_ranker_score": 0.927245365589414,
+              "lexical_candidate_rank_score": 1.0,
               "premise_id": "premise:AddCircle.continuousAt_equivIoc",
-              "score": 0.8102319324565477
+              "score": 0.820928104038293
             },
             {
+              "embedding_candidate_rank_score": 0.5,
               "embedding_score": 0.837796688079834,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": false,
               "full_name": "AddCircle.continuousAt_equivIco",
               "learned_ranker_score": 0.7479871119201122,
+              "lexical_candidate_rank_score": 0.0,
               "premise_id": "premise:AddCircle.continuousAt_equivIco",
-              "score": 0.707008698108491
+              "score": 0.6820779322412578
             },
             {
+              "embedding_candidate_rank_score": 0.3333333333333333,
               "embedding_score": 0.8327902555465698,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": false,
               "full_name": "AddCircle.continuous_equivIoc_symm",
               "learned_ranker_score": 0.6974700243469099,
+              "lexical_candidate_rank_score": 0.0,
               "premise_id": "premise:AddCircle.continuous_equivIoc_symm",
-              "score": 0.6787173315880508
+              "score": 0.6509893262384147
             },
             {
+              "embedding_candidate_rank_score": 0.16666666666666666,
               "embedding_score": 0.8007225394248962,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": true,
               "full_name": "AddCircle.equivIoc",
               "learned_ranker_score": 0.684507322462117,
+              "lexical_candidate_rank_score": 0.07692307692307693,
               "premise_id": "premise:AddCircle.equivIoc",
-              "score": 0.6606501244181826
+              "score": 0.6374516308022435
             },
             {
+              "embedding_candidate_rank_score": 0.09090909090909091,
               "embedding_score": 0.7881290912628174,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": false,
               "full_name": "Continuous.continuousAt",
               "learned_ranker_score": 0.6413339661203821,
+              "lexical_candidate_rank_score": 0.0,
               "premise_id": "premise:Continuous.continuousAt",
-              "score": 0.5978478148715797
+              "score": 0.5675649503117992
             }
           ]
         },
@@ -848,10 +1004,12 @@
           "candidate_pool": {
             "embedding_candidate_count": 50,
             "embedding_hit": false,
+            "embedding_lexical_overlap_count": 4,
             "gold_in_train_index_count": 1,
             "lexical_added_gold_after_embedding_miss": false,
             "lexical_candidate_count": 50,
             "lexical_hit": false,
+            "lexical_only_candidate_count": 46,
             "proof_state_id": "ps:AddCircle.continuousAt_equivIoc:2:52b95ad6b078",
             "union_candidate_count": 96,
             "union_hit": false
@@ -863,39 +1021,59 @@
           "split": "test",
           "top_retrieved_premises": [
             {
+              "embedding_candidate_rank_score": 0.25,
               "embedding_score": 0.8171553015708923,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": true,
               "full_name": "AddCircle.continuousAt_equivIoc",
               "learned_ranker_score": 0.6936218809282776,
+              "lexical_candidate_rank_score": 1.0,
               "premise_id": "premise:AddCircle.continuousAt_equivIoc",
-              "score": 0.6718808425055314
+              "score": 0.6702860527919103
             },
             {
+              "embedding_candidate_rank_score": 0.0,
               "embedding_score": 0.7880305051803589,
+              "from_embedding_candidate": false,
+              "from_lexical_candidate": true,
               "full_name": "Filter.map_map",
               "learned_ranker_score": 0.7425787711477375,
+              "lexical_candidate_rank_score": 0.05555555555555555,
               "premise_id": "premise:Filter.map_map",
-              "score": 0.6532754131024104
+              "score": 0.6226101776426058
             },
             {
+              "embedding_candidate_rank_score": 0.04,
               "embedding_score": 0.7974632382392883,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": false,
               "full_name": "GCongr.Filter.map_le_map",
               "learned_ranker_score": 0.6627868564438874,
+              "lexical_candidate_rank_score": 0.0,
               "premise_id": "premise:GCongr.Filter.map_le_map",
-              "score": 0.6474065219453602
+              "score": 0.6158292607966691
             },
             {
+              "embedding_candidate_rank_score": 0.021739130434782608,
               "embedding_score": 0.7930667400360107,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": false,
               "full_name": "Filter.map_equiv_symm",
               "learned_ranker_score": 0.651023061439544,
+              "lexical_candidate_rank_score": 0.0,
               "premise_id": "premise:Filter.map_equiv_symm",
-              "score": 0.6407161062427685
+              "score": 0.6089882076191362
             },
             {
+              "embedding_candidate_rank_score": 0.08333333333333333,
               "embedding_score": 0.8044055700302124,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": true,
               "full_name": "AddCircle.equivIoc",
               "learned_ranker_score": 0.6204559782959771,
+              "lexical_candidate_rank_score": 0.16666666666666666,
               "premise_id": "premise:AddCircle.equivIoc",
-              "score": 0.6265488924920324
+              "score": 0.6037204669058087
             }
           ]
         },
@@ -903,10 +1081,12 @@
           "candidate_pool": {
             "embedding_candidate_count": 50,
             "embedding_hit": true,
+            "embedding_lexical_overlap_count": 25,
             "gold_in_train_index_count": 8,
             "lexical_added_gold_after_embedding_miss": false,
             "lexical_candidate_count": 50,
             "lexical_hit": true,
+            "lexical_only_candidate_count": 25,
             "proof_state_id": "ps:AddCommGroup.modEq_iff_toIcoDiv_eq_toIocDiv_add_one:0:a1c762add1cc",
             "union_candidate_count": 75,
             "union_hit": true
@@ -925,39 +1105,59 @@
           "split": "test",
           "top_retrieved_premises": [
             {
+              "embedding_candidate_rank_score": 1.0,
               "embedding_score": 0.8437860012054443,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": true,
               "full_name": "AddCommGroup.modEq_iff_toIcoMod_add_period_eq_toIocMod",
               "learned_ranker_score": 0.9202557282781638,
+              "lexical_candidate_rank_score": 0.05555555555555555,
               "premise_id": "premise:AddCommGroup.modEq_iff_toIcoMod_add_period_eq_toIocMod",
-              "score": 0.8067141669218562
+              "score": 0.7962908338730357
             },
             {
+              "embedding_candidate_rank_score": 0.027777777777777776,
               "embedding_score": 0.805900514125824,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": false,
               "full_name": "AddCommGroup.ModEq.add_iff_right",
               "learned_ranker_score": 0.9023450407687282,
+              "lexical_candidate_rank_score": 0.0,
               "premise_id": "premise:AddCommGroup.ModEq.add_iff_right",
-              "score": 0.7850024726024456
+              "score": 0.7528635017803497
             },
             {
+              "embedding_candidate_rank_score": 0.020833333333333332,
               "embedding_score": 0.7995011210441589,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": false,
               "full_name": "AddCommGroup.ModEq.add_iff_left",
               "learned_ranker_score": 0.8981024813653296,
+              "lexical_candidate_rank_score": 0.0,
               "premise_id": "premise:AddCommGroup.ModEq.add_iff_left",
-              "score": 0.7807108506475868
+              "score": 0.7487060552452983
             },
             {
+              "embedding_candidate_rank_score": 0.0,
               "embedding_score": 0.7792915105819702,
+              "from_embedding_candidate": false,
+              "from_lexical_candidate": true,
               "full_name": "AddCommGroup.ModEq.nsmul_add",
               "learned_ranker_score": 0.8696200691489125,
+              "lexical_candidate_rank_score": 0.041666666666666664,
               "premise_id": "premise:AddCommGroup.ModEq.nsmul_add",
-              "score": 0.7577656039063485
+              "score": 0.7271417977277786
             },
             {
+              "embedding_candidate_rank_score": 0.0,
               "embedding_score": 0.7754862904548645,
+              "from_embedding_candidate": false,
+              "from_lexical_candidate": true,
               "full_name": "AddCommGroup.ModEq.zsmul_add",
               "learned_ranker_score": 0.8664020068566217,
+              "lexical_candidate_rank_score": 0.03125,
               "premise_id": "premise:AddCommGroup.ModEq.zsmul_add",
-              "score": 0.7548312722866941
+              "score": 0.7241272025232721
             }
           ]
         },
@@ -965,10 +1165,12 @@
           "candidate_pool": {
             "embedding_candidate_count": 50,
             "embedding_hit": true,
+            "embedding_lexical_overlap_count": 27,
             "gold_in_train_index_count": 2,
             "lexical_added_gold_after_embedding_miss": false,
             "lexical_candidate_count": 50,
             "lexical_hit": true,
+            "lexical_only_candidate_count": 23,
             "proof_state_id": "ps:AddCommGroup.natCast_modEq_natCast:0:5e34d05f7df0",
             "union_candidate_count": 73,
             "union_hit": true
@@ -983,39 +1185,59 @@
           "split": "test",
           "top_retrieved_premises": [
             {
+              "embedding_candidate_rank_score": 0.5,
               "embedding_score": 0.8179498910903931,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": true,
               "full_name": "Int.natCast_modEq_iff",
               "learned_ranker_score": 0.8869779736919557,
+              "lexical_candidate_rank_score": 0.034482758620689655,
               "premise_id": "premise:Int.natCast_modEq_iff",
-              "score": 0.7778422715024816
+              "score": 0.7589911629822862
             },
             {
+              "embedding_candidate_rank_score": 0.3333333333333333,
               "embedding_score": 0.8161623477935791,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": true,
               "full_name": "AddCommGroup.ModEq.trans",
               "learned_ranker_score": 0.867931166854053,
+              "lexical_candidate_rank_score": 0.25,
               "premise_id": "premise:AddCommGroup.ModEq.trans",
-              "score": 0.7668578201945644
+              "score": 0.7499282451089244
             },
             {
+              "embedding_candidate_rank_score": 0.2,
               "embedding_score": 0.8082288503646851,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": true,
               "full_name": "AddCommGroup.ModEq.nsmul",
               "learned_ranker_score": 0.8610722683683245,
+              "lexical_candidate_rank_score": 0.14285714285714285,
               "premise_id": "premise:AddCommGroup.ModEq.nsmul",
-              "score": 0.7606577758141722
+              "score": 0.7392387930886881
             },
             {
+              "embedding_candidate_rank_score": 0.14285714285714285,
               "embedding_score": 0.80418860912323,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": true,
               "full_name": "AddCommGroup.ModEq.of_nsmul",
               "learned_ranker_score": 0.8574658501381908,
+              "lexical_candidate_rank_score": 0.06666666666666667,
               "premise_id": "premise:AddCommGroup.ModEq.of_nsmul",
-              "score": 0.7574379319677134
+              "score": 0.7334397218696511
             },
             {
+              "embedding_candidate_rank_score": 0.1,
               "embedding_score": 0.8005940914154053,
+              "from_embedding_candidate": true,
+              "from_lexical_candidate": true,
               "full_name": "AddCommGroup.ModEq.of_zsmul",
               "learned_ranker_score": 0.8541919891859653,
+              "lexical_candidate_rank_score": 0.03571428571428571,
               "premise_id": "premise:AddCommGroup.ModEq.of_zsmul",
-              "score": 0.754537386025395
+              "score": 0.7292168967516425
             }
           ]
         }
@@ -1059,7 +1281,7 @@
         ]
       },
       "metrics": {
-        "MAP": 0.07478070175438596,
+        "MAP": 0.0756578947368421,
         "MRR": 0.17543859649122806,
         "Recall@1": 0.03289473684210526,
         "Recall@10": 0.16885964912280702,
@@ -1071,7 +1293,7 @@
         "gold_premises_missing_from_train_index": 7,
         "gold_premises_total": 57,
         "nDCG@1": 0.10526315789473684,
-        "nDCG@10": 0.1218999799045277,
+        "nDCG@10": 0.12255203159139533,
         "nDCG@5": 0.11150653640929499
       },
       "worst_cases": [
@@ -1953,35 +2175,35 @@
               "full_name": "AList.lookup_to_alist",
               "learned_ranker_score": 0.910783177066932,
               "premise_id": "premise:AList.lookup_to_alist",
-              "score": 0.7560414774864908
+              "score": 0.7228128514438863
             },
             {
               "embedding_score": 0.8012900352478027,
               "full_name": "AList.lookup",
               "learned_ranker_score": 0.91409748037254,
               "premise_id": "premise:AList.lookup",
-              "score": 0.7521269364192962
+              "score": 0.7196746899917601
             },
             {
               "embedding_score": 0.7629333138465881,
               "full_name": "AList.lookup_eq_none",
               "learned_ranker_score": 0.78877753557787,
               "premise_id": "premise:AList.lookup_eq_none",
-              "score": 0.6710352386048846
+              "score": 0.6401364393940977
             },
             {
               "embedding_score": 0.761119544506073,
               "full_name": "AList.lookup_isSome",
               "learned_ranker_score": 0.7865381794282186,
               "premise_id": "premise:AList.lookup_isSome",
-              "score": 0.6692485793043785
+              "score": 0.6384232377518826
             },
             {
               "embedding_score": 0.7671421766281128,
               "full_name": "AList.perm_lookup",
               "learned_ranker_score": 0.6540697317579951,
               "premise_id": "premise:AList.perm_lookup",
-              "score": 0.5977338585150999
+              "score": 0.5666646003616613
             }
           ]
         },
@@ -1998,35 +2220,35 @@
               "full_name": "UniformSpace.Completion.extension_comp_coe",
               "learned_ranker_score": 0.8819457450129092,
               "premise_id": "premise:UniformSpace.Completion.extension_comp_coe",
-              "score": 0.7872179350219868
+              "score": 0.7527255258523129
             },
             {
               "embedding_score": 0.7989178895950317,
               "full_name": "BoundedLatticeHom.coe_comp",
               "learned_ranker_score": 0.8068024751454759,
               "premise_id": "premise:BoundedLatticeHom.coe_comp",
-              "score": 0.7274602355460915
+              "score": 0.6951040610174927
             },
             {
               "embedding_score": 0.8061606287956238,
               "full_name": "Valued.closure_coe_completion_v_lt",
               "learned_ranker_score": 0.7149395718756243,
               "premise_id": "premise:Valued.closure_coe_completion_v_lt",
-              "score": 0.6787947740859114
+              "score": 0.6461452686196887
             },
             {
               "embedding_score": 0.7981046438217163,
               "full_name": "Valued.extension",
               "learned_ranker_score": 0.6165696826566139,
               "premise_id": "premise:Valued.extension",
-              "score": 0.62110120361344
+              "score": 0.5887779655386605
             },
             {
-              "embedding_score": 0.8272745609283447,
-              "full_name": "UniformSpace.Completion.extensionHom",
-              "learned_ranker_score": 0.595215747192222,
-              "premise_id": "premise:UniformSpace.Completion.extensionHom",
-              "score": 0.6179331548606652
+              "embedding_score": 0.7887153625488281,
+              "full_name": "AbsoluteValue.comp",
+              "learned_ranker_score": 0.6133832466791357,
+              "premise_id": "premise:AbsoluteValue.comp",
+              "score": 0.585336143001667
             }
           ]
         },
@@ -2045,35 +2267,35 @@
               "full_name": "Action.Hom.id",
               "learned_ranker_score": 0.8822449581791327,
               "premise_id": "premise:Action.Hom.id",
-              "score": 0.7443471348190884
+              "score": 0.7105208077335934
             },
             {
               "embedding_score": 0.8208795785903931,
               "full_name": "Action.id_hom",
               "learned_ranker_score": 0.8697578271585034,
               "premise_id": "premise:Action.id_hom",
-              "score": 0.7333059559858371
+              "score": 0.7000603330529263
             },
             {
               "embedding_score": 0.819179892539978,
               "full_name": "Action.res",
               "learned_ranker_score": 0.754688042813852,
               "premise_id": "premise:Action.res",
-              "score": 0.6689617563791377
+              "score": 0.6357849707312686
             },
             {
               "embedding_score": 0.8228293657302856,
               "full_name": "Action.hom_ext",
               "learned_ranker_score": 0.7403024949812577,
               "premise_id": "premise:Action.hom_ext",
-              "score": 0.6622021581531592
+              "score": 0.6288775688410826
             },
             {
               "embedding_score": 0.8515900373458862,
               "full_name": "Rep.\u03c1_hom",
               "learned_ranker_score": 0.7162649883035531,
               "premise_id": "premise:Rep.\u03c1_hom",
-              "score": 0.6561572949947954
+              "score": 0.621667898482287
             }
           ]
         },
@@ -2089,35 +2311,35 @@
               "full_name": "AddChar.to_mulShift_inj_of_isPrimitive",
               "learned_ranker_score": 0.9715421227073046,
               "premise_id": "premise:AddChar.to_mulShift_inj_of_isPrimitive",
-              "score": 0.7984450515012399
+              "score": 0.7643513462643281
             },
             {
               "embedding_score": 0.817188560962677,
               "full_name": "AddChar.IsPrimitive",
               "learned_ranker_score": 0.8941464191187701,
               "premise_id": "premise:AddChar.IsPrimitive",
-              "score": 0.7457777301699028
+              "score": 0.7126815934509143
             },
             {
               "embedding_score": 0.7919825315475464,
               "full_name": "AddChar.mulShift",
               "learned_ranker_score": 0.8203553706213093,
               "premise_id": "premise:AddChar.mulShift",
-              "score": 0.6969171084952692
+              "score": 0.6648418159675936
             },
             {
               "embedding_score": 0.7528934478759766,
               "full_name": "AddChar.mulShift_mul",
               "learned_ranker_score": 0.8334040009826019,
               "premise_id": "premise:AddChar.mulShift_mul",
-              "score": 0.6936325955904799
+              "score": 0.6631404109515029
             },
             {
               "embedding_score": 0.7474581003189087,
               "full_name": "AddChar.mulShift_spec'",
               "learned_ranker_score": 0.8362984624568188,
               "premise_id": "premise:AddChar.mulShift_spec'",
-              "score": 0.692548052347082
+              "score": 0.6622759992841663
             }
           ]
         },
@@ -2136,35 +2358,35 @@
               "full_name": "AddChar.to_mulShift_inj_of_isPrimitive",
               "learned_ranker_score": 0.9715421227073046,
               "premise_id": "premise:AddChar.to_mulShift_inj_of_isPrimitive",
-              "score": 0.7984450515012399
+              "score": 0.7643513462643281
             },
             {
               "embedding_score": 0.817188560962677,
               "full_name": "AddChar.IsPrimitive",
               "learned_ranker_score": 0.8941464191187701,
               "premise_id": "premise:AddChar.IsPrimitive",
-              "score": 0.7457777301699028
+              "score": 0.7126815934509143
             },
             {
               "embedding_score": 0.7919825315475464,
               "full_name": "AddChar.mulShift",
               "learned_ranker_score": 0.8203553706213093,
               "premise_id": "premise:AddChar.mulShift",
-              "score": 0.6969171084952692
+              "score": 0.6648418159675936
             },
             {
               "embedding_score": 0.7528934478759766,
               "full_name": "AddChar.mulShift_mul",
               "learned_ranker_score": 0.8334040009826019,
               "premise_id": "premise:AddChar.mulShift_mul",
-              "score": 0.6936325955904799
+              "score": 0.6631404109515029
             },
             {
               "embedding_score": 0.7474581003189087,
               "full_name": "AddChar.mulShift_spec'",
               "learned_ranker_score": 0.8362984624568188,
               "premise_id": "premise:AddChar.mulShift_spec'",
-              "score": 0.692548052347082
+              "score": 0.6622759992841663
             }
           ]
         },
@@ -2180,35 +2402,35 @@
               "full_name": "AddCircle.continuousAt_equivIoc",
               "learned_ranker_score": 0.9354874943876442,
               "premise_id": "premise:AddCircle.continuousAt_equivIoc",
-              "score": 0.8201159214527705
+              "score": 0.7851038965137102
             },
             {
               "embedding_score": 0.8531449437141418,
               "full_name": "AddCircle.continuousAt_equivIco",
               "learned_ranker_score": 0.7687391531048166,
               "premise_id": "premise:AddCircle.continuousAt_equivIco",
-              "score": 0.7231188869841765
+              "score": 0.6885665167637538
             },
             {
               "embedding_score": 0.8389780521392822,
               "full_name": "AddCircle.continuous_equivIoc_symm",
               "learned_ranker_score": 0.7070205201158047,
               "premise_id": "premise:AddCircle.continuous_equivIoc_symm",
-              "score": 0.685863570018313
+              "score": 0.651884958906672
             },
             {
               "embedding_score": 0.807059645652771,
               "full_name": "AddCircle.equivIoc",
               "learned_ranker_score": 0.6945215617863462,
               "premise_id": "premise:AddCircle.equivIoc",
-              "score": 0.6680971105522384
+              "score": 0.6354111949033011
             },
             {
               "embedding_score": 0.8048856258392334,
               "full_name": "Continuous.continuousAt",
               "learned_ranker_score": 0.6692631712275648,
               "premise_id": "premise:Continuous.continuousAt",
-              "score": 0.6183363772609135
+              "score": 0.5857385094144245
             }
           ]
         },
@@ -2227,35 +2449,35 @@
               "full_name": "AddCircle.continuousAt_equivIoc",
               "learned_ranker_score": 0.927245365589414,
               "premise_id": "premise:AddCircle.continuousAt_equivIoc",
-              "score": 0.8102319324565477
+              "score": 0.7759281040382928
             },
             {
               "embedding_score": 0.837796688079834,
               "full_name": "AddCircle.continuousAt_equivIco",
               "learned_ranker_score": 0.7479871119201122,
               "premise_id": "premise:AddCircle.continuousAt_equivIco",
-              "score": 0.707008698108491
+              "score": 0.6730779322412577
             },
             {
               "embedding_score": 0.8327902555465698,
               "full_name": "AddCircle.continuous_equivIoc_symm",
               "learned_ranker_score": 0.6974700243469099,
               "premise_id": "premise:AddCircle.continuous_equivIoc_symm",
-              "score": 0.6787173315880508
+              "score": 0.6449893262384148
             },
             {
               "embedding_score": 0.8007225394248962,
               "full_name": "AddCircle.equivIoc",
               "learned_ranker_score": 0.684507322462117,
               "premise_id": "premise:AddCircle.equivIoc",
-              "score": 0.6606501244181826
+              "score": 0.6282208615714744
             },
             {
               "embedding_score": 0.7881290912628174,
               "full_name": "Continuous.continuousAt",
               "learned_ranker_score": 0.6413339661203821,
               "premise_id": "premise:Continuous.continuousAt",
-              "score": 0.5978478148715797
+              "score": 0.5659285866754356
             }
           ]
         },
@@ -2271,35 +2493,35 @@
               "full_name": "AddCircle.continuousAt_equivIoc",
               "learned_ranker_score": 0.6936218809282776,
               "premise_id": "premise:AddCircle.continuousAt_equivIoc",
-              "score": 0.6718808425055314
+              "score": 0.6387860527919103
             },
             {
               "embedding_score": 0.7974632382392883,
               "full_name": "GCongr.Filter.map_le_map",
               "learned_ranker_score": 0.6627868564438874,
               "premise_id": "premise:GCongr.Filter.map_le_map",
-              "score": 0.6474065219453602
+              "score": 0.615109260796669
             },
             {
               "embedding_score": 0.7930667400360107,
               "full_name": "Filter.map_equiv_symm",
               "learned_ranker_score": 0.651023061439544,
               "premise_id": "premise:Filter.map_equiv_symm",
-              "score": 0.6407161062427685
+              "score": 0.6085969032713101
             },
             {
               "embedding_score": 0.8044055700302124,
               "full_name": "AddCircle.equivIoc",
               "learned_ranker_score": 0.6204559782959771,
               "premise_id": "premise:AddCircle.equivIoc",
-              "score": 0.6265488924920324
+              "score": 0.5939704669058088
             },
             {
               "embedding_score": 0.7934503555297852,
               "full_name": "Filter.map_le_iff_le_comap",
               "learned_ranker_score": 0.6862665978957092,
               "premise_id": "premise:Filter.map_le_iff_le_comap",
-              "score": 0.6233587333741027
+              "score": 0.5912239939751465
             }
           ]
         },
@@ -2322,35 +2544,35 @@
               "full_name": "AddCommGroup.modEq_iff_toIcoMod_add_period_eq_toIocMod",
               "learned_ranker_score": 0.9202557282781638,
               "premise_id": "premise:AddCommGroup.modEq_iff_toIcoMod_add_period_eq_toIocMod",
-              "score": 0.8067141669218562
+              "score": 0.7725408338730356
             },
             {
               "embedding_score": 0.805900514125824,
               "full_name": "AddCommGroup.ModEq.add_iff_right",
               "learned_ranker_score": 0.9023450407687282,
               "premise_id": "premise:AddCommGroup.ModEq.add_iff_right",
-              "score": 0.7850024726024456
+              "score": 0.7523635017803496
             },
             {
               "embedding_score": 0.7995011210441589,
               "full_name": "AddCommGroup.ModEq.add_iff_left",
               "learned_ranker_score": 0.8981024813653296,
               "premise_id": "premise:AddCommGroup.ModEq.add_iff_left",
-              "score": 0.7807108506475868
+              "score": 0.7483310552452983
             },
             {
               "embedding_score": 0.8001309633255005,
               "full_name": "AddCommGroup.modEq_iff_eq_mod_zmultiples",
               "learned_ranker_score": 0.8163505606939844,
               "premise_id": "premise:AddCommGroup.modEq_iff_eq_mod_zmultiples",
-              "score": 0.7358328831592946
+              "score": 0.7034275791446118
             },
             {
               "embedding_score": 0.8077094554901123,
               "full_name": "AddCommGroup.ModEq.trans",
               "learned_ranker_score": 0.7947818487164929,
               "premise_id": "premise:AddCommGroup.ModEq.trans",
-              "score": 0.7237663829013182
+              "score": 0.6910541499539686
             }
           ]
         },
@@ -2369,35 +2591,35 @@
               "full_name": "Int.natCast_modEq_iff",
               "learned_ranker_score": 0.8869779736919557,
               "premise_id": "premise:Int.natCast_modEq_iff",
-              "score": 0.7778422715024816
+              "score": 0.7447153009133207
             },
             {
               "embedding_score": 0.8161623477935791,
               "full_name": "AddCommGroup.ModEq.trans",
               "learned_ranker_score": 0.867931166854053,
               "premise_id": "premise:AddCommGroup.ModEq.trans",
-              "score": 0.7668578201945644
+              "score": 0.7338032451089245
             },
             {
               "embedding_score": 0.8082288503646851,
               "full_name": "AddCommGroup.ModEq.nsmul",
               "learned_ranker_score": 0.8610722683683245,
               "premise_id": "premise:AddCommGroup.ModEq.nsmul",
-              "score": 0.7606577758141722
+              "score": 0.7279245073744023
             },
             {
               "embedding_score": 0.80418860912323,
               "full_name": "AddCommGroup.ModEq.of_nsmul",
               "learned_ranker_score": 0.8574658501381908,
               "premise_id": "premise:AddCommGroup.ModEq.of_nsmul",
-              "score": 0.7574379319677134
+              "score": 0.7248682932982224
             },
             {
               "embedding_score": 0.8005940914154053,
               "full_name": "AddCommGroup.ModEq.of_zsmul",
               "learned_ranker_score": 0.8541919891859653,
               "premise_id": "premise:AddCommGroup.ModEq.of_zsmul",
-              "score": 0.754537386025395
+              "score": 0.722113325323071
             }
           ]
         }

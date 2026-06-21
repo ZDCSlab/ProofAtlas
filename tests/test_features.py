@@ -87,6 +87,10 @@ def test_ranker_features_use_processed_feature_tables(tmp_path, monkeypatch):
     assert features["symbol_context_overlap"].between(0, 1).all()
     assert features["graph_premise_degree"].between(0, 1).all()
     assert features["theorem_neighborhood_premise_score"].between(0, 1).all()
+    assert features["embedding_candidate_rank_score"].eq(0.0).all()
+    assert features["lexical_candidate_rank_score"].eq(0.0).all()
+    assert features["candidate_source_overlap"].eq(0.0).all()
+    assert features["lexical_only_candidate"].eq(0.0).all()
     assert features[
         [
             "proof_state_difficulty",

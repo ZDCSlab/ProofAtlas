@@ -505,6 +505,16 @@ def _rerank_premise_candidates(
         symbol_name_overlap = _jaccard_score(query_tokens, tokens)
         symbol_context_overlap = _jaccard_score(query_tokens, premise_context_tokens)
         embedding_score = float(row["score"])
+        embedding_candidate_rank_score = float(row.get("embedding_candidate_rank_score", 0.0) or 0.0)
+        lexical_candidate_rank_score = float(row.get("lexical_candidate_rank_score", 0.0) or 0.0)
+        candidate_source_overlap = float(
+            bool(row.get("from_embedding_candidate", False))
+            and bool(row.get("from_lexical_candidate", False))
+        )
+        lexical_only_candidate = float(
+            bool(row.get("from_lexical_candidate", False))
+            and not bool(row.get("from_embedding_candidate", False))
+        )
         same_namespace = float(bool(query_namespace and query_namespace == premise_namespace) or premise_namespace in query_namespaces)
         same_domain = float(bool(query_domain and query_domain == str(row.get("domain_tag", ""))))
         learned_ranker_score = _score_with_premise_ranker(
@@ -521,10 +531,14 @@ def _rerank_premise_candidates(
                 "symbol_context_overlap": symbol_context_overlap,
                 "graph_premise_degree": graph_premise_degree,
                 "theorem_neighborhood_premise_score": theorem_neighborhood_score,
+                "embedding_candidate_rank_score": embedding_candidate_rank_score,
+                "lexical_candidate_rank_score": lexical_candidate_rank_score,
+                "candidate_source_overlap": candidate_source_overlap,
+                "lexical_only_candidate": lexical_only_candidate,
             },
         )
         fixed_score = (
-            0.68 * embedding_score
+            0.59 * embedding_score
             + 0.10 * frequency_score
             + 0.08 * technique_score
             + 0.06 * graph_score
@@ -532,6 +546,9 @@ def _rerank_premise_candidates(
             + 0.02 * graph_premise_degree
             + 0.01 * max(shared_token_score, symbol_name_overlap)
             + 0.01 * max(conclusion_symbol_score, symbol_context_overlap)
+            + 0.04 * embedding_candidate_rank_score
+            + 0.05 * lexical_candidate_rank_score
+            + 0.01 * candidate_source_overlap
         )
         rerank_score = 0.55 * learned_ranker_score + 0.45 * fixed_score if learned_ranker_score is not None else fixed_score
         enriched = dict(row)
@@ -550,6 +567,10 @@ def _rerank_premise_candidates(
                 "symbol_name_overlap": symbol_name_overlap,
                 "symbol_context_overlap": symbol_context_overlap,
                 "conclusion_symbol_score": conclusion_symbol_score,
+                "embedding_candidate_rank_score": embedding_candidate_rank_score,
+                "lexical_candidate_rank_score": lexical_candidate_rank_score,
+                "candidate_source_overlap_score": candidate_source_overlap,
+                "lexical_only_candidate_score": lexical_only_candidate,
                 "fixed_rerank_score": fixed_score,
                 "score": rerank_score,
             }
@@ -635,6 +656,10 @@ def _ranking_reasons(row: dict[str, Any], explanation: dict[str, Any]) -> list[s
         reasons.append("used by a similar theorem in the KG")
     if float(row.get("theorem_neighborhood_premise_score", 0.0)) > 0:
         reasons.append("appears in the similar-theorem neighborhood")
+    if float(row.get("lexical_candidate_rank_score", 0.0)) > 0:
+        reasons.append("lexical candidate rank evidence")
+    if float(row.get("embedding_candidate_rank_score", 0.0)) > 0:
+        reasons.append("embedding candidate rank evidence")
     if float(row.get("graph_premise_degree", 0.0)) >= 0.5:
         reasons.append("high theorem-level premise degree in the KG")
     if float(row.get("symbol_context_overlap", 0.0)) > 0:
@@ -720,6 +745,10 @@ def retrieve_premises_for_query(
                     "symbol_context_overlap": float(row.get("symbol_context_overlap", 0.0)),
                     "conclusion_symbol_score": float(row.get("conclusion_symbol_score", 0.0)),
                     "parsed_symbol_overlap_score": float(row.get("conclusion_symbol_score", 0.0)),
+                    "embedding_candidate_rank_score": float(row.get("embedding_candidate_rank_score", 0.0)),
+                    "lexical_candidate_rank_score": float(row.get("lexical_candidate_rank_score", 0.0)),
+                    "candidate_source_overlap_score": float(row.get("candidate_source_overlap_score", 0.0)),
+                    "lexical_only_candidate_score": float(row.get("lexical_only_candidate_score", 0.0)),
                 },
             }
         )

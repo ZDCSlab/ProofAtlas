@@ -21,6 +21,12 @@ FEATURE_GROUPS = {
     "symbol_overlap": ["symbol_name_overlap", "symbol_context_overlap"],
     "graph": ["graph_premise_degree"],
     "theorem_neighborhood": ["theorem_neighborhood_premise_score"],
+    "candidate_source": [
+        "embedding_candidate_rank_score",
+        "lexical_candidate_rank_score",
+        "candidate_source_overlap",
+        "lexical_only_candidate",
+    ],
 }
 
 
@@ -206,6 +212,10 @@ def _features(pairs: pd.DataFrame, split: str, *, max_pairs_per_label: int | Non
                 "symbol_context_overlap": _jaccard(ps_tokens[proof_state_id], premise_context_tokens[premise_id]),
                 "graph_premise_degree": float(theorem_premise_degree.get(premise_id, 0.0)) if not theorem_premise_degree.empty else 0.0,
                 "theorem_neighborhood_premise_score": theorem_neighbor_scores[idx],
+                "embedding_candidate_rank_score": 0.0,
+                "lexical_candidate_rank_score": 0.0,
+                "candidate_source_overlap": 0.0,
+                "lexical_only_candidate": 0.0,
                 "label": row["label"],
             }
         )

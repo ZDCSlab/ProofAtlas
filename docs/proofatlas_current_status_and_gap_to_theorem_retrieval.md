@@ -157,6 +157,13 @@ Interpretation:
   remains tied with embedding-only rerank at 0.1689. This means candidate union
   is useful, but the next accuracy work needs lexical-source/rank features so
   added candidates are promoted into the top-k output.
+- Lexical-source and candidate-rank features are now wired through the hybrid
+  rerank path and exposed in ranked examples. The same 20-query diagnostic
+  still ties embedding-only rerank at Recall@10 0.1689, with mean lexical-only
+  candidates 38.1053 and mean embedding/lexical overlap 11.8947 per retrievable
+  query. The remaining bottleneck is therefore not just candidate inclusion; it
+  is training or calibrating the ranker on candidate-generated positives and
+  lexical-only hard negatives.
 - Reranking helps user-facing examples, but the broad accuracy ceiling is still
   controlled by embedding candidate generation and gold-premise availability in
   the train premise index.
