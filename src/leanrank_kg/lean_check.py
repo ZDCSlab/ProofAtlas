@@ -147,6 +147,8 @@ def extract_proof_state_report(stdout: str = "", stderr: str = "") -> dict:
                 "retrieval_text": retrieval_text,
                 "hypothesis_count": len(parsed["local_hypotheses"]),
                 "symbol_count": len(parsed["symbols"]),
+                "goal_line_count": len([line for line in str(parsed["goal_text"]).splitlines() if line.strip()]),
+                "has_multiline_goal": len([line for line in str(parsed["goal_text"]).splitlines() if line.strip()]) > 1,
                 "context_line_count": len([line for line in context.splitlines() if line.strip()]),
             }
         )
@@ -189,6 +191,8 @@ def build_tactic_state_trace(
                 "goal_text": state.get("goal_text", ""),
                 "hypothesis_count": int(state.get("hypothesis_count", len(state.get("local_hypotheses") or [])) or 0),
                 "symbol_count": int(state.get("symbol_count", len(state.get("symbols") or [])) or 0),
+                "goal_line_count": int(state.get("goal_line_count") or 0),
+                "has_multiline_goal": bool(state.get("has_multiline_goal")),
                 "retrieval_text": retrieval_text,
             }
         )

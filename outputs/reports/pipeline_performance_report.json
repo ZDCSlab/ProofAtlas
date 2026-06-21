@@ -3869,8 +3869,8 @@
               "severity": "required",
               "threshold": "all fixture diagnostic extraction cases pass",
               "value": {
-                "case_count": 7,
-                "passed_case_count": 7
+                "case_count": 8,
+                "passed_case_count": 8
               }
             },
             {
@@ -3878,7 +3878,7 @@
               "passed": true,
               "severity": "required",
               "threshold": ">0 extracted proof states",
-              "value": 8
+              "value": 9
             },
             {
               "name": "retrieval_text_present",
@@ -3902,6 +3902,13 @@
               "passed": true,
               "severity": "required",
               "threshold": "theorem/lemma/example statement can be checked as temporary := by skeleton",
+              "value": true
+            },
+            {
+              "name": "multiline_goal_preserved",
+              "passed": true,
+              "severity": "required",
+              "threshold": "at least one multiline Lean goal fixture is extracted as a proof state",
               "value": true
             },
             {
@@ -3930,16 +3937,16 @@
           "summary": {
             "advisory_gate_count": 2,
             "advisory_gates_passed": true,
-            "passed_gate_count": 8,
-            "required_gate_count": 6,
+            "passed_gate_count": 9,
+            "required_gate_count": 7,
             "required_gates_passed": true,
-            "total_gate_count": 8
+            "total_gate_count": 9
           }
         },
-        "case_count": 7,
+        "case_count": 8,
         "exists": true,
         "method": "lean_unsolved_goals_diagnostic",
-        "passed_case_count": 7,
+        "passed_case_count": 8,
         "path": "outputs/reports/lean_diagnostic_extraction_report.json",
         "production_pipeline_role": "optional query diagnostics only; not a corpus extractor and not part of the default LeanRank-data pipeline",
         "quality_checks": {
@@ -3950,11 +3957,12 @@
           "has_failure_explanation_case": true,
           "has_initial_goal_skeleton_case": true,
           "has_multi_state_tactic_trace_case": true,
+          "has_multiline_goal_case": true,
           "has_successful_extraction_case": true,
           "has_timeout_stderr_extraction_case": true
         },
         "scope": "query-time Lean unsolved-goals diagnostic proof-state extraction",
-        "total_extracted_proof_states": 8
+        "total_extracted_proof_states": 9
       },
       "premise_trace_supervision": {
         "current_artifact_supervision": {
@@ -4633,7 +4641,7 @@
         "outputs/reports",
         "homepage/assets"
       ],
-      "bytes_per_processed_row": 10454.217477363944,
+      "bytes_per_processed_row": 10454.26202005397,
       "directories": {
         "data/processed": {
           "bytes": 46533700,
@@ -4660,7 +4668,7 @@
           "path": "outputs/indexes"
         },
         "outputs/reports": {
-          "bytes": 19326353,
+          "bytes": 19339360,
           "exists": true,
           "file_count": 39,
           "path": "outputs/reports"
@@ -4716,36 +4724,36 @@
       ],
       "projections": [
         {
-          "estimated_artifact_bytes": 3052756954.0,
-          "estimated_artifact_gib": 2.843101466074586,
+          "estimated_artifact_bytes": 3052769961.0,
+          "estimated_artifact_gib": 2.843113579787314,
           "label": "current_1x",
           "scale_factor_vs_current": 1.0,
           "target_processed_rows": 292012
         },
         {
-          "estimated_artifact_bytes": 6105513908.0,
-          "estimated_artifact_gib": 5.686202932149172,
+          "estimated_artifact_bytes": 6105539922.0,
+          "estimated_artifact_gib": 5.686227159574628,
           "label": "current_2x",
           "scale_factor_vs_current": 2.0,
           "target_processed_rows": 584024
         },
         {
-          "estimated_artifact_bytes": 15263784770.0,
-          "estimated_artifact_gib": 14.21550733037293,
+          "estimated_artifact_bytes": 15263849805.0,
+          "estimated_artifact_gib": 14.21556789893657,
           "label": "current_5x",
           "scale_factor_vs_current": 5.0,
           "target_processed_rows": 1460060
         },
         {
-          "estimated_artifact_bytes": 3658976117.07738,
-          "estimated_artifact_gib": 3.4076870578130523,
+          "estimated_artifact_bytes": 3658991707.0188894,
+          "estimated_artifact_gib": 3.4077015770775168,
           "label": "configured_source_rows",
           "scale_factor_vs_current": 1.1985808802377984,
           "target_processed_rows": 350000
         }
       ],
-      "total_artifact_bytes": 3052756954,
-      "total_artifact_gib": 2.843101466074586,
+      "total_artifact_bytes": 3052769961,
+      "total_artifact_gib": 2.843113579787314,
       "unreferenced_index_artifact_bytes": 1502501178,
       "unreferenced_index_artifact_count": 12,
       "unreferenced_index_artifact_gib": 1.3993132654577494,
@@ -4948,8 +4956,8 @@
           "severity": "required",
           "threshold": "all fixture diagnostic extraction cases pass",
           "value": {
-            "case_count": 7,
-            "passed_case_count": 7
+            "case_count": 8,
+            "passed_case_count": 8
           }
         },
         {
@@ -4957,7 +4965,7 @@
           "passed": true,
           "severity": "required",
           "threshold": ">0 extracted proof states",
-          "value": 8
+          "value": 9
         },
         {
           "name": "retrieval_text_present",
@@ -4981,6 +4989,13 @@
           "passed": true,
           "severity": "required",
           "threshold": "theorem/lemma/example statement can be checked as temporary := by skeleton",
+          "value": true
+        },
+        {
+          "name": "multiline_goal_preserved",
+          "passed": true,
+          "severity": "required",
+          "threshold": "at least one multiline Lean goal fixture is extracted as a proof state",
           "value": true
         },
         {
@@ -5009,10 +5024,10 @@
       "summary": {
         "advisory_gate_count": 2,
         "advisory_gates_passed": true,
-        "passed_gate_count": 8,
-        "required_gate_count": 6,
+        "passed_gate_count": 9,
+        "required_gate_count": 7,
         "required_gates_passed": true,
-        "total_gate_count": 8
+        "total_gate_count": 9
       }
     },
     "mean_index_speedup_vs_exact": 17.07151721843473,

@@ -157,10 +157,10 @@ Pipeline scale profile:
 - Embedding devices: `cuda:0` to `cuda:6`
 - Index backend: `hnswlib`
 - LeanRank premise supervision ready: true
-- Artifact storage: 2.8431 GiB total, 10,454.2175 bytes per processed row
+- Artifact storage: 2.8431 GiB total, 10,454.2620 bytes per processed row
 - Largest storage component: `outputs/indexes`, 2,295,002,043 bytes
 - Unreferenced index artifacts: 1,502,501,178 bytes (1.3993 GiB) not pointed to by current manifests
-- Projected storage at current_5x: 14.2155 GiB
+- Projected storage at current_5x: 14.2156 GiB
 
 ## Verification Commands
 
@@ -181,7 +181,7 @@ make verify-delivery
 Recent passing result:
 
 ```text
-pytest: 100 passed, 4 skipped
+pytest: 101 passed, 4 skipped
 audit: 182/182 checks passed
 git diff --check: passed
 ```

@@ -177,6 +177,28 @@ y : Nat
     assert states[1]["local_hypotheses"] == ["y : Nat"]
 
 
+def test_extract_proof_states_preserves_multiline_goal_text():
+    stderr = """
+error: unsolved goals
+case h
+α : Type
+xs : List α
+⊢ xs.map id =
+  xs
+"""
+    report = lean_check.extract_proof_state_report(stderr=stderr)
+    trace = lean_check.build_tactic_state_trace(report["proof_states"], source_variant="fixture")
+
+    assert report["extracted_count"] == 1
+    state = report["proof_states"][0]
+    assert state["goal_text"] == "xs.map id =\nxs"
+    assert state["goal_line_count"] == 2
+    assert state["has_multiline_goal"] is True
+    assert state["retrieval_text"].endswith("⊢ xs.map id =\nxs")
+    assert trace["states"][0]["goal_line_count"] == 2
+    assert trace["states"][0]["has_multiline_goal"] is True
+
+
 def test_extract_proof_state_report_explains_failures():
     report = lean_check.extract_proof_state_report(stderr="error: unsolved goals\ncase h\nno goal marker")
     assert report["has_unsolved_goals"] is True

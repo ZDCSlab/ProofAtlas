@@ -734,6 +734,7 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
             "production_pipeline_role": "optional query diagnostics only; not a corpus extractor and not part of the default LeanRank-data pipeline",
             "quality_checks": {
                 "has_initial_goal_skeleton_case": True,
+                "has_multiline_goal_case": True,
                 "has_multi_state_tactic_trace_case": True,
                 "all_tactic_trace_counts_match": True,
             },
@@ -882,6 +883,7 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "Query-Time Lean Diagnostics" in text
     assert "ordered tactic-state trace" in text
     assert "Has ordered tactic-state trace case: `True`" in text
+    assert "Has multiline-goal case: `True`" in text
     assert "Lean Diagnostic Acceptance Gates" in text
     assert "ordered_tactic_state_trace" in text
     assert "query_time_only_scope" in text

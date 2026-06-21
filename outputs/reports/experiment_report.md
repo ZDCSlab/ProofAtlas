@@ -35,9 +35,10 @@
 Lean validation is optional and is not part of the default `erbacher/LeanRank-data` corpus extraction path. When enabled for an interactive theorem query, diagnostics from `lake env lean` or `lean` are parsed into retrieval proof states and an ordered tactic-state trace.
 
 - Diagnostic method: `lean_unsolved_goals_diagnostic`
-- Case coverage: `7` / `7`
-- Extracted fixture proof states: `8`
+- Case coverage: `8` / `8`
+- Extracted fixture proof states: `9`
 - Has initial-goal skeleton case: `True`
+- Has multiline-goal case: `True`
 - Has ordered tactic-state trace case: `True`
 - Tactic trace counts match extracted proof states: `True`
 - Pipeline role: `optional query diagnostics only; not a corpus extractor and not part of the default LeanRank-data pipeline`
@@ -48,15 +49,16 @@ These gates summarize whether query-time Lean diagnostics can supply proof-state
 
 - Required gates passed: `True`
 - Advisory gates passed: `True`
-- Passed gates: `8` / `8`
+- Passed gates: `9` / `9`
 
 | Gate | Severity | Passed | Value | Threshold |
 | --- | --- | ---: | --- | --- |
-| `diagnostic_cases_passed` | required | True | {'case_count': 7, 'passed_case_count': 7} | all fixture diagnostic extraction cases pass |
-| `proof_states_extracted` | required | True | 8 | >0 extracted proof states |
+| `diagnostic_cases_passed` | required | True | {'case_count': 8, 'passed_case_count': 8} | all fixture diagnostic extraction cases pass |
+| `proof_states_extracted` | required | True | 9 | >0 extracted proof states |
 | `retrieval_text_present` | required | True | True | all extracted proof states have retrieval text |
 | `ordered_tactic_state_trace` | required | True | {'all_tactic_trace_counts_match': True, 'has_multi_state_tactic_trace_case': True} | trace counts match and at least one multi-state trace case exists |
 | `initial_goal_skeleton` | required | True | True | theorem/lemma/example statement can be checked as temporary := by skeleton |
+| `multiline_goal_preserved` | required | True | True | at least one multiline Lean goal fixture is extracted as a proof state |
 | `timeout_stderr_extraction` | advisory | True | True | timeout stderr unsolved-goal diagnostics remain parseable |
 | `failure_explanation` | advisory | True | True | malformed diagnostics report a failure reason |
 | `query_time_only_scope` | required | True | optional query diagnostics only; not a corpus extractor and not part of the default LeanRank-data pipeline | query-time diagnostics only; not a LeanRank-data corpus extractor |
@@ -821,16 +823,19 @@ This profile records the resource choices used by the committed LeanRank-data ru
 
 This plan turns the timed LeanRank-data run into concrete optimization actions. It separates throughput work from retrieval-quality work so performance changes do not silently change the held-out ML task.
 
-- Method: `n/a`
-- Action count: `n/a`
-- Top action: `n/a`
-- Estimated seconds saved by top two actions: `n/a`
-- Estimated pipeline seconds after top two actions: `n/a`
-- Estimated speedup after top two actions: `n/a`
+- Method: `timed_stage_based_performance_optimization_plan`
+- Action count: `4`
+- Top action: `embedding_reuse`
+- Estimated seconds saved by top two actions: `168.8302059888374`
+- Estimated pipeline seconds after top two actions: `330.50781425414607`
+- Estimated speedup after top two actions: `1.5108206181745958`
 
 | Priority | Area | Action | Estimated seconds saved | Accuracy risk |
 | ---: | --- | --- | ---: | --- |
-| n/a | n/a | n/a | n/a | n/a |
+| 1 | `embedding_reuse` | `reuse_saved_embeddings_for_report_rerank_and_homepage_refreshes` | 148.6884 | none_when_embedding_inputs_are_unchanged |
+| 2 | `cpu_io_stage` | `optimize_sample_stage_vectorization_or_io` | 20.1418 | none_if_outputs_are_schema_and_artifact_compatible |
+| 3 | `ann_candidate_generation` | `keep_ann_index_for_interactive_retrieval_and_large_refreshes` | n/a | monitor_recall_vs_exact_gate |
+| 4 | `rerank_evaluation_policy` | `keep_expensive_reranked_proof_state_evaluation_sampled_during_development` | 2191.9286 | use_full_batched_embedding_eval_for_final_metrics_and_sampled_rerank_only_as_diagnostic |
 
 ### Performance Acceptance Gates
 
@@ -915,9 +920,9 @@ These linear projections use the current timed pipeline as a capacity-planning b
 This profile records the local footprint of generated LeanRank-data artifacts. It is a practical scale-up signal because embeddings and ANN indexes can dominate disk usage before model training becomes the bottleneck.
 
 - Method: `filesystem_artifact_footprint_with_linear_scale_projection`
-- Total artifact bytes: `3052747392`
-- Total artifact GiB: `2.8430925607681274`
-- Bytes per processed row: `10454.184732134296`
+- Total artifact bytes: `3052769961`
+- Total artifact GiB: `2.843113579787314`
+- Bytes per processed row: `10454.26202005397`
 - Unreferenced index artifact bytes: `1502501178`
 - Unreferenced index artifact count: `12`
 
@@ -925,7 +930,7 @@ This profile records the local footprint of generated LeanRank-data artifacts. I
 | --- | ---: | ---: | ---: |
 | `current_1x` | 292012 | 1.0000 | 2.8431 |
 | `current_2x` | 584024 | 2.0000 | 5.6862 |
-| `current_5x` | 1460060 | 5.0000 | 14.2155 |
+| `current_5x` | 1460060 | 5.0000 | 14.2156 |
 | `configured_source_rows` | 350000 | 1.1986 | 3.4077 |
 
 Largest generated artifact files:

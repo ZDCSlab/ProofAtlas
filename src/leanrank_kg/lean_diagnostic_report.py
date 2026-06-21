@@ -64,6 +64,20 @@ y : Nat
         "expected_extracted_count": 2,
     },
     {
+        "name": "multiline_goal",
+        "description": "A Lean goal whose target spans multiple diagnostic lines remains one proof state with multiline retrieval text.",
+        "stderr": """
+error: unsolved goals
+case h
+α : Type
+xs : List α
+⊢ xs.map id =
+  xs
+""",
+        "expected_extracted_count": 1,
+        "expected_multiline_goal": True,
+    },
+    {
         "name": "missing_turnstile",
         "description": "Malformed diagnostics explain why no proof state was extracted.",
         "stderr": """
@@ -121,6 +135,8 @@ def _case_result(case: dict[str, Any]) -> dict[str, Any]:
         checks["failure_reason_matches"] = report["failure_reason"] == expected_failure
     if case.get("expected_timeout_preserved") is not None:
         checks["timeout_diagnostic_preserved"] = bool(case.get("expected_timeout_preserved")) and report["extracted_count"] > 0
+    if case.get("expected_multiline_goal") is not None:
+        checks["multiline_goal_preserved"] = any(row.get("has_multiline_goal") for row in report["proof_states"])
     skeleton_source = None
     if case.get("expected_skeleton_source") is not None:
         skeleton_source = _initial_goal_skeleton_source(str(case.get("source", "")))
@@ -190,6 +206,13 @@ def _acceptance_profile(report: dict[str, Any]) -> dict[str, Any]:
             "threshold": "theorem/lemma/example statement can be checked as temporary := by skeleton",
         },
         {
+            "name": "multiline_goal_preserved",
+            "severity": "required",
+            "passed": quality.get("has_multiline_goal_case") is True,
+            "value": quality.get("has_multiline_goal_case"),
+            "threshold": "at least one multiline Lean goal fixture is extracted as a proof state",
+        },
+        {
             "name": "timeout_stderr_extraction",
             "severity": "advisory",
             "passed": quality.get("has_timeout_stderr_extraction_case") is True,
@@ -247,6 +270,12 @@ def build_report() -> dict[str, Any]:
             ),
             "has_adjacent_goal_split_case": any(
                 case["name"] == "adjacent_goals_without_blank_lines" and case["extracted_count"] == 2
+                for case in cases
+            ),
+            "has_multiline_goal_case": any(
+                case["name"] == "multiline_goal"
+                and case["checks"].get("multiline_goal_preserved") is True
+                and case["extracted_count"] == 1
                 for case in cases
             ),
             "has_initial_goal_skeleton_case": any(

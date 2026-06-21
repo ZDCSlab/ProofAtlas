@@ -766,6 +766,7 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
         f"- Case coverage: `{lean_diagnostic.get('passed_case_count', 'n/a')}` / `{lean_diagnostic.get('case_count', 'n/a')}`",
         f"- Extracted fixture proof states: `{lean_diagnostic.get('total_extracted_proof_states', 'n/a')}`",
         f"- Has initial-goal skeleton case: `{lean_diagnostic.get('quality_checks', {}).get('has_initial_goal_skeleton_case', 'n/a')}`",
+        f"- Has multiline-goal case: `{lean_diagnostic.get('quality_checks', {}).get('has_multiline_goal_case', 'n/a')}`",
         f"- Has ordered tactic-state trace case: `{lean_diagnostic.get('quality_checks', {}).get('has_multi_state_tactic_trace_case', 'n/a')}`",
         f"- Tactic trace counts match extracted proof states: `{lean_diagnostic.get('quality_checks', {}).get('all_tactic_trace_counts_match', 'n/a')}`",
         f"- Pipeline role: `{lean_diagnostic.get('production_pipeline_role', 'n/a')}`",

@@ -363,6 +363,7 @@ def build_audit() -> dict[str, Any]:
             and data.get("quality_checks", {}).get("has_failure_explanation_case") is True
             and data.get("quality_checks", {}).get("has_timeout_stderr_extraction_case") is True
             and data.get("quality_checks", {}).get("has_adjacent_goal_split_case") is True
+            and data.get("quality_checks", {}).get("has_multiline_goal_case") is True
             and data.get("quality_checks", {}).get("has_initial_goal_skeleton_case") is True
             and data.get("quality_checks", {}).get("all_tactic_trace_counts_match") is True
             and data.get("quality_checks", {}).get("has_multi_state_tactic_trace_case") is True
@@ -597,6 +598,10 @@ def build_audit() -> dict[str, Any]:
             )
             and any(
                 row.get("name") == "query_time_only_scope" and row.get("passed") is True
+                for row in data.get("throughput_profile", {}).get("lean_diagnostic_acceptance_profile", {}).get("gates", [])
+            )
+            and any(
+                row.get("name") == "multiline_goal_preserved" and row.get("passed") is True
                 for row in data.get("throughput_profile", {}).get("lean_diagnostic_acceptance_profile", {}).get("gates", [])
             ),
             {

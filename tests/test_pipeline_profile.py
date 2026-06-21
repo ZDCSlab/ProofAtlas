@@ -241,6 +241,7 @@ def test_pipeline_profile_summarizes_leanrank_data_baseline(tmp_path, monkeypatc
                 "has_successful_extraction_case": True,
                 "has_failure_explanation_case": True,
                 "has_timeout_stderr_extraction_case": True,
+                "has_multiline_goal_case": True,
                 "has_initial_goal_skeleton_case": True,
                 "all_extracted_states_have_retrieval_text": True,
                 "all_tactic_trace_counts_match": True,
