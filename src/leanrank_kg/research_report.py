@@ -308,6 +308,42 @@ def _sample_guidance_cases(limit: int = 3) -> list[dict[str, Any]]:
     return compact
 
 
+def _case_overview(case: dict[str, Any]) -> str:
+    theorem = str(case.get("theorem") or "")
+    goal = str(case.get("goal_text") or "")
+    premises = " ".join(str(row.get("full_name") or "") for row in case.get("top_premises", []))
+    neighbors = " ".join(str(row.get("full_name") or "") for row in case.get("similar_theorems", []))
+    text = " ".join([theorem, goal, premises, neighbors])
+    if "≫" in text or "CategoryTheory" in text or ".hom" in text or "hom_" in text:
+        return (
+            "This query is a categorical/action morphism equality. The important proof shape is not a numeric computation; "
+            "it is an equality between composed morphisms, so useful guidance should point toward category structure, hom/extensionality lemmas, "
+            "and nearby commutative-diagram style proof states."
+        )
+    if "lookup" in text or "dlookup" in text or "toAList" in text or "AList" in text:
+        return (
+            "This query is a data-structure lookup equality. The useful proof context is concentrated around list/AList conversion, "
+            "lookup/dlookup lemmas, and historical proofs that normalize finite-map or association-list representations."
+        )
+    return (
+        "This query illustrates the general theorem-guidance workflow: retrieve candidate premises, inspect nearby historical theorem/proof-state "
+        "patterns, then use strategy facets and difficulty as calibration rather than as a generated proof."
+    )
+
+
+def _case_takeaway(case: dict[str, Any]) -> str:
+    facets = [str(row.get("label")) for row in case.get("techniques", [])[:3]]
+    premise_names = [str(row.get("full_name")) for row in case.get("top_premises", [])[:3]]
+    theorem_names = [str(row.get("full_name")) for row in case.get("similar_theorems", [])[:2]]
+    difficulty = case.get("difficulty") or {}
+    return (
+        f"Takeaway: the user would first inspect `{', '.join(premise_names)}` as candidate dependencies, "
+        f"then compare the query against historical neighbors such as `{', '.join(theorem_names)}`. "
+        f"The top strategy facets (`{', '.join(facets)}`) summarize the likely proof mode, while the difficulty profile "
+        f"(`{difficulty.get('difficulty_bucket', 'n/a')}` / `{_fmt(difficulty.get('difficulty_score'))}`) indicates that this case is expected to be relatively lightweight in the current corpus."
+    )
+
+
 def _case_study_markdown(cases: list[dict[str, Any]]) -> list[str]:
     if not cases:
         return []
@@ -319,6 +355,8 @@ def _case_study_markdown(cases: list[dict[str, Any]]) -> list[str]:
                 f"### Case {idx}: `{case.get('theorem', 'unknown')}`",
                 "",
                 "This is a held-out theorem-guidance example showing how the retrieval bundle is meant to be used: inspect candidate premises, compare nearby historical theorems/proof states, read strategy facets, and use the difficulty profile as calibration.",
+                "",
+                _case_overview(case),
                 "",
                 _table(
                     ["Field", "Value"],
@@ -341,6 +379,8 @@ def _case_study_markdown(cases: list[dict[str, Any]]) -> list[str]:
                     ],
                 ),
                 "",
+                "How to read this table: these are candidate dependencies a user would inspect first. The score combines embedding similarity and reranker signals; the reason column shows why the system surfaced each premise.",
+                "",
                 "**Historical proof neighbors.**",
                 "",
                 _table(
@@ -359,6 +399,8 @@ def _case_study_markdown(cases: list[dict[str, Any]]) -> list[str]:
                     ],
                 ),
                 "",
+                "How to read these neighbors: similar theorems give theorem-level proof templates, while similar proof states show local goal shapes that appeared in historical proofs.",
+                "",
                 "**Strategy facets.**",
                 "",
                 _table(
@@ -368,6 +410,8 @@ def _case_study_markdown(cases: list[dict[str, Any]]) -> list[str]:
                         for rank, row in enumerate(case.get("techniques", [])[:5], start=1)
                     ],
                 ),
+                "",
+                _case_takeaway(case),
                 "",
             ]
         )

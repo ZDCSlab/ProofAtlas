@@ -203,6 +203,8 @@ Difficulty buckets use a split-local distribution policy: easy is the lower 50%,
 
 This is a held-out theorem-guidance example showing how the retrieval bundle is meant to be used: inspect candidate premises, compare nearby historical theorems/proof states, read strategy facets, and use the difficulty profile as calibration.
 
+This query is a categorical/action morphism equality. The important proof shape is not a numeric computation; it is an equality between composed morphisms, so useful guidance should point toward category structure, hom/extensionality lemmas, and nearby commutative-diagram style proof states.
+
 | Field | Value |
 | --- | --- |
 | Split | test |
@@ -221,6 +223,8 @@ This is a held-out theorem-guidance example showing how the retrieval bundle is 
 | 4 | Action.resEquiv | 0.8172 | high query-premise embedding similarity (0.857); learned premise ranker score 0.941 |
 | 5 | Monoid.PushoutI.hom_ext | 0.8130 | high query-premise embedding similarity (0.817); learned premise ranker score 0.954 |
 
+How to read this table: these are candidate dependencies a user would inspect first. The score combines embedding similarity and reranker signals; the reason column shows why the system surfaced each premise.
+
 **Historical proof neighbors.**
 
 | Rank | Similar theorem | Score |
@@ -236,6 +240,8 @@ This is a held-out theorem-guidance example showing how the retrieval bundle is 
 | 2 | groupCohomology.resolution.d_comp_ε | 0.9241 | (ModuleCat.Hom.hom ((resolution k G).d 1 0 ≫ ε k G).hom) x = (ModuleCat.Hom.hom (Action.Hom.hom 0)) x |
 | 3 | groupCohomology.resolution.d_comp_ε | 0.9201 | (ModuleCat.Hom.hom ((resolution k G).d 1 0 ≫ ε k G).hom) x = (ModuleCat.Hom.hom (Action.Hom.hom 0)) x |
 
+How to read these neighbors: similar theorems give theorem-level proof templates, while similar proof states show local goal shapes that appeared in historical proofs.
+
 **Strategy facets.**
 
 | Rank | Facet | Confidence | Evidence |
@@ -246,9 +252,13 @@ This is a held-out theorem-guidance example showing how the retrieval bundle is 
 | 4 | typeclass_instance_resolution | 0.7000 | context_typeclass_bindings:\binst[^\s:]*\s*:;\bCategory\b |
 | 5 | algebraic_computation | 0.6800 | goal_symbols_and_names:[+*/^] |
 
+Takeaway: the user would first inspect `CategoryTheory.Category, CategoryTheory.MonoidalCategory, CategoryTheory.rightAdjointMate` as candidate dependencies, then compare the query against historical neighbors such as `CategoryTheory.comp_rightAdjointMate, CategoryTheory.comp_leftAdjointMate`. The top strategy facets (`category_morphism_reasoning, case_analysis, rewrite_transport`) summarize the likely proof mode, while the difficulty profile (`easy` / `0.2686`) indicates that this case is expected to be relatively lightweight in the current corpus.
+
 ### Case 2: `AList.lookup_to_alist`
 
 This is a held-out theorem-guidance example showing how the retrieval bundle is meant to be used: inspect candidate premises, compare nearby historical theorems/proof states, read strategy facets, and use the difficulty profile as calibration.
+
+This query is a data-structure lookup equality. The useful proof context is concentrated around list/AList conversion, lookup/dlookup lemmas, and historical proofs that normalize finite-map or association-list representations.
 
 | Field | Value |
 | --- | --- |
@@ -268,6 +278,8 @@ This is a held-out theorem-guidance example showing how the retrieval bundle is 
 | 4 | AList.lookup_to_alist | 0.7551 | high query-premise embedding similarity (0.850); learned premise ranker score 0.892 |
 | 5 | List.dlookup_kunion_eq_some | 0.7545 | high query-premise embedding similarity (0.791); learned premise ranker score 0.860 |
 
+How to read this table: these are candidate dependencies a user would inspect first. The score combines embedding similarity and reranker signals; the reason column shows why the system surfaced each premise.
+
 **Historical proof neighbors.**
 
 | Rank | Similar theorem | Score |
@@ -283,6 +295,8 @@ This is a held-out theorem-guidance example showing how the retrieval bundle is 
 | 2 | Finmap.keys_union | 0.8816 | ∀ (a : α), a ∈ (⟦s₁⟧ ∪ ⟦s₂⟧).keys ↔ a ∈ ⟦s₁⟧.keys ∪ ⟦s₂⟧.keys |
 | 3 | AList.insertRec_insert | 0.8816 | HEq (insertRec H0 IH { entries := c :: l, nodupKeys := ⋯ })     (IH c.fst c.snd { entries := l, nodupKeys := hl } h (insertRec H0 IH { entri |
 
+How to read these neighbors: similar theorems give theorem-level proof templates, while similar proof states show local goal shapes that appeared in historical proofs.
+
 **Strategy facets.**
 
 | Rank | Facet | Confidence | Evidence |
@@ -292,6 +306,8 @@ This is a held-out theorem-guidance example showing how the retrieval bundle is 
 | 3 | induction_recursion | 0.6600 | name_context_or_statement:\bList\b |
 | 4 | typeclass_instance_resolution | 0.6600 | context_typeclass_bindings:\binst[^\s:]*\s*: |
 | 5 | theorem_application | 0.6200 | statement_connectives:→ |
+
+Takeaway: the user would first inspect `List.toAList, List.lookupAll_eq_dlookup, List.dlookup` as candidate dependencies, then compare the query against historical neighbors such as `Plausible.TotalFunction.apply_eq_dlookup, AList.toFinmap_eq`. The top strategy facets (`rewrite_transport, simplification_normalization, induction_recursion`) summarize the likely proof mode, while the difficulty profile (`easy` / `0.1766`) indicates that this case is expected to be relatively lightweight in the current corpus.
 
 ## Interpretation
 
