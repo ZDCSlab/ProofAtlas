@@ -146,6 +146,11 @@ Interpretation:
   theorem queries already have a top-10 hit, 13.93% have ordering/reranking
   headroom after top 10, and only 5.76% miss all train-side gold premises in the
   top-100 candidate pool.
+- A hybrid candidate-generation diagnostic now compares embedding top-100 with
+  lexical TF-IDF top-100 over train premise text. Lexical-only candidate recall
+  is 0.2494 versus embedding top-100 recall 0.2362, and the embedding+lexical
+  union candidate oracle reaches 0.3266. Lexical retrieval adds gold premises
+  for 367 retrievable proof-state queries that embedding top-100 missed.
 - Reranking helps user-facing examples, but the broad accuracy ceiling is still
   controlled by embedding candidate generation and gold-premise availability in
   the train premise index.
@@ -225,7 +230,9 @@ quality and presentation around the ML retrieval task:
    depth, domain-specific retrieval, and hybrid lexical plus embedding
    retrieval. The new candidate-miss diagnosis shows this is the primary
    accuracy gap: 1,823 retrievable proof-state queries still miss all train-side
-   gold premises at top 100.
+   gold premises at top 100. The hybrid lexical diagnostic is a promising next
+   implementation target because it adds gold candidates for 367 of those
+   embedding misses before reranking.
 
 2. Broaden rerank evaluation.
    The user-facing reranker diagnostic is intentionally small because it follows

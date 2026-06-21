@@ -392,39 +392,39 @@
       "evaluation_timing": {
         "slowest_substages": [
           {
-            "actual_backend": "batched_torch_cuda_then_rerank",
-            "candidate_k": 50,
-            "evaluated_queries": 20,
-            "name": "test_reranked_proof_state_retrieval",
-            "seconds": 14.492579214973375,
-            "split": "test"
-          },
-          {
             "actual_backend": "torch_cuda",
             "evaluated_queries": 2822,
             "name": "val_proof_state_retrieval",
-            "seconds": 6.839982734061778,
-            "split": "val"
-          },
-          {
-            "best_variant_by_recall": "stored_plus_goal_only",
-            "evaluated_queries": 50,
-            "name": "val_proof_state_query_representation_diagnostic",
-            "seconds": 1.8116060649044812,
+            "seconds": 20.077549455920234,
             "split": "val"
           },
           {
             "actual_backend": "torch_cuda",
             "evaluated_queries": 3053,
             "name": "test_proof_state_retrieval",
-            "seconds": 0.9846244780346751,
+            "seconds": 14.836337798973545,
             "split": "test"
+          },
+          {
+            "actual_backend": "batched_torch_cuda_then_rerank",
+            "candidate_k": 50,
+            "evaluated_queries": 20,
+            "name": "test_reranked_proof_state_retrieval",
+            "seconds": 14.42910149297677,
+            "split": "test"
+          },
+          {
+            "best_variant_by_recall": "stored_plus_goal_only",
+            "evaluated_queries": 50,
+            "name": "val_proof_state_query_representation_diagnostic",
+            "seconds": 1.5791925168596208,
+            "split": "val"
           },
           {
             "best_variant_by_recall": "stored_plus_full_name_context_goal",
             "evaluated_queries": 50,
             "name": "test_proof_state_query_representation_diagnostic",
-            "seconds": 0.8953292008955032,
+            "seconds": 1.1219090591184795,
             "split": "test"
           },
           {
@@ -432,7 +432,7 @@
             "case_study_limit": 0,
             "evaluated_queries": 1000,
             "name": "test_theorem_retrieval",
-            "seconds": 0.4361388839315623,
+            "seconds": 0.4634031429886818,
             "split": "test"
           },
           {
@@ -440,13 +440,13 @@
             "case_study_limit": 0,
             "evaluated_queries": 1000,
             "name": "val_theorem_retrieval",
-            "seconds": 0.34053498785942793,
+            "seconds": 0.4385440428741276,
             "split": "val"
           }
         ],
         "substage_count": 7,
-        "substage_seconds_total": 25.800795564660802,
-        "total_seconds": 26.26292545394972
+        "substage_seconds_total": 52.94603750971146,
+        "total_seconds": 53.46015711291693
       },
       "held_out_test_coverage": {
         "proof_state_configured_limit": null,
@@ -675,6 +675,76 @@
         "theorem_retrieval_nDCG@50": 0.4907450705779267
       },
       "test_set_evaluation": {
+        "candidate_generation_diagnostic": {
+          "proof_state_retrieval": {
+            "added_gold_queries": 367,
+            "evaluated_queries": 3053,
+            "lexical_top_k": 100,
+            "method": "embedding_topk_vs_lexical_topk_candidate_union",
+            "metrics": {
+              "embedding_candidate_recall": 0.23617207100657536,
+              "embedding_hit_query_share": 0.3562853107344633,
+              "embedding_lexical_union_candidate_recall": 0.32664298468152003,
+              "lexical_added_gold_query_share": 0.129590395480226,
+              "lexical_candidate_recall": 0.2494144722570334,
+              "lexical_hit_query_share": 0.4004237288135593,
+              "retrievable_queries": 2832,
+              "union_hit_query_share": 0.4858757062146893
+            },
+            "recommendation": "evaluate_hybrid_lexical_embedding_candidate_union",
+            "top_added_gold_domains": [
+              {
+                "domain_tag": "Topology",
+                "query_count": 55
+              },
+              {
+                "domain_tag": "MeasureTheory",
+                "query_count": 47
+              },
+              {
+                "domain_tag": "RingTheory",
+                "query_count": 42
+              },
+              {
+                "domain_tag": "Data",
+                "query_count": 42
+              },
+              {
+                "domain_tag": "Algebra",
+                "query_count": 32
+              },
+              {
+                "domain_tag": "Analysis",
+                "query_count": 31
+              },
+              {
+                "domain_tag": "NumberTheory",
+                "query_count": 19
+              },
+              {
+                "domain_tag": "CategoryTheory",
+                "query_count": 18
+              },
+              {
+                "domain_tag": "GroupTheory",
+                "query_count": 17
+              },
+              {
+                "domain_tag": "SetTheory",
+                "query_count": 13
+              },
+              {
+                "domain_tag": "Geometry",
+                "query_count": 12
+              },
+              {
+                "domain_tag": "Probability",
+                "query_count": 8
+              }
+            ],
+            "top_k": 100
+          }
+        },
         "candidate_miss_diagnosis": {
           "proof_state_retrieval": {
             "bucket_counts": [
@@ -936,14 +1006,14 @@
               "actual_backend": "torch_cuda",
               "evaluated_queries": 2822,
               "name": "val_proof_state_retrieval",
-              "seconds": 6.839982734061778,
+              "seconds": 20.077549455920234,
               "split": "val"
             },
             {
               "actual_backend": "torch_cuda",
               "evaluated_queries": 3053,
               "name": "test_proof_state_retrieval",
-              "seconds": 0.9846244780346751,
+              "seconds": 14.836337798973545,
               "split": "test"
             },
             {
@@ -951,7 +1021,7 @@
               "case_study_limit": 0,
               "evaluated_queries": 1000,
               "name": "val_theorem_retrieval",
-              "seconds": 0.34053498785942793,
+              "seconds": 0.4385440428741276,
               "split": "val"
             },
             {
@@ -959,7 +1029,7 @@
               "case_study_limit": 0,
               "evaluated_queries": 1000,
               "name": "test_theorem_retrieval",
-              "seconds": 0.4361388839315623,
+              "seconds": 0.4634031429886818,
               "split": "test"
             },
             {
@@ -967,21 +1037,21 @@
               "candidate_k": 50,
               "evaluated_queries": 20,
               "name": "test_reranked_proof_state_retrieval",
-              "seconds": 14.492579214973375,
+              "seconds": 14.42910149297677,
               "split": "test"
             },
             {
               "best_variant_by_recall": "stored_plus_goal_only",
               "evaluated_queries": 50,
               "name": "val_proof_state_query_representation_diagnostic",
-              "seconds": 1.8116060649044812,
+              "seconds": 1.5791925168596208,
               "split": "val"
             },
             {
               "best_variant_by_recall": "stored_plus_full_name_context_goal",
               "evaluated_queries": 50,
               "name": "test_proof_state_query_representation_diagnostic",
-              "seconds": 0.8953292008955032,
+              "seconds": 1.1219090591184795,
               "split": "test"
             }
           ],
@@ -989,7 +1059,7 @@
             "test": null,
             "val": null
           },
-          "total_seconds": 26.26292545394972,
+          "total_seconds": 53.46015711291693,
           "use_gpu": true
         },
         "label_policy": "held-out test positive_edges are used only for evaluation",
@@ -4925,7 +4995,7 @@
         "outputs/reports",
         "homepage/assets"
       ],
-      "bytes_per_processed_row": 10454.411219401942,
+      "bytes_per_processed_row": 10454.44139624399,
       "directories": {
         "data/processed": {
           "bytes": 46533700,
@@ -4934,7 +5004,7 @@
           "path": "data/processed"
         },
         "homepage/assets": {
-          "bytes": 2054146,
+          "bytes": 2053921,
           "exists": true,
           "file_count": 11,
           "path": "homepage/assets"
@@ -4952,7 +5022,7 @@
           "path": "outputs/indexes"
         },
         "outputs/reports": {
-          "bytes": 19383444,
+          "bytes": 19392481,
           "exists": true,
           "file_count": 39,
           "path": "outputs/reports"
@@ -5008,36 +5078,36 @@
       ],
       "projections": [
         {
-          "estimated_artifact_bytes": 3052813529.0,
-          "estimated_artifact_gib": 2.843154155649245,
+          "estimated_artifact_bytes": 3052822341.0,
+          "estimated_artifact_gib": 2.8431623624637723,
           "label": "current_1x",
           "scale_factor_vs_current": 1.0,
           "target_processed_rows": 292012
         },
         {
-          "estimated_artifact_bytes": 6105627058.0,
-          "estimated_artifact_gib": 5.68630831129849,
+          "estimated_artifact_bytes": 6105644682.0,
+          "estimated_artifact_gib": 5.686324724927545,
           "label": "current_2x",
           "scale_factor_vs_current": 2.0,
           "target_processed_rows": 584024
         },
         {
-          "estimated_artifact_bytes": 15264067645.0,
-          "estimated_artifact_gib": 14.215770778246224,
+          "estimated_artifact_bytes": 15264111705.0,
+          "estimated_artifact_gib": 14.215811812318861,
           "label": "current_5x",
           "scale_factor_vs_current": 5.0,
           "target_processed_rows": 1460060
         },
         {
-          "estimated_artifact_bytes": 3659043926.79068,
-          "estimated_artifact_gib": 3.4077502105298265,
+          "estimated_artifact_bytes": 3659054488.685396,
+          "estimated_artifact_gib": 3.4077600470608065,
           "label": "configured_source_rows",
           "scale_factor_vs_current": 1.1985808802377984,
           "target_processed_rows": 350000
         }
       ],
-      "total_artifact_bytes": 3052813529,
-      "total_artifact_gib": 2.843154155649245,
+      "total_artifact_bytes": 3052822341,
+      "total_artifact_gib": 2.8431623624637723,
       "unreferenced_index_artifact_bytes": 1502501178,
       "unreferenced_index_artifact_count": 12,
       "unreferenced_index_artifact_gib": 1.3993132654577494,
@@ -5203,10 +5273,10 @@
     "embedding_rows_per_second": 489.4299854857369,
     "estimated_seconds_at_requested_source_rows": 598.4970038390347,
     "evaluation_timing_delta": {
-      "current_evaluation_seconds": 26.26292545394972,
+      "current_evaluation_seconds": 53.46015711291693,
       "current_faster_than_pipeline_timing": false,
       "timed_pipeline_evaluate_seconds": 19.468068956863135,
-      "timed_to_current_ratio": 0.7412757193024475
+      "timed_to_current_ratio": 0.36416033936719017
     },
     "execution_mode_summary": {
       "ann_index_active": true,
@@ -5594,7 +5664,7 @@
           "area": "rerank_evaluation_policy",
           "basis": "full rerank cost is projected from the sampled rerank diagnostic",
           "estimated_pipeline_seconds_after_action": null,
-          "estimated_seconds_saved": 2197.7996379507126,
+          "estimated_seconds_saved": 2188.1732414099274,
           "priority": 4
         }
       ],
@@ -5973,8 +6043,8 @@
     "requested_source_rows": 350000,
     "rerank_evaluation_cost_profile": {
       "batched_embedding_recall_at_10": 0.11624918291584951,
-      "batched_embedding_seconds": 0.9846244780346751,
-      "batched_embedding_seconds_per_query": 0.0003225104742989437,
+      "batched_embedding_seconds": 14.836337798973545,
+      "batched_embedding_seconds_per_query": 0.0048595931211836045,
       "candidate_k": 50,
       "candidate_k_values": [
         50,
@@ -5983,13 +6053,13 @@
       "full_proof_state_queries": 3053,
       "method": "project_full_rerank_cost_from_user_facing_sampled_rerank_diagnostic",
       "policy": "keep reranked proof-state evaluation sampled for development and use full batched embedding evaluation for final held-out coverage",
-      "projected_full_rerank_minutes": 36.87153695276143,
-      "projected_full_rerank_seconds": 2212.292217165686,
+      "projected_full_rerank_minutes": 36.71003904838174,
+      "projected_full_rerank_seconds": 2202.602342902904,
       "rerank_backend": "batched_torch_cuda_then_rerank",
-      "rerank_seconds": 14.492579214973375,
-      "rerank_seconds_per_query": 0.7246289607486688,
+      "rerank_seconds": 14.42910149297677,
+      "rerank_seconds_per_query": 0.7214550746488385,
       "rerank_stage_name": "test_reranked_proof_state_retrieval",
-      "rerank_to_batched_seconds_per_query_ratio": 2246.838532372721,
+      "rerank_to_batched_seconds_per_query_ratio": 148.45997528145332,
       "reranked_recall_at_10": 0.16885964912280702,
       "sampled_fraction_of_full_proof_state_eval": 0.006550933508024894,
       "sampled_rerank_queries": 20,
@@ -6087,6 +6157,76 @@
       }
     },
     "retrieval_quality_profile": {
+      "candidate_generation_diagnostic": {
+        "proof_state": {
+          "added_gold_queries": 367,
+          "evaluated_queries": 3053,
+          "lexical_top_k": 100,
+          "method": "embedding_topk_vs_lexical_topk_candidate_union",
+          "metrics": {
+            "embedding_candidate_recall": 0.23617207100657536,
+            "embedding_hit_query_share": 0.3562853107344633,
+            "embedding_lexical_union_candidate_recall": 0.32664298468152003,
+            "lexical_added_gold_query_share": 0.129590395480226,
+            "lexical_candidate_recall": 0.2494144722570334,
+            "lexical_hit_query_share": 0.4004237288135593,
+            "retrievable_queries": 2832,
+            "union_hit_query_share": 0.4858757062146893
+          },
+          "recommendation": "evaluate_hybrid_lexical_embedding_candidate_union",
+          "top_added_gold_domains": [
+            {
+              "domain_tag": "Topology",
+              "query_count": 55
+            },
+            {
+              "domain_tag": "MeasureTheory",
+              "query_count": 47
+            },
+            {
+              "domain_tag": "RingTheory",
+              "query_count": 42
+            },
+            {
+              "domain_tag": "Data",
+              "query_count": 42
+            },
+            {
+              "domain_tag": "Algebra",
+              "query_count": 32
+            },
+            {
+              "domain_tag": "Analysis",
+              "query_count": 31
+            },
+            {
+              "domain_tag": "NumberTheory",
+              "query_count": 19
+            },
+            {
+              "domain_tag": "CategoryTheory",
+              "query_count": 18
+            },
+            {
+              "domain_tag": "GroupTheory",
+              "query_count": 17
+            },
+            {
+              "domain_tag": "SetTheory",
+              "query_count": 13
+            },
+            {
+              "domain_tag": "Geometry",
+              "query_count": 12
+            },
+            {
+              "domain_tag": "Probability",
+              "query_count": 8
+            }
+          ],
+          "top_k": 100
+        }
+      },
       "candidate_miss_diagnosis": {
         "proof_state": {
           "bucket_counts": [
@@ -6298,7 +6438,7 @@
       },
       "rerank_sample": {
         "policy": "keep reranked proof-state evaluation sampled for development and use full batched embedding evaluation for final held-out coverage",
-        "projected_full_seconds": 2212.292217165686,
+        "projected_full_seconds": 2202.602342902904,
         "recall_at_10_delta": 0.0526104662069575,
         "sampled_queries": 20
       },

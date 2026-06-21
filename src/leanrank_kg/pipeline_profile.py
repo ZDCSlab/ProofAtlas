@@ -241,6 +241,7 @@ def _evaluation_stage() -> dict[str, Any]:
     total_substage_seconds = sum(float(row.get("seconds") or 0.0) for row in timed_substages)
     proof_test_metrics = test_set_evaluation.get("test", {}).get("proof_state_retrieval", {}).get("metrics", {})
     proof_candidate_miss = test_set_evaluation.get("test", {}).get("proof_state_retrieval", {}).get("candidate_miss_diagnosis", {})
+    proof_candidate_generation = test_set_evaluation.get("test", {}).get("proof_state_retrieval", {}).get("candidate_generation_diagnostic", {})
     theorem_test_metrics = test_set_evaluation.get("test", {}).get("theorem_retrieval", {}).get("metrics", {})
     theorem_candidate_miss = test_set_evaluation.get("test", {}).get("theorem_retrieval", {}).get("candidate_miss_diagnosis", {})
     reranked_proof_state = test_set_evaluation.get("test", {}).get("proof_state_reranked_retrieval", {})
@@ -288,6 +289,9 @@ def _evaluation_stage() -> dict[str, Any]:
             "candidate_miss_diagnosis": {
                 "proof_state_retrieval": proof_candidate_miss,
                 "theorem_retrieval": theorem_candidate_miss,
+            },
+            "candidate_generation_diagnostic": {
+                "proof_state_retrieval": proof_candidate_generation,
             },
             "test": {
                 "proof_state_reranked_retrieval": reranked_proof_state,
@@ -690,6 +694,7 @@ def _retrieval_quality_profile(evaluation: dict[str, Any], throughput: dict[str,
     test_eval = evaluation.get("test_set_evaluation", {}) if isinstance(evaluation, dict) else {}
     test_metrics = test_eval.get("test_metrics", {}) if isinstance(test_eval, dict) else {}
     candidate_miss = test_eval.get("candidate_miss_diagnosis", {}) if isinstance(test_eval, dict) else {}
+    candidate_generation = test_eval.get("candidate_generation_diagnostic", {}) if isinstance(test_eval, dict) else {}
     coverage = evaluation.get("held_out_test_coverage", {}) if isinstance(evaluation, dict) else {}
     retrieval_bottleneck = throughput.get("retrieval_bottleneck_profile", {}) if isinstance(throughput, dict) else {}
     rapid = throughput.get("rapid_convergence_profile", {}) if isinstance(throughput, dict) else {}
@@ -762,6 +767,9 @@ def _retrieval_quality_profile(evaluation: dict[str, Any], throughput: dict[str,
         "candidate_miss_diagnosis": {
             "proof_state": candidate_miss.get("proof_state_retrieval", {}) if isinstance(candidate_miss, dict) else {},
             "theorem": candidate_miss.get("theorem_retrieval", {}) if isinstance(candidate_miss, dict) else {},
+        },
+        "candidate_generation_diagnostic": {
+            "proof_state": candidate_generation.get("proof_state_retrieval", {}) if isinstance(candidate_generation, dict) else {},
         },
         "rerank_sample": {
             "sampled_queries": rerank_cost.get("sampled_rerank_queries"),

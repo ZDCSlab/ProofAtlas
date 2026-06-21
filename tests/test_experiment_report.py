@@ -83,6 +83,22 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
                         ],
                         "top_candidate_miss_domains": [{"domain_tag": "Algebra", "query_count": 1}],
                     },
+                    "candidate_generation_diagnostic": {
+                        "method": "embedding_topk_vs_lexical_topk_candidate_union",
+                        "top_k": 100,
+                        "lexical_top_k": 100,
+                        "added_gold_queries": 1,
+                        "recommendation": "evaluate_hybrid_lexical_embedding_candidate_union",
+                        "metrics": {
+                            "embedding_candidate_recall": 0.2,
+                            "lexical_candidate_recall": 0.3,
+                            "embedding_lexical_union_candidate_recall": 0.4,
+                            "embedding_hit_query_share": 0.2,
+                            "lexical_hit_query_share": 0.3,
+                            "union_hit_query_share": 0.4,
+                            "lexical_added_gold_query_share": 0.1,
+                        },
+                    },
                     "worst_cases": [{"proof_state_id": "ps_bad", "rank_of_first_gold": 27, "Recall@10": 0.0, "MRR": 0.0, "gold_premises_total": 1, "gold_premises_in_train_index": 1}],
                 },
                 "proof_state_query_representation_diagnostic": {
@@ -948,6 +964,9 @@ def test_experiment_report_documents_ml_task_and_final_artifacts(tmp_path, monke
     assert "Proof-state candidate-miss diagnosis" in text
     assert "candidate_generation_or_embedding_miss" in text
     assert "candidate_miss_at_max_k" in text
+    assert "Proof-State Hybrid Candidate Generation Diagnostic" in text
+    assert "embedding_topk_vs_lexical_topk_candidate_union" in text
+    assert "evaluate_hybrid_lexical_embedding_candidate_union" in text
     assert "Theorem candidate-miss diagnosis" in text
     assert "same namespace share" in text
     assert "Mathlib.Algebra.Group.mul_left_cancel" in text

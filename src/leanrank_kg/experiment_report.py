@@ -252,6 +252,25 @@ def _retrieval_quality_table(profile: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def _candidate_generation_diagnostic_table(profile: dict[str, Any]) -> str:
+    metrics = profile.get("metrics", {}) if isinstance(profile, dict) else {}
+    rows = [
+        ("Embedding top-k", "embedding_candidate_recall", "embedding_hit_query_share"),
+        ("Lexical top-k", "lexical_candidate_recall", "lexical_hit_query_share"),
+        ("Embedding + lexical union", "embedding_lexical_union_candidate_recall", "union_hit_query_share"),
+    ]
+    lines = [
+        "| Candidate pool | Candidate recall | Hit query share |",
+        "| --- | ---: | ---: |",
+    ]
+    for label, recall_key, hit_key in rows:
+        lines.append(f"| {label} | {_fmt(metrics.get(recall_key))} | {_fmt(metrics.get(hit_key))} |")
+    lines.append(
+        f"| Lexical added after embedding miss | n/a | {_fmt(metrics.get('lexical_added_gold_query_share'))} |"
+    )
+    return "\n".join(lines)
+
+
 def _rapid_convergence_table(profile: dict[str, Any]) -> str:
     rows = profile.get("recommended_sequence", []) if isinstance(profile, dict) else []
     lines = [
@@ -662,6 +681,7 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
         test_eval.get("validation", {}).get("proof_state_query_representation_diagnostic", {}) if isinstance(test_eval, dict) else {}
     )
     theorem_metrics = test_eval.get("test", {}).get("theorem_retrieval", {}).get("metrics", {})
+    proof_candidate_generation_diagnostic = test_eval.get("test", {}).get("proof_state_retrieval", {}).get("candidate_generation_diagnostic", {})
     proof_domain_breakdown = test_eval.get("test", {}).get("proof_state_retrieval", {}).get("domain_breakdown", [])
     theorem_domain_breakdown = test_eval.get("test", {}).get("theorem_retrieval", {}).get("domain_breakdown", [])
     proof_failure_profile = test_eval.get("test", {}).get("proof_state_retrieval", {}).get("failure_profile", {})
@@ -886,6 +906,17 @@ def build_markdown(config_path: str = "configs/proofatlas.yaml") -> str:
         "### Proof-State Candidate Pool",
         "",
         _metric_table(proof_metrics, candidate_diagnostic_keys),
+        "",
+        "### Proof-State Hybrid Candidate Generation Diagnostic",
+        "",
+        "This diagnostic compares the committed embedding candidate pool against a lexical TF-IDF candidate pool built from train premise text. The union row is an unranked candidate-pool oracle, so it measures whether lexical retrieval can recover gold premises missed by embedding top-k before reranking.",
+        "",
+        f"- Method: `{proof_candidate_generation_diagnostic.get('method', 'n/a')}`",
+        f"- Top-k: `{proof_candidate_generation_diagnostic.get('top_k', 'n/a')}`",
+        f"- Recommendation: `{proof_candidate_generation_diagnostic.get('recommendation', 'n/a')}`",
+        f"- Lexical added gold queries: `{proof_candidate_generation_diagnostic.get('added_gold_queries', 'n/a')}`",
+        "",
+        _candidate_generation_diagnostic_table(proof_candidate_generation_diagnostic),
         "",
         "### Theorem Candidate Pool",
         "",
