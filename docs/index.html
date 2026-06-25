@@ -16,10 +16,14 @@
         <div class="intro">
           <p class="eyebrow">Lean premise retrieval research system</p>
           <h1>ProofAtlas</h1>
-          <p class="claim">Theorem-neighborhood retrieval for Lean premise selection</p>
+          <p class="claim">Recall-oriented candidate generation for Lean premise selection</p>
           <p class="support">
-            A static view of how dense, lexical, proof-state expansion, and
-            LLM-enriched theorem-neighborhood evidence are fused for premise retrieval.
+            ProofAtlas substantially improves recall-oriented premise candidate generation
+            by fusing proof-state retrieval with LLM-enriched theorem-neighborhood evidence.
+          </p>
+          <p class="scope-note">
+            Covered Recall is computed over retrievable gold premises. All-positive Recall
+            is computed over all held-out positive edges.
           </p>
           <nav class="resource-links" aria-label="Project resources">
             <a href="https://github.com/ZDCSlab/ProofAtlas">Repository</a>
@@ -32,42 +36,117 @@
           <article class="metric-card">
             <span>Covered Recall@100</span>
             <strong>0.2362 -> 0.4746</strong>
-            <small>+101.0%</small>
+            <small>+0.2384</small>
           </article>
           <article class="metric-card">
             <span>All-positive Recall@100</span>
             <strong>0.1851 -> 0.4074</strong>
-            <small>+120.1%</small>
+            <small>+0.2223</small>
           </article>
           <article class="metric-card">
-            <span>MAP</span>
-            <strong>0.0494 -> 0.0981</strong>
-            <small>+98.6%</small>
+            <span>Covered Recall@50</span>
+            <strong>0.1961 -> 0.3894</strong>
+            <small>+0.1933</small>
           </article>
           <article class="metric-card">
             <span>nDCG@10</span>
             <strong>0.0697 -> 0.1236</strong>
-            <small>+77.4%</small>
+            <small>+0.0539</small>
           </article>
         </section>
       </div>
     </header>
 
     <main>
+      <section class="dataset-band">
+        <div class="container dataset-scope-grid">
+          <article>
+            <div class="section-heading compact">
+              <h2>Dataset & Evaluation Scope</h2>
+              <p>
+                Task: given a held-out proof state, retrieve useful premises from
+                127,561 train-side candidate premises.
+              </p>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Split</th>
+                  <th>Theorems</th>
+                  <th>Proof states</th>
+                  <th>Premises</th>
+                  <th>Positive edges</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>train</th>
+                  <td>8000</td>
+                  <td>23723</td>
+                  <td>127561</td>
+                  <td>54897</td>
+                </tr>
+                <tr>
+                  <th>test</th>
+                  <td>1000</td>
+                  <td>3053</td>
+                  <td>38332</td>
+                  <td>7054</td>
+                </tr>
+              </tbody>
+            </table>
+          </article>
+
+          <aside class="review-box" aria-label="Evaluation review">
+            <div>
+              <span>Retrieval pool</span>
+              <strong>127,561 train-side premises</strong>
+            </div>
+            <div>
+              <span>Query set</span>
+              <strong>3,053 held-out proof states</strong>
+            </div>
+            <div>
+              <span>Metric</span>
+              <strong>Recall@100 = gold premise coverage within top 100 candidates</strong>
+            </div>
+            <p>
+              Train/test are theorem-disjoint. Covered Recall is over retrievable
+              gold premises; All-positive Recall is over all held-out positive edges.
+              This is not a theorem-statement-only setting.
+            </p>
+          </aside>
+        </div>
+      </section>
+
       <section class="figure-band">
         <div class="container">
           <div class="section-heading">
             <h2>System Pipeline</h2>
             <p>
-              Weighted reciprocal-rank fusion is the center of the system, combining
-              proof-state and theorem-neighborhood evidence into ranked premise candidates.
+              LLM enrichment converts theorem metadata plus proof-state goals,
+              hypotheses, and symbols into semantic, strategy-oriented, and
+              difficulty-oriented theorem profiles. These profiles feed
+              theorem-neighbor premise evidence, which is fused with proof-state
+              retrieval by weighted reciprocal-rank fusion.
             </p>
           </div>
-          <svg class="pipeline-graph" viewBox="0 0 1180 730" role="img" aria-labelledby="pipeline-title pipeline-desc">
+          <div class="method-notes">
+            <p>
+              LLM enrichment is retrieval text only; it does not use gold premise labels
+              or proof scripts as target answers.
+            </p>
+            <p>
+              The primary method is the strongest non-BGE LLM theorem-neighborhood
+              variant; BGE fusion is reported as an auxiliary recall-maximizing variant.
+            </p>
+          </div>
+          <svg class="pipeline-graph" viewBox="0 0 1180 780" role="img" aria-labelledby="pipeline-title pipeline-desc">
             <title id="pipeline-title">ProofAtlas retrieval pipeline graph</title>
             <desc id="pipeline-desc">
-              LeanRank processed data flows through theorem-disjoint splitting, retrieval sources,
-              weighted RRF fusion, ranked premise candidates, and evaluation metrics.
+              LeanRank data is split into a proof-state retrieval path and an LLM
+              theorem-neighborhood path. Both paths feed weighted RRF fusion, then
+              ranked premise candidates are evaluated against held-out positives.
             </desc>
             <defs>
               <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
@@ -77,26 +156,18 @@
 
             <g class="edges">
               <path d="M590 72 V118" />
-              <path d="M590 172 V218" />
-              <path d="M590 218 H170 V255" />
-              <path d="M590 218 H425 V255" />
-              <path d="M590 218 H655 V255" />
-              <path d="M590 218 H905 V255" />
-              <path d="M170 318 V360" />
-              <path d="M170 423 V470" />
-              <path d="M425 318 V360" />
-              <path d="M425 423 V470" />
-              <path d="M655 318 V470" />
-              <path d="M905 318 V360" />
-              <path d="M905 423 V470" />
-              <path d="M170 520 H590 V548" />
-              <path d="M425 520 H590" />
-              <path d="M655 520 H590" />
-              <path d="M905 520 H590" />
-              <path d="M590 620 V650" />
-              <path d="M590 650 H360 V666" />
-              <path d="M590 650 H590 V666" />
-              <path d="M590 650 H820 V666" />
+              <path d="M590 172 V205" />
+              <path d="M590 205 H245 V246" />
+              <path d="M590 205 H875 V246" />
+              <path d="M245 309 V344" />
+              <path d="M245 407 V442" />
+              <path d="M875 309 V344" />
+              <path d="M875 407 V442" />
+              <path d="M875 505 V540" />
+              <path d="M245 505 C335 555 440 590 510 620" />
+              <path d="M875 603 C790 642 705 642 670 648" />
+              <path d="M590 682 V705" />
+              <path d="M790 730 H880 V714" />
             </g>
 
             <g class="node data" transform="translate(425 28)">
@@ -109,78 +180,67 @@
               <text x="200" y="43">train / test split</text>
             </g>
 
-            <g class="node data" transform="translate(55 255)">
-              <rect width="230" height="63" rx="6" />
-              <text x="115" y="37">proof states</text>
+            <g class="pipeline-label" transform="translate(245 226)">
+              <text>Proof-state evidence path</text>
             </g>
-            <g class="node data" transform="translate(310 255)">
-              <rect width="230" height="63" rx="6" />
-              <text x="115" y="28">theorem</text>
-              <text x="115" y="46">profiles</text>
-            </g>
-            <g class="node data" transform="translate(560 255)">
-              <rect width="190" height="63" rx="6" />
-              <text x="95" y="37">premises</text>
-            </g>
-            <g class="node data" transform="translate(790 255)">
-              <rect width="230" height="63" rx="6" />
-              <text x="115" y="37">positive edges</text>
+            <g class="pipeline-label" transform="translate(875 226)">
+              <text>LLM theorem-neighborhood path</text>
             </g>
 
-            <g class="node retrieval" transform="translate(55 360)">
-              <rect width="230" height="63" rx="6" />
-              <text x="115" y="28">dense retrieval</text>
-              <text x="115" y="46">+ lexical TF-IDF</text>
+            <g class="node data" transform="translate(90 246)">
+              <rect width="310" height="63" rx="6" />
+              <text x="155" y="28">test proof state</text>
+              <text x="155" y="46">goal + hypotheses</text>
             </g>
-            <g class="node enrichment" transform="translate(310 360)">
-              <rect width="230" height="63" rx="6" />
-              <text x="115" y="28">LLM enrichment</text>
-              <text x="115" y="46">profiles</text>
+            <g class="node retrieval" transform="translate(90 344)">
+              <rect width="310" height="63" rx="6" />
+              <text x="155" y="24">dense + lexical retrieval</text>
+              <text x="155" y="43">proof-state expansion</text>
             </g>
-            <g class="node retrieval" transform="translate(790 360)">
-              <rect width="230" height="63" rx="6" />
-              <text x="115" y="28">theorem-neighbor</text>
-              <text x="115" y="46">premise source</text>
-            </g>
-
-            <g class="node retrieval" transform="translate(55 470)">
-              <rect width="230" height="50" rx="6" />
-              <text x="115" y="30">proof-state evidence</text>
-            </g>
-            <g class="node neighborhood" transform="translate(310 470)">
-              <rect width="230" height="50" rx="6" />
-              <text x="115" y="22">theorem-neighborhood</text>
-              <text x="115" y="39">evidence</text>
-            </g>
-            <g class="node retrieval" transform="translate(560 470)">
-              <rect width="190" height="50" rx="6" />
-              <text x="95" y="30">premise pool</text>
-            </g>
-            <g class="node output" transform="translate(790 470)">
-              <rect width="230" height="50" rx="6" />
-              <text x="115" y="30">guidance bundles</text>
+            <g class="node retrieval" transform="translate(90 442)">
+              <rect width="310" height="63" rx="6" />
+              <text x="155" y="34">proof-state evidence</text>
             </g>
 
-            <g class="node fusion" transform="translate(415 548)">
+            <g class="node data" transform="translate(690 246)">
+              <rect width="370" height="63" rx="6" />
+              <text x="185" y="25">theorem metadata + state context</text>
+              <text x="185" y="44">goals / hypotheses / symbols</text>
+            </g>
+            <g class="node enrichment core" transform="translate(675 344)">
+              <rect width="400" height="63" rx="8" />
+              <text x="200" y="24">LLM theorem enrichment</text>
+              <text x="200" y="43">semantic / strategy / difficulty profile</text>
+            </g>
+            <g class="node neighborhood" transform="translate(690 442)">
+              <rect width="370" height="63" rx="6" />
+              <text x="185" y="24">similar train theorems</text>
+              <text x="185" y="43">neighbor premise evidence</text>
+            </g>
+            <g class="node output" transform="translate(690 540)">
+              <rect width="370" height="63" rx="6" />
+              <text x="185" y="24">LLM theorem-neighborhood</text>
+              <text x="185" y="43">premise evidence</text>
+            </g>
+
+            <g class="node fusion" transform="translate(415 610)">
               <rect width="350" height="72" rx="8" />
               <text x="175" y="30">weighted RRF fusion</text>
               <text x="175" y="52">weighted_rrf_llm_theorem_tuned</text>
             </g>
 
-            <g class="node output" transform="translate(225 666)">
-              <rect width="270" height="50" rx="6" />
-              <text x="135" y="30">ranked premise candidates</text>
+            <g class="node output" transform="translate(390 705)">
+              <rect width="400" height="50" rx="6" />
+              <text x="200" y="30">Top-100 ranked premise candidates</text>
             </g>
-            <g class="node output" transform="translate(505 666)">
-              <rect width="170" height="50" rx="6" />
-              <text x="85" y="30">theorem neighbors</text>
-            </g>
-            <g class="node metric" transform="translate(700 666)">
-              <rect width="240" height="50" rx="6" />
-              <text x="120" y="30">Recall@100 / MAP / nDCG</text>
+            <g class="node metric eval-only" transform="translate(880 681)">
+              <rect width="250" height="66" rx="6" />
+              <text x="125" y="19">Evaluation only</text>
+              <text x="125" y="38">held-out positives</text>
+              <text x="125" y="56">Recall@100 / nDCG@10</text>
             </g>
           </svg>
-          <svg class="pipeline-mobile-graph" viewBox="0 0 390 820" role="img" aria-label="Mobile ProofAtlas retrieval pipeline graph">
+          <svg class="pipeline-mobile-graph" viewBox="0 0 390 920" role="img" aria-label="Mobile ProofAtlas retrieval pipeline graph">
             <defs>
               <marker id="mobile-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
                 <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head" />
@@ -193,7 +253,8 @@
               <path d="M195 352 V390" />
               <path d="M195 450 V488" />
               <path d="M195 558 V596" />
-              <path d="M195 666 V704" />
+              <path d="M195 656 V694" />
+              <path d="M195 764 V802" />
             </g>
             <g class="node data" transform="translate(45 16)">
               <rect width="300" height="42" rx="6" />
@@ -209,30 +270,36 @@
               <text x="150" y="24">proof-state evidence</text>
               <text x="150" y="43">dense + lexical + expansion</text>
             </g>
-            <g class="node enrichment" transform="translate(45 292)">
+            <g class="node data" transform="translate(45 292)">
               <rect width="300" height="60" rx="6" />
-              <text x="150" y="24">LLM-enriched</text>
-              <text x="150" y="43">theorem profiles</text>
+              <text x="150" y="20">theorem metadata + state</text>
+              <text x="150" y="39">goals / hypotheses / symbols</text>
             </g>
-            <g class="node neighborhood" transform="translate(45 390)">
+            <g class="node enrichment core" transform="translate(45 390)">
               <rect width="300" height="60" rx="6" />
-              <text x="150" y="24">theorem-neighborhood</text>
-              <text x="150" y="43">premise evidence</text>
+              <text x="150" y="20">LLM theorem enrichment</text>
+              <text x="150" y="39">semantic / strategy / difficulty</text>
             </g>
-            <g class="node output" transform="translate(45 488)">
+            <g class="node neighborhood" transform="translate(45 488)">
               <rect width="300" height="70" rx="6" />
-              <text x="150" y="24">premises + positives</text>
-              <text x="150" y="43">candidate and eval pools</text>
+              <text x="150" y="24">similar train theorems</text>
+              <text x="150" y="43">neighbor premise evidence</text>
             </g>
-            <g class="node fusion" transform="translate(28 596)">
+            <g class="node output" transform="translate(45 596)">
+              <rect width="300" height="60" rx="6" />
+              <text x="150" y="22">proof-state evidence +</text>
+              <text x="150" y="41">LLM neighborhood evidence</text>
+            </g>
+            <g class="node fusion" transform="translate(28 694)">
               <rect width="334" height="70" rx="8" />
               <text x="167" y="28">weighted RRF fusion</text>
               <text x="167" y="50">weighted_rrf_llm_theorem_tuned</text>
             </g>
-            <g class="node metric" transform="translate(45 704)">
+            <g class="node metric" transform="translate(45 802)">
               <rect width="300" height="72" rx="6" />
-              <text x="150" y="25">ranked premise candidates</text>
-              <text x="150" y="45">Recall@100 / MAP / nDCG@10</text>
+              <text x="150" y="18">Top-100 candidates</text>
+              <text x="150" y="38">Evaluation against positives</text>
+              <text x="150" y="58">Recall@100 / nDCG@10</text>
             </g>
           </svg>
         </div>
@@ -242,8 +309,10 @@
         <div class="section-heading">
           <h2>Held-Out Results</h2>
           <p>
-            The primary method is the strongest main non-BGE ranking variant; the BGE
-            fusion is shown as an auxiliary recall-maximizing variant.
+            ProofAtlas improves recall-oriented premise candidate generation. The
+            primary method is the strongest non-BGE LLM theorem-neighborhood variant;
+            BGE fusion is shown separately as an auxiliary recall-maximizing variant.
+            Top-rank precision remains a future reranking problem.
           </p>
         </div>
 
@@ -272,6 +341,14 @@
                 <rect class="bar baseline" x="435" y="229" width="34" height="21" />
                 <rect class="bar primary" x="473" y="212" width="34" height="38" />
               </g>
+              <g class="value-labels">
+                <text x="122" y="171">0.2362</text>
+                <text x="160" y="98">0.4746</text>
+                <text x="232" y="187">0.1851</text>
+                <text x="270" y="119">0.4074</text>
+                <text x="452" y="223">0.0697</text>
+                <text x="490" y="206">0.1236</text>
+              </g>
               <g class="chart-labels">
                 <text x="141" y="280">Cov R@100</text>
                 <text x="251" y="280">All-pos R@100</text>
@@ -286,7 +363,7 @@
               </g>
             </svg>
             <p class="caption">
-              Primary method: weighted_rrf_llm_theorem_tuned.
+              Primary method: weighted_rrf_llm_theorem_tuned. MAP remains in the full report and ablation chart.
             </p>
           </article>
 
@@ -312,6 +389,13 @@
                 <circle cx="362" cy="102" r="4" /><circle cx="432" cy="94" r="4" />
                 <circle cx="502" cy="90" r="4" /><circle cx="572" cy="87" r="4" />
               </g>
+              <g class="value-labels recall-values">
+                <text x="82" y="162">0.236</text>
+                <text x="292" y="111">0.389</text>
+                <text x="432" y="85">0.462</text>
+                <text x="502" y="81">0.475</text>
+                <text x="572" y="78">0.481</text>
+              </g>
               <g class="points map-points">
                 <circle cx="82" cy="234" r="4" /><circle cx="152" cy="232" r="4" />
                 <circle cx="222" cy="230" r="4" /><circle cx="292" cy="226" r="4" />
@@ -336,7 +420,8 @@
               </g>
             </svg>
             <p class="caption">
-              The sequence moves from simple retrieval toward theorem-neighborhood fusion.
+              Most gain over dense comes from multi-source fusion and proof-state expansion;
+              theorem-neighborhood evidence adds a further incremental lift.
             </p>
           </article>
 
@@ -371,6 +456,13 @@
                 <rect class="bar primary" x="684" y="191" width="20" height="67" />
                 <rect class="bar aux" x="708" y="200" width="20" height="58" />
               </g>
+              <g class="value-labels">
+                <text x="154" y="174">0.1985</text>
+                <text x="289" y="123">0.3279</text>
+                <text x="424" y="104">0.3774</text>
+                <text x="559" y="202">0.1257</text>
+                <text x="694" y="184">0.1717</text>
+              </g>
               <g class="chart-labels">
                 <text x="154" y="288">R@10</text>
                 <text x="289" y="288">R@50</text>
@@ -394,70 +486,14 @@
         </div>
       </section>
 
-      <section class="dataset-band">
-        <div class="container two-column">
-          <article>
-            <div class="section-heading compact">
-              <h2>Dataset Overview</h2>
-              <p>The held-out split is theorem-disjoint from training.</p>
-            </div>
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Split</th>
-                  <th>Theorems</th>
-                  <th>Proof states</th>
-                  <th>Premises</th>
-                  <th>Positive edges</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th>train</th>
-                  <td>8000</td>
-                  <td>23723</td>
-                  <td>127561</td>
-                  <td>54897</td>
-                </tr>
-                <tr>
-                  <th>test</th>
-                  <td>1000</td>
-                  <td>3053</td>
-                  <td>38332</td>
-                  <td>7054</td>
-                </tr>
-              </tbody>
-            </table>
-          </article>
-
-          <article>
-            <div class="section-heading compact">
-              <h2>Top Test Domains</h2>
-              <p>Shares are from the held-out theorem set.</p>
-            </div>
-            <div class="domain-bars" aria-label="Top theorem domain shares">
-              <div><span>Algebra</span><b style="width: 66.2%"></b><em>14.9%</em></div>
-              <div><span>Data</span><b style="width: 64.9%"></b><em>14.6%</em></div>
-              <div><span>Analysis</span><b style="width: 51.6%"></b><em>11.6%</em></div>
-              <div><span>Topology</span><b style="width: 34.7%"></b><em>7.8%</em></div>
-              <div><span>RingTheory</span><b style="width: 31.1%"></b><em>7.0%</em></div>
-              <div><span>MeasureTheory</span><b style="width: 29.3%"></b><em>6.6%</em></div>
-              <div><span>CategoryTheory</span><b style="width: 24.0%"></b><em>5.4%</em></div>
-              <div><span>LinearAlgebra</span><b style="width: 22.2%"></b><em>5.0%</em></div>
-              <div><span>Order</span><b style="width: 20.4%"></b><em>4.6%</em></div>
-              <div><span>Other</span><b style="width: 100%"></b><em>22.5%</em></div>
-            </div>
-          </article>
-        </div>
-      </section>
-
       <section class="figure-band">
         <div class="container">
           <div class="section-heading">
             <h2>Knowledge Graph View</h2>
             <p>
               ProofAtlas aggregates theorem, proof-state, premise, strategy, domain,
-              difficulty, and retrieval-method evidence around a query theorem.
+              difficulty, and retrieval-method evidence around a query theorem. This
+              example illustrates exposed evidence, not an aggregate performance claim.
             </p>
           </div>
           <svg class="knowledge-graph" viewBox="0 0 1180 520" role="img" aria-label="Representative ProofAtlas knowledge graph">
@@ -488,18 +524,18 @@
             </g>
             <g class="kg-node neighbor" transform="translate(60 340)">
               <rect width="255" height="70" rx="6" />
-              <text x="128" y="28">10 theorem neighbors</text>
-              <text x="128" y="49">similar_to_theorem</text>
+              <text x="128" y="24">stalkwise_Spec_map_iff</text>
+              <text x="128" y="45">locally_of_iff</text>
             </g>
             <g class="kg-node premise" transform="translate(300 390)">
               <rect width="245" height="70" rx="6" />
-              <text x="123" y="28">10 premise suggestions</text>
-              <text x="123" y="49">premise evidence</text>
+              <text x="123" y="24">RingHom.toMorphismProperty</text>
+              <text x="123" y="45">Localization.Away</text>
             </g>
             <g class="kg-node strategy" transform="translate(485 405)">
               <rect width="250" height="70" rx="6" />
-              <text x="125" y="28">8 strategy facets</text>
-              <text x="125" y="49">scheme-local reasoning</text>
+              <text x="125" y="24">rewrite transport</text>
+              <text x="125" y="45">localization reasoning</text>
             </g>
             <g class="kg-node difficulty" transform="translate(755 390)">
               <rect width="220" height="70" rx="6" />
@@ -517,15 +553,44 @@
               <text x="125" y="41">local goals + hypotheses</text>
             </g>
           </svg>
+          <div class="evidence-grid">
+            <article>
+              <h3>Top Theorem Neighbors</h3>
+              <ul>
+                <li>AlgebraicGeometry.stalkwise_Spec_map_iff</li>
+                <li>AlgebraicGeometry.HasRingHomProperty.locally_of_iff</li>
+                <li>RingHom.locally_stableUnderComposition</li>
+                <li>RingHom.RespectsIso.arrow_mk_iso_iff</li>
+              </ul>
+            </article>
+            <article>
+              <h3>Premise Suggestions</h3>
+              <ul>
+                <li>RingHom.toMorphismProperty</li>
+                <li>Localization.Away</li>
+                <li>algebraMap</li>
+                <li>CategoryTheory.MorphismProperty.RespectsIso</li>
+              </ul>
+            </article>
+            <article>
+              <h3>Strategy Facets</h3>
+              <ul>
+                <li>rewrite_transport</li>
+                <li>algebraic_computation</li>
+                <li>case_analysis</li>
+                <li>set_membership_reasoning</li>
+              </ul>
+            </article>
+          </div>
         </div>
       </section>
 
       <section class="container demo-section">
         <div class="section-heading">
-          <h2>Demo Case Graphs</h2>
+          <h2>Example Retrieval Neighborhoods</h2>
           <p>
-            The report markdown provides bundle counts and metadata, so these static
-            graphs show the available evidence without inventing neighbor or premise names.
+            These qualitative views list concrete evidence exposed by ProofAtlas for
+            two held-out theorems. They are examples, not aggregate performance claims.
           </p>
         </div>
         <div class="demo-grid">
@@ -565,6 +630,24 @@
                 <text x="90" y="30">hard difficulty bucket</text>
               </g>
             </svg>
+            <div class="demo-lists">
+              <div>
+                <strong>Neighbors</strong>
+                <ul>
+                  <li>AlgebraicGeometry.stalkwise_Spec_map_iff</li>
+                  <li>AlgebraicGeometry.HasRingHomProperty.locally_of_iff</li>
+                  <li>RingHom.locally_stableUnderComposition</li>
+                </ul>
+              </div>
+              <div>
+                <strong>Premises</strong>
+                <ul>
+                  <li>RingHom.toMorphismProperty</li>
+                  <li>Localization.Away</li>
+                  <li>algebraMap</li>
+                </ul>
+              </div>
+            </div>
             <p class="caption">
               Emphasizes scheme-local reasoning, localization, prime spectra, and morphism-property transport.
             </p>
@@ -606,6 +689,24 @@
                 <text x="90" y="30">hard difficulty bucket</text>
               </g>
             </svg>
+            <div class="demo-lists">
+              <div>
+                <strong>Neighbors</strong>
+                <ul>
+                  <li>Algebra.Generators.aeval_val_eq_zero</li>
+                  <li>Algebra.Presentation.fg_ker</li>
+                  <li>PowerBasis.mem_span_pow</li>
+                </ul>
+              </div>
+              <div>
+                <strong>Premises</strong>
+                <ul>
+                  <li>Algebra.Generators.algebraMap_apply</li>
+                  <li>WithBot.coe_lt_coe</li>
+                  <li>Set.Finite.toFinset</li>
+                </ul>
+              </div>
+            </div>
             <p class="caption">
               Emphasizes polynomial evaluation, ideals, span membership, and relations vanishing under evaluation.
             </p>
@@ -616,9 +717,10 @@
       <section class="conclusion-band">
         <div class="container conclusion">
           <p>
-            The held-out test result supports the design hypothesis: theorem-theorem
-            retrieval is not just a side task, but a useful source of premise evidence
-            for Proof-State -> Premise retrieval.
+            The held-out result suggests theorem-theorem retrieval can provide useful
+            auxiliary premise evidence when fused with proof-state retrieval signals.
+            The next bottleneck is top-rank precision, where a learned reranker over
+            the fused candidate pool is the natural follow-up.
           </p>
         </div>
       </section>

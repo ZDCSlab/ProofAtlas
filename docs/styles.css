@@ -116,9 +116,17 @@ h3 {
 
 .support {
   max-width: 760px;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
   color: var(--muted);
   font-size: 1rem;
+}
+
+.scope-note {
+  max-width: 760px;
+  margin-bottom: 20px;
+  color: #3f4c49;
+  font-size: 0.94rem;
+  font-weight: 600;
 }
 
 .resource-links {
@@ -138,6 +146,8 @@ h3 {
 
 .metric-card,
 .chart-panel,
+.review-box,
+.evidence-grid article,
 .demo-case {
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -193,6 +203,62 @@ h3 {
 
 .section-heading.compact {
   margin-bottom: 16px;
+}
+
+.dataset-scope-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.72fr);
+  gap: 34px;
+  align-items: start;
+}
+
+.review-box {
+  padding: 20px;
+}
+
+.review-box div {
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.review-box span {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 750;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.review-box strong {
+  display: block;
+  font-size: 1rem;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.review-box p {
+  margin-bottom: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.method-notes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin: -4px 0 24px;
+}
+
+.method-notes p {
+  margin: 0;
+  padding: 14px 16px;
+  border-left: 3px solid var(--violet);
+  background: rgba(233, 229, 244, 0.48);
+  color: #3f4c49;
+  font-size: 0.92rem;
 }
 
 svg {
@@ -278,6 +344,21 @@ svg {
   stroke: var(--enrichment-stroke);
 }
 
+.node.enrichment.core rect {
+  fill: #ded8ef;
+  stroke: #5f5293;
+  stroke-width: 2.2;
+}
+
+.pipeline-label text {
+  fill: var(--muted);
+  font-size: 15px;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  text-anchor: middle;
+  text-transform: uppercase;
+}
+
 .node.fusion rect {
   fill: var(--fusion);
   stroke: var(--fusion);
@@ -309,6 +390,11 @@ svg {
 .demo-node.difficulty rect {
   fill: var(--metric);
   stroke: var(--metric-stroke);
+}
+
+.node.eval-only rect {
+  fill: #fbf4e8;
+  stroke-dasharray: 5 4;
 }
 
 .results,
@@ -359,6 +445,18 @@ svg {
 .legend text {
   text-anchor: start;
   font-size: 13px;
+}
+
+.value-labels text {
+  fill: #25322f;
+  font-size: 11px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-anchor: middle;
+}
+
+.recall-values text {
+  font-size: 10px;
 }
 
 .grid-lines path {
@@ -486,7 +584,41 @@ svg {
 }
 
 .kg-node text {
-  font-size: 16px;
+  font-size: 14px;
+}
+
+.evidence-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.evidence-grid article {
+  padding: 18px;
+}
+
+.evidence-grid h3,
+.demo-lists strong {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.evidence-grid ul,
+.demo-lists ul {
+  margin: 0;
+  padding-left: 18px;
+  color: #3f4c49;
+  font-size: 0.9rem;
+}
+
+.evidence-grid li,
+.demo-lists li {
+  margin: 0 0 7px;
+  overflow-wrap: anywhere;
 }
 
 .demo-grid {
@@ -511,6 +643,15 @@ svg {
 
 .demo-node text {
   font-size: 14px;
+}
+
+.demo-lists {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
 }
 
 .conclusion {
@@ -551,6 +692,9 @@ svg {
   .header-grid,
   .chart-grid,
   .two-column,
+  .dataset-scope-grid,
+  .method-notes,
+  .evidence-grid,
   .demo-grid {
     grid-template-columns: 1fr;
   }
@@ -599,14 +743,27 @@ svg {
 
   .chart-panel,
   .demo-case,
-  .metric-card {
+  .metric-card,
+  .review-box {
     padding: 16px;
   }
 
+  .demo-lists {
+    grid-template-columns: 1fr;
+  }
+
   .data-table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
+    display: table;
+    table-layout: fixed;
+    overflow-x: visible;
+    white-space: normal;
+    font-size: 0.68rem;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 8px 4px;
+    overflow-wrap: anywhere;
   }
 
   .domain-bars div {
