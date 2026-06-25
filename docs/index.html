@@ -381,6 +381,12 @@
             neighbor-premise Recall@100 from 0.3185 to 0.3774 and nDCG@10 from 0.1499
             to 0.1717.
           </p>
+          <p>
+            Evaluation expands retrieved theorem neighbors into the premises used in
+            their proof states, then measures whether held-out gold premises appear in
+            the resulting neighbor-derived premise candidates. Neighbor-premise
+            Recall@100 is a premise-evidence metric, not direct theorem-name matching.
+          </p>
         </div>
 
         <div class="chart-grid">

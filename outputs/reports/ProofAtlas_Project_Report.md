@@ -142,7 +142,9 @@ This report is a held-out test-split result generated after fixing the selected 
 
 ## Capability 1: LLM-Enriched Theorem Neighborhood Retrieval
 
-This capability answers: can ProofAtlas retrieve useful similar theorems? Given a held-out theorem profile, the system uses LLM-enriched theorem text to find similar train-side theorems, then checks whether premises from those neighbors are useful evidence. This is the mechanism check for theorem-neighborhood retrieval. Strategy coverage is included as an auxiliary guidance diagnostic.
+This capability answers: can ProofAtlas retrieve useful similar theorems? Given a held-out theorem profile, the system uses LLM-enriched theorem text to find similar train-side theorems, then checks whether premises from those neighbors are useful evidence. This is the mechanism check for theorem-neighborhood retrieval.
+
+Evaluation expands retrieved theorem neighbors into the premises used in their proof states, then measures whether held-out gold premises appear in the resulting neighbor-derived premise candidates. Neighbor-premise Recall@100 is therefore a premise-evidence metric, not direct theorem-name matching. Strategy coverage is included as an auxiliary guidance diagnostic.
 
 | Method | Neighbor premise Recall@10 | Recall@50 | Recall@100 | MAP | nDCG@10 | Strategy coverage |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
