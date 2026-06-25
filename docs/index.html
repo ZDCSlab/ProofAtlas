@@ -117,8 +117,8 @@
             <div><dt>All-positive Recall</dt><dd>Recall over all held-out positive premise edges, including non-retrievable positives.</dd></div>
             <div><dt>MAP</dt><dd>Mean average precision, a ranking-quality metric over the retrieved list.</dd></div>
             <div><dt>nDCG@10</dt><dd>Normalized discounted cumulative gain at rank 10, a top-rank quality metric.</dd></div>
-            <div><dt>T1</dt><dd>Proof-State -> Premise retrieval, used here as the challenge evaluation.</dd></div>
-            <div><dt>T2/T3</dt><dd>Theorem-neighborhood retrieval and qualitative guidance aggregation.</dd></div>
+            <div><dt>Challenge evaluation</dt><dd>Proof-state to premise retrieval from the full train-side candidate pool.</dd></div>
+            <div><dt>Guidance view</dt><dd>An interpretable neighborhood display with theorem neighbors, premise suggestions, and strategy facets.</dd></div>
           </dl>
         </div>
       </section>
@@ -374,7 +374,7 @@
         <div class="section-heading">
           <h2>Capability 1: LLM-Enriched Theorem Neighborhood Retrieval</h2>
           <p>
-            T2 is the mechanism check: do LLM-enriched theorem profiles retrieve
+            This is the mechanism check: do LLM-enriched theorem profiles retrieve
             theorem neighborhoods whose premises are useful evidence? The LLM-enriched
             TF-IDF profile improves neighbor-premise Recall@100 from 0.3185 to 0.3774
             and nDCG@10 from 0.1499 to 0.1717.
@@ -675,7 +675,7 @@
         <div class="section-heading">
           <h2>Challenge Evaluation: Proof-State -> Premise Retrieval</h2>
           <p>
-            T1 is the hard benchmark: retrieve useful train-side premises for 3,053
+            This is the hard benchmark: retrieve useful train-side premises for 3,053
             held-out proof states from a 127,561-premise pool. The challenge result
             shows that the pipeline improves top-100 candidate generation, while
             top-rank precision remains the next-stage bottleneck.
@@ -756,7 +756,7 @@
           </article>
 
           <article class="chart-panel">
-            <h3>T1 Ablation Progression</h3>
+            <h3>Ablation Progression</h3>
             <svg class="chart" viewBox="0 0 620 330" role="img" aria-label="Line chart showing covered recall and MAP across ablations">
               <g class="axis">
                 <path d="M66 250 H585" />
