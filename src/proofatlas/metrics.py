@@ -39,7 +39,9 @@ def ranking_row(retrieved_ids: list[str], gold_all: set[str], retrievable_ids: s
         "average_precision": average_precision(retrieved_ids, gold_in_pool) if gold_in_pool else 0.0,
     }
     for k in top_ks:
-        row[f"Recall@{k}"] = len(set(retrieved_ids[:k]) & gold_in_pool) / len(gold_in_pool) if gold_in_pool else 0.0
+        hits_at_k = len(set(retrieved_ids[:k]) & gold_in_pool)
+        row[f"hits@{k}"] = hits_at_k
+        row[f"Recall@{k}"] = hits_at_k / len(gold_in_pool) if gold_in_pool else 0.0
         row[f"nDCG@{k}"] = ndcg(retrieved_ids, gold_in_pool, k) if gold_in_pool else 0.0
     return row
 
@@ -56,6 +58,8 @@ def summarize_rows(rows: list[dict], top_ks: list[int]) -> dict:
         "MAP": float(sum(row.get("average_precision", 0.0) for row in retrievable) / len(retrievable)) if retrievable else 0.0,
     }
     for k in top_ks:
+        out[f"hits@{k}"] = int(sum(row.get(f"hits@{k}", 0) for row in rows))
         out[f"Recall@{k}"] = float(sum(row.get(f"Recall@{k}", 0.0) for row in retrievable) / len(retrievable)) if retrievable else 0.0
+        out[f"AllPositiveRecall@{k}"] = float(out[f"hits@{k}"] / max(1, out["gold_total"]))
         out[f"nDCG@{k}"] = float(sum(row.get(f"nDCG@{k}", 0.0) for row in retrievable) / len(retrievable)) if retrievable else 0.0
     return out

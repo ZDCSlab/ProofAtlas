@@ -31,11 +31,14 @@ def _pct(part: int | float, total: int | float) -> str:
     return f"{(float(part) / max(float(total), 1.0)) * 100:.1f}%"
 
 
-def _overall_recall(metrics: dict[str, Any], k: int) -> str:
+def _all_positive_recall(metrics: dict[str, Any], k: int) -> str:
+    value = metrics.get(f"AllPositiveRecall@{k}", "")
+    if isinstance(value, int | float):
+        return _fmt(value)
     recall = metrics.get(f"Recall@{k}", "")
     coverage = metrics.get("gold_pool_coverage", "")
     if isinstance(recall, int | float) and isinstance(coverage, int | float):
-        return _fmt(float(recall) * float(coverage))
+        return f"~{_fmt(float(recall) * float(coverage))}"
     return ""
 
 
@@ -144,7 +147,7 @@ def _append_glossary(lines: list[str]) -> None:
             "| Similar proof-state expansion | Retrieve similar train proof states, then rank premises used by those train proof states. |",
             "| Similar theorem premise source | Retrieve similar train theorems, then rank premises used by proof states under those train theorems. |",
             "| Covered Recall@K | Fraction of retrievable gold positives found in the top K retrieved candidates. The denominator excludes gold positives absent from the train-side premise pool. |",
-            "| Overall Recall@100 | `Covered Recall@100 * Gold coverage`, an approximate all-positive recall after accounting for missing gold positives. |",
+            "| All-positive Recall@100 | Direct edge-level recall over all held-out positives, including positives absent from the train-side retrievable premise pool. |",
             "| MAP | Mean average precision over retrievable positives. It rewards ranking gold premises earlier across the candidate list. |",
             "| nDCG@K | Normalized discounted cumulative gain at K. It rewards hits near the top of the ranked list. |",
             "| Gold coverage | Fraction of all held-out positive edges whose premise appears in the train-side retrievable premise pool. This is a ceiling factor for recall. |",
@@ -159,7 +162,7 @@ def _append_glossary(lines: list[str]) -> None:
 def _append_t1_table(lines: list[str], t1: dict[str, Any], methods: list[tuple[str, str]]) -> None:
     lines.extend(
         [
-            "| Stage | Method | Covered Recall@10 | Covered Recall@50 | Covered Recall@100 | Overall Recall@100 | MAP | nDCG@10 | Gold coverage |",
+            "| Stage | Method | Covered Recall@10 | Covered Recall@50 | Covered Recall@100 | All-positive Recall@100 | MAP | nDCG@10 | Gold coverage |",
             "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
         ]
     )
@@ -176,7 +179,7 @@ def _append_t1_table(lines: list[str], t1: dict[str, Any], methods: list[tuple[s
                     _fmt(metrics.get("Recall@10", "")),
                     _fmt(metrics.get("Recall@50", "")),
                     _fmt(metrics.get("Recall@100", "")),
-                    _overall_recall(metrics, 100),
+                    _all_positive_recall(metrics, 100),
                     _fmt(metrics.get("MAP", "")),
                     _fmt(metrics.get("nDCG@10", "")),
                     _fmt(metrics.get("gold_pool_coverage", "")),
@@ -189,7 +192,7 @@ def _append_t1_table(lines: list[str], t1: dict[str, Any], methods: list[tuple[s
 def _append_t1_ablation_table(lines: list[str], t1: dict[str, Any], methods: list[str]) -> None:
     lines.extend(
         [
-            "| Method | Covered Recall@10 | Covered Recall@50 | Covered Recall@100 | Overall Recall@100 | MAP | nDCG@10 | Gold coverage |",
+            "| Method | Covered Recall@10 | Covered Recall@50 | Covered Recall@100 | All-positive Recall@100 | MAP | nDCG@10 | Gold coverage |",
             "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
         ]
     )
@@ -205,7 +208,7 @@ def _append_t1_ablation_table(lines: list[str], t1: dict[str, Any], methods: lis
                     _fmt(metrics.get("Recall@10", "")),
                     _fmt(metrics.get("Recall@50", "")),
                     _fmt(metrics.get("Recall@100", "")),
-                    _overall_recall(metrics, 100),
+                    _all_positive_recall(metrics, 100),
                     _fmt(metrics.get("MAP", "")),
                     _fmt(metrics.get("nDCG@10", "")),
                     _fmt(metrics.get("gold_pool_coverage", "")),
@@ -381,13 +384,13 @@ def run(
             "",
             "The retrieval pipeline starts with dense proof-state/premise embeddings and lexical TF-IDF profiles. It then adds structured candidate sources: symbol overlap, similar proof-state expansion, and similar theorem premise expansion. Candidate lists are fused with weighted reciprocal-rank fusion, with the final theorem-enhanced variants using train-side similar theorem premises as an additional source.",
             "",
-            "Primary method: `weighted_rrf_llm_theorem_tuned`. This is the main reported ProofAtlas method: weighted RRF over dense, lexical, rank-based similar proof-state expansion, and the LLM-enriched similar-theorem premise source. The BGE pretrained embedding variants are reported as auxiliary ablations, not as the primary method.",
+            "Primary method: `weighted_rrf_llm_theorem_tuned`. This is the pre-specified non-BGE ProofAtlas method used for the main claim: weighted RRF over dense, lexical, rank-based similar proof-state expansion, and the LLM-enriched similar-theorem premise source. BGE pretrained embedding variants are reported as auxiliary ablations because they add a separate pretrained encoder channel beyond the selected LLM-theorem fusion configuration. When BGE fusion is enabled, the recall-maximizing variant may differ from the primary non-BGE method.",
             "",
             "The final method keeps the same train/validation/test split and evaluates only against held-out positive premise edges. Strategy and difficulty in T2/T3 use precomputed rule/proxy labels and proxy difficulty buckets from `data/processed`; this experiment does not generate strategy or difficulty evaluation labels with the LLM during evaluation.",
             "",
             "Leakage control: LLM theorem enrichment is used as retrieval text, not as an evaluation label. The enrichment prompt is built from theorem metadata and a bounded number of proof-state goals, hypotheses, and symbols. It does not include validation/test positive premise labels, negative candidates, existing strategy labels, existing difficulty buckets/scores, or proof scripts/tactics as target answers. The proof-state text is still a metadata-level retrieval signal: local hypotheses and symbols may contain library identifiers or named facts from the state, so this is not a theorem-statement-only setting.",
             "",
-            "Metric note: T1 and T2 premise Recall@k is reported over positives that are present in the train-side retrievable premise pool. MAP and nDCG are computed on the same filtered evaluation set. `Gold coverage` is the fraction of all held-out positive edges that are in that pool; `Overall Recall@100` multiplies covered Recall@100 by this coverage to show the approximate all-positive recall ceiling effect.",
+            "Metric note: T1 and T2 premise Recall@k is macro-averaged over queries after filtering to positives that are present in the train-side retrievable premise pool. MAP and nDCG are computed on the same filtered evaluation set. `Gold coverage` is the fraction of all held-out positive edges that are in that pool. `All-positive Recall@100` is computed directly as edge-level hits@100 divided by all held-out positive edges, including positives absent from the train-side pool.",
             "",
             "## Experiments",
             "",
@@ -523,7 +526,7 @@ def run(
             "",
             "## Conclusion",
             "",
-            "The current ID retrieval setup is promising. The report shows a coherent progression from dense and lexical baselines to proof-state expansion and then theorem-neighborhood fusion. In this run, `weighted_rrf_llm_theorem_tuned` gives the strongest covered Recall@10, Recall@50, and Recall@100, while `weighted_rrf_llm_pretrained_tuned` gives the strongest MAP by a small margin. The BGE pretrained channel is useful but not dominant: its proof-state expansion source helps over the non-LLM theorem baseline, while its direct dense premise source is weak and the combined LLM+BGE fusion does not exceed the LLM theorem-tuned method on covered recall.",
+            "The current ID retrieval setup is promising. The report shows a coherent progression from dense and lexical baselines to proof-state expansion and then theorem-neighborhood fusion. `weighted_rrf_llm_theorem_tuned` is the primary non-BGE method for the main claim. BGE fusion is reported separately as an auxiliary variant: when it improves recall, it should be read as the recall-oriented candidate-generation option rather than as a replacement for the pre-specified primary configuration.",
             "",
             "The main result supports the design hypothesis: theorem-theorem retrieval is not just a side task, but a useful source of premise evidence for Proof-State -> Premise retrieval. The next improvement should focus on reranking and better source-specific calibration rather than only adding more candidate sources.",
         ]
