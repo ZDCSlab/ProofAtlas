@@ -166,13 +166,13 @@ It is an explanation layer, not a separate performance benchmark. For a query th
 
 The purpose is reviewability. A reader can inspect whether the system is finding mathematically plausible neighboring theorems and whether the suggested premises come from recognizable local proof patterns. These examples should not be read as aggregate performance claims; they are qualitative views of the evidence that the retrieval pipeline exposes.
 
-Generated evidence bundles: `25`
+Example evidence bundles shown: `25`
 
-These bundles are qualitative artifacts: they are the deterministic first `limit` rows from the theorem-neighbor artifact, not a stratified sample and not a full-split aggregate.
+These are example qualitative artifacts: they are the deterministic first `limit` rows from the theorem-neighbor artifact, not a stratified sample, not a full-split aggregate, and not a standalone evaluation result.
 
 | Metric | Value |
 | --- | ---: |
-| Evidence bundles | 25 |
+| Example evidence bundles shown | 25 |
 | Avg source theorem neighbors/bundle | 10.0000 |
 | Avg premise suggestions/bundle | 10.0000 |
 | Avg strategy facets/bundle | 7.8800 |
