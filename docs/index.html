@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ProofAtlas</title>
+    <meta
+      name="description"
+      content="ProofAtlas: theorem-neighborhood retrieval for Lean premise selection."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-grid">
+        <div class="intro">
+          <p class="eyebrow">Lean premise retrieval research system</p>
+          <h1>ProofAtlas</h1>
+          <p class="claim">Theorem-neighborhood retrieval for Lean premise selection</p>
+          <p class="support">
+            A static view of how dense, lexical, proof-state expansion, and
+            LLM-enriched theorem-neighborhood evidence are fused for premise retrieval.
+          </p>
+          <nav class="resource-links" aria-label="Project resources">
+            <a href="https://github.com/ZDCSlab/ProofAtlas">Repository</a>
+            <a href="https://huggingface.co/datasets/ZDCSlab/proofatlas-enriched">Dataset</a>
+            <a href="https://github.com/ZDCSlab/ProofAtlas/blob/main/outputs/reports/ProofAtlas_Project_Report.md">Report</a>
+          </nav>
+        </div>
+
+        <section class="metric-grid" aria-label="Held-out test improvements">
+          <article class="metric-card">
+            <span>Covered Recall@100</span>
+            <strong>0.2362 -> 0.4746</strong>
+            <small>+101.0%</small>
+          </article>
+          <article class="metric-card">
+            <span>All-positive Recall@100</span>
+            <strong>0.1851 -> 0.4074</strong>
+            <small>+120.1%</small>
+          </article>
+          <article class="metric-card">
+            <span>MAP</span>
+            <strong>0.0494 -> 0.0981</strong>
+            <small>+98.6%</small>
+          </article>
+          <article class="metric-card">
+            <span>nDCG@10</span>
+            <strong>0.0697 -> 0.1236</strong>
+            <small>+77.4%</small>
+          </article>
+        </section>
+      </div>
+    </header>
+
+    <main>
+      <section class="figure-band">
+        <div class="container">
+          <div class="section-heading">
+            <h2>System Pipeline</h2>
+            <p>
+              Weighted reciprocal-rank fusion is the center of the system, combining
+              proof-state and theorem-neighborhood evidence into ranked premise candidates.
+            </p>
+          </div>
+          <svg class="pipeline-graph" viewBox="0 0 1180 730" role="img" aria-labelledby="pipeline-title pipeline-desc">
+            <title id="pipeline-title">ProofAtlas retrieval pipeline graph</title>
+            <desc id="pipeline-desc">
+              LeanRank processed data flows through theorem-disjoint splitting, retrieval sources,
+              weighted RRF fusion, ranked premise candidates, and evaluation metrics.
+            </desc>
+            <defs>
+              <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head" />
+              </marker>
+            </defs>
+
+            <g class="edges">
+              <path d="M590 72 V118" />
+              <path d="M590 172 V218" />
+              <path d="M590 218 H170 V255" />
+              <path d="M590 218 H425 V255" />
+              <path d="M590 218 H655 V255" />
+              <path d="M590 218 H905 V255" />
+              <path d="M170 318 V360" />
+              <path d="M170 423 V470" />
+              <path d="M425 318 V360" />
+              <path d="M425 423 V470" />
+              <path d="M655 318 V470" />
+              <path d="M905 318 V360" />
+              <path d="M905 423 V470" />
+              <path d="M170 520 H590 V548" />
+              <path d="M425 520 H590" />
+              <path d="M655 520 H590" />
+              <path d="M905 520 H590" />
+              <path d="M590 620 V650" />
+              <path d="M590 650 H360 V666" />
+              <path d="M590 650 H590 V666" />
+              <path d="M590 650 H820 V666" />
+            </g>
+
+            <g class="node data" transform="translate(425 28)">
+              <rect width="330" height="44" rx="6" />
+              <text x="165" y="28">LeanRank processed data</text>
+            </g>
+            <g class="node data" transform="translate(390 118)">
+              <rect width="400" height="54" rx="6" />
+              <text x="200" y="25">theorem-disjoint</text>
+              <text x="200" y="43">train / test split</text>
+            </g>
+
+            <g class="node data" transform="translate(55 255)">
+              <rect width="230" height="63" rx="6" />
+              <text x="115" y="37">proof states</text>
+            </g>
+            <g class="node data" transform="translate(310 255)">
+              <rect width="230" height="63" rx="6" />
+              <text x="115" y="28">theorem</text>
+              <text x="115" y="46">profiles</text>
+            </g>
+            <g class="node data" transform="translate(560 255)">
+              <rect width="190" height="63" rx="6" />
+              <text x="95" y="37">premises</text>
+            </g>
+            <g class="node data" transform="translate(790 255)">
+              <rect width="230" height="63" rx="6" />
+              <text x="115" y="37">positive edges</text>
+            </g>
+
+            <g class="node retrieval" transform="translate(55 360)">
+              <rect width="230" height="63" rx="6" />
+              <text x="115" y="28">dense retrieval</text>
+              <text x="115" y="46">+ lexical TF-IDF</text>
+            </g>
+            <g class="node enrichment" transform="translate(310 360)">
+              <rect width="230" height="63" rx="6" />
+              <text x="115" y="28">LLM enrichment</text>
+              <text x="115" y="46">profiles</text>
+            </g>
+            <g class="node retrieval" transform="translate(790 360)">
+              <rect width="230" height="63" rx="6" />
+              <text x="115" y="28">theorem-neighbor</text>
+              <text x="115" y="46">premise source</text>
+            </g>
+
+            <g class="node retrieval" transform="translate(55 470)">
+              <rect width="230" height="50" rx="6" />
+              <text x="115" y="30">proof-state evidence</text>
+            </g>
+            <g class="node neighborhood" transform="translate(310 470)">
+              <rect width="230" height="50" rx="6" />
+              <text x="115" y="22">theorem-neighborhood</text>
+              <text x="115" y="39">evidence</text>
+            </g>
+            <g class="node retrieval" transform="translate(560 470)">
+              <rect width="190" height="50" rx="6" />
+              <text x="95" y="30">premise pool</text>
+            </g>
+            <g class="node output" transform="translate(790 470)">
+              <rect width="230" height="50" rx="6" />
+              <text x="115" y="30">guidance bundles</text>
+            </g>
+
+            <g class="node fusion" transform="translate(415 548)">
+              <rect width="350" height="72" rx="8" />
+              <text x="175" y="30">weighted RRF fusion</text>
+              <text x="175" y="52">weighted_rrf_llm_theorem_tuned</text>
+            </g>
+
+            <g class="node output" transform="translate(225 666)">
+              <rect width="270" height="50" rx="6" />
+              <text x="135" y="30">ranked premise candidates</text>
+            </g>
+            <g class="node output" transform="translate(505 666)">
+              <rect width="170" height="50" rx="6" />
+              <text x="85" y="30">theorem neighbors</text>
+            </g>
+            <g class="node metric" transform="translate(700 666)">
+              <rect width="240" height="50" rx="6" />
+              <text x="120" y="30">Recall@100 / MAP / nDCG</text>
+            </g>
+          </svg>
+          <svg class="pipeline-mobile-graph" viewBox="0 0 390 820" role="img" aria-label="Mobile ProofAtlas retrieval pipeline graph">
+            <defs>
+              <marker id="mobile-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head" />
+              </marker>
+            </defs>
+            <g class="mobile-edges">
+              <path d="M195 58 V96" />
+              <path d="M195 156 V194" />
+              <path d="M195 254 V292" />
+              <path d="M195 352 V390" />
+              <path d="M195 450 V488" />
+              <path d="M195 558 V596" />
+              <path d="M195 666 V704" />
+            </g>
+            <g class="node data" transform="translate(45 16)">
+              <rect width="300" height="42" rx="6" />
+              <text x="150" y="26">LeanRank processed data</text>
+            </g>
+            <g class="node data" transform="translate(45 96)">
+              <rect width="300" height="60" rx="6" />
+              <text x="150" y="26">theorem-disjoint</text>
+              <text x="150" y="44">train / test split</text>
+            </g>
+            <g class="node retrieval" transform="translate(45 194)">
+              <rect width="300" height="60" rx="6" />
+              <text x="150" y="24">proof-state evidence</text>
+              <text x="150" y="43">dense + lexical + expansion</text>
+            </g>
+            <g class="node enrichment" transform="translate(45 292)">
+              <rect width="300" height="60" rx="6" />
+              <text x="150" y="24">LLM-enriched</text>
+              <text x="150" y="43">theorem profiles</text>
+            </g>
+            <g class="node neighborhood" transform="translate(45 390)">
+              <rect width="300" height="60" rx="6" />
+              <text x="150" y="24">theorem-neighborhood</text>
+              <text x="150" y="43">premise evidence</text>
+            </g>
+            <g class="node output" transform="translate(45 488)">
+              <rect width="300" height="70" rx="6" />
+              <text x="150" y="24">premises + positives</text>
+              <text x="150" y="43">candidate and eval pools</text>
+            </g>
+            <g class="node fusion" transform="translate(28 596)">
+              <rect width="334" height="70" rx="8" />
+              <text x="167" y="28">weighted RRF fusion</text>
+              <text x="167" y="50">weighted_rrf_llm_theorem_tuned</text>
+            </g>
+            <g class="node metric" transform="translate(45 704)">
+              <rect width="300" height="72" rx="6" />
+              <text x="150" y="25">ranked premise candidates</text>
+              <text x="150" y="45">Recall@100 / MAP / nDCG@10</text>
+            </g>
+          </svg>
+        </div>
+      </section>
+
+      <section class="container results">
+        <div class="section-heading">
+          <h2>Held-Out Results</h2>
+          <p>
+            The primary method is the strongest main non-BGE ranking variant; the BGE
+            fusion is shown as an auxiliary recall-maximizing variant.
+          </p>
+        </div>
+
+        <div class="chart-grid">
+          <article class="chart-panel">
+            <h3>Dense vs Primary Method</h3>
+            <svg class="chart" viewBox="0 0 560 330" role="img" aria-label="Grouped bars comparing dense baseline and primary method">
+              <g class="axis">
+                <path d="M70 250 H535" />
+                <path d="M70 55 V250" />
+                <text x="45" y="253">0</text>
+                <text x="38" y="175">0.25</text>
+                <text x="38" y="98">0.50</text>
+              </g>
+              <g class="grid-lines">
+                <path d="M70 173 H535" />
+                <path d="M70 96 H535" />
+              </g>
+              <g class="bars">
+                <rect class="bar baseline" x="105" y="177" width="34" height="73" />
+                <rect class="bar primary" x="143" y="104" width="34" height="146" />
+                <rect class="bar baseline" x="215" y="193" width="34" height="57" />
+                <rect class="bar primary" x="253" y="125" width="34" height="125" />
+                <rect class="bar baseline" x="325" y="235" width="34" height="15" />
+                <rect class="bar primary" x="363" y="220" width="34" height="30" />
+                <rect class="bar baseline" x="435" y="229" width="34" height="21" />
+                <rect class="bar primary" x="473" y="212" width="34" height="38" />
+              </g>
+              <g class="chart-labels">
+                <text x="141" y="280">Cov R@100</text>
+                <text x="251" y="280">All-pos R@100</text>
+                <text x="361" y="280">MAP</text>
+                <text x="471" y="280">nDCG@10</text>
+              </g>
+              <g class="legend">
+                <rect class="bar baseline" x="80" y="24" width="14" height="14" />
+                <text x="100" y="36">Dense baseline</text>
+                <rect class="bar primary" x="230" y="24" width="14" height="14" />
+                <text x="250" y="36">Primary method</text>
+              </g>
+            </svg>
+            <p class="caption">
+              Primary method: weighted_rrf_llm_theorem_tuned.
+            </p>
+          </article>
+
+          <article class="chart-panel">
+            <h3>T1 Ablation Progression</h3>
+            <svg class="chart" viewBox="0 0 620 330" role="img" aria-label="Line chart showing covered recall and MAP across ablations">
+              <g class="axis">
+                <path d="M66 250 H585" />
+                <path d="M66 48 V250" />
+                <text x="34" y="253">0</text>
+                <text x="28" y="169">0.25</text>
+                <text x="28" y="86">0.50</text>
+              </g>
+              <g class="grid-lines">
+                <path d="M66 166 H585" />
+                <path d="M66 82 H585" />
+              </g>
+              <polyline class="line recall-line" points="82,171 152,159 222,152 292,120 362,102 432,94 502,90 572,87" />
+              <polyline class="line map-line" points="82,234 152,232 222,230 292,226 362,221 432,219 502,217 572,218" />
+              <g class="points recall-points">
+                <circle cx="82" cy="171" r="4" /><circle cx="152" cy="159" r="4" />
+                <circle cx="222" cy="152" r="4" /><circle cx="292" cy="120" r="4" />
+                <circle cx="362" cy="102" r="4" /><circle cx="432" cy="94" r="4" />
+                <circle cx="502" cy="90" r="4" /><circle cx="572" cy="87" r="4" />
+              </g>
+              <g class="points map-points">
+                <circle cx="82" cy="234" r="4" /><circle cx="152" cy="232" r="4" />
+                <circle cx="222" cy="230" r="4" /><circle cx="292" cy="226" r="4" />
+                <circle cx="362" cy="221" r="4" /><circle cx="432" cy="219" r="4" />
+                <circle cx="502" cy="217" r="4" /><circle cx="572" cy="218" r="4" />
+              </g>
+              <g class="chart-labels small">
+                <text x="82" y="276">dense</text>
+                <text x="152" y="276">lexical</text>
+                <text x="222" y="276">d+l</text>
+                <text x="292" y="276">union</text>
+                <text x="362" y="276">ps tuned</text>
+                <text x="432" y="276">thm</text>
+                <text x="502" y="276">LLM thm</text>
+                <text x="572" y="276">BGE aux</text>
+              </g>
+              <g class="legend">
+                <path class="line recall-line" d="M80 24 H110" />
+                <text x="118" y="29">Covered Recall@100</text>
+                <path class="line map-line" d="M280 24 H310" />
+                <text x="318" y="29">MAP</text>
+              </g>
+            </svg>
+            <p class="caption">
+              The sequence moves from simple retrieval toward theorem-neighborhood fusion.
+            </p>
+          </article>
+
+          <article class="chart-panel wide">
+            <h3>T2 Theorem Retrieval Comparison</h3>
+            <svg class="chart" viewBox="0 0 820 340" role="img" aria-label="Grouped bars comparing theorem retrieval methods">
+              <g class="axis">
+                <path d="M76 258 H790" />
+                <path d="M76 48 V258" />
+                <text x="44" y="261">0</text>
+                <text x="38" y="183">0.20</text>
+                <text x="38" y="105">0.40</text>
+              </g>
+              <g class="grid-lines">
+                <path d="M76 180 H790" />
+                <path d="M76 102 H790" />
+              </g>
+              <g class="bars">
+                <rect class="bar baseline" x="120" y="191" width="20" height="67" />
+                <rect class="bar primary" x="144" y="181" width="20" height="77" />
+                <rect class="bar aux" x="168" y="190" width="20" height="68" />
+                <rect class="bar baseline" x="255" y="147" width="20" height="111" />
+                <rect class="bar primary" x="279" y="130" width="20" height="128" />
+                <rect class="bar aux" x="303" y="146" width="20" height="112" />
+                <rect class="bar baseline" x="390" y="134" width="20" height="124" />
+                <rect class="bar primary" x="414" y="111" width="20" height="147" />
+                <rect class="bar aux" x="438" y="127" width="20" height="131" />
+                <rect class="bar baseline" x="525" y="215" width="20" height="43" />
+                <rect class="bar primary" x="549" y="209" width="20" height="49" />
+                <rect class="bar aux" x="573" y="216" width="20" height="42" />
+                <rect class="bar baseline" x="660" y="200" width="20" height="58" />
+                <rect class="bar primary" x="684" y="191" width="20" height="67" />
+                <rect class="bar aux" x="708" y="200" width="20" height="58" />
+              </g>
+              <g class="chart-labels">
+                <text x="154" y="288">R@10</text>
+                <text x="289" y="288">R@50</text>
+                <text x="424" y="288">R@100</text>
+                <text x="559" y="288">MAP</text>
+                <text x="694" y="288">nDCG@10</text>
+              </g>
+              <g class="legend">
+                <rect class="bar baseline" x="92" y="22" width="14" height="14" />
+                <text x="112" y="34">Baseline profile</text>
+                <rect class="bar primary" x="250" y="22" width="14" height="14" />
+                <text x="270" y="34">LLM TF-IDF profile</text>
+                <rect class="bar aux" x="435" y="22" width="14" height="14" />
+                <text x="455" y="34">LLM BGE profile</text>
+              </g>
+            </svg>
+            <p class="caption">
+              LLM-enriched TF-IDF theorem profiles produce the strongest theorem-neighborhood premise retrieval.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="dataset-band">
+        <div class="container two-column">
+          <article>
+            <div class="section-heading compact">
+              <h2>Dataset Overview</h2>
+              <p>The held-out split is theorem-disjoint from training.</p>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Split</th>
+                  <th>Theorems</th>
+                  <th>Proof states</th>
+                  <th>Premises</th>
+                  <th>Positive edges</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>train</th>
+                  <td>8000</td>
+                  <td>23723</td>
+                  <td>127561</td>
+                  <td>54897</td>
+                </tr>
+                <tr>
+                  <th>test</th>
+                  <td>1000</td>
+                  <td>3053</td>
+                  <td>38332</td>
+                  <td>7054</td>
+                </tr>
+              </tbody>
+            </table>
+          </article>
+
+          <article>
+            <div class="section-heading compact">
+              <h2>Top Test Domains</h2>
+              <p>Shares are from the held-out theorem set.</p>
+            </div>
+            <div class="domain-bars" aria-label="Top theorem domain shares">
+              <div><span>Algebra</span><b style="width: 66.2%"></b><em>14.9%</em></div>
+              <div><span>Data</span><b style="width: 64.9%"></b><em>14.6%</em></div>
+              <div><span>Analysis</span><b style="width: 51.6%"></b><em>11.6%</em></div>
+              <div><span>Topology</span><b style="width: 34.7%"></b><em>7.8%</em></div>
+              <div><span>RingTheory</span><b style="width: 31.1%"></b><em>7.0%</em></div>
+              <div><span>MeasureTheory</span><b style="width: 29.3%"></b><em>6.6%</em></div>
+              <div><span>CategoryTheory</span><b style="width: 24.0%"></b><em>5.4%</em></div>
+              <div><span>LinearAlgebra</span><b style="width: 22.2%"></b><em>5.0%</em></div>
+              <div><span>Order</span><b style="width: 20.4%"></b><em>4.6%</em></div>
+              <div><span>Other</span><b style="width: 100%"></b><em>22.5%</em></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="figure-band">
+        <div class="container">
+          <div class="section-heading">
+            <h2>Knowledge Graph View</h2>
+            <p>
+              ProofAtlas aggregates theorem, proof-state, premise, strategy, domain,
+              difficulty, and retrieval-method evidence around a query theorem.
+            </p>
+          </div>
+          <svg class="knowledge-graph" viewBox="0 0 1180 520" role="img" aria-label="Representative ProofAtlas knowledge graph">
+            <defs>
+              <marker id="kg-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" class="arrow-head" />
+              </marker>
+            </defs>
+            <g class="kg-edges">
+              <path d="M590 82 V142" />
+              <path d="M590 222 C380 230 255 275 188 340" />
+              <path d="M590 222 C450 262 410 330 380 390" />
+              <path d="M590 222 C610 305 610 355 610 405" />
+              <path d="M590 222 C760 265 825 330 865 390" />
+              <path d="M590 222 C875 235 990 285 1040 348" />
+              <path d="M188 340 C265 310 340 315 420 352" />
+              <path d="M865 390 C760 350 690 350 610 405" />
+              <path d="M1040 348 C980 300 900 288 805 304" />
+            </g>
+            <g class="kg-node domain" transform="translate(450 38)">
+              <rect width="280" height="44" rx="6" />
+              <text x="140" y="28">Domain: AlgebraicGeometry</text>
+            </g>
+            <g class="kg-node theorem" transform="translate(365 142)">
+              <rect width="450" height="80" rx="8" />
+              <text x="225" y="31">AlgebraicGeometry.</text>
+              <text x="225" y="52">HasRingHomProperty.stalkwise</text>
+            </g>
+            <g class="kg-node neighbor" transform="translate(60 340)">
+              <rect width="255" height="70" rx="6" />
+              <text x="128" y="28">10 theorem neighbors</text>
+              <text x="128" y="49">similar_to_theorem</text>
+            </g>
+            <g class="kg-node premise" transform="translate(300 390)">
+              <rect width="245" height="70" rx="6" />
+              <text x="123" y="28">10 premise suggestions</text>
+              <text x="123" y="49">premise evidence</text>
+            </g>
+            <g class="kg-node strategy" transform="translate(485 405)">
+              <rect width="250" height="70" rx="6" />
+              <text x="125" y="28">8 strategy facets</text>
+              <text x="125" y="49">scheme-local reasoning</text>
+            </g>
+            <g class="kg-node difficulty" transform="translate(755 390)">
+              <rect width="220" height="70" rx="6" />
+              <text x="110" y="28">Difficulty: hard</text>
+              <text x="110" y="49">difficulty bucket</text>
+            </g>
+            <g class="kg-node retrieval" transform="translate(930 348)">
+              <rect width="220" height="70" rx="6" />
+              <text x="110" y="28">retrieved by</text>
+              <text x="110" y="49">weighted RRF</text>
+            </g>
+            <g class="kg-node proofstate" transform="translate(680 276)">
+              <rect width="250" height="56" rx="6" />
+              <text x="125" y="24">proof states</text>
+              <text x="125" y="41">local goals + hypotheses</text>
+            </g>
+          </svg>
+        </div>
+      </section>
+
+      <section class="container demo-section">
+        <div class="section-heading">
+          <h2>Demo Case Graphs</h2>
+          <p>
+            The report markdown provides bundle counts and metadata, so these static
+            graphs show the available evidence without inventing neighbor or premise names.
+          </p>
+        </div>
+        <div class="demo-grid">
+          <article class="demo-case">
+            <h3>AlgebraicGeometry.HasRingHomProperty.stalkwise</h3>
+            <p class="demo-meta">Domain: AlgebraicGeometry | Difficulty: hard | Theme: stalkwise/localization criteria</p>
+            <svg viewBox="0 0 540 360" role="img" aria-label="Demo graph for AlgebraicGeometry HasRingHomProperty stalkwise">
+              <g class="demo-edges">
+                <path d="M270 74 V134" />
+                <path d="M270 134 H96 V206" />
+                <path d="M270 134 H270 V206" />
+                <path d="M270 134 H444 V206" />
+                <path d="M270 134 V286" />
+              </g>
+              <g class="demo-node theorem" transform="translate(83 24)">
+                <rect width="374" height="58" rx="7" />
+                <text x="187" y="25">query theorem</text>
+                <text x="187" y="43">HasRingHomProperty.stalkwise</text>
+              </g>
+              <g class="demo-node neighbor" transform="translate(22 206)">
+                <rect width="148" height="68" rx="6" />
+                <text x="74" y="30">10 similar</text>
+                <text x="74" y="48">theorems</text>
+              </g>
+              <g class="demo-node premise" transform="translate(196 206)">
+                <rect width="148" height="68" rx="6" />
+                <text x="74" y="30">10 premise</text>
+                <text x="74" y="48">suggestions</text>
+              </g>
+              <g class="demo-node strategy" transform="translate(370 206)">
+                <rect width="148" height="68" rx="6" />
+                <text x="74" y="30">8 strategy</text>
+                <text x="74" y="48">facets</text>
+              </g>
+              <g class="demo-node difficulty" transform="translate(180 286)">
+                <rect width="180" height="48" rx="6" />
+                <text x="90" y="30">hard difficulty bucket</text>
+              </g>
+            </svg>
+            <p class="caption">
+              Emphasizes scheme-local reasoning, localization, prime spectra, and morphism-property transport.
+            </p>
+          </article>
+
+          <article class="demo-case">
+            <h3>Algebra.Presentation.aeval_val_relation</h3>
+            <p class="demo-meta">Domain: RingTheory | Difficulty: hard | Theme: generators and relations</p>
+            <svg viewBox="0 0 540 360" role="img" aria-label="Demo graph for Algebra Presentation aeval val relation">
+              <g class="demo-edges">
+                <path d="M270 74 V134" />
+                <path d="M270 134 H96 V206" />
+                <path d="M270 134 H270 V206" />
+                <path d="M270 134 H444 V206" />
+                <path d="M270 134 V286" />
+              </g>
+              <g class="demo-node theorem" transform="translate(83 24)">
+                <rect width="374" height="58" rx="7" />
+                <text x="187" y="25">query theorem</text>
+                <text x="187" y="43">Algebra.Presentation.aeval_val_relation</text>
+              </g>
+              <g class="demo-node neighbor" transform="translate(22 206)">
+                <rect width="148" height="68" rx="6" />
+                <text x="74" y="30">10 similar</text>
+                <text x="74" y="48">theorems</text>
+              </g>
+              <g class="demo-node premise" transform="translate(196 206)">
+                <rect width="148" height="68" rx="6" />
+                <text x="74" y="30">10 premise</text>
+                <text x="74" y="48">suggestions</text>
+              </g>
+              <g class="demo-node strategy" transform="translate(370 206)">
+                <rect width="148" height="68" rx="6" />
+                <text x="74" y="30">8 strategy</text>
+                <text x="74" y="48">facets</text>
+              </g>
+              <g class="demo-node difficulty" transform="translate(180 286)">
+                <rect width="180" height="48" rx="6" />
+                <text x="90" y="30">hard difficulty bucket</text>
+              </g>
+            </svg>
+            <p class="caption">
+              Emphasizes polynomial evaluation, ideals, span membership, and relations vanishing under evaluation.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="conclusion-band">
+        <div class="container conclusion">
+          <p>
+            The held-out test result supports the design hypothesis: theorem-theorem
+            retrieval is not just a side task, but a useful source of premise evidence
+            for Proof-State -> Premise retrieval.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <strong>ProofAtlas</strong>
+        <nav class="resource-links" aria-label="Footer resources">
+          <a href="https://github.com/ZDCSlab/ProofAtlas">Repository</a>
+          <a href="https://huggingface.co/datasets/ZDCSlab/proofatlas-enriched">Dataset</a>
+          <a href="https://github.com/ZDCSlab/ProofAtlas/blob/main/outputs/reports/ProofAtlas_Project_Report.md">Report</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>
