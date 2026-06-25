@@ -65,10 +65,7 @@ a:hover {
 }
 
 .header-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(520px, 0.9fr);
-  gap: 42px;
-  align-items: end;
+  display: block;
 }
 
 .eyebrow {
@@ -142,6 +139,10 @@ h3 {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
+}
+
+.result-metrics {
+  margin-bottom: 22px;
 }
 
 .metric-card,
@@ -680,7 +681,6 @@ svg {
 @media (min-width: 980px) {
   .metric-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    grid-column: 1 / -1;
   }
 }
 
@@ -689,7 +689,6 @@ svg {
     width: min(100% - 28px, 760px);
   }
 
-  .header-grid,
   .chart-grid,
   .two-column,
   .dataset-scope-grid,
