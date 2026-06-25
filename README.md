@@ -1,6 +1,6 @@
 # ProofAtlas
 
-ProofAtlas is a Lean/mathlib premise-retrieval project built on processed LeanRank artifacts. This repository is currently framed as a midterm report: it documents the data pipeline, theorem-neighborhood retrieval system, qualitative guidance views, and a hard proof-state premise retrieval challenge.
+ProofAtlas is a Lean/mathlib premise-retrieval project built on processed LeanRank artifacts. This repository is currently framed as a midterm report: it documents the data pipeline, theorem-neighborhood retrieval system, interpretable retrieval evidence views, and a hard proof-state premise retrieval challenge.
 
 - Homepage: <https://zdcslab.github.io/ProofAtlas/>
 - Enriched dataset: <https://huggingface.co/datasets/ZDCSlab/proofatlas-enriched>
@@ -12,7 +12,7 @@ The midterm contribution is best read as a capability build-out first, then a ch
 
 1. ProofAtlas builds a theorem-neighborhood retrieval pipeline over a theorem-disjoint Lean proof split.
 2. LLM-enriched theorem profiles improve theorem-neighbor premise evidence.
-3. ProofAtlas exposes qualitative theorem-neighborhood guidance views with premise suggestions and strategy/difficulty facets.
+3. ProofAtlas exposes interpretable retrieval evidence views with theorem neighbors, premise suggestions, and strategy/difficulty facets.
 4. On the harder proof-state -> premise challenge, candidate recall roughly doubles over dense retrieval, while top-rank precision remains the next bottleneck.
 
 ## Midterm Milestones
@@ -68,9 +68,9 @@ The midterm contribution is best read as a capability build-out first, then a ch
 - All-positive Recall: recall over all held-out positive premise edges, including non-retrievable positives.
 - MAP: mean average precision, a ranking-quality metric over the retrieved list.
 - nDCG@10: normalized discounted cumulative gain at rank 10, a top-rank quality metric.
-- T1: Proof-State -> Premise retrieval, used here as the challenge evaluation.
-- T2: Theorem -> Theorem neighborhood retrieval, used here as a mechanism check.
-- T3: similar-theorem guidance aggregation, used here as qualitative interpretability output.
+- Challenge evaluation: proof-state to premise retrieval from the full train-side candidate pool.
+- Mechanism check: theorem to theorem-neighborhood retrieval, used to test whether enriched theorem profiles expose reusable premise evidence.
+- Retrieval evidence view: an explanation layer showing theorem neighbors, premise suggestions, and strategy facets behind retrieved candidates.
 
 ## Dataset and Evaluation Scope
 
@@ -93,7 +93,7 @@ It contains theorem-disjoint train/validation/test parquet tables, enriched `the
 
 ## Capability 1: LLM-Enriched Theorem Neighborhood Retrieval
 
-T2 is the mechanism check for whether LLM-enriched theorem profiles improve theorem-neighbor premise evidence.
+This mechanism check tests whether LLM-enriched theorem profiles improve theorem-neighbor premise evidence.
 
 | Method | Neighbor premise Recall@100 | nDCG@10 |
 | --- | ---: | ---: |
@@ -102,9 +102,9 @@ T2 is the mechanism check for whether LLM-enriched theorem profiles improve theo
 
 LLM enrichment converts theorem metadata plus proof-state goals, hypotheses, and symbols into semantic, strategy-oriented, and difficulty-oriented theorem profiles. These profiles are retrieval text only: they do not use gold premise labels or proof scripts as target answers.
 
-## Capability 2: ProofAtlas Guidance Views
+## Capability 2: Interpretable Retrieval Evidence
 
-T3 turns theorem-neighborhood evidence into qualitative guidance views. A guidance bundle can show:
+This is the explanation layer for the retrieval system, not a separate performance benchmark. An evidence bundle can show:
 
 - query theorem or proof-state context;
 - similar theorem neighbors;
@@ -116,7 +116,7 @@ These examples illustrate the evidence exposed by ProofAtlas and are not aggrega
 
 ## Challenge Evaluation: Proof-State -> Premise Retrieval
 
-T1 is the hard benchmark: given a held-out proof state, retrieve useful premises from 127,561 train-side candidate premises.
+This is the hard benchmark: given a held-out proof state, retrieve useful premises from 127,561 train-side candidate premises.
 
 | Metric | Dense baseline | Primary method | Absolute gain |
 | --- | ---: | ---: | ---: |

@@ -57,7 +57,7 @@ BGE model: `BAAI/bge-base-en-v1.5`
 - nDCG@10: normalized discounted cumulative gain at rank 10, a top-rank quality metric.
 - Challenge evaluation: proof-state to premise retrieval from the full train-side candidate pool.
 - Mechanism check: theorem to theorem-neighborhood retrieval, used to test whether enriched theorem profiles expose reusable premise evidence.
-- Guidance view: similar-theorem guidance aggregation, used as qualitative interpretability output.
+- Retrieval evidence view: an explanation layer showing theorem neighbors, premise suggestions, and strategy facets behind retrieved candidates.
 
 ## Executive Summary
 
@@ -152,15 +152,17 @@ Theorem retrieval is used to test whether theorem-neighborhood profiles carry re
 
 LLM-enriched TF-IDF profiles give the strongest theorem-neighborhood premise retrieval. The strategy signal should be read as broad coverage from neighbor labels, not as a standalone proof-strategy prediction claim.
 
-## Capability 2: ProofAtlas Guidance Views
+## Capability 2: Interpretable Retrieval Evidence
 
-Generated guidance bundles: `25`
+This section is not a separate performance benchmark. It describes the qualitative explanation layer produced by ProofAtlas: for a query theorem, the system exposes similar train theorems, neighbor-derived premise suggestions, strategy facets, difficulty signals, and retrieval methods that contributed evidence.
+
+Generated evidence bundles: `25`
 
 These bundles are qualitative artifacts: they are the deterministic first `limit` rows from the theorem-neighbor artifact, not a stratified sample and not a full-split aggregate.
 
 | Metric | Value |
 | --- | ---: |
-| Guidance bundles | 25 |
+| Evidence bundles | 25 |
 | Avg source theorem neighbors/bundle | 10.0000 |
 | Avg premise suggestions/bundle | 10.0000 |
 | Avg strategy facets/bundle | 7.8800 |
@@ -212,7 +214,7 @@ The primary method improves covered Recall@100 from `0.2362` to `0.4746`, direct
 
 ## Analysis
 
-The midterm result should be read in capability-first order. The theorem-neighborhood mechanism check shows that LLM-enriched theorem profiles improve theorem-neighborhood premise retrieval. The guidance views show that the system exposes interpretable theorem-neighbor, premise, strategy, and difficulty evidence. The proof-state premise retrieval challenge then tests whether those capabilities help on the harder retrieval task.
+The midterm result should be read in capability-first order. The theorem-neighborhood mechanism check shows that LLM-enriched theorem profiles improve theorem-neighborhood premise retrieval. The interpretable retrieval evidence view shows that the system exposes theorem-neighbor, premise, strategy, and difficulty evidence behind retrieved candidates. The proof-state premise retrieval challenge then tests whether those capabilities help on the harder retrieval task.
 
 LLM theorem enrichment improves theorem-neighborhood retrieval by adding semantic, strategy-oriented, and difficulty-oriented natural-language profile text. This enters the proof-state premise retrieval challenge system as one fused source inside weighted RRF, not as an evaluation label.
 

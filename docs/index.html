@@ -43,7 +43,7 @@
             <p>
               Midterm progress is best read as a capability build-out first, then a
               hard challenge benchmark. ProofAtlas now has theorem-neighborhood
-              retrieval infrastructure, interpretable guidance views, and an initial
+              retrieval infrastructure, interpretable retrieval evidence views, and an initial
               proof-state premise retrieval result.
             </p>
           </div>
@@ -118,7 +118,7 @@
             <div><dt>MAP</dt><dd>Mean average precision, a ranking-quality metric over the retrieved list.</dd></div>
             <div><dt>nDCG@10</dt><dd>Normalized discounted cumulative gain at rank 10, a top-rank quality metric.</dd></div>
             <div><dt>Challenge evaluation</dt><dd>Proof-state to premise retrieval from the full train-side candidate pool.</dd></div>
-            <div><dt>Guidance view</dt><dd>An interpretable neighborhood display with theorem neighbors, premise suggestions, and strategy facets.</dd></div>
+            <div><dt>Retrieval evidence view</dt><dd>An explanation layer showing theorem neighbors, premise suggestions, and strategy facets behind retrieved candidates.</dd></div>
           </dl>
         </div>
       </section>
@@ -446,11 +446,13 @@
       <section class="figure-band">
         <div class="container">
           <div class="section-heading">
-            <h2>Capability 2: ProofAtlas Guidance Views</h2>
+            <h2>Capability 2: Interpretable Retrieval Evidence</h2>
             <p>
-              ProofAtlas aggregates theorem, proof-state, premise, strategy, domain,
-              difficulty, and retrieval-method evidence around a query theorem. This
-              example illustrates exposed evidence, not an aggregate performance claim.
+              This is the explanation layer for the retrieval system, not a separate
+              performance benchmark. For a query theorem, ProofAtlas exposes the
+              similar train theorems, neighbor-derived premise suggestions, strategy
+              facets, difficulty signals, and retrieval methods that contributed evidence.
+              The example illustrates visible evidence for inspection, not an aggregate claim.
             </p>
           </div>
           <svg class="knowledge-graph" viewBox="0 0 1180 520" role="img" aria-label="Representative ProofAtlas knowledge graph">
