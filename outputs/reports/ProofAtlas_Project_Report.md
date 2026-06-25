@@ -33,13 +33,43 @@ BGE model: `BAAI/bge-base-en-v1.5`
 - premise suggestions
 - strategy/difficulty facets
 
-## Summary
+## Terms and Abbreviations
 
-ProofAtlas evaluates whether theorem-neighborhood structure in Lean proof data can improve premise retrieval. The main task is Proof-State -> Premise retrieval: given a held-out proof state, retrieve useful train-side premises.
+- Lean: a theorem prover and proof assistant used to formalize mathematics.
+- LeanRank: the processed Lean proof dataset source used by this experiment.
+- Proof state: the current goal, hypotheses, and local context at a point in a Lean proof.
+- Premise: a theorem, lemma, definition, or fact that may help prove a proof state.
+- Gold premise edge: a held-out labeled link between a proof state and a premise used in the reference proof.
+- Theorem-disjoint split: a train/test split where test theorems do not appear in training.
+- Train-side premise pool: the candidate premises available for retrieval from the training side.
+- Theorem neighborhood: similar train theorems retrieved for a held-out theorem or proof state.
+- LLM: large language model; in ProofAtlas it produces retrieval text, not evaluation labels.
+- TF-IDF: term frequency-inverse document frequency, a lexical text retrieval representation.
+- BGE: an external pretrained embedding model used as an auxiliary variant; the exact model name is recorded in the report header.
+- Dense retrieval: nearest-neighbor retrieval using vector embeddings.
+- Lexical retrieval: retrieval based on token overlap or weighted text features such as TF-IDF.
+- RRF: reciprocal-rank fusion, a method for combining ranked candidate lists.
+- Recall@k: the fraction of relevant gold items found within the top `k` retrieved candidates.
+- R@k: short chart/report notation for Recall@k, such as R@10 or R@100.
+- Covered Recall: recall over gold premises that are present in the retrievable train-side premise pool.
+- All-positive Recall: recall over all held-out positive premise edges, including non-retrievable positives.
+- MAP: mean average precision, a ranking-quality metric over the retrieved list.
+- nDCG@10: normalized discounted cumulative gain at rank 10, a top-rank quality metric.
+- T1: Proof-State -> Premise retrieval, used here as the challenge evaluation.
+- T2: Theorem -> Theorem neighborhood retrieval, used here as a mechanism check.
+- T3: similar-theorem guidance aggregation, used here as qualitative interpretability output.
 
-The primary method, `weighted_rrf_llm_theorem_tuned`, is the pre-specified non-BGE configuration selected for the main claim. It combines dense retrieval, lexical retrieval, rank-based similar proof-state expansion, and LLM-enriched similar-theorem premise evidence using weighted reciprocal-rank fusion. The BGE fusion is reported as an auxiliary variant because it adds an external pretrained encoder channel; on the test split it is the recall-maximizing variant, while the primary method gives stronger ranking quality by MAP and nDCG@10.
+## Executive Summary
 
-On the held-out test split, the primary method nearly doubles covered Recall@100 and substantially improves direct all-positive Recall@100 and MAP over dense retrieval:
+ProofAtlas is a midterm research system for theorem-neighborhood retrieval in Lean premise selection. The midterm contribution is threefold:
+
+- built a theorem-neighborhood retrieval pipeline over a theorem-disjoint Lean proof split;
+- validated that LLM-enriched theorem profiles improve theorem-neighbor premise evidence;
+- tested the resulting evidence on the harder Proof-State -> Premise retrieval challenge.
+
+On the theorem-neighborhood retrieval task, LLM-enriched TF-IDF theorem profiles improve neighbor-premise Recall@100 from `0.3185` to `0.3774` and nDCG@10 from `0.1499` to `0.1717`.
+
+On the harder proof-state premise retrieval challenge, the primary non-BGE method, `weighted_rrf_llm_theorem_tuned`, improves top-100 candidate generation over dense retrieval:
 
 | Metric | Dense baseline | Primary method | Absolute gain | Relative gain |
 | --- | ---: | ---: | ---: | ---: |
@@ -48,7 +78,7 @@ On the held-out test split, the primary method nearly doubles covered Recall@100
 | MAP | 0.0494 | 0.0981 | +0.0487 | +98.6% |
 | nDCG@10 | 0.0697 | 0.1236 | +0.0539 | +77.4% |
 
-The strongest supported conclusion is that theorem-neighborhood evidence substantially improves premise retrieval when fused with proof-state retrieval signals. If the objective is maximum candidate-pool recall, the auxiliary BGE fusion is the best reported T1 variant on the test split; the primary method remains the main non-BGE result and the strongest ranking-quality variant.
+The challenge result shows that the pipeline improves hard candidate generation from a 127,561-premise train-side pool, but it also identifies the next bottleneck: top-rank precision remains a reranking problem. If the objective is maximum candidate-pool recall, the auxiliary BGE fusion is the best reported T1 variant on the test split; the primary method remains the main non-BGE result.
 
 ## Dataset
 
@@ -110,26 +140,7 @@ The proof-state text is still a metadata-level retrieval signal: local hypothese
 
 This report is a held-out test-split result generated after fixing the selected validation configuration. Methods with `tuned` in the name still reflect hyperparameters selected during validation/model selection, while the metrics here are computed on the held-out test split.
 
-## T1 Main Result: Proof-State -> Premise Retrieval
-
-The main result table emphasizes the progression from simple baselines to theorem-neighborhood fusion.
-
-| Stage | Method | Covered Recall@10 | Covered Recall@50 | Covered Recall@100 | All-positive Recall@100 | MAP | nDCG@10 |
-| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Dense baseline | `dense` | 0.1162 | 0.1961 | 0.2362 | 0.1851 | 0.0494 | 0.0697 |
-| Lexical baseline | `lexical` | 0.1245 | 0.2255 | 0.2713 | 0.2182 | 0.0523 | 0.0736 |
-| Dense + lexical | `dense_lexical_rrf` | 0.1407 | 0.2476 | 0.2915 | 0.2324 | 0.0581 | 0.0825 |
-| Multi-source fusion | `full_union_rrf` | 0.1640 | 0.3197 | 0.3888 | 0.3177 | 0.0705 | 0.0949 |
-| Proof-state expansion tuned | `weighted_rrf_tuned_recall` | 0.1854 | 0.3562 | 0.4408 | 0.3699 | 0.0861 | 0.1122 |
-| Theorem-neighborhood fusion | `weighted_rrf_theorem_tuned` | 0.1878 | 0.3791 | 0.4618 | 0.3947 | 0.0929 | 0.1180 |
-| Primary method | `weighted_rrf_llm_theorem_tuned` | 0.1943 | 0.3894 | 0.4746 | 0.4074 | **0.0981** | **0.1236** |
-| Auxiliary BGE fusion | `weighted_rrf_llm_pretrained_tuned` | **0.2000** | **0.3919** | **0.4813** | **0.4124** | 0.0964 | 0.1230 |
-
-Gold coverage is constant at `0.9076` for these runs.
-
-The primary method improves covered Recall@100 from `0.2362` to `0.4746`, direct all-positive Recall@100 from `0.1851` to `0.4074`, and MAP from `0.0494` to `0.0981` over dense retrieval. The non-LLM theorem-neighborhood fusion also improves strongly over dense retrieval, reaching `0.4618` covered Recall@100 and `0.0929` MAP. The auxiliary BGE fusion reaches `0.4813` covered Recall@100, `0.4124` all-positive Recall@100, and `0.0964` MAP.
-
-## T2 Theorem -> Theorem Pattern Retrieval
+## Capability 1: LLM-Enriched Theorem Neighborhood Retrieval
 
 Theorem retrieval is used to test whether theorem-neighborhood profiles carry reusable premise evidence. Strategy coverage is included as an auxiliary guidance diagnostic.
 
@@ -141,7 +152,7 @@ Theorem retrieval is used to test whether theorem-neighborhood profiles carry re
 
 LLM-enriched TF-IDF profiles give the strongest theorem-neighborhood premise retrieval. The strategy signal should be read as broad coverage from neighbor labels, not as a standalone proof-strategy prediction claim.
 
-## T3 Similar-Theorem Guidance Aggregation
+## Capability 2: ProofAtlas Guidance Views
 
 Generated guidance bundles: `25`
 
@@ -180,11 +191,30 @@ These bundles are qualitative artifacts: they are the deterministic first `limit
 | AddChar.to_mulShift_inj_of_isPrimitive | NumberTheory | 10 | 10 | 8 | easy |
 | AddCircle.continuousAt_equivIoc | Topology | 10 | 10 | 8 | easy |
 
+## Challenge Evaluation: Proof-State -> Premise Retrieval
+
+T1 is the hard benchmark: given a held-out proof state, retrieve useful premises from 127,561 train-side candidate premises. The main table emphasizes the progression from simple baselines to theorem-neighborhood fusion.
+
+| Stage | Method | Covered Recall@10 | Covered Recall@50 | Covered Recall@100 | All-positive Recall@100 | MAP | nDCG@10 |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Dense baseline | `dense` | 0.1162 | 0.1961 | 0.2362 | 0.1851 | 0.0494 | 0.0697 |
+| Lexical baseline | `lexical` | 0.1245 | 0.2255 | 0.2713 | 0.2182 | 0.0523 | 0.0736 |
+| Dense + lexical | `dense_lexical_rrf` | 0.1407 | 0.2476 | 0.2915 | 0.2324 | 0.0581 | 0.0825 |
+| Multi-source fusion | `full_union_rrf` | 0.1640 | 0.3197 | 0.3888 | 0.3177 | 0.0705 | 0.0949 |
+| Proof-state expansion tuned | `weighted_rrf_tuned_recall` | 0.1854 | 0.3562 | 0.4408 | 0.3699 | 0.0861 | 0.1122 |
+| Theorem-neighborhood fusion | `weighted_rrf_theorem_tuned` | 0.1878 | 0.3791 | 0.4618 | 0.3947 | 0.0929 | 0.1180 |
+| Primary method | `weighted_rrf_llm_theorem_tuned` | 0.1943 | 0.3894 | 0.4746 | 0.4074 | **0.0981** | **0.1236** |
+| Auxiliary BGE fusion | `weighted_rrf_llm_pretrained_tuned` | **0.2000** | **0.3919** | **0.4813** | **0.4124** | 0.0964 | 0.1230 |
+
+Gold coverage is constant at `0.9076` for these runs.
+
+The primary method improves covered Recall@100 from `0.2362` to `0.4746`, direct all-positive Recall@100 from `0.1851` to `0.4074`, and nDCG@10 from `0.0697` to `0.1236` over dense retrieval. The challenge result shows that the pipeline improves hard candidate generation, but top-rank precision remains the next-stage bottleneck.
+
 ## Analysis
 
-The strongest signal is that theorem-neighborhood evidence improves T1 after it is fused with proof-state evidence. The ablation sequence suggests that proof-state expansion, tuned weighted fusion, and theorem-neighborhood premise evidence are associated with the improvement.
+The midterm result should be read in capability-first order. T2 shows that LLM-enriched theorem profiles improve theorem-neighborhood premise retrieval. T3 shows that the system exposes interpretable theorem-neighbor, premise, strategy, and difficulty evidence. T1 then tests whether those capabilities help on the harder Proof-State -> Premise retrieval challenge.
 
-LLM theorem enrichment improves theorem-neighborhood retrieval by adding semantic, strategy-oriented, and difficulty-oriented natural-language profile text. This enters the main T1 system as one fused source inside weighted RRF, not as an evaluation label.
+LLM theorem enrichment improves theorem-neighborhood retrieval by adding semantic, strategy-oriented, and difficulty-oriented natural-language profile text. This enters the T1 challenge system as one fused source inside weighted RRF, not as an evaluation label.
 
 BGE pretrained embeddings provide a useful auxiliary channel but are not dominant across all ranking metrics. On the test split, the combined LLM+BGE fusion gives the strongest covered and all-positive Recall@100, so it is the best recall-oriented candidate generator. The primary LLM theorem-tuned method remains the main non-BGE result and gives stronger MAP and nDCG@10.
 
@@ -194,9 +224,9 @@ The remaining bottleneck is ranking quality near the top of the list. Covered Re
 
 ## Conclusion
 
-The held-out test result supports the design hypothesis: theorem-theorem retrieval is not just a side task, but a useful source of premise evidence for Proof-State -> Premise retrieval.
+The held-out result suggests theorem-theorem retrieval can provide useful auxiliary premise evidence when fused with proof-state retrieval signals.
 
-The primary method, `weighted_rrf_llm_theorem_tuned`, nearly doubles covered Recall@100 and substantially improves direct all-positive Recall@100 and MAP over dense retrieval. The auxiliary BGE fusion reaches `0.4813` covered Recall@100 and `0.4124` all-positive Recall@100, while strategy and difficulty evidence are presented as auxiliary guidance signals rather than primary success metrics.
+At midterm, the stronger claim is not that final high-precision premise ranking is solved. The stronger claim is that ProofAtlas has built the theorem-neighborhood retrieval/guidance capability, validated the LLM-enriched theorem-neighborhood mechanism, and shown a meaningful improvement on the hard candidate-generation challenge. Top-rank precision remains the next-stage bottleneck.
 
 ## Appendix: Full T1 Ablation Table
 
@@ -237,6 +267,7 @@ The primary method, `weighted_rrf_llm_theorem_tuned`, nearly doubles covered Rec
 ## Next Phase
 
 - learned reranker
-- downstream prover evaluation
-- leakage/stress-test ablations
+- prover-in-the-loop evaluation
+- statement-only/no-symbol leakage ablations
+- larger theorem-neighborhood evaluation
 - improve top-10 ranking quality

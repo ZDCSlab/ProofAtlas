@@ -180,6 +180,7 @@ h3 {
 .figure-band,
 .dataset-band,
 .milestone-band,
+.terms-band,
 .next-phase-band,
 .conclusion-band {
   padding: 54px 0;
@@ -191,6 +192,7 @@ h3 {
 
 .dataset-band,
 .milestone-band,
+.terms-band,
 .next-phase-band,
 .conclusion-band {
   border-block: 1px solid var(--line);
@@ -306,6 +308,31 @@ h3 {
 .next-phase li {
   margin-bottom: 8px;
   overflow-wrap: anywhere;
+}
+
+.terms-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px 16px;
+  margin: 0;
+}
+
+.terms-grid div {
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+}
+
+.terms-grid dt {
+  margin-bottom: 4px;
+  font-size: 0.88rem;
+  font-weight: 750;
+}
+
+.terms-grid dd {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.84rem;
+  line-height: 1.4;
 }
 
 svg {
@@ -751,6 +778,7 @@ svg {
   .method-notes,
   .evidence-grid,
   .milestone-grid,
+  .terms-grid,
   .demo-grid {
     grid-template-columns: 1fr;
   }
@@ -763,6 +791,7 @@ svg {
   .figure-band,
   .dataset-band,
   .milestone-band,
+  .terms-band,
   .next-phase-band,
   .results,
   .demo-section,
@@ -781,12 +810,8 @@ svg {
   }
 
   .knowledge-graph {
-    min-width: 760px;
-  }
-
-  .figure-band .container {
-    overflow-x: auto;
-    padding-bottom: 4px;
+    min-width: 0;
+    width: 100%;
   }
 }
 

@@ -39,52 +39,87 @@
       <section class="milestone-band">
         <div class="container">
           <div class="section-heading">
-            <h2>Midterm Milestones</h2>
+            <h2>Executive Summary</h2>
             <p>
-              ProofAtlas is currently a midterm research system: the data pipeline,
-              retrieval stack, first held-out result, and interpretability views are in place.
+              Midterm progress is best read as a capability build-out first, then a
+              hard challenge benchmark. ProofAtlas now has theorem-neighborhood
+              retrieval infrastructure, interpretable guidance views, and an initial
+              proof-state premise retrieval result.
             </p>
           </div>
           <div class="milestone-grid">
             <article>
-              <span>Milestone 1</span>
-              <h3>Data Pipeline</h3>
+              <span>Built</span>
+              <h3>Theorem-Neighborhood Pipeline</h3>
               <ul>
                 <li>theorem-disjoint Lean proof split</li>
                 <li>127,561 train-side premise pool</li>
-                <li>3,053 held-out proof states</li>
-                <li>7,054 gold premise edges</li>
-              </ul>
-            </article>
-            <article>
-              <span>Milestone 2</span>
-              <h3>Retrieval System</h3>
-              <ul>
-                <li>dense + lexical baseline</li>
-                <li>similar proof-state expansion</li>
-                <li>LLM-enriched theorem-neighborhood evidence</li>
+                <li>LLM theorem enrichment</li>
                 <li>weighted RRF fusion</li>
               </ul>
             </article>
             <article>
-              <span>Milestone 3</span>
-              <h3>Midterm Result</h3>
+              <span>Validated</span>
+              <h3>Mechanistic Retrieval Signal</h3>
               <ul>
-                <li>Covered Recall@100 +0.2384</li>
-                <li>All-positive Recall@100 +0.2223</li>
-                <li>nDCG@10 +0.0539</li>
+                <li>LLM-enriched theorem profiles improve theorem-neighbor premise evidence</li>
+                <li>theorem neighborhoods expose reusable premise suggestions</li>
+                <li>strategy and difficulty facets are inspectable</li>
               </ul>
             </article>
             <article>
-              <span>Milestone 4</span>
-              <h3>Interpretability / Guidance</h3>
+              <span>Challenged</span>
+              <h3>Hard Premise Retrieval</h3>
               <ul>
-                <li>theorem neighborhood views</li>
-                <li>premise suggestions</li>
-                <li>strategy / difficulty facets</li>
+                <li>3,053 held-out proof states</li>
+                <li>7,054 gold premise edges</li>
+                <li>Top-100 retrieval from 127,561 train-side premises</li>
+                <li>candidate recall roughly doubles over dense retrieval</li>
+              </ul>
+            </article>
+            <article>
+              <span>Identified</span>
+              <h3>Next Bottleneck</h3>
+              <ul>
+                <li>top-rank precision remains limited</li>
+                <li>learned reranking is the next system step</li>
+                <li>downstream prover evaluation is still needed</li>
               </ul>
             </article>
           </div>
+        </div>
+      </section>
+
+      <section class="terms-band">
+        <div class="container">
+          <div class="section-heading">
+            <h2>Terms Used Here</h2>
+            <p>Short definitions for the main abbreviations and proof-retrieval terms used below.</p>
+          </div>
+          <dl class="terms-grid">
+            <div><dt>Lean</dt><dd>A theorem prover and proof assistant used to formalize mathematics.</dd></div>
+            <div><dt>LeanRank</dt><dd>The processed Lean proof dataset source used by this experiment.</dd></div>
+            <div><dt>Proof state</dt><dd>The current goal, hypotheses, and local context at a point in a Lean proof.</dd></div>
+            <div><dt>Premise</dt><dd>A theorem, lemma, definition, or fact that may help prove a proof state.</dd></div>
+            <div><dt>Gold premise edge</dt><dd>A held-out labeled link between a proof state and a premise used in the reference proof.</dd></div>
+            <div><dt>Theorem-disjoint split</dt><dd>A train/test split where test theorems do not appear in training.</dd></div>
+            <div><dt>Train-side premise pool</dt><dd>The candidate premises available for retrieval from the training side.</dd></div>
+            <div><dt>Theorem neighborhood</dt><dd>Similar train theorems retrieved for a held-out theorem or proof state.</dd></div>
+            <div><dt>LLM</dt><dd>Large language model; here it generates retrieval text, not evaluation labels.</dd></div>
+            <div><dt>TF-IDF</dt><dd>Term frequency-inverse document frequency, a lexical text retrieval representation.</dd></div>
+            <div><dt>BGE</dt><dd>An external pretrained embedding model used as an auxiliary variant; the report records the exact model name.</dd></div>
+            <div><dt>Dense retrieval</dt><dd>Nearest-neighbor retrieval using vector embeddings.</dd></div>
+            <div><dt>Lexical retrieval</dt><dd>Retrieval based on token overlap or weighted text features such as TF-IDF.</dd></div>
+            <div><dt>RRF</dt><dd>Reciprocal-rank fusion, a method for combining ranked candidate lists.</dd></div>
+            <div><dt>Recall@100</dt><dd>Whether gold premises appear within the top 100 retrieved candidates.</dd></div>
+            <div><dt>R@k</dt><dd>Short chart label for Recall@k, such as R@10 or R@100.</dd></div>
+            <div><dt>Covered Recall</dt><dd>Recall over gold premises that are present in the retrievable train-side pool.</dd></div>
+            <div><dt>All-positive Recall</dt><dd>Recall over all held-out positive premise edges, including non-retrievable positives.</dd></div>
+            <div><dt>MAP</dt><dd>Mean average precision, a ranking-quality metric over the retrieved list.</dd></div>
+            <div><dt>nDCG@10</dt><dd>Normalized discounted cumulative gain at rank 10, a top-rank quality metric.</dd></div>
+            <div><dt>T1</dt><dd>Proof-State -> Premise retrieval, used here as the challenge evaluation.</dd></div>
+            <div><dt>T2/T3</dt><dd>Theorem-neighborhood retrieval and qualitative guidance aggregation.</dd></div>
+          </dl>
         </div>
       </section>
 
@@ -337,148 +372,18 @@
 
       <section class="container results">
         <div class="section-heading">
-          <h2>Held-Out Results</h2>
+          <h2>Capability 1: LLM-Enriched Theorem Neighborhood Retrieval</h2>
           <p>
-            ProofAtlas improves recall-oriented premise candidate generation. The
-            primary method is the strongest non-BGE LLM theorem-neighborhood variant;
-            BGE fusion is shown separately as an auxiliary recall-maximizing variant.
-            Top-rank precision remains a future reranking problem.
+            T2 is the mechanism check: do LLM-enriched theorem profiles retrieve
+            theorem neighborhoods whose premises are useful evidence? The LLM-enriched
+            TF-IDF profile improves neighbor-premise Recall@100 from 0.3185 to 0.3774
+            and nDCG@10 from 0.1499 to 0.1717.
           </p>
         </div>
-        <section class="metric-grid result-metrics" aria-label="Held-out test improvements">
-          <article class="metric-card">
-            <span>Covered Recall@100</span>
-            <strong>0.2362 -> 0.4746</strong>
-            <small>+0.2384</small>
-          </article>
-          <article class="metric-card">
-            <span>All-positive Recall@100</span>
-            <strong>0.1851 -> 0.4074</strong>
-            <small>+0.2223</small>
-          </article>
-          <article class="metric-card">
-            <span>Covered Recall@50</span>
-            <strong>0.1961 -> 0.3894</strong>
-            <small>+0.1933</small>
-          </article>
-          <article class="metric-card">
-            <span>nDCG@10</span>
-            <strong>0.0697 -> 0.1236</strong>
-            <small>+0.0539</small>
-          </article>
-        </section>
 
         <div class="chart-grid">
-          <article class="chart-panel">
-            <h3>Dense vs Primary Method</h3>
-            <svg class="chart" viewBox="0 0 560 330" role="img" aria-label="Grouped bars comparing dense baseline and primary method">
-              <g class="axis">
-                <path d="M70 250 H535" />
-                <path d="M70 55 V250" />
-                <text x="45" y="253">0</text>
-                <text x="38" y="175">0.25</text>
-                <text x="38" y="98">0.50</text>
-              </g>
-              <g class="grid-lines">
-                <path d="M70 173 H535" />
-                <path d="M70 96 H535" />
-              </g>
-              <g class="bars">
-                <rect class="bar baseline" x="105" y="177" width="34" height="73" />
-                <rect class="bar primary" x="143" y="104" width="34" height="146" />
-                <rect class="bar baseline" x="215" y="193" width="34" height="57" />
-                <rect class="bar primary" x="253" y="125" width="34" height="125" />
-                <rect class="bar baseline" x="325" y="235" width="34" height="15" />
-                <rect class="bar primary" x="363" y="220" width="34" height="30" />
-                <rect class="bar baseline" x="435" y="229" width="34" height="21" />
-                <rect class="bar primary" x="473" y="212" width="34" height="38" />
-              </g>
-              <g class="value-labels">
-                <text x="122" y="171">0.2362</text>
-                <text x="160" y="98">0.4746</text>
-                <text x="232" y="187">0.1851</text>
-                <text x="270" y="119">0.4074</text>
-                <text x="452" y="223">0.0697</text>
-                <text x="490" y="206">0.1236</text>
-              </g>
-              <g class="chart-labels">
-                <text x="141" y="280">Cov R@100</text>
-                <text x="251" y="280">All-pos R@100</text>
-                <text x="361" y="280">MAP</text>
-                <text x="471" y="280">nDCG@10</text>
-              </g>
-              <g class="legend">
-                <rect class="bar baseline" x="80" y="24" width="14" height="14" />
-                <text x="100" y="36">Dense baseline</text>
-                <rect class="bar primary" x="230" y="24" width="14" height="14" />
-                <text x="250" y="36">Primary method</text>
-              </g>
-            </svg>
-            <p class="caption">
-              Primary method: weighted_rrf_llm_theorem_tuned. MAP remains in the full report and ablation chart.
-            </p>
-          </article>
-
-          <article class="chart-panel">
-            <h3>T1 Ablation Progression</h3>
-            <svg class="chart" viewBox="0 0 620 330" role="img" aria-label="Line chart showing covered recall and MAP across ablations">
-              <g class="axis">
-                <path d="M66 250 H585" />
-                <path d="M66 48 V250" />
-                <text x="34" y="253">0</text>
-                <text x="28" y="169">0.25</text>
-                <text x="28" y="86">0.50</text>
-              </g>
-              <g class="grid-lines">
-                <path d="M66 166 H585" />
-                <path d="M66 82 H585" />
-              </g>
-              <polyline class="line recall-line" points="82,171 152,159 222,152 292,120 362,102 432,94 502,90 572,87" />
-              <polyline class="line map-line" points="82,234 152,232 222,230 292,226 362,221 432,219 502,217 572,218" />
-              <g class="points recall-points">
-                <circle cx="82" cy="171" r="4" /><circle cx="152" cy="159" r="4" />
-                <circle cx="222" cy="152" r="4" /><circle cx="292" cy="120" r="4" />
-                <circle cx="362" cy="102" r="4" /><circle cx="432" cy="94" r="4" />
-                <circle cx="502" cy="90" r="4" /><circle cx="572" cy="87" r="4" />
-              </g>
-              <g class="value-labels recall-values">
-                <text x="82" y="162">0.236</text>
-                <text x="292" y="111">0.389</text>
-                <text x="432" y="85">0.462</text>
-                <text x="502" y="81">0.475</text>
-                <text x="572" y="78">0.481</text>
-              </g>
-              <g class="points map-points">
-                <circle cx="82" cy="234" r="4" /><circle cx="152" cy="232" r="4" />
-                <circle cx="222" cy="230" r="4" /><circle cx="292" cy="226" r="4" />
-                <circle cx="362" cy="221" r="4" /><circle cx="432" cy="219" r="4" />
-                <circle cx="502" cy="217" r="4" /><circle cx="572" cy="218" r="4" />
-              </g>
-              <g class="chart-labels small">
-                <text x="82" y="276">dense</text>
-                <text x="152" y="276">lexical</text>
-                <text x="222" y="276">d+l</text>
-                <text x="292" y="276">union</text>
-                <text x="362" y="276">ps tuned</text>
-                <text x="432" y="276">thm</text>
-                <text x="502" y="276">LLM thm</text>
-                <text x="572" y="276">BGE aux</text>
-              </g>
-              <g class="legend">
-                <path class="line recall-line" d="M80 24 H110" />
-                <text x="118" y="29">Covered Recall@100</text>
-                <path class="line map-line" d="M280 24 H310" />
-                <text x="318" y="29">MAP</text>
-              </g>
-            </svg>
-            <p class="caption">
-              Most gain over dense comes from multi-source fusion and proof-state expansion;
-              theorem-neighborhood evidence adds a further incremental lift.
-            </p>
-          </article>
-
           <article class="chart-panel wide">
-            <h3>T2 Theorem Retrieval Comparison</h3>
+            <h3>Theorem-Neighborhood Retrieval Comparison</h3>
             <svg class="chart" viewBox="0 0 820 340" role="img" aria-label="Grouped bars comparing theorem retrieval methods">
               <g class="axis">
                 <path d="M76 258 H790" />
@@ -541,7 +446,7 @@
       <section class="figure-band">
         <div class="container">
           <div class="section-heading">
-            <h2>Knowledge Graph View</h2>
+            <h2>Capability 2: ProofAtlas Guidance Views</h2>
             <p>
               ProofAtlas aggregates theorem, proof-state, premise, strategy, domain,
               difficulty, and retrieval-method evidence around a query theorem. This
@@ -766,6 +671,150 @@
         </div>
       </section>
 
+      <section class="container results">
+        <div class="section-heading">
+          <h2>Challenge Evaluation: Proof-State -> Premise Retrieval</h2>
+          <p>
+            T1 is the hard benchmark: retrieve useful train-side premises for 3,053
+            held-out proof states from a 127,561-premise pool. The challenge result
+            shows that the pipeline improves top-100 candidate generation, while
+            top-rank precision remains the next-stage bottleneck.
+          </p>
+        </div>
+        <section class="metric-grid result-metrics" aria-label="Challenge evaluation improvements">
+          <article class="metric-card">
+            <span>Covered Recall@100</span>
+            <strong>0.2362 -> 0.4746</strong>
+            <small>+0.2384</small>
+          </article>
+          <article class="metric-card">
+            <span>All-positive Recall@100</span>
+            <strong>0.1851 -> 0.4074</strong>
+            <small>+0.2223</small>
+          </article>
+          <article class="metric-card">
+            <span>Covered Recall@50</span>
+            <strong>0.1961 -> 0.3894</strong>
+            <small>+0.1933</small>
+          </article>
+          <article class="metric-card">
+            <span>nDCG@10</span>
+            <strong>0.0697 -> 0.1236</strong>
+            <small>+0.0539</small>
+          </article>
+        </section>
+
+        <div class="chart-grid">
+          <article class="chart-panel">
+            <h3>Dense vs Primary Method</h3>
+            <svg class="chart" viewBox="0 0 560 330" role="img" aria-label="Grouped bars comparing dense baseline and primary method">
+              <g class="axis">
+                <path d="M70 250 H535" />
+                <path d="M70 55 V250" />
+                <text x="45" y="253">0</text>
+                <text x="38" y="175">0.25</text>
+                <text x="38" y="98">0.50</text>
+              </g>
+              <g class="grid-lines">
+                <path d="M70 173 H535" />
+                <path d="M70 96 H535" />
+              </g>
+              <g class="bars">
+                <rect class="bar baseline" x="105" y="177" width="34" height="73" />
+                <rect class="bar primary" x="143" y="104" width="34" height="146" />
+                <rect class="bar baseline" x="215" y="193" width="34" height="57" />
+                <rect class="bar primary" x="253" y="125" width="34" height="125" />
+                <rect class="bar baseline" x="325" y="235" width="34" height="15" />
+                <rect class="bar primary" x="363" y="220" width="34" height="30" />
+                <rect class="bar baseline" x="435" y="229" width="34" height="21" />
+                <rect class="bar primary" x="473" y="212" width="34" height="38" />
+              </g>
+              <g class="value-labels">
+                <text x="122" y="171">0.2362</text>
+                <text x="160" y="98">0.4746</text>
+                <text x="232" y="187">0.1851</text>
+                <text x="270" y="119">0.4074</text>
+                <text x="452" y="223">0.0697</text>
+                <text x="490" y="206">0.1236</text>
+              </g>
+              <g class="chart-labels">
+                <text x="141" y="280">Cov R@100</text>
+                <text x="251" y="280">All-pos R@100</text>
+                <text x="361" y="280">MAP</text>
+                <text x="471" y="280">nDCG@10</text>
+              </g>
+              <g class="legend">
+                <rect class="bar baseline" x="80" y="24" width="14" height="14" />
+                <text x="100" y="36">Dense baseline</text>
+                <rect class="bar primary" x="230" y="24" width="14" height="14" />
+                <text x="250" y="36">Primary method</text>
+              </g>
+            </svg>
+            <p class="caption">
+              Primary method: weighted_rrf_llm_theorem_tuned. MAP remains in the full report and ablation chart.
+            </p>
+          </article>
+
+          <article class="chart-panel">
+            <h3>T1 Ablation Progression</h3>
+            <svg class="chart" viewBox="0 0 620 330" role="img" aria-label="Line chart showing covered recall and MAP across ablations">
+              <g class="axis">
+                <path d="M66 250 H585" />
+                <path d="M66 48 V250" />
+                <text x="34" y="253">0</text>
+                <text x="28" y="169">0.25</text>
+                <text x="28" y="86">0.50</text>
+              </g>
+              <g class="grid-lines">
+                <path d="M66 166 H585" />
+                <path d="M66 82 H585" />
+              </g>
+              <polyline class="line recall-line" points="82,171 152,159 222,152 292,120 362,102 432,94 502,90 572,87" />
+              <polyline class="line map-line" points="82,234 152,232 222,230 292,226 362,221 432,219 502,217 572,218" />
+              <g class="points recall-points">
+                <circle cx="82" cy="171" r="4" /><circle cx="152" cy="159" r="4" />
+                <circle cx="222" cy="152" r="4" /><circle cx="292" cy="120" r="4" />
+                <circle cx="362" cy="102" r="4" /><circle cx="432" cy="94" r="4" />
+                <circle cx="502" cy="90" r="4" /><circle cx="572" cy="87" r="4" />
+              </g>
+              <g class="value-labels recall-values">
+                <text x="82" y="162">0.236</text>
+                <text x="292" y="111">0.389</text>
+                <text x="432" y="85">0.462</text>
+                <text x="502" y="81">0.475</text>
+                <text x="572" y="78">0.481</text>
+              </g>
+              <g class="points map-points">
+                <circle cx="82" cy="234" r="4" /><circle cx="152" cy="232" r="4" />
+                <circle cx="222" cy="230" r="4" /><circle cx="292" cy="226" r="4" />
+                <circle cx="362" cy="221" r="4" /><circle cx="432" cy="219" r="4" />
+                <circle cx="502" cy="217" r="4" /><circle cx="572" cy="218" r="4" />
+              </g>
+              <g class="chart-labels small">
+                <text x="82" y="276">dense</text>
+                <text x="152" y="276">lexical</text>
+                <text x="222" y="276">d+l</text>
+                <text x="292" y="276">union</text>
+                <text x="362" y="276">ps tuned</text>
+                <text x="432" y="276">thm</text>
+                <text x="502" y="276">LLM thm</text>
+                <text x="572" y="276">BGE aux</text>
+              </g>
+              <g class="legend">
+                <path class="line recall-line" d="M80 24 H110" />
+                <text x="118" y="29">Covered Recall@100</text>
+                <path class="line map-line" d="M280 24 H310" />
+                <text x="318" y="29">MAP</text>
+              </g>
+            </svg>
+            <p class="caption">
+              Most gain over dense comes from multi-source fusion and proof-state expansion;
+              theorem-neighborhood evidence adds a further incremental lift.
+            </p>
+          </article>
+        </div>
+      </section>
+
       <section class="conclusion-band">
         <div class="container conclusion">
           <p>
@@ -785,8 +834,9 @@
           </div>
           <ul>
             <li>learned reranker</li>
-            <li>downstream prover evaluation</li>
-            <li>leakage / stress-test ablations</li>
+            <li>prover-in-the-loop evaluation</li>
+            <li>statement-only / no-symbol leakage ablations</li>
+            <li>larger theorem-neighborhood evaluation</li>
             <li>improve top-10 ranking quality</li>
           </ul>
         </div>
