@@ -3,21 +3,15 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "leanrank-kg"
+name = "proofatlas"
 version = "0.1.0"
-description = "Non-GNN LeanRank math proof knowledge graph MVP"
+description = "Focused in-distribution LeanRank proof retrieval experiments"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-  "datasets",
-  "joblib",
-  "jinja2",
-  "jsonschema",
-  "networkx",
   "numpy",
   "pandas",
   "pyarrow",
-  "pyyaml",
   "rich",
   "scipy",
   "scikit-learn",
@@ -26,14 +20,9 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest"]
-hf = ["sentence-transformers"]
-api = ["fastapi", "uvicorn"]
-ann = ["hnswlib"]
-faiss = ["faiss-cpu"]
-lancedb = ["lancedb"]
 
 [project.scripts]
-leanrank-kg = "leanrank_kg.cli:app"
+proofatlas = "proofatlas.cli:app"
 
 [tool.setuptools.packages.find]
 where = ["src"]

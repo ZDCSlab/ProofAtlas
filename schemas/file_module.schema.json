@@ -1,1 +1,0 @@
-{"type":"object","required":["id","file_path"],"properties":{"id":{"type":"string"},"file_path":{"type":"string"},"domain_tag":{"type":"string"},"subdomain_tag":{"type":"string"}}}

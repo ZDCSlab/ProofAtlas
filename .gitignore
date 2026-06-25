@@ -66,17 +66,10 @@ site/
 tmp/
 logs/
 
-# The homepage is the demo deliverable, so keep generated static assets tracked.
-!homepage/
-!homepage/index.html
-!homepage/assets/
-!homepage/assets/**
-
 # Project documentation is source material; keep only bulky local reference PDFs out.
 docs/*.pdf
 
 # Generated LeanRank/ProofAtlas data and model artifacts.
-# These are reproducible from configs/proofatlas.yaml and are too large for git.
 checkpoints/
 lightning_logs/
 mlruns/
@@ -84,9 +77,7 @@ models/
 runs/
 tensorboard/
 wandb/
-data/processed/
-data/sample/
-data/raw/
+data/
 outputs/embeddings/
 outputs/graph/
 outputs/indexes/
@@ -96,45 +87,11 @@ outputs/*
 !outputs/reports/
 outputs/reports/*
 
-# Keep only curated report artifacts below; ad hoc previews/conflict dumps stay local.
+# Keep only the curated final report below; generated metrics/artifacts stay local.
 outputs/reports/*.jsonl
 outputs/reports/*_errors.json
 outputs/reports/*_errors.jsonl
 outputs/reports/*_conflicts.json
 outputs/reports/*_provenance.csv
 
-!outputs/reports/artifact_compatibility_report.json
-!outputs/reports/context_parse_coverage.json
-!outputs/reports/corpus_manifest.json
-!outputs/reports/deployment_security_review.json
-!outputs/reports/difficulty_distribution.csv
-!outputs/reports/difficulty_estimator_metrics.json
-!outputs/reports/difficulty_target_report.json
-!outputs/reports/domain_coverage.json
-!outputs/reports/domain_distribution.json
-!outputs/reports/experiment_report.md
-!outputs/reports/graph_stats_summary.json
-!outputs/reports/graph_validation_summary.json
-!outputs/reports/homepage_summary.json
-!outputs/reports/index_benchmark.json
-!outputs/reports/lean_diagnostic_extraction_report.json
-!outputs/reports/metrics.json
-!outputs/reports/mvp_completion_audit.json
-!outputs/reports/pipeline_performance_report.json
-!outputs/reports/pipeline_run_timings.json
-!outputs/reports/premise_trace_supervision_report.json
-!outputs/reports/proof_technique_candidate_pool.json
-!outputs/reports/proof_technique_distribution.csv
-!outputs/reports/ranker_validation_metrics.json
-!outputs/reports/raw_schema.json
-!outputs/reports/refresh_dashboard.json
-!outputs/reports/refresh_history.json
-!outputs/reports/refresh_trend.json
-!outputs/reports/retrieval_examples.json
-!outputs/reports/retrieval_examples.md
-!outputs/reports/sampling_report.json
-!outputs/reports/schema_validation_summary.json
-!outputs/reports/split_leakage_report.json
-!outputs/reports/test_set_evaluation.json
-!outputs/reports/theorem_query_parse_coverage.json
-!outputs/reports/theorem_retrieval_case_studies.json
+!outputs/reports/ProofAtlas_Experiment_Report.md
