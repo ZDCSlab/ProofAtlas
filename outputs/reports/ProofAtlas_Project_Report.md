@@ -5,6 +5,34 @@ LLM theorem enrichment: `True`
 BGE pretrained embeddings: `True`  
 BGE model: `BAAI/bge-base-en-v1.5`
 
+## Midterm Milestones
+
+### Milestone 1: Data pipeline
+
+- theorem-disjoint Lean proof split
+- 127,561 train-side premise pool
+- 3,053 held-out proof states
+- 7,054 gold premise edges
+
+### Milestone 2: Retrieval system
+
+- dense + lexical baseline
+- similar proof-state expansion
+- LLM-enriched theorem-neighborhood evidence
+- weighted RRF fusion
+
+### Milestone 3: Midterm result
+
+- Covered Recall@100 +0.2384
+- All-positive Recall@100 +0.2223
+- nDCG@10 +0.0539
+
+### Milestone 4: Interpretability/guidance
+
+- theorem neighborhood views
+- premise suggestions
+- strategy/difficulty facets
+
 ## Summary
 
 ProofAtlas evaluates whether theorem-neighborhood structure in Lean proof data can improve premise retrieval. The main task is Proof-State -> Premise retrieval: given a held-out proof state, retrieve useful train-side premises.
@@ -205,3 +233,10 @@ The primary method, `weighted_rrf_llm_theorem_tuned`, nearly doubles covered Rec
 | weighted_rrf_llm_theorem_tuned | 0.1943 | 0.3894 | 0.4746 | 0.4074 | 0.0981 | 0.1236 | 0.9076 |
 | weighted_rrf_pretrained_tuned | 0.1917 | 0.3837 | 0.4703 | 0.4010 | 0.0917 | 0.1169 | 0.9076 |
 | weighted_rrf_llm_pretrained_tuned | 0.2000 | 0.3919 | 0.4813 | 0.4124 | 0.0964 | 0.1230 | 0.9076 |
+
+## Next Phase
+
+- learned reranker
+- downstream prover evaluation
+- leakage/stress-test ablations
+- improve top-10 ranking quality

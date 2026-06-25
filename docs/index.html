@@ -36,6 +36,58 @@
     </header>
 
     <main>
+      <section class="milestone-band">
+        <div class="container">
+          <div class="section-heading">
+            <h2>Midterm Milestones</h2>
+            <p>
+              ProofAtlas is currently a midterm research system: the data pipeline,
+              retrieval stack, first held-out result, and interpretability views are in place.
+            </p>
+          </div>
+          <div class="milestone-grid">
+            <article>
+              <span>Milestone 1</span>
+              <h3>Data Pipeline</h3>
+              <ul>
+                <li>theorem-disjoint Lean proof split</li>
+                <li>127,561 train-side premise pool</li>
+                <li>3,053 held-out proof states</li>
+                <li>7,054 gold premise edges</li>
+              </ul>
+            </article>
+            <article>
+              <span>Milestone 2</span>
+              <h3>Retrieval System</h3>
+              <ul>
+                <li>dense + lexical baseline</li>
+                <li>similar proof-state expansion</li>
+                <li>LLM-enriched theorem-neighborhood evidence</li>
+                <li>weighted RRF fusion</li>
+              </ul>
+            </article>
+            <article>
+              <span>Milestone 3</span>
+              <h3>Midterm Result</h3>
+              <ul>
+                <li>Covered Recall@100 +0.2384</li>
+                <li>All-positive Recall@100 +0.2223</li>
+                <li>nDCG@10 +0.0539</li>
+              </ul>
+            </article>
+            <article>
+              <span>Milestone 4</span>
+              <h3>Interpretability / Guidance</h3>
+              <ul>
+                <li>theorem neighborhood views</li>
+                <li>premise suggestions</li>
+                <li>strategy / difficulty facets</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
       <section class="dataset-band">
         <div class="container dataset-scope-grid">
           <article>
@@ -722,6 +774,21 @@
             The next bottleneck is top-rank precision, where a learned reranker over
             the fused candidate pool is the natural follow-up.
           </p>
+        </div>
+      </section>
+
+      <section class="next-phase-band">
+        <div class="container next-phase">
+          <div class="section-heading compact">
+            <h2>Next Phase</h2>
+            <p>Work after the midterm checkpoint focuses on ranking quality and downstream validation.</p>
+          </div>
+          <ul>
+            <li>learned reranker</li>
+            <li>downstream prover evaluation</li>
+            <li>leakage / stress-test ablations</li>
+            <li>improve top-10 ranking quality</li>
+          </ul>
         </div>
       </section>
     </main>
