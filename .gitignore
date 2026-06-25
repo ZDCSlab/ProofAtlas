@@ -94,4 +94,4 @@ outputs/reports/*_errors.jsonl
 outputs/reports/*_conflicts.json
 outputs/reports/*_provenance.csv
 
-!outputs/reports/ProofAtlas_Experiment_Report.md
+!outputs/reports/ProofAtlas_Project_Report.md

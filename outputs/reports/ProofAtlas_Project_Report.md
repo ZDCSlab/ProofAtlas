@@ -1,4 +1,4 @@
-# ProofAtlas Experiment Report
+# ProofAtlas Project Report
 
 Split: `val`  
 LLM theorem enrichment: `True`  

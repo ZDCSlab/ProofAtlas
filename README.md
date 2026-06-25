@@ -1,6 +1,6 @@
 # ProofAtlas
 
-ProofAtlas is a Lean/mathlib premise-retrieval experiment built on processed LeanRank artifacts. It evaluates whether theorem-neighborhood structure and LLM-enriched theorem profiles improve retrieval for held-out proof states.
+ProofAtlas is a Lean/mathlib premise-retrieval project built on processed LeanRank artifacts. It evaluates whether theorem-neighborhood structure and LLM-enriched theorem profiles improve retrieval for held-out proof states.
 
 ## Overview
 
@@ -14,9 +14,10 @@ The split is theorem-disjoint and in-distribution. File, domain, namespace, and 
 
 ## Dataset
 
-The enriched dataset is available on HuggingFace:
+The enriched dataset is available on HuggingFace, and the validation report is tracked in this repository:
 
 - [ZDCSlab/proofatlas-enriched](https://huggingface.co/datasets/ZDCSlab/proofatlas-enriched)
+- [ProofAtlas Project Report](outputs/reports/ProofAtlas_Project_Report.md)
 
 Local data files should be placed under `data/`. The entire `data/` directory is ignored by git and is used for downloaded, generated, or exported dataset artifacts.
 
@@ -136,7 +137,7 @@ Common output files include:
 The curated validation report is tracked at:
 
 ```text
-outputs/reports/ProofAtlas_Experiment_Report.md
+outputs/reports/ProofAtlas_Project_Report.md
 ```
 
 Other generated outputs under `outputs/` are local artifacts and are ignored unless explicitly whitelisted.
@@ -165,26 +166,6 @@ The package entry point is:
 
 ```text
 proofatlas = proofatlas.cli:app
-```
-
-## Documentation
-
-Experiment design:
-
-```text
-docs/proofatlas_id_retrieval_experiment_design.md
-```
-
-LLM enhancement plan:
-
-```text
-docs/proofatlas_llm_enhancement_plan.md
-```
-
-Validation report:
-
-```text
-outputs/reports/ProofAtlas_Experiment_Report.md
 ```
 
 ## Notes
