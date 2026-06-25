@@ -374,10 +374,12 @@
         <div class="section-heading">
           <h2>Capability 1: LLM-Enriched Theorem Neighborhood Retrieval</h2>
           <p>
-            This is the mechanism check: do LLM-enriched theorem profiles retrieve
-            theorem neighborhoods whose premises are useful evidence? The LLM-enriched
-            TF-IDF profile improves neighbor-premise Recall@100 from 0.3185 to 0.3774
-            and nDCG@10 from 0.1499 to 0.1717.
+            This capability answers: can ProofAtlas retrieve useful similar theorems?
+            Given a held-out theorem profile, the system uses LLM-enriched theorem text
+            to find similar train-side theorems, then checks whether premises from those
+            neighbors are useful evidence. The LLM-enriched TF-IDF profile improves
+            neighbor-premise Recall@100 from 0.3185 to 0.3774 and nDCG@10 from 0.1499
+            to 0.1717.
           </p>
         </div>
 
@@ -448,11 +450,12 @@
           <div class="section-heading">
             <h2>Capability 2: Interpretable Retrieval Evidence</h2>
             <p>
-              This is the explanation layer for the retrieval system, not a separate
-              performance benchmark. For a query theorem, ProofAtlas exposes the
-              similar train theorems, neighbor-derived premise suggestions, strategy
-              facets, difficulty signals, and retrieval methods that contributed evidence.
-              The example illustrates visible evidence for inspection, not an aggregate claim.
+              This capability answers: what evidence did those similar theorems provide?
+              It is the explanation layer for the retrieval system, not a separate
+              performance benchmark. For a query theorem, ProofAtlas exposes similar
+              train theorems, neighbor-derived premise suggestions, strategy facets,
+              difficulty signals, and retrieval methods that contributed evidence. The
+              example illustrates visible evidence for inspection, not an aggregate claim.
             </p>
           </div>
           <svg class="knowledge-graph" viewBox="0 0 1180 520" role="img" aria-label="Representative ProofAtlas knowledge graph">

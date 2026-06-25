@@ -142,7 +142,7 @@ This report is a held-out test-split result generated after fixing the selected 
 
 ## Capability 1: LLM-Enriched Theorem Neighborhood Retrieval
 
-Theorem retrieval is used to test whether theorem-neighborhood profiles carry reusable premise evidence. Strategy coverage is included as an auxiliary guidance diagnostic.
+This capability answers: can ProofAtlas retrieve useful similar theorems? Given a held-out theorem profile, the system uses LLM-enriched theorem text to find similar train-side theorems, then checks whether premises from those neighbors are useful evidence. This is the mechanism check for theorem-neighborhood retrieval. Strategy coverage is included as an auxiliary guidance diagnostic.
 
 | Method | Neighbor premise Recall@10 | Recall@50 | Recall@100 | MAP | nDCG@10 | Strategy coverage |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -154,7 +154,7 @@ LLM-enriched TF-IDF profiles give the strongest theorem-neighborhood premise ret
 
 ## Capability 2: Interpretable Retrieval Evidence
 
-This section is not a separate performance benchmark. It describes the qualitative explanation layer produced by ProofAtlas: for a query theorem, the system exposes similar train theorems, neighbor-derived premise suggestions, strategy facets, difficulty signals, and retrieval methods that contributed evidence.
+This capability answers: what evidence did those similar theorems provide? It is not a separate performance benchmark. It describes the qualitative explanation layer produced by ProofAtlas: for a query theorem, the system exposes similar train theorems, neighbor-derived premise suggestions, strategy facets, difficulty signals, and retrieval methods that contributed evidence.
 
 Generated evidence bundles: `25`
 
