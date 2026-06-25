@@ -46,6 +46,10 @@ The first viewport should contain:
 - Project name: `ProofAtlas`
 - One-line claim: `Theorem-neighborhood retrieval for Lean premise selection`
 - Short supporting sentence: `A static view of how dense, lexical, proof-state expansion, and LLM-enriched theorem-neighborhood evidence are fused for premise retrieval.`
+- Resource links:
+  - Repository: `https://github.com/ZDCSlab/ProofAtlas`
+  - Dataset: `https://huggingface.co/datasets/ZDCSlab/proofatlas-enriched`
+  - Report: `outputs/reports/ProofAtlas_Project_Report.md`
 - Four compact metric cards:
   - Covered Recall@100: `0.2362 -> 0.4746`
   - All-positive Recall@100: `0.1851 -> 0.4074`
@@ -53,6 +57,51 @@ The first viewport should contain:
   - nDCG@10: `0.0697 -> 0.1236`
 
 Do not use a generic product hero. The system graph should be the visual focus of the first page.
+
+### 1.1 Resource Links
+
+The homepage should include explicit links to the repo, dataset, and report near the header and again in a compact footer.
+
+| Resource | Link target | Purpose |
+| --- | --- | --- |
+| GitHub repo | `https://github.com/ZDCSlab/ProofAtlas` | Source code, pipeline commands, and implementation details |
+| HuggingFace dataset | `https://huggingface.co/datasets/ZDCSlab/proofatlas-enriched` | Exported enriched dataset artifact |
+| Project report | `outputs/reports/ProofAtlas_Project_Report.md` | Full held-out test results and ablation details |
+
+If the homepage is deployed outside the repository, the report link should point to the GitHub-rendered markdown file instead of a local relative path.
+
+### 1.2 Layout Control
+
+The layout should be carefully controlled so the page feels balanced, readable, and intentional on both desktop and mobile.
+
+Desktop layout rules:
+
+- Use a centered page container with a maximum content width around `1180px` to `1280px`.
+- Keep the header concise: project title, one-sentence claim, resource links, and metric cards should fit before the main graph without crowding it.
+- The system pipeline graph should be the dominant first visual element and should span the main content width.
+- Place metric cards in a single row on desktop, with equal widths and consistent numeric alignment.
+- Use two-column layouts only when the content naturally pairs:
+  - dataset summary next to domain distribution
+  - T1 main comparison next to T1 ablation progression, if chart labels remain legible
+  - the two demo case graphs side by side
+- Do not place large graph visualizations inside decorative cards. Use section bands or unframed constrained content instead.
+- Keep chart heights stable, approximately `260px` to `360px`, so the page rhythm stays predictable.
+- Keep the knowledge graph visually separate from the system pipeline graph; it should feel like a second figure, not an extension of the first.
+
+Mobile layout rules:
+
+- Stack all sections vertically.
+- Metric cards should become a two-column grid, then one column on narrow screens.
+- The system graph should either scale down with readable labels or switch to a simplified vertical graph.
+- Long theorem names in demo cases must wrap cleanly without overflowing their node boxes.
+- Charts should keep axis labels readable; if necessary, use horizontal bars instead of dense grouped bars.
+
+Spacing rules:
+
+- Use consistent vertical section spacing.
+- Avoid dense text blocks immediately above or below complex graphs.
+- Every graph should have a short title and one concise caption explaining what to look for.
+- No label, chart legend, node, or edge should overlap another element.
 
 ### 2. System Pipeline Graph
 
@@ -244,10 +293,10 @@ Recommended edge types:
 Suggested graph composition:
 
 ```text
-                         Domain: Data
+                  Domain: AlgebraicGeometry
                               |
                               v
-                    AList.lookup_to_alist
+      AlgebraicGeometry.HasRingHomProperty.stalkwise
                               |
           +-------------------+-------------------+
           |                   |                   |
@@ -269,24 +318,42 @@ The report's example bundles can seed this view:
 | AddChar.to_mulShift_inj_of_isPrimitive | NumberTheory | 10 | 10 | 8 | easy |
 | AddCircle.continuousAt_equivIoc | Topology | 10 | 10 | 8 | easy |
 
-Use one bundle as the central demo graph and optionally show the other four as small adjacent examples.
+Use two harder mathematically focused bundles as central demo graphs:
+
+- `AlgebraicGeometry.HasRingHomProperty.stalkwise` from AlgebraicGeometry
+- `Algebra.Presentation.aeval_val_relation` from RingTheory
+
+These are better homepage examples than `AList.lookup_to_alist` because they foreground deeper mathematical dependencies: stalkwise/localization criteria in algebraic geometry, and generators-and-relations reasoning in commutative algebra.
 
 ## Demo Case Section
 
-Use a static demo case graph rather than an interactive selector.
+Use two static demo case graphs rather than an interactive selector.
 
-Primary recommended demo:
+Recommended demo case A:
 
 ```text
-AList.lookup_to_alist
-Domain: Data
-Difficulty: medium
+AlgebraicGeometry.HasRingHomProperty.stalkwise
+Domain: AlgebraicGeometry
+Difficulty: hard
 Neighbors: 10
 Premise suggestions: 10
 Strategy facets: 8
+Theme: stalkwise/localization criteria for ring-hom properties
 ```
 
-The graph should show:
+Recommended demo case B:
+
+```text
+Algebra.Presentation.aeval_val_relation
+Domain: RingTheory
+Difficulty: hard
+Neighbors: 10
+Premise suggestions: 10
+Strategy facets: 8
+Theme: relations in algebra presentations vanish under evaluation
+```
+
+Each demo graph should show:
 
 ```text
 query theorem
@@ -300,13 +367,18 @@ query theorem
     +--> difficulty bucket
 ```
 
+Demo case captions:
+
+- `AlgebraicGeometry.HasRingHomProperty.stalkwise`: shows how a ring-homomorphism property in algebraic geometry can be checked through stalkwise/localized conditions. This demo should emphasize scheme-local reasoning, localization, prime spectra, and morphism-property transport.
+- `Algebra.Presentation.aeval_val_relation`: shows that relations declared in an algebra presentation vanish under algebraic evaluation and belong to the span/ideal generated by the presentation relations. This demo should emphasize generators, relations, polynomial evaluation, ideals, and span membership.
+
 The report does not include the full neighbor and premise names for each example bundle in the markdown, so the design should avoid inventing those labels unless the implementation reads `outputs/proofatlas/t3_test_llm_enriched_guidance_bundles.json`.
 
 If using only the report markdown as the data source, show counts and bundle metadata. If implementation is allowed to use the JSON artifact, expand the graph with concrete neighbor and premise names.
 
 ## Visual Style
 
-The page should read like a research artifact:
+The page should be beautiful, professional, concise, and elegant. It should read like a polished research artifact: rigorous enough for an academic audience, but clean enough for a public project homepage.
 
 - Dense but clean layout
 - White or near-white background
@@ -315,6 +387,13 @@ The page should read like a research artifact:
 - Avoid gradients, decorative blobs, and marketing-style hero sections
 - Keep chart labels short and legible
 - Use compact cards only for metrics and repeated evidence items
+- Prefer generous whitespace around major figures, while keeping tables and metric summaries compact
+- Use a restrained typography system: one sans-serif family, clear hierarchy, no oversized decorative display text
+- Keep graph lines thin, node shapes simple, and labels aligned to make the visualization feel precise rather than ornamental
+- Make the main graph look publication-quality: balanced spacing, consistent edge routing, no overlapping labels, no unnecessary visual effects
+- Keep chart palettes muted and consistent with graph node colors
+- Use concise section headings and avoid explanatory text that repeats what a chart already shows
+- The overall impression should be refined and technical, not flashy
 
 Suggested color mapping:
 
@@ -363,7 +442,8 @@ Avoid D3 unless dynamic graph layout becomes necessary. The design calls for a s
 4. Dataset and domain summary
 5. Knowledge graph visualization showing theorem, proof-state, premise, strategy, difficulty, and domain relationships
 6. Static demo case based on one report example bundle
-7. Short conclusion:
+7. Resource links to GitHub, HuggingFace dataset, and full report
+8. Short conclusion:
 
 ```text
 The held-out test result supports the design hypothesis: theorem-theorem retrieval is not just a side task, but a useful source of premise evidence for Proof-State -> Premise retrieval.
