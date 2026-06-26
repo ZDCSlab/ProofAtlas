@@ -109,7 +109,7 @@ The experiment uses the processed LeanRank-derived in-distribution split in `dat
 The retrieval pipeline starts with dense proof-state/premise embeddings and lexical TF-IDF profiles. It then adds structured candidate sources:
 
 - similar proof-state expansion: retrieve similar train proof states, then reuse their premises;
-- similar theorem premise expansion: retrieve similar train theorems, then reuse premises from their proof states;
+- theorem-neighborhood premise expansion: retrieve similar train theorems, then reuse premises from their proof states;
 - LLM-enriched theorem profiles: add semantic, strategy-oriented, and difficulty-oriented natural-language theorem profile text for theorem-neighborhood retrieval.
 
 The primary method is:
@@ -118,7 +118,21 @@ The primary method is:
 weighted_rrf_llm_theorem_tuned
 ```
 
-It uses weighted RRF over dense, lexical, rank-based proof-state expansion, and the LLM-enriched similar-theorem premise source. BGE pretrained variants are reported as auxiliary ablations, not as the primary method, because they add a separate pretrained embedding dependency beyond the selected LLM-theorem fusion configuration. For recall-oriented deployment, `weighted_rrf_llm_pretrained_tuned` is the stronger test-split variant; for the paper's main non-BGE claim and ranking-quality comparison, `weighted_rrf_llm_theorem_tuned` is the primary method.
+It uses weighted RRF over dense, lexical, rank-based proof-state expansion, and the LLM-enriched theorem-neighborhood premise source. BGE pretrained variants are reported as auxiliary ablations, not as the primary method, because they add a separate pretrained embedding dependency beyond the selected LLM-theorem fusion configuration. For recall-oriented deployment, `weighted_rrf_llm_pretrained_tuned` is the stronger test-split variant; for the paper's main non-BGE claim and ranking-quality comparison, `weighted_rrf_llm_theorem_tuned` is the primary method.
+
+### End-to-End Retrieval Flow
+
+For each held-out proof state, ProofAtlas runs the following pipeline:
+
+1. Build the query context from the proof-state goal, local hypotheses, local symbols, and parent theorem metadata.
+2. Generate proof-state evidence by retrieving train-side premises with dense and lexical retrieval, then adding premises from similar train proof states.
+3. Generate theorem-neighborhood evidence by enriching the parent theorem profile with LLM semantic, strategy, and difficulty text, retrieving similar train theorems, and collecting premises used in their proof states.
+4. Rank neighbor-derived premises by reciprocal theorem-neighbor rank. Premises from higher-ranked neighbor theorems receive larger weight, and duplicate premise evidence is merged.
+5. Fuse candidate sources with weighted RRF. The fused sources include dense retrieval, lexical retrieval, proof-state expansion, and theorem-neighborhood premise evidence.
+6. Output a ranked list of train-side premise candidates for the proof state. The challenge evaluation measures whether held-out gold premises appear in the top 100 candidates.
+7. In parallel, produce qualitative evidence bundles that expose the theorem neighbors, premise suggestions, strategy facets, and difficulty signals behind the theorem-neighborhood evidence.
+
+The LLM is used only to add retrieval text to theorem profiles. It does not generate gold premise labels, target proof scripts, or final proof answers.
 
 ### Evaluation Scope
 
