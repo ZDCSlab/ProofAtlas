@@ -166,6 +166,28 @@ It is an explanation layer, not a separate performance benchmark. For a query th
 
 The purpose is reviewability. A reader can inspect whether the system is finding mathematically plausible neighboring theorems and whether the suggested premises come from recognizable local proof patterns. These examples should not be read as aggregate performance claims; they are qualitative views of the evidence that the retrieval pipeline exposes.
 
+### Proof Strategy Facet Taxonomy
+
+ProofAtlas uses 15 broad strategy facets as interpretable labels. They summarize recurring proof patterns; they are not final tactic predictions.
+
+| Strategy facet | Meaning |
+| --- | --- |
+| `algebraic_computation` | Ring, field, arithmetic, and normalization-style algebraic calculation. |
+| `case_analysis` | Splitting the proof into constructors, alternatives, or conditional cases. |
+| `category_morphism_reasoning` | Reasoning about categorical morphisms, composition, identities, and commutative diagrams. |
+| `contradiction_negation` | Using negation, contradiction, impossible hypotheses, or proof by contradiction. |
+| `existential_construction` | Building witnesses for existential goals or packaging data into structures. |
+| `extensionality` | Proving equality by showing pointwise, componentwise, or structural equality. |
+| `induction_recursion` | Using induction, recursion, or structural decomposition over inductive objects. |
+| `measure_ae_reasoning` | Measure-theoretic reasoning with almost-everywhere statements and measurable sets. |
+| `order_inequality_reasoning` | Manipulating inequalities, monotonicity, bounds, lattice/order facts, or comparisons. |
+| `rewrite_transport` | Rewriting goals across equalities, equivalences, casts, coercions, or transported structures. |
+| `set_membership_reasoning` | Reasoning about set membership, subsets, intersections, unions, images, and preimages. |
+| `simplification_normalization` | Simplifying definitions, canonical forms, coercions, and routine goals. |
+| `theorem_application` | Solving a goal mainly by applying a known lemma, theorem, or hypothesis. |
+| `topology_filter_limit` | Reasoning about continuity, filters, neighborhoods, convergence, and limits. |
+| `typeclass_instance_resolution` | Using or constructing typeclass instances and inherited algebraic/order/topological structure. |
+
 Example evidence bundles shown: `25`
 
 These are example qualitative artifacts: they are the deterministic first `limit` rows from the theorem-neighbor artifact, not a stratified sample, not a full-split aggregate, and not a standalone evaluation result.

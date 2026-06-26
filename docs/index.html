@@ -487,6 +487,30 @@
               example illustrates visible evidence for inspection, not an aggregate claim.
             </p>
           </div>
+          <div class="strategy-taxonomy">
+            <h3>Proof Strategy Facet Taxonomy</h3>
+            <p>
+              ProofAtlas uses 15 broad strategy facets as interpretable labels. They
+              summarize recurring proof patterns; they are not final tactic predictions.
+            </p>
+            <dl>
+              <div><dt>algebraic_computation</dt><dd>Ring, field, arithmetic, and normalization-style algebraic calculation.</dd></div>
+              <div><dt>case_analysis</dt><dd>Splitting the proof into constructors, alternatives, or conditional cases.</dd></div>
+              <div><dt>category_morphism_reasoning</dt><dd>Reasoning about categorical morphisms, composition, identities, and commutative diagrams.</dd></div>
+              <div><dt>contradiction_negation</dt><dd>Using negation, contradiction, impossible hypotheses, or proof by contradiction.</dd></div>
+              <div><dt>existential_construction</dt><dd>Building witnesses for existential goals or packaging data into structures.</dd></div>
+              <div><dt>extensionality</dt><dd>Proving equality by showing pointwise, componentwise, or structural equality.</dd></div>
+              <div><dt>induction_recursion</dt><dd>Using induction, recursion, or structural decomposition over inductive objects.</dd></div>
+              <div><dt>measure_ae_reasoning</dt><dd>Measure-theoretic reasoning with almost-everywhere statements and measurable sets.</dd></div>
+              <div><dt>order_inequality_reasoning</dt><dd>Manipulating inequalities, monotonicity, bounds, lattice/order facts, or comparisons.</dd></div>
+              <div><dt>rewrite_transport</dt><dd>Rewriting goals across equalities, equivalences, casts, coercions, or transported structures.</dd></div>
+              <div><dt>set_membership_reasoning</dt><dd>Reasoning about set membership, subsets, intersections, unions, images, and preimages.</dd></div>
+              <div><dt>simplification_normalization</dt><dd>Simplifying definitions, canonical forms, coercions, and routine goals.</dd></div>
+              <div><dt>theorem_application</dt><dd>Solving a goal mainly by applying a known lemma, theorem, or hypothesis.</dd></div>
+              <div><dt>topology_filter_limit</dt><dd>Reasoning about continuity, filters, neighborhoods, convergence, and limits.</dd></div>
+              <div><dt>typeclass_instance_resolution</dt><dd>Using or constructing typeclass instances and inherited algebraic/order/topological structure.</dd></div>
+            </dl>
+          </div>
           <svg class="knowledge-graph" viewBox="0 0 1180 520" role="img" aria-label="Representative ProofAtlas knowledge graph">
             <defs>
               <marker id="kg-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
